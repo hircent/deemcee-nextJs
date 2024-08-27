@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import { sidebarLinks } from '../../constants'
-import { cn } from '../../lib/utils'
+import { cn } from '@/lib/utils'
 import { usePathname } from 'next/navigation'
 
 const Sidebar = ({user}:SiderbarProps) => {
