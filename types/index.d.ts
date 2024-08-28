@@ -26,13 +26,13 @@ declare type LoginUser = {
 };
 
 declare type User = {
-  // $id: string;
-  // email: string;
-  // userId: string;
+  $id: string;
+  email: string;
+  userId: string;
   // dwollaCustomerUrl: string;
   // dwollaCustomerId: string;
   firstName: string;
-  // lastName: string;
+  lastName: string;
   // name: string;
   // address1: string;
   // city: string;
@@ -211,7 +211,7 @@ declare interface TotalBalanceBoxProps {
 
 declare interface FooterProps {
   user: User;
-  type?: 'mobile' | 'desktop'
+  type?: "mobile" | "desktop";
 }
 
 declare interface RightSidebarProps {
