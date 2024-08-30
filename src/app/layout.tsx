@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, IBM_Plex_Serif } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster"
 
 // Initialised for font family
 const inter = Inter({ subsets: ["latin"] ,variable:"--font-inter"});
@@ -21,7 +22,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} ${ibmPlexSerif.variable}`}>{children}</body>
+      <body className={`${inter.className} ${ibmPlexSerif.variable}`}>{children}<Toaster /></body>
+      
     </html>
   );
 }

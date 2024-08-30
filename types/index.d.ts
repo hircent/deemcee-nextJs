@@ -273,6 +273,10 @@ declare interface getTransactionsProps {
   accessToken: string;
 }
 
+declare interface userTokenProp {
+  accessToken: string;
+}
+
 declare interface CreateFundingSourceOptions {
   customerId: string; // Dwolla Customer ID
   fundingSourceName: string; // Dwolla Funding Source Name

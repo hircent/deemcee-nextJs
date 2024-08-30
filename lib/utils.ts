@@ -209,3 +209,14 @@ export const authFormSchema = (type: string) => z.object({
   email: z.string().email(),
   password: z.string().min(8),
 })
+
+export const getUserInfo = async ({ accessToken }: userTokenProp) => {
+  try {
+  
+    const user = accessToken;
+
+    return parseStringify(user);
+  } catch (error) {
+    console.log(error)
+  }
+}

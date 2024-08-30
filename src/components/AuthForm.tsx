@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -20,6 +21,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
+import { signIn } from "@/lib/actions/user.actions";
+import { useToast } from "@/components/ui/use-toast"
+import { cn } from "@/lib/utils";
+
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -29,6 +34,8 @@ const formSchema = z.object({
 const AuthForm = ({ type }: { type: string }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,6 +50,18 @@ const AuthForm = ({ type }: { type: string }) => {
     // ✅ This will be type-safe and validated.
     setIsLoading(true);
     try {
+      const res = await signIn({email:values.email,password:values.password});
+      toast({
+        variant:"default",
+        title: res.success ? "Successful" : "Failed",
+        description: res.msg,
+        duration:2000,
+        className:cn('bottom-0 left-0 bg-error-100')
+      })
+
+      // setTimeout(()=>{
+      //   router.push("/")
+      // },2300)
     } catch (error) {
       console.log(error);
     } finally {
@@ -91,6 +110,7 @@ const AuthForm = ({ type }: { type: string }) => {
                     <div className="flex w-full flex-col">
                       <FormControl>
                         <Input
+                          id={field.name}
                           placeholder="Enter you email"
                           className="input-class"
                           {...field}
@@ -110,6 +130,7 @@ const AuthForm = ({ type }: { type: string }) => {
                     <div className="flex w-full flex-col">
                       <FormControl>
                         <Input
+                          id={field.name}
                           placeholder="Enter you password"
                           className="input-class"
                           type="password"
