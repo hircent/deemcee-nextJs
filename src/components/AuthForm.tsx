@@ -24,7 +24,8 @@ import { Loader2 } from "lucide-react";
 import { signIn } from "@/lib/actions/user.actions";
 import { useToast } from "@/components/ui/use-toast"
 import { cn } from "@/lib/utils";
-
+import { HOME_REDIRECT } from "@/constants/message";
+import { appConfig } from "@/app.config";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -45,24 +46,41 @@ const AuthForm = ({ type }: { type: string }) => {
     },
   });
 
+  const toastResponse = ( res:signInResponse)=>{
+    if (res.success) {
+      toast({
+        title: "Successful",
+        description: HOME_REDIRECT,
+        duration: 3000,
+        className: cn('bottom-0 left-0 bg-success-100'),
+      });
+    } else {
+      toast({
+        title: "Failed",
+        description: res.msg,
+        duration: 5000,
+        className: cn('bottom-0 left-0 bg-error-100')
+      });
+    }
+  }
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     setIsLoading(true);
     try {
-      const res = await signIn({email:values.email,password:values.password});
-      toast({
-        variant:"default",
-        title: res.success ? "Successful" : "Failed",
-        description: res.msg,
-        duration:2000,
-        className:cn('bottom-0 left-0 bg-error-100')
-      })
-
-      // setTimeout(()=>{
-      //   router.push("/")
-      // },2300)
+      const res : signInResponse= await signIn({email:values.email,password:values.password});
+      toastResponse(res);
+      setTimeout(() => {
+        router.push("/");
+      }, 3100);
     } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred.",
+        duration: 4000,
+        className: cn('bottom-0 left-0 bg-error-100'),
+      });
       console.log(error);
     } finally {
       setIsLoading(false);
@@ -80,7 +98,7 @@ const AuthForm = ({ type }: { type: string }) => {
             alt="Deemcee logo"
           />
           <h1 className="text-26 font-ibm-plex-serif font-bold text-black-1">
-            Deemcee
+            {appConfig.app_name}
           </h1>
         </Link>
 
@@ -159,7 +177,7 @@ const AuthForm = ({ type }: { type: string }) => {
             </form>
           </Form>
 
-          <footer className="flex justify-center gap-1">
+          {/* <footer className="flex justify-center gap-1">
             <p className="text-14 font-normal text-gray-600">
               {type === "sign-in"
                 ? "Dont have an account?"
@@ -171,7 +189,7 @@ const AuthForm = ({ type }: { type: string }) => {
             >
               {type === "sign-in" ? "Sign Up" : "Sign In"}
             </Link>
-          </footer>
+          </footer> */}
         </>
       )}
     </section>

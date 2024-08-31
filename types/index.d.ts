@@ -332,3 +332,8 @@ declare interface getBankProps {
 declare interface getBankByAccountIdProps {
   accountId: string;
 }
+
+declare interface signInResponse {
+  success:boolean,
+  msg:string
+}

@@ -6,7 +6,7 @@ import { LOGIN_FAILED, LOGIN_SUCCESSFUL, SERVER_ERROR } from "@/constants/messag
 // import { revalidatePath } from "next/cache";
 
 
-export const signIn = async ({ email, password }: signInProps) => {
+export const signIn = async ({ email, password }: signInProps) :Promise<signInResponse>=> {
   try {
     const response = fetch("http://localhost:8000/api/login/",{
       method:"POST",
@@ -27,7 +27,6 @@ export const signIn = async ({ email, password }: signInProps) => {
     }
 
     const data = await (await response).json()
-    console.log(data);
 
     cookies().set("deemceeAuth", data.access, {
       path: "/",
@@ -41,7 +40,7 @@ export const signIn = async ({ email, password }: signInProps) => {
 
     return parseStringify({"success":true,"msg":LOGIN_SUCCESSFUL});
   } catch (error) {
-    console.error('Error', error);
+    return parseStringify({"success":false,"msg":error});
   }
 }
 
