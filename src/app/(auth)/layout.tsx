@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -10,11 +10,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <div className="auth-asset">
         <div>
           <Image
-            src="/icons/auth-image.svg"
+            // src="/icons/auth-image.svg"
+            src="/icons/home.jpg"
             alt="Auth image"
-            width={500}
+            width={700}
             height={500}
-            className="rounded-l-xl object-contain"
+            className="rounded-xl object-contain"
           />
         </div>
       </div>
