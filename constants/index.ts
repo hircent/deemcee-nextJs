@@ -5,7 +5,7 @@ export const sidebarLinks = [
     label: "Home",
   },
   {
-    imgURL: "/icons/home.svg",
+    imgURL: "/icons/users.svg",
     route: "/user-management",
     label: "User Management",
   },
@@ -14,6 +14,46 @@ export const sidebarLinks = [
     route: "/branch",
     label: "Branch",
   },
+  // {
+  //   imgURL: "/icons/home.svg",
+  //   route: "/user-management",
+  //   label: "User Management",
+  // },
+  // {
+  //   imgURL: "/icons/home.svg",
+  //   route: "/branch",
+  //   label: "Branch",
+  // },
+  // {
+  //   imgURL: "/icons/home.svg",
+  //   route: "/user-management",
+  //   label: "User Management",
+  // },
+  // {
+  //   imgURL: "/icons/home.svg",
+  //   route: "/branch",
+  //   label: "Branch",
+  // },
+  // {
+  //   imgURL: "/icons/home.svg",
+  //   route: "/user-management",
+  //   label: "User Management",
+  // },
+  // {
+  //   imgURL: "/icons/home.svg",
+  //   route: "/branch",
+  //   label: "Branch",
+  // },
+  // {
+  //   imgURL: "/icons/home.svg",
+  //   route: "/user-management",
+  //   label: "User Management",
+  // },
+  // {
+  //   imgURL: "/icons/home.svg",
+  //   route: "/branch",
+  //   label: "Branch",
+  // },
   // {
   //   imgURL: "/icons/money-send.svg",
   //   route: "/payment-transfer",

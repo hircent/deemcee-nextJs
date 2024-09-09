@@ -1,7 +1,11 @@
 import React from "react";
 
 const UserManagement = () => {
-  return <div>UserManagement</div>;
+  return (
+    <section className="home">
+      <div className="home-content">UserManagement</div>
+    </section>
+  );
 };
 
 export default UserManagement;

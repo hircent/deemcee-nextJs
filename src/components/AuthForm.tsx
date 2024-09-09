@@ -22,7 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import { signIn } from "@/lib/actions/user.actions";
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { HOME_REDIRECT } from "@/constants/message";
 import { appConfig } from "@/app.config";
@@ -46,30 +46,33 @@ const AuthForm = ({ type }: { type: string }) => {
     },
   });
 
-  const toastResponse = ( res:signInResponse)=>{
+  const toastResponse = (res: signInResponse) => {
     if (res.success) {
       toast({
         title: "Successful",
         description: HOME_REDIRECT,
         duration: 3000,
-        className: cn('bottom-0 left-0 bg-success-100'),
+        className: cn("bottom-0 left-0 bg-success-100"),
       });
     } else {
       toast({
         title: "Failed",
         description: res.msg,
         duration: 5000,
-        className: cn('bottom-0 left-0 bg-error-100')
+        className: cn("bottom-0 left-0 bg-error-100"),
       });
     }
-  }
+  };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     setIsLoading(true);
     try {
-      const res : signInResponse= await signIn({email:values.email,password:values.password});
+      const res: signInResponse = await signIn({
+        email: values.email,
+        password: values.password,
+      });
       toastResponse(res);
       setTimeout(() => {
         router.push("/");
@@ -79,7 +82,7 @@ const AuthForm = ({ type }: { type: string }) => {
         title: "Error",
         description: "An unexpected error occurred.",
         duration: 4000,
-        className: cn('bottom-0 left-0 bg-error-100'),
+        className: cn("bottom-0 left-0 bg-error-100"),
       });
       console.log(error);
     } finally {
@@ -92,14 +95,14 @@ const AuthForm = ({ type }: { type: string }) => {
       <header className="flex flex-col gap-5 md:gap-8">
         <Link href="/" className="cursor-pointer flex items-center gap-1">
           <Image
-            src="/icons/logo.svg"
-            width={34}
-            height={34}
+            src="/images/logo.png"
+            width={200}
+            height={70}
             alt="Deemcee logo"
           />
-          <h1 className="text-26 font-ibm-plex-serif font-bold text-black-1">
+          {/* <h1 className="text-26 font-ibm-plex-serif font-bold text-black-1">
             {appConfig.app_name}
-          </h1>
+          </h1> */}
         </Link>
 
         <div className="flex flex-col gap-1 md:gap-3">

@@ -10,7 +10,7 @@ import { usePathname } from "next/navigation";
 const Sidebar = ({ user }: SiderbarProps) => {
   const pathName = usePathname();
   return (
-    <section className="sidebar">
+    <section className="sidebar overflow-y-scroll custom-scrollbar">
       <nav className="flex flex-col gap-4">
         <Link href="/" className="mb-12 cursor-pointer flex items-center gap-2">
           <Image
