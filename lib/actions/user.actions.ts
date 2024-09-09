@@ -1,48 +1,58 @@
-'use server';
+"use server";
 
 import { cookies } from "next/headers";
 import { encryptId, extractCustomerIdFromUrl, parseStringify } from "../utils";
-import { LOGIN_FAILED, LOGIN_SUCCESSFUL, SERVER_ERROR } from "@/constants/message";
+import {
+  LOGIN_FAILED,
+  LOGIN_SUCCESSFUL,
+  SERVER_ERROR,
+} from "@/constants/message";
 // import { revalidatePath } from "next/cache";
 
-
-export const signIn = async ({ email, password }: signInProps) :Promise<signInResponse>=> {
+export const signIn = async ({
+  email,
+  password,
+}: signInProps): Promise<signInResponse> => {
   try {
-    const response = fetch("http://localhost:8000/api/login/",{
-      method:"POST",
-      headers:{
-        "Content-type":"application/json"
+    const response = fetch("http://localhost:8000/api/login/", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
       },
-      body:JSON.stringify({email,password})
+      body: JSON.stringify({ email, password }),
     });
 
-    if((await response).status === 401){
+    if ((await response).status === 401) {
       return parseStringify({
-        "success":false,
-        "msg":LOGIN_FAILED})
+        success: false,
+        msg: LOGIN_FAILED,
+      });
     }
 
-    if(!(await response).ok){
-      return parseStringify({"success":false,"msg":SERVER_ERROR})
+    if (!(await response).ok) {
+      return parseStringify({ success: false, msg: SERVER_ERROR });
     }
 
-    const data = await (await response).json()
+    const data = await (await response).json();
 
     cookies().set("deemceeAuth", data.access, {
       path: "/",
       httpOnly: true,
       sameSite: "strict",
-      maxAge:30 * 2,
+      maxAge: 60 * 60 * 5,
       secure: process.env.ENVIRONMENT !== "development",
     });
 
-    // const user = await getUserInfo({ userId: ""}) 
+    // const user = await getUserInfo({ userId: ""})
 
-    return parseStringify({"success":true,"msg":LOGIN_SUCCESSFUL});
-  } catch (error) {
-    return parseStringify({"success":false,"msg":error});
+    return parseStringify({ success: true, msg: LOGIN_SUCCESSFUL });
+  } catch (error: any) {
+    return parseStringify({
+      success: false,
+      msg: SERVER_ERROR,
+    });
   }
-}
+};
 
 // export const getUserInfo = async ({ userId }: getUserInfoProps) => {
 //   try {
@@ -60,20 +70,18 @@ export const signIn = async ({ email, password }: signInProps) :Promise<signInRe
 //   }
 // }
 
-
-
 // export const signUp = async ({ password, ...userData }: SignUpParams) => {
 //   const { email, firstName, lastName } = userData;
-  
+
 //   let newUserAccount;
 
 //   try {
 //     const { account, database } = await createAdminClient();
 
 //     newUserAccount = await account.create(
-//       ID.unique(), 
-//       email, 
-//       password, 
+//       ID.unique(),
+//       email,
+//       password,
 //       `${firstName} ${lastName}`
 //     );
 
@@ -204,7 +212,7 @@ export const signIn = async ({ email, password }: signInProps) :Promise<signInRe
 
 //     const accessToken = response.data.access_token;
 //     const itemId = response.data.item_id;
-    
+
 //     // Get account information from Plaid using the access token
 //     const accountsResponse = await plaidClient.accountsGet({
 //       access_token: accessToken,
@@ -228,7 +236,7 @@ export const signIn = async ({ email, password }: signInProps) :Promise<signInRe
 //       processorToken,
 //       bankName: accountData.name,
 //     });
-    
+
 //     // If the funding source URL is not created, throw an error
 //     if (!fundingSourceUrl) throw Error;
 

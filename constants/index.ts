@@ -5,20 +5,20 @@ export const sidebarLinks = [
     label: "Home",
   },
   {
-    imgURL: "/icons/dollar-circle.svg",
-    route: "/my-banks",
-    label: "My Banks",
+    imgURL: "/icons/home.svg",
+    route: "/user-management",
+    label: "User Management",
   },
   {
-    imgURL: "/icons/transaction.svg",
-    route: "/transaction-history",
-    label: "Transaction History",
+    imgURL: "/icons/home.svg",
+    route: "/branch",
+    label: "Branch",
   },
-  {
-    imgURL: "/icons/money-send.svg",
-    route: "/payment-transfer",
-    label: "Transfer Funds",
-  },
+  // {
+  //   imgURL: "/icons/money-send.svg",
+  //   route: "/payment-transfer",
+  //   label: "Transfer Funds",
+  // },
 ];
 
 // good_user / good_password - Bank of America
