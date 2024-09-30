@@ -14,7 +14,7 @@ export const signIn = async ({
   password,
 }: signInProps): Promise<signInResponse> => {
   try {
-    const response = fetch("http://localhost:8000/api/login/", {
+    const response = fetch("http://localhost:8000/api/login", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
