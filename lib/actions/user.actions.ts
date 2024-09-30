@@ -10,7 +10,7 @@ import {
 // import { revalidatePath } from "next/cache";
 
 export const signIn = async ({
-  email,
+  username,
   password,
 }: signInProps): Promise<signInResponse> => {
   try {
@@ -19,7 +19,7 @@ export const signIn = async ({
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ username, password }),
     });
 
     if ((await response).status === 401) {

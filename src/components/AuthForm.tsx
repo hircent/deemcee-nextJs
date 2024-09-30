@@ -28,7 +28,7 @@ import { HOME_REDIRECT } from "@/constants/message";
 import { appConfig } from "@/app.config";
 
 const formSchema = z.object({
-  email: z.string().email(),
+  username: z.string(),
   password: z.string(),
 });
 
@@ -41,7 +41,7 @@ const AuthForm = ({ type }: { type: string }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
@@ -70,13 +70,13 @@ const AuthForm = ({ type }: { type: string }) => {
     setIsLoading(true);
     try {
       const res: signInResponse = await signIn({
-        email: values.email,
+        username: values.username,
         password: values.password,
       });
       toastResponse(res);
       setTimeout(() => {
         router.push("/");
-      }, 3100);
+      }, 2100);
     } catch (error) {
       toast({
         title: "Error",
@@ -124,15 +124,15 @@ const AuthForm = ({ type }: { type: string }) => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
-                name="email"
+                name="username"
                 render={({ field }) => (
                   <div className="form-item">
-                    <FormLabel className="form-label">Email</FormLabel>
+                    <FormLabel className="form-label">Username</FormLabel>
                     <div className="flex w-full flex-col">
                       <FormControl>
                         <Input
                           id={field.name}
-                          placeholder="Enter you email"
+                          placeholder="Enter you username"
                           className="input-class"
                           {...field}
                         />
