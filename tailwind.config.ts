@@ -45,7 +45,7 @@ const config = {
           700: "#B52626",
           900: "#8A1C1C",
         },
-        
+
         pink: {
           25: "#FEF6FB",
           100: "#FCE7F6",
@@ -77,6 +77,25 @@ const config = {
           600: "#475467",
           700: "#344054",
           900: "#101828",
+        },
+        yellow: {
+          // Backgrounds
+          1: "#FDFDFA",
+          2: "#FAFBEE",
+          // Interactive components
+          3: "#F4F7CA",
+          4: "#ECF0AB",
+          5: "#E2E5A1",
+          // Borders and separators
+          6: "#D4D794",
+          7: "#C2C582",
+          8: "#ABAE6C",
+          // Solid colors
+          9: "#D9DD99",
+          10: "#CFD38F",
+          // Accessible text
+          11: "#747735",
+          12: "#3D3E19",
         },
       },
       backgroundImage: {

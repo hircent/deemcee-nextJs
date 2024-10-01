@@ -1,3 +1,4 @@
+import { HeaderBoxProps } from "@/types/index";
 import React from "react";
 
 const HeaderBox = ({ type, title, user, subtext }: HeaderBoxProps) => {
