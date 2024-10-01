@@ -26,9 +26,10 @@ import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { HOME_REDIRECT } from "@/constants/message";
 import { appConfig } from "@/app.config";
+import { signInResponse } from "@/types/index";
 
 const formSchema = z.object({
-  username: z.string(),
+  email: z.string().email(),
   password: z.string(),
 });
 
@@ -41,7 +42,7 @@ const AuthForm = ({ type }: { type: string }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
@@ -70,7 +71,7 @@ const AuthForm = ({ type }: { type: string }) => {
     setIsLoading(true);
     try {
       const res: signInResponse = await signIn({
-        username: values.username,
+        email: values.email,
         password: values.password,
       });
       toastResponse(res);
@@ -124,15 +125,15 @@ const AuthForm = ({ type }: { type: string }) => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
-                name="username"
+                name="email"
                 render={({ field }) => (
                   <div className="form-item">
-                    <FormLabel className="form-label">Username</FormLabel>
+                    <FormLabel className="form-label">Email</FormLabel>
                     <div className="flex w-full flex-col">
                       <FormControl>
                         <Input
                           id={field.name}
-                          placeholder="Enter you username"
+                          placeholder="Enter you email"
                           className="input-class"
                           {...field}
                         />

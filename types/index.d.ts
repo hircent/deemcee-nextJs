@@ -25,22 +25,22 @@ declare type LoginUser = {
   password: string;
 };
 
-declare type User = {
-  $id: string;
-  email: string;
-  userId: string;
-  // dwollaCustomerUrl: string;
-  // dwollaCustomerId: string;
-  firstName: string;
-  lastName: string;
-  // name: string;
-  // address1: string;
-  // city: string;
-  // state: string;
-  // postalCode: string;
-  // dateOfBirth: string;
-  // ssn: string;
-};
+// declare type User = {
+//   $id: string;
+//   email: string;
+//   userId: string;
+//   // dwollaCustomerUrl: string;
+//   // dwollaCustomerId: string;
+//   firstName: string;
+//   lastName: string;
+//   // name: string;
+//   // address1: string;
+//   // city: string;
+//   // state: string;
+//   // postalCode: string;
+//   // dateOfBirth: string;
+//   // ssn: string;
+// };
 
 declare type NewUserParams = {
   userId: string;
@@ -299,7 +299,7 @@ declare interface getTransactionsByBankIdProps {
 }
 
 declare interface signInProps {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -336,4 +336,15 @@ declare interface getBankByAccountIdProps {
 declare interface signInResponse {
   success:boolean,
   msg:string
+}
+
+export type User = {
+  id:number,
+  username:string,
+  role:string[]
+}
+
+export type UserContextProps = {
+  user:User | undefined,
+  isLoading:boolean
 }

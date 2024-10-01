@@ -6,14 +6,14 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <main className="flex min-h-screen w-full justify-between font-inter">
       <div className="auth-asset">
-        <div>
+        <div className="px-8">
           <Image
-            // src="/icons/auth-image.svg"
             src="/images/home.jpg"
             alt="Auth image"
             width={700}
             height={500}
-            className="rounded-xl object-contain"
+            priority={true}
+            className="rounded-xl w-auto h-auto"
           />
         </div>
       </div>

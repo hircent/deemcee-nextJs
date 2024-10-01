@@ -7,10 +7,11 @@ import {
   LOGIN_SUCCESSFUL,
   SERVER_ERROR,
 } from "@/constants/message";
+import { signInProps, signInResponse } from "@/types/index";
 // import { revalidatePath } from "next/cache";
 
 export const signIn = async ({
-  username,
+  email,
   password,
 }: signInProps): Promise<signInResponse> => {
   try {
@@ -19,7 +20,7 @@ export const signIn = async ({
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ email, password }),
     });
 
     if ((await response).status === 401) {

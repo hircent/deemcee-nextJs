@@ -6,9 +6,11 @@ import React from "react";
 import { sidebarLinks } from "../../constants";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
+import { useAuthContext } from "@/context/userContext";
 
-const Sidebar = ({ user }: SiderbarProps) => {
+const Sidebar = () => {
   const pathName = usePathname();
+  const { user,isLoading } = useAuthContext()
   return (
     <section className="sidebar overflow-y-scroll custom-scrollbar">
       <nav className="flex flex-col gap-4">
@@ -22,7 +24,7 @@ const Sidebar = ({ user }: SiderbarProps) => {
           />
           <h1 className="sidebar-logo">Deemcee</h1>
         </Link>
-        {sidebarLinks.map((item) => {
+        {isLoading ? (<> <p>Loading...</p></>): sidebarLinks.map((item) => {
           const isActive =
             pathName === item.route || pathName.startsWith(`${item.route}/`);
           return (
@@ -53,7 +55,7 @@ const Sidebar = ({ user }: SiderbarProps) => {
             </Link>
           );
         })}
-        User
+        {user?.username}
       </nav>
       Footer
     </section>

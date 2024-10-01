@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, IBM_Plex_Serif } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { AuthContextWrapper } from "@/context/userContext";
 
 // Initialised for font family
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -27,7 +28,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} ${ibmPlexSerif.variable}`}>
-        {children}
+        <AuthContextWrapper>
+          {children}
+        </AuthContextWrapper>
         <Toaster />
       </body>
     </html>
