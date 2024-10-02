@@ -12,7 +12,7 @@ const Sidebar = () => {
   const pathName = usePathname();
   const { user, isLoading } = useAuthContext();
   return (
-    <section className="flex flex-col w-[18%] md:w-[13%] lg:w-[16%] xl:w-[14%] overflow-y-scroll custom-scrollbar">
+    <section className="flex flex-col w-[18%] md:w-[13%] lg:w-[16%] xl:w-[17%] overflow-y-scroll custom-scrollbar">
       <div className="bg-white p-4 sticky top-0 z-10 ">
         <Link
           href="/"

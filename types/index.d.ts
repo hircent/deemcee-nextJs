@@ -348,3 +348,20 @@ export type UserContextProps = {
   user:User | undefined,
   isLoading:boolean
 }
+
+export type BranchProps = {
+  id:number,
+  branch_grade:number,
+  name:string,
+  display_name:string,
+  business_reg_no:string,
+  operation_date:string
+}
+
+export type BranchListProps = {
+  success:boolean,
+  total:number,
+  next:string | null,
+  previous:string | null,
+  data:BranchProps[]
+}

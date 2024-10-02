@@ -11,14 +11,14 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     <main className="flex h-screen w-full font-inter">
       <Sidebar />
 
-      <div className="flex size-full flex-col">
+      <div className="flex size-full flex-col bg-yellow-1">
         <div className="root-layout">
           <Image src="/icons/logo.svg" width={30} height={30} alt="menu icon" />
           <div>
             <MobileNavbar />
           </div>
         </div>
-        <header className="home-header sticky top-0 bg-white">
+        <header className="home-header sticky top-0">
           <HeaderBox
             type="greeting"
             title="Welcome"
