@@ -2,6 +2,19 @@
 import { BranchProps } from "@/types/index"
 import { ColumnDef } from "@tanstack/react-table"
 import { Pencil, Trash2 } from "lucide-react"
+import { MoreHorizontal } from "lucide-react"
+ 
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Edit } from "@/components/Edit"
+import { Delete } from "@/components/Delete"
 
 export const BranchListColumns : ColumnDef<BranchProps>[] = [
     {
@@ -41,29 +54,23 @@ export const BranchListColumns : ColumnDef<BranchProps>[] = [
             //       Copy payment ID
             //     </DropdownMenuItem>
             //     <DropdownMenuSeparator />
-            //     <DropdownMenuItem className="hover:bg-slate-400 cursor-pointer">View customer</DropdownMenuItem>
-            //     <DropdownMenuItem className="hover:bg-slate-400 cursor-pointer">View payment details</DropdownMenuItem>
+            //     <DropdownMenuItem className="hover:bg-slate-400 cursor-pointer">
+            //         <Pencil 
+            //           size={18} 
+            //           className="text-gray-500 group-hover:text-blue-500 transition-colors"
+            //         />
+            //     </DropdownMenuItem>
+            //     <DropdownMenuItem className="hover:bg-slate-400 cursor-pointer">
+            //         <Trash2 
+            //           size={18} 
+            //           className="text-gray-500 group-hover:text-red-500 transition-colors"
+            //         />
+            //     </DropdownMenuItem>
             //   </DropdownMenuContent>
             // </DropdownMenu>
             <div className="flex gap-4">
-              <button 
-                className="group p-2 hover:bg-gray-100 rounded-full transition-colors"
-                aria-label="Edit"
-              >
-                <Pencil 
-                  size={18} 
-                  className="text-gray-500 group-hover:text-blue-500 transition-colors"
-                />
-              </button>
-              <button 
-                className="group p-2 hover:bg-gray-100 rounded-full transition-colors"
-                aria-label="Delete"
-              >
-                <Trash2 
-                  size={18} 
-                  className="text-gray-500 group-hover:text-red-500 transition-colors"
-                />
-              </button>
+              <Edit/>
+              <Delete/>
             </div>
           )
         }
