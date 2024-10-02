@@ -19,7 +19,7 @@ export default async function Branch() {
             </li>
           ))}
         </ol> */}
-
+        
         <BranchListTable columns={BranchListColumns} data={branches.data}/>
       </div>
     </section>
