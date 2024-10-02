@@ -23,6 +23,8 @@ const config = {
         fill: {
           1: "rgba(255, 255, 255, 0.10)",
         },
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
         bankGradient: "#0179FE",
         indigo: {
           500: "#6172F3",
