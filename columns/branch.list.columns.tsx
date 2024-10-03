@@ -69,7 +69,10 @@ export const BranchListColumns : ColumnDef<BranchProps>[] = [
             //   </DropdownMenuContent>
             // </DropdownMenu>
             <div className="flex gap-4">
-              <Edit/>
+              <Edit
+                type={"Branch"}
+                id={branch.id}
+              />
               <Delete 
                 type={"Branch"}
                 name={branch.name}

@@ -372,9 +372,14 @@ export type MANAGER = "Manager"
 export type TEACHER = "Teacher"
 export type STUDENT = "Student"
 
-export type deleteProps = {
+export type DeleteProps = {
   type: BRANCH | PRINCIPAL | MANAGER | TEACHER | STUDENT,
   name:string,
+  id:number
+}
+
+export type EditProps = {
+  type: BRANCH | PRINCIPAL | MANAGER | TEACHER | STUDENT,
   id:number
 }
 
@@ -383,3 +388,35 @@ export type deleteBranchProps = {
   confirmName:string,
   id:number
 }
+
+export type GetBranchDetailProps = {
+  id:number
+}
+
+export type Address = {
+  address_line_1:string | null,
+  address_line_2:string | null,
+  address_line_3:string | null,
+  city:string,
+  postcode:string,
+  state:string,
+  created_at:string,
+  updated_at:string,
+}
+
+export type BranchDetailProps = {
+  address:Address,
+  branch_grade:number,
+  business_name:string,
+  business_reg_no:string,
+  description:string | null,
+  display_name:string,
+  id:number,
+  is_headquaters:string,
+  name:string,
+  operation_date:string,
+  updated_at:string,
+  created_at:string,
+  terminated_at:string
+}
+

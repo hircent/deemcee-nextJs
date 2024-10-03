@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { deleteProps } from "@/types/index"
+import { DeleteProps } from "@/types/index"
 import { Trash2 } from "lucide-react"
 import {z} from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,7 +29,7 @@ const deleteFormSchema = z.object({
 })
 
 
-export function Delete({type,name,id}:deleteProps) {
+export function Delete({type,name,id}:DeleteProps) {
   const [open, setOpen] = useState<boolean>(false)
   const [isLoading, setLoading] = useState<boolean>(false)
   const { toast } = useToast();
