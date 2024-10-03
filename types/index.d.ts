@@ -365,3 +365,21 @@ export type BranchListProps = {
   previous:string | null,
   data:BranchProps[]
 }
+
+export type BRANCH = "Branch"
+export type PRINCIPAL = "Principal"
+export type MANAGER = "Manager"
+export type TEACHER = "Teacher"
+export type STUDENT = "Student"
+
+export type deleteProps = {
+  type: BRANCH | PRINCIPAL | MANAGER | TEACHER | STUDENT,
+  name:string,
+  id:number
+}
+
+export type deleteBranchProps = {
+  name:string,
+  confirmName:string,
+  id:number
+}

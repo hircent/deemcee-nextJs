@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -11,11 +13,71 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { deleteProps } from "@/types/index"
 import { Trash2 } from "lucide-react"
+import {z} from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, useForm } from "react-hook-form";
+import { FormField } from "./ui/form";
+import { useState } from "react";
+import { deleteBranch } from "@/lib/actions/branch.action";
+import { useToast } from "./ui/use-toast";
+import { cn } from "@/lib/utils";
 
-export function Delete() {
+const deleteFormSchema = z.object({
+  name:z.string()
+})
+
+
+export function Delete({type,name,id}:deleteProps) {
+  const [open, setOpen] = useState<boolean>(false)
+  const [isLoading, setLoading] = useState<boolean>(false)
+  const { toast } = useToast();
+  const form = useForm<z.infer<typeof deleteFormSchema>>({
+    resolver:zodResolver(deleteFormSchema),
+    defaultValues:{
+      name:""
+    }
+  })
+
+  const onSubmit = async (values:z.infer<typeof deleteFormSchema>)=>{
+    setLoading(true)
+    setOpen(false)
+
+    try {
+      await deleteBranch({name:values.name, confirmName:name,id})
+      toast({
+        title: "Success",
+        description: `${type} "${name}" has been deleted successfully.`,
+        duration: 2000,
+        className: cn("bottom-0 left-0 bg-success-100"),
+      })
+    } catch (err:any) {
+      if (err instanceof Error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: err.message,
+          duration: 3000,
+          className: cn("bottom-0 left-0 bg-error-100"),
+        })
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "An unexpected error occurred",
+          duration: 3000,
+          className: cn("bottom-0 left-0 bg-error-100"),
+        })
+      }
+    } finally {
+      setLoading(false)
+      setOpen(false)
+    }
+  }
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="group p-2 hover:bg-gray-100 rounded-full transition-colors">
             <Trash2 
@@ -25,30 +87,35 @@ export function Delete() {
         </Button>
       </DialogTrigger>
       <DialogOverlay className="bg-black/80" style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)' }} />
-      <DialogContent className="sm:max-w-[425px] bg-white">
+      <DialogContent className="w-[400px] sm:max-w-[425px] bg-white rounded-md">
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle>Delete {type}</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
+            Are you sure to delete {type} <span className="font-bold">{name}</span>?
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
-            <Input id="name" className="col-span-3" />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Username
-            </Label>
-            <Input id="username" className="col-span-3" />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button type="submit" className="bg-black-2 text-white">Save changes</Button>
-        </DialogFooter>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <FormField
+            control={form.control}
+            name="name"
+            render={({field}) => (
+              <div className="grid gap-4 py-4 border-b-2">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="branchName" className="text-left">
+                    Name:
+                  </Label>
+                  <Input id="branchName" className="col-span-3" {...field}/>
+                </div>
+              </div>
+            )}
+          />
+          <small className="text-slate-400">Please key in the branch name to confirm delete.</small>
+          <DialogFooter>
+            <Button type="submit" className="bg-red-500 text-white" disabled={isLoading}>
+              {isLoading ? "Deleting.." : "Delete"}
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   )
