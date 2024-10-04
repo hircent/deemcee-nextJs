@@ -27,6 +27,7 @@ import { cn } from "@/lib/utils";
 import { HOME_REDIRECT } from "@/constants/message";
 import { appConfig } from "@/app.config";
 import { signInResponse } from "@/types/index";
+import { useAuthContext } from "@/context/userContext";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -34,7 +35,7 @@ const formSchema = z.object({
 });
 
 const AuthForm = ({ type }: { type: string }) => {
-  const [user, setUser] = useState(null);
+  const { user,setUser } = useAuthContext()
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
@@ -68,16 +69,24 @@ const AuthForm = ({ type }: { type: string }) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    
     setIsLoading(true);
     try {
       const res: signInResponse = await signIn({
         email: values.email,
         password: values.password,
       });
+
+      if (res.success && res.data) {
+        setUser(res.data);
+      }
+
       toastResponse(res);
+      
       setTimeout(() => {
         router.push("/");
       }, 2100);
+
     } catch (error) {
       toast({
         title: "Error",
@@ -85,8 +94,6 @@ const AuthForm = ({ type }: { type: string }) => {
         duration: 4000,
         className: cn("bottom-0 left-0 bg-error-100"),
       });
-      console.log(error);
-    } finally {
       setIsLoading(false);
     }
   };
@@ -108,20 +115,14 @@ const AuthForm = ({ type }: { type: string }) => {
 
         <div className="flex flex-col gap-1 md:gap-3">
           <h1 className="text-24 lg:text-36 font-semibold text-gray-900">
-            {user ? "Link Account" : type === "sign-in" ? "Sign In" : "Sign Up"}
+            Sign In
             <p className="text-16 font-normal text-gray-600">
-              {user
-                ? "Link your account to get started"
-                : "Please enter your detail"}
+              Please enter your detail
             </p>
           </h1>
         </div>
       </header>
-      {user ? (
-        <div className="flex flex-col gap4"></div>
-      ) : (
-        <>
-          <Form {...form}>
+      <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
@@ -180,22 +181,6 @@ const AuthForm = ({ type }: { type: string }) => {
               </div>
             </form>
           </Form>
-
-          {/* <footer className="flex justify-center gap-1">
-            <p className="text-14 font-normal text-gray-600">
-              {type === "sign-in"
-                ? "Dont have an account?"
-                : "Already have an account?"}
-            </p>
-            <Link
-              href={type === "sign-in" ? "/sign-up" : "/sign-in"}
-              className="form-link"
-            >
-              {type === "sign-in" ? "Sign Up" : "Sign In"}
-            </Link>
-          </footer> */}
-        </>
-      )}
     </section>
   );
 };

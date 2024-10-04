@@ -335,18 +335,31 @@ declare interface getBankByAccountIdProps {
 
 declare interface signInResponse {
   success:boolean,
-  msg:string
+  msg:string,
+  data:User | undefined
 }
 
+export type BranchRole = {
+  branch_id: number;
+  branch_role: string;
+};
+
 export type User = {
-  id:number,
-  username:string,
-  role:string[]
-}
+  token_type: string;
+  exp: number;
+  iat: number;
+  jti: string;
+  user_id: number;
+  username: string;
+  email: string;
+  first_name: string | null;
+  last_name: string | null;
+  branch_role: BranchRole[];
+};
 
 export type UserContextProps = {
   user:User | undefined,
-  isLoading:boolean
+  setUser: (user: User | undefined) => void;
 }
 
 export type BranchProps = {

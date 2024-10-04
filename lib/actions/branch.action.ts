@@ -3,6 +3,7 @@
 import { GetBranchDetailProps, deleteBranchProps } from "@/types/index";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export async function getBranchList(){
     const token = getToken()
@@ -25,7 +26,6 @@ export async function getBranchList(){
         const data = await response.json()
         return data
     } catch (error) {
-        console.log(error)
         throw error
     }
 }
@@ -85,6 +85,10 @@ export async function getBranchDetails({id}:GetBranchDetailProps){
 function getToken(){
     const cookieStore = cookies()
     const token = cookieStore.get("deemceeAuth")
+
+    if (!token) {
+        redirect('/sign-in')
+      }
 
     return token
 }

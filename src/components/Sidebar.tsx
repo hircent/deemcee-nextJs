@@ -10,7 +10,7 @@ import { useAuthContext } from "@/context/userContext";
 
 const Sidebar = () => {
   const pathName = usePathname();
-  const { user, isLoading } = useAuthContext();
+  const { user } = useAuthContext();
   return (
     <section className="flex flex-col w-[18%] md:w-[13%] lg:w-[16%] xl:w-[17%] overflow-y-scroll custom-scrollbar">
       <div className="bg-white p-4 sticky top-0 z-10 ">
@@ -29,13 +29,7 @@ const Sidebar = () => {
         </Link>
       </div>
       <nav className="flex flex-col gap-1 text-sm p-4 pt-0">
-        {isLoading ? (
-          <>
-            {" "}
-            <p>Loading...</p>
-          </>
-        ) : (
-          sidebarLinks.map((item) => {
+        {sidebarLinks.map((item) => {
             const isActive =
               pathName === item.route || pathName.startsWith(`${item.route}/`);
             return (
@@ -69,8 +63,7 @@ const Sidebar = () => {
                 </p>
               </Link>
             );
-          })
-        )}
+          })}
       </nav>
     </section>
   );

@@ -8,6 +8,9 @@ import {
   SERVER_ERROR,
 } from "@/constants/message";
 import { signInProps, signInResponse } from "@/types/index";
+import { jwtDecode } from "jwt-decode";
+
+
 // import { revalidatePath } from "next/cache";
 
 export const signIn = async ({
@@ -44,16 +47,28 @@ export const signIn = async ({
       secure: process.env.ENVIRONMENT !== "development",
     });
 
-    // const user = await getUserInfo({ userId: ""})
+    const userData = jwtDecode(data.access)
 
-    return parseStringify({ success: true, msg: LOGIN_SUCCESSFUL });
+    return parseStringify({ 
+      success: true, 
+      msg: LOGIN_SUCCESSFUL,
+      data:userData 
+    });
   } catch (error: any) {
     return parseStringify({
       success: false,
       msg: SERVER_ERROR,
+      data:undefined
     });
   }
 };
+
+export const signOut = async ()=>{
+  const cookieStore = cookies()
+
+  cookieStore.delete("deemceeAuth")
+
+}
 
 // export const getUserInfo = async ({ userId }: getUserInfoProps) => {
 //   try {
