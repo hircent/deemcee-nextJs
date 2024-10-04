@@ -4,13 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { sidebarLinks } from "../../constants";
-import { cn } from "@/lib/utils";
+import { cn, getUserRole } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { useAuthContext } from "@/context/userContext";
 
 const Sidebar = () => {
   const pathName = usePathname();
   const { user } = useAuthContext();
+
+  const userRole = getUserRole(user);
+
+  console.log(userRole)
   return (
     <section className="flex flex-col w-[18%] md:w-[13%] lg:w-[16%] xl:w-[17%] overflow-y-scroll custom-scrollbar">
       <div className="bg-white p-4 sticky top-0 z-10 ">
@@ -30,6 +34,10 @@ const Sidebar = () => {
       </div>
       <nav className="flex flex-col gap-1 text-sm p-4 pt-0">
         {sidebarLinks.map((item) => {
+          const isVisible = userRole.some(role => item.visible.includes(role));
+        
+          if (!isVisible) return null;
+
             const isActive =
               pathName === item.route || pathName.startsWith(`${item.route}/`);
             return (
