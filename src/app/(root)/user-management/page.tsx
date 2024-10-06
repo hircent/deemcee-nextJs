@@ -8,7 +8,6 @@ const UserManagement = async () => {
   const user = await authUser()
   const userRole = getUserRole(user)
 
-  console.log(userRole)
   return (
     <section className="home">
       <div className="home-content">UserManagement</div>

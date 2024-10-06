@@ -395,7 +395,7 @@
   }
 
   .sidebar-logo {
-    @apply font-ibm-plex-serif text-[21px] font-bold text-black-1 max-xl:hidden;
+    @apply font-ibm-plex-serif text-[21px] font-bold text-yellow-12 max-xl:hidden;
   }
 
   .sidebar-link {

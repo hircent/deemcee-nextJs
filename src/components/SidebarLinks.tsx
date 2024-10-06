@@ -22,20 +22,20 @@ const pathName = usePathname();
                 href={item.route}
                 key={item.label}
                 className={cn(
-                  "flex items-center justify-center lg:justify-start gap-2 text-gray-500 py-2 md:px-2 rounded-md hover:bg-slate-400",
+                  "flex items-center justify-center lg:justify-start gap-2 text-gray-500 py-2 md:px-2 rounded-md hover:bg-yellow-3",
                   {
-                    "bg-bank-gradient": isActive,
+                    "bg-yellow-8 hover:bg-yellow-8": isActive,
                   }
                 )}
               >
-                <div className="relative size-6">
+                <div className="relative size-6 flex justify-center">
                   <Image
                     src={item.imgURL}
                     alt={item.label}
                     width={20}
                     height={20}
                     className={cn({
-                      "brightness-[3] invert-0": isActive,
+                      "brightness-[3] invert-0 text-yellow-11": isActive,
                     })}
                   />
                 </div>
