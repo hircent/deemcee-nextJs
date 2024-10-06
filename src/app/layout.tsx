@@ -27,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} ${ibmPlexSerif.variable}`}>
+      <body className={`bg-yellow-2 ${inter.className} ${ibmPlexSerif.variable}`}>
         <AuthContextWrapper>
           {children}
         </AuthContextWrapper>

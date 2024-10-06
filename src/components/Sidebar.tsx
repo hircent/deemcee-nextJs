@@ -10,10 +10,10 @@ const Sidebar = async ({user}:{user:User | undefined}) => {
 
   return (
     <section className="flex flex-col w-[18%] md:w-[13%] lg:w-[16%] xl:w-[17%] overflow-y-scroll custom-scrollbar">
-      <div className="bg-white p-4 sticky top-0 z-10 ">
+      <div className="bg-yellow-2 p-4 sticky top-0 z-10 ">
         <Link
           href="/"
-          className="cursor-pointer flex gap-2 sticky top-0 bg-white items-center justify-center xl:justify-start"
+          className="cursor-pointer flex gap-2 sticky top-0 items-center justify-center xl:justify-start"
         >
           <Image
             src="/icons/logo.svg"
