@@ -239,7 +239,7 @@
   }
 
   .header-box {
-    @apply flex flex-col gap-1;
+    @apply flex flex-col gap-1 justify-center;
   }
 
   .header-box-title {

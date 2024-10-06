@@ -7,7 +7,7 @@ import {
   LOGIN_SUCCESSFUL,
   SERVER_ERROR,
 } from "@/constants/message";
-import { signInProps, signInResponse } from "@/types/index";
+import { signInProps, signInResponse, User } from "@/types/index";
 import { jwtDecode } from "jwt-decode";
 
 
@@ -70,6 +70,21 @@ export const signOut = async ()=>{
 
 }
 
+export const authUser = async (): Promise<User | undefined> => {
+  const cookieStore = cookies();
+  const cookie = cookieStore.get("deemceeAuth");
+
+  if (cookie && cookie.value) {
+    try {
+      const user = jwtDecode<User>(cookie.value);
+      return user;
+    } catch (error) {
+      console.error("Error decoding JWT:", error);
+      return undefined;
+    }
+  }
+  return undefined;
+};
 // export const getUserInfo = async ({ userId }: getUserInfoProps) => {
 //   try {
 //     const { database } = await createAdminClient();

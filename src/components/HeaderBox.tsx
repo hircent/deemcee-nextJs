@@ -9,11 +9,10 @@ import { useAuthContext } from "@/context/userContext";
 
 const HeaderBox = ({ type, title, user, subtext }: HeaderBoxProps) => {
   const router = useRouter()
-  const {setUser} = useAuthContext()
   const userSignOut = async () =>{
     await signOut()
+    router.refresh();
     router.push('/sign-in')
-    // setUser(undefined)
   }
   return (
     <div className="flex justify-between">

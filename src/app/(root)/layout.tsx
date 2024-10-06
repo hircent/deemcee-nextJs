@@ -1,15 +1,16 @@
 import HeaderBox from "@/components/HeaderBox";
 import MobileNavbar from "@/components/MobileNavbar";
 import Sidebar from "@/components/Sidebar";
-import TotalBalanceBox from "@/components/TotalBalanceBox";
+import { authUser } from "@/lib/actions/user.actions";
+import { getUserRole } from "@/lib/utils";
 import Image from "next/image";
 import React from "react";
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
-  const loggedIn = { firstName: "hircent" };
+const Layout = async ({ children }: { children: React.ReactNode }) => {
+  const user = await authUser()
   return (
     <main className="flex h-screen w-full font-inter">
-      <Sidebar />
+      <Sidebar user={user}/>
 
       <div className="flex size-full flex-col bg-yellow-1">
         <div className="root-layout">
@@ -22,7 +23,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <HeaderBox
             type="greeting"
             title="Welcome"
-            user={loggedIn?.firstName || "Guest"}
+            user={user?.username || "Guest"}
             subtext="Access and manage your account and ...."
           />
         </header>
