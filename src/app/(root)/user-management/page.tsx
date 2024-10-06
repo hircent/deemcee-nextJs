@@ -9,9 +9,7 @@ const UserManagement = async () => {
   const userRole = getUserRole(user)
 
   return (
-    <section className="home">
-      <div className="home-content">UserManagement</div>
-    </section>
+    <div className="home-content">UserManagement</div>
   );
 };
 

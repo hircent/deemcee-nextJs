@@ -27,7 +27,9 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
             subtext="Access and manage your account and ...."
           />
         </header>
-        {children}
+        <section className="home overflow-y-scroll custom-scrollbar">
+          {children}
+        </section>
       </div>
     </main>
   );

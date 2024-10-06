@@ -12,11 +12,9 @@ export default async function Branch() {
     const branches:BranchListProps = await getBranchList()
   
     return (
-      <section className="home overflow-y-scroll custom-scrollbar">
         <div className="home-content">
           <BranchListTable columns={BranchListColumns} data={branches.data}/>
         </div>
-      </section>
     );
   } catch (error) {
     return <div>Error loading branches</div>

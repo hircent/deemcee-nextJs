@@ -34,7 +34,7 @@ interface DataTableProps<TData, TValue> {
         getCoreRowModel: getCoreRowModel(),
       })
       return (
-        <div className="rounded-md border">
+        <div className="rounded-md border bg-yellow-2">
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
