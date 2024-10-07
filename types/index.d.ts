@@ -334,9 +334,9 @@ declare interface getBankByAccountIdProps {
 }
 
 declare interface signInResponse {
-  success:boolean,
-  msg:string,
-  data:User | undefined
+  success: boolean;
+  msg: string;
+  data: User | undefined;
 }
 
 export type BranchRole = {
@@ -358,78 +358,84 @@ export type User = {
 };
 
 export type UserContextProps = {
-  user:User | undefined,
+  user: User | undefined;
   setUser: (user: User | undefined) => void;
-}
+};
 
 export type BranchProps = {
-  id:number,
-  branch_grade:number,
-  name:string,
-  display_name:string,
-  business_reg_no:string,
-  operation_date:string
-}
+  id: number;
+  branch_grade: number;
+  name: string;
+  display_name: string;
+  business_reg_no: string;
+  operation_date: string;
+};
 
 export type BranchListProps = {
-  success:boolean,
-  total:number,
-  next:string | null,
-  previous:string | null,
-  data:BranchProps[]
-}
+  success: boolean;
+  total: number;
+  next: string | null;
+  previous: string | null;
+  data: BranchProps[];
+};
 
-export type BRANCH = "Branch"
-export type PRINCIPAL = "Principal"
-export type MANAGER = "Manager"
-export type TEACHER = "Teacher"
-export type STUDENT = "Student"
+export type BranchListFilterProps = {
+  page?: number;
+  pageSize?: number;
+  searchQuery?: string;
+  filter?: string;
+};
+
+export type BRANCH = "Branch";
+export type PRINCIPAL = "Principal";
+export type MANAGER = "Manager";
+export type TEACHER = "Teacher";
+export type STUDENT = "Student";
 
 export type DeleteProps = {
-  type: BRANCH | PRINCIPAL | MANAGER | TEACHER | STUDENT,
-  name:string,
-  id:number
-}
+  type: BRANCH | PRINCIPAL | MANAGER | TEACHER | STUDENT;
+  name: string;
+  id: number;
+};
 
 export type EditProps = {
-  type: BRANCH | PRINCIPAL | MANAGER | TEACHER | STUDENT,
-  id:number
-}
+  type: BRANCH | PRINCIPAL | MANAGER | TEACHER | STUDENT;
+  id: number;
+};
 
-export type deleteBranchProps = {
-  name:string,
-  confirmName:string,
-  id:number
-}
+export type DeleteBranchProps = {
+  name: string;
+  confirmName: string;
+  id: number;
+};
 
 export type GetBranchDetailProps = {
-  id:number
-}
+  id: number;
+};
 
 export type Address = {
-  address_line_1:string | null,
-  address_line_2:string | null,
-  address_line_3:string | null,
-  city:string,
-  postcode:string,
-  state:string,
-  created_at:string,
-  updated_at:string,
-}
+  address_line_1: string | null;
+  address_line_2: string | null;
+  address_line_3: string | null;
+  city: string;
+  postcode: string;
+  state: string;
+  created_at: string;
+  updated_at: string;
+};
 
 export type BranchDetailProps = {
-  address:Address,
-  branch_grade:number,
-  business_name:string,
-  business_reg_no:string,
-  description:string | null,
-  display_name:string,
-  id:number,
-  is_headquaters:string,
-  name:string,
-  operation_date:string,
-  updated_at:string,
-  created_at:string,
-  terminated_at:string
-}
-
+  address: Address;
+  branch_grade: number;
+  business_name: string;
+  business_reg_no: string;
+  description: string | null;
+  display_name: string;
+  id: number;
+  is_headquaters: string;
+  name: string;
+  operation_date: string;
+  updated_at: string;
+  created_at: string;
+  terminated_at: string;
+};
