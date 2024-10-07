@@ -386,11 +386,12 @@ export type BranchListFilterProps = {
   filter?: string;
 };
 
-export type BRANCH = "Branch";
-export type PRINCIPAL = "Principal";
-export type MANAGER = "Manager";
-export type TEACHER = "Teacher";
-export type STUDENT = "Student";
+export type SUPERADMIN = "superadmin";
+export type BRANCH = "branch";
+export type PRINCIPAL = "principal";
+export type MANAGER = "manager";
+export type TEACHER = "teacher";
+export type STUDENT = "student";
 
 export type DeleteProps = {
   type: BRANCH | PRINCIPAL | MANAGER | TEACHER | STUDENT;
