@@ -10,15 +10,19 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function getBranchList(params: BranchListFilterProps) {
-  const { page } = params;
+  const { page, searchQuery } = params;
   const token = getToken();
 
   let url = `${process.env.API_URL}/branch/list`;
 
-  if (page) {
-    url = `${url}?page=${page}`;
+  if (searchQuery) {
+    url = `${url}?q=${searchQuery}`;
   }
 
+  if (page && page > 1) {
+    url = `${url}?page=${page}`;
+  }
+  console.log(url);
   try {
     const response = await fetch(url, {
       method: "GET",
