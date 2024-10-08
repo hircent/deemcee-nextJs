@@ -5,6 +5,7 @@ import {
   GetBranchDetailProps,
   DeleteBranchProps,
   BranchDetailProps,
+  PrincipalsAndBranchGrade,
 } from "@/types/index";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
@@ -100,6 +101,38 @@ export async function getBranchDetails({
 
     if (!response.ok) {
       throw new Error(`HTTP Error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    return data.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getAllPrincipalAndBranchGrade(): Promise<
+  PrincipalsAndBranchGrade | undefined
+> {
+  const token = getToken();
+  try {
+    const response = await fetch(
+      `${process.env.API_URL}/branch/principals/branch_grade`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error! Status: ${response.status}`);
+    }
+
+    if (response.status == 403) {
+      return undefined;
     }
 
     const data = await response.json();

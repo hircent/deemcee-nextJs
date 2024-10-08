@@ -415,9 +415,9 @@ export type GetBranchDetailProps = {
 };
 
 export type Address = {
-  address_line_1: string | null;
-  address_line_2: string | null;
-  address_line_3: string | null;
+  address_line_1: string;
+  address_line_2: string;
+  address_line_3: string;
   city: string;
   postcode: string;
   state: string;
@@ -447,4 +447,18 @@ export type BranchDetailProps = {
   updated_at: string;
   created_at: string;
   terminated_at: string;
+};
+
+export type Principal = {
+  id: number;
+  username: string;
+};
+export type BranchGrade = {
+  id: number;
+  name: string;
+};
+
+export type PrincipalsAndBranchGrade = {
+  principals: Principal[];
+  branch_grades: BranchGrade[];
 };

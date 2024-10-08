@@ -19,9 +19,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { getBranchDetails } from "@/lib/actions/branch.action";
-import { BranchDetailProps, EditProps } from "@/types/index";
+import {
+  getAllPrincipalAndBranchGrade,
+  getBranchDetails,
+} from "@/lib/actions/branch.action";
+import { BranchGrade, EditProps, Principal } from "@/types/index";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -36,44 +38,12 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
-const MOCK_PRINCIPALS = [
-  { id: 1, username: "principalbsddeemcee.com", fullName: "John Doe" },
-  { id: 13, username: "principalkkdeemcee.com", fullName: "Mike Brown" },
-  { id: 14, username: "principalasdeemcee.com", fullName: "Sarah Wilson" },
-  {
-    id: 15,
-    username: "principalchlensendeemcee.com",
-    fullName: "Alex Johnson",
-  },
-  { id: 679, username: "principal2spdeemcee.com", fullName: "Jane Smith" },
-];
-
-export const MOCK_BRANCH_GRADES = [
-  { id: 1, name: "Level 1", description: "Premium branch" },
-  { id: 2, name: "Level 2", description: "Standard branch" },
-  { id: 3, name: "Level 3", description: "Basic branch" },
-  { id: 4, name: "Level 4", description: "Satellite branch" },
-];
-
-// Types for the mock data
-export interface MockPrincipal {
-  id: number;
-  username: string;
-  fullName: string;
-}
-
-export interface MockBranchGrade {
-  id: number;
-  name: string;
-  description: string;
-}
-
 const formSchema = z.object({
   principal: z.object({
-    username: z.string().min(2, "Username must be at least 2 characters"),
+    id: z.number().min(1, "Principal is required"),
   }),
   branch_grade: z.object({
-    name: z.string().min(2, "Username must be at least 2 characters"),
+    id: z.number().min(1, "Branch grade is required"),
   }),
   business_name: z
     .string()
@@ -84,9 +54,9 @@ const formSchema = z.object({
     .string()
     .min(1, "Business registration number is required"),
   address: z.object({
-    address_line_1: z.string().nullable(),
-    address_line_2: z.string().nullable(),
-    address_line_3: z.string().nullable(),
+    address_line_1: z.string(),
+    address_line_2: z.string(),
+    address_line_3: z.string(),
     city: z.string().min(1, "City is required"),
     postcode: z.string().min(1, "Postcode is required"),
     state: z.string().min(1, "State is required"),
@@ -94,29 +64,28 @@ const formSchema = z.object({
 });
 type FormValues = z.infer<typeof formSchema>;
 export function Edit({ type, id }: EditProps) {
-  const [branch, setBranch] = useState<BranchDetailProps | null>(null);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false);
-  const [principals] = useState<MockPrincipal[]>(MOCK_PRINCIPALS);
-  const [branchGrades] = useState<MockBranchGrade[]>(MOCK_BRANCH_GRADES);
+  const [principals, setPrincipals] = useState<Principal[]>([]);
+  const [branchGrades, setBranchGrades] = useState<BranchGrade[]>([]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       principal: {
-        username: "",
+        id: 0, // or null, depending on your needs
       },
       branch_grade: {
-        name: "",
+        id: 0, // or null, depending on your needs
       },
       business_name: "",
       display_name: "",
       description: "",
       business_reg_no: "",
       address: {
-        address_line_1: null,
-        address_line_2: null,
-        address_line_3: null,
+        address_line_1: "",
+        address_line_2: "",
+        address_line_3: "",
         city: "",
         postcode: "",
         state: "",
@@ -124,29 +93,45 @@ export function Edit({ type, id }: EditProps) {
     },
   });
 
+  async function getSelectFromPrincipalAndBranchGrade() {
+    try {
+      const data = await getAllPrincipalAndBranchGrade();
+      if (data) {
+        setBranchGrades(data.branch_grades);
+        setPrincipals(data.principals);
+      }
+    } catch (error) {
+      console.error("Failed to fetch select options:", error);
+    }
+  }
+
   async function getBranch() {
     setLoading(true);
     try {
-      const branchData = await getBranchDetails({ id });
-      setBranch(branchData);
+      const [branchData, _] = await Promise.all([
+        getBranchDetails({ id }),
+        getSelectFromPrincipalAndBranchGrade(), // Fetch select options alongside branch details
+      ]);
+      // setBranch(branchData);
+
       form.reset({
         principal: {
-          username: branchData.principal.username,
+          id: branchData.principal?.id || 0,
         },
         branch_grade: {
-          name: branchData.branch_grade.name,
+          id: branchData.branch_grade?.id || 0,
         },
-        business_name: branchData.business_name,
-        display_name: branchData.display_name,
-        description: branchData.description,
-        business_reg_no: branchData.business_reg_no,
+        business_name: branchData?.business_name || "",
+        display_name: branchData?.display_name || "",
+        description: branchData?.description || "",
+        business_reg_no: branchData?.business_reg_no || "",
         address: {
-          address_line_1: branchData.address.address_line_1,
-          address_line_2: branchData.address.address_line_2,
-          address_line_3: branchData.address.address_line_3,
-          city: branchData.address.city,
-          postcode: branchData.address.postcode,
-          state: branchData.address.state,
+          address_line_1: branchData?.address.address_line_1 || "",
+          address_line_2: branchData?.address.address_line_2 || "",
+          address_line_3: branchData?.address.address_line_3 || "",
+          city: branchData?.address.city || "",
+          postcode: branchData?.address.postcode || "",
+          state: branchData?.address.state || "",
         },
       });
     } catch (error) {
@@ -158,8 +143,6 @@ export function Edit({ type, id }: EditProps) {
 
   async function onSubmit(data: FormValues) {
     try {
-      // Implement your update logic here
-      console.log("Form submitted:", data);
       setOpen(false);
     } catch (error) {
       console.error("Failed to update branch:", error);
@@ -212,13 +195,17 @@ export function Edit({ type, id }: EditProps) {
                   <div className="grid gap-4 sm:grid-cols-2">
                     <FormField
                       control={form.control}
-                      name="principal.username"
+                      name="principal.id"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Principal</FormLabel>
                           <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
+                            onValueChange={(value) =>
+                              field.onChange(Number(value))
+                            }
+                            value={
+                              field.value ? String(field.value) : undefined
+                            }
                           >
                             <FormControl>
                               <SelectTrigger>
@@ -229,7 +216,7 @@ export function Edit({ type, id }: EditProps) {
                               {principals.map((principal) => (
                                 <SelectItem
                                   key={principal.id}
-                                  value={principal.username}
+                                  value={String(principal.id)}
                                 >
                                   {principal.username}
                                 </SelectItem>
@@ -243,13 +230,17 @@ export function Edit({ type, id }: EditProps) {
 
                     <FormField
                       control={form.control}
-                      name="branch_grade.name"
+                      name="branch_grade.id"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Branch Grade</FormLabel>
                           <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
+                            onValueChange={(value) =>
+                              field.onChange(Number(value))
+                            }
+                            value={
+                              field.value ? String(field.value) : undefined
+                            }
                           >
                             <FormControl>
                               <SelectTrigger>
@@ -258,7 +249,10 @@ export function Edit({ type, id }: EditProps) {
                             </FormControl>
                             <SelectContent className="bg-white">
                               {branchGrades.map((grade) => (
-                                <SelectItem key={grade.id} value={grade.name}>
+                                <SelectItem
+                                  key={grade.id}
+                                  value={String(grade.id)}
+                                >
                                   {grade.name}
                                 </SelectItem>
                               ))}
