@@ -426,11 +426,19 @@ export type Address = {
 };
 
 export type BranchDetailProps = {
+  principal: {
+    id: number;
+    username: string;
+  };
+  branch_grade: {
+    id: number;
+    name: string;
+  };
   address: Address;
   branch_grade: number;
   business_name: string;
   business_reg_no: string;
-  description: string | null;
+  description: string;
   display_name: string;
   id: number;
   is_headquaters: string;

@@ -11,6 +11,13 @@ import {
   DialogTrigger,
   DialogOverlay,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getBranchDetails } from "@/lib/actions/branch.action";
@@ -29,12 +36,50 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
+const MOCK_PRINCIPALS = [
+  { id: 1, username: "principalbsddeemcee.com", fullName: "John Doe" },
+  { id: 13, username: "principalkkdeemcee.com", fullName: "Mike Brown" },
+  { id: 14, username: "principalasdeemcee.com", fullName: "Sarah Wilson" },
+  {
+    id: 15,
+    username: "principalchlensendeemcee.com",
+    fullName: "Alex Johnson",
+  },
+  { id: 679, username: "principal2spdeemcee.com", fullName: "Jane Smith" },
+];
+
+export const MOCK_BRANCH_GRADES = [
+  { id: 1, name: "Level 1", description: "Premium branch" },
+  { id: 2, name: "Level 2", description: "Standard branch" },
+  { id: 3, name: "Level 3", description: "Basic branch" },
+  { id: 4, name: "Level 4", description: "Satellite branch" },
+];
+
+// Types for the mock data
+export interface MockPrincipal {
+  id: number;
+  username: string;
+  fullName: string;
+}
+
+export interface MockBranchGrade {
+  id: number;
+  name: string;
+  description: string;
+}
+
 const formSchema = z.object({
+  principal: z.object({
+    username: z.string().min(2, "Username must be at least 2 characters"),
+  }),
+  branch_grade: z.object({
+    name: z.string().min(2, "Username must be at least 2 characters"),
+  }),
   business_name: z
     .string()
     .min(2, "Business name must be at least 2 characters"),
   display_name: z.string().min(2, "Display name must be at least 2 characters"),
-  description: z.string().nullable(),
+  description: z.string(),
   business_reg_no: z
     .string()
     .min(1, "Business registration number is required"),
@@ -52,12 +97,21 @@ export function Edit({ type, id }: EditProps) {
   const [branch, setBranch] = useState<BranchDetailProps | null>(null);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false);
+  const [principals] = useState<MockPrincipal[]>(MOCK_PRINCIPALS);
+  const [branchGrades] = useState<MockBranchGrade[]>(MOCK_BRANCH_GRADES);
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      principal: {
+        username: "",
+      },
+      branch_grade: {
+        name: "",
+      },
       business_name: "",
       display_name: "",
-      description: null,
+      description: "",
       business_reg_no: "",
       address: {
         address_line_1: null,
@@ -69,12 +123,19 @@ export function Edit({ type, id }: EditProps) {
       },
     },
   });
+
   async function getBranch() {
     setLoading(true);
     try {
       const branchData = await getBranchDetails({ id });
       setBranch(branchData);
       form.reset({
+        principal: {
+          username: branchData.principal.username,
+        },
+        branch_grade: {
+          name: branchData.branch_grade.name,
+        },
         business_name: branchData.business_name,
         display_name: branchData.display_name,
         description: branchData.description,
@@ -144,6 +205,71 @@ export function Edit({ type, id }: EditProps) {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid gap-6">
+                {/* Principal and Branch Grade Section */}
+
+                <div className="space-y-4">
+                  <h3 className="text-lg font-medium">Branch Details</h3>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <FormField
+                      control={form.control}
+                      name="principal.username"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Principal</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select a principal" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="bg-white">
+                              {principals.map((principal) => (
+                                <SelectItem
+                                  key={principal.id}
+                                  value={principal.username}
+                                >
+                                  {principal.username}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="branch_grade.name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Branch Grade</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select a branch grade" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="bg-white">
+                              {branchGrades.map((grade) => (
+                                <SelectItem key={grade.id} value={grade.name}>
+                                  {grade.name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
                 {/* Basic Information Section */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-medium">Basic Information</h3>
@@ -189,6 +315,19 @@ export function Edit({ type, id }: EditProps) {
                         </FormItem>
                       )}
                     />
+                    <FormField
+                      control={form.control}
+                      name="description"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Description</FormLabel>
+                          <FormControl>
+                            <Input {...field} className="w-full" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
                 </div>
 
@@ -220,6 +359,24 @@ export function Edit({ type, id }: EditProps) {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Address Line 2</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              value={field.value || ""}
+                              className="w-full"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="address.address_line_3"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Address Line 3</FormLabel>
                           <FormControl>
                             <Input
                               {...field}

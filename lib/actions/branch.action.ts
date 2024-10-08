@@ -4,6 +4,7 @@ import {
   BranchListFilterProps,
   GetBranchDetailProps,
   DeleteBranchProps,
+  BranchDetailProps,
 } from "@/types/index";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
@@ -22,7 +23,7 @@ export async function getBranchList(params: BranchListFilterProps) {
   if (page && page > 1) {
     url = `${url}?page=${page}`;
   }
-  console.log(url);
+
   try {
     const response = await fetch(url, {
       method: "GET",
@@ -80,7 +81,9 @@ export async function deleteBranch({
   }
 }
 
-export async function getBranchDetails({ id }: GetBranchDetailProps) {
+export async function getBranchDetails({
+  id,
+}: GetBranchDetailProps): Promise<BranchDetailProps> {
   const token = getToken();
 
   try {
