@@ -35,7 +35,7 @@ export async function getBranchList(params: BranchListFilterProps) {
       // next:{
       //     revalidate:3300
       // },
-      // cache:"no-cache"
+      cache: "no-cache",
     });
 
     if (!response.ok) {
