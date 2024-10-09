@@ -13,8 +13,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Edit } from "@/components/Edit";
-import { Delete } from "@/components/Delete";
+import { EditBranch } from "@/components/EditBranch";
+import { DeleteBranch } from "@/components/DeleteBranch";
 
 export const BranchListColumns: ColumnDef<BranchProps>[] = [
   {
@@ -69,8 +69,8 @@ export const BranchListColumns: ColumnDef<BranchProps>[] = [
         //   </DropdownMenuContent>
         // </DropdownMenu>
         <div className="flex gap-4">
-          <Edit type={"branch"} id={branch.id} />
-          <Delete type={"branch"} name={branch.name} id={branch.id} />
+          <EditBranch type={"branch"} id={branch.id} />
+          <DeleteBranch type={"branch"} name={branch.name} id={branch.id} />
         </div>
       );
     },
