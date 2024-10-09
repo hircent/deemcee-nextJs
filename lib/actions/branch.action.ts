@@ -143,6 +143,27 @@ export async function getAllPrincipalAndBranchGrade(): Promise<
   }
 }
 
+export async function createBranch(formData: FormData) {
+  const token = getToken();
+
+  try {
+    // const response = await fetch(`${process.env.API_URL}/branch/create`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${token?.value}`,
+    //   },
+    // });
+    setTimeout(() => {
+      console.log({ success: true });
+    }, 3000);
+
+    return { success: true };
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 function getToken() {
   const cookieStore = cookies();
   const token = cookieStore.get("deemceeAuth");

@@ -34,15 +34,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react";
 import { branchFormSchema, BranchFormValues } from "@/constants/form";
 import { BranchGrade, Principal } from "@/types/index";
-import { getAllPrincipalAndBranchGrade } from "@/lib/actions/branch.action";
-import { useFormStatus } from "react-dom";
+import {
+  createBranch,
+  getAllPrincipalAndBranchGrade,
+} from "@/lib/actions/branch.action";
 
 const CreateBranch = (params: CreateType) => {
   const { type } = params;
   const [open, setOpen] = useState<boolean>(false);
   const [principals, setPrincipals] = useState<Principal[]>([]);
   const [branchGrades, setBranchGrades] = useState<BranchGrade[]>([]);
-  const [pending, setPending] = useState<boolean>(false);
+  const [principalID, setPrincipalID] = useState("");
+  const [branchGradeID, setBranchGradeID] = useState("");
 
   useEffect(() => {
     async function getSelectFromPrincipalAndBranchGrade() {
@@ -83,12 +86,15 @@ const CreateBranch = (params: CreateType) => {
     },
   });
 
-  const onSubmit = (data: BranchFormValues) => {
-    setPending(true);
-    console.log("Form Data:", data);
+  const submitForm = async (formData: FormData) => {
+    formData.append("principal", principalID);
+    formData.append("branch_grade", branchGradeID);
+    console.log("Form Data:", Object.fromEntries(formData));
     try {
-    } catch (error) {}
-    // Here you'll see the principal.id in the logged data
+      await createBranch(formData);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -117,7 +123,7 @@ const CreateBranch = (params: CreateType) => {
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form action={submitForm} className="space-y-6">
             <div className="grid gap-6">
               {/* Principal and Branch Grade Section */}
 
@@ -133,7 +139,7 @@ const CreateBranch = (params: CreateType) => {
                         <Select
                           onValueChange={(value) => {
                             field.onChange(Number(value));
-                            console.log("Select changed to:", value);
+                            setPrincipalID(value);
                           }}
                           value={field.value ? String(field.value) : undefined}
                         >
@@ -166,9 +172,10 @@ const CreateBranch = (params: CreateType) => {
                       <FormItem>
                         <FormLabel>Branch Grade</FormLabel>
                         <Select
-                          onValueChange={(value) =>
-                            field.onChange(Number(value))
-                          }
+                          onValueChange={(value) => {
+                            field.onChange(Number(value));
+                            setBranchGradeID(value);
+                          }}
                           value={field.value ? String(field.value) : undefined}
                         >
                           <FormControl>
@@ -360,12 +367,8 @@ const CreateBranch = (params: CreateType) => {
               </div>
             </div>
             <DialogFooter className="gap-4 sm:gap-0">
-              <Button
-                type="submit"
-                className="bg-[#000] text-white"
-                disabled={pending}
-              >
-                {pending ? "Submitting..." : "Submit"}
+              <Button type="submit" className="bg-[#000] text-white">
+                Create
               </Button>
             </DialogFooter>
           </form>
