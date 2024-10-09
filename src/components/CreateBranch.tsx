@@ -38,6 +38,8 @@ import {
   createBranch,
   getAllPrincipalAndBranchGrade,
 } from "@/lib/actions/branch.action";
+import { useToast } from "./ui/use-toast";
+import { cn } from "@/lib/utils";
 
 const CreateBranch = (params: CreateType) => {
   const { type } = params;
@@ -46,6 +48,7 @@ const CreateBranch = (params: CreateType) => {
   const [branchGrades, setBranchGrades] = useState<BranchGrade[]>([]);
   const [principalID, setPrincipalID] = useState("");
   const [branchGradeID, setBranchGradeID] = useState("");
+  const { toast } = useToast();
 
   useEffect(() => {
     async function getSelectFromPrincipalAndBranchGrade() {
@@ -71,18 +74,17 @@ const CreateBranch = (params: CreateType) => {
       branch_grade: {
         id: 0, // or null, depending on your needs
       },
+      name: "",
       business_name: "",
       display_name: "",
       description: "",
       business_reg_no: "",
-      address: {
-        address_line_1: "",
-        address_line_2: "",
-        address_line_3: "",
-        city: "",
-        postcode: "",
-        state: "",
-      },
+      address_line_1: "",
+      address_line_2: "",
+      address_line_3: "",
+      city: "",
+      postcode: "",
+      state: "",
     },
   });
 
@@ -92,6 +94,14 @@ const CreateBranch = (params: CreateType) => {
     console.log("Form Data:", Object.fromEntries(formData));
     try {
       await createBranch(formData);
+      toast({
+        title: "Success",
+        description: `New Branch has been created successfully.`,
+        duration: 2000,
+        className: cn("bottom-0 left-0 bg-success-100"),
+      });
+      form.reset();
+      setOpen(false);
     } catch (error) {
       console.log(error);
     }
@@ -207,6 +217,20 @@ const CreateBranch = (params: CreateType) => {
                 <div className="grid gap-4 sm:grid-cols-2">
                   <FormField
                     control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input {...field} className="w-full" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
                     name="business_name"
                     render={({ field }) => (
                       <FormItem>
@@ -268,7 +292,7 @@ const CreateBranch = (params: CreateType) => {
                 <div className="grid gap-4">
                   <FormField
                     control={form.control}
-                    name="address.address_line_1"
+                    name="address_line_1"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Address Line 1</FormLabel>
@@ -286,7 +310,7 @@ const CreateBranch = (params: CreateType) => {
 
                   <FormField
                     control={form.control}
-                    name="address.address_line_2"
+                    name="address_line_2"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Address Line 2</FormLabel>
@@ -304,7 +328,7 @@ const CreateBranch = (params: CreateType) => {
 
                   <FormField
                     control={form.control}
-                    name="address.address_line_3"
+                    name="address_line_3"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Address Line 3</FormLabel>
@@ -323,7 +347,7 @@ const CreateBranch = (params: CreateType) => {
                   <div className="grid gap-4 sm:grid-cols-3">
                     <FormField
                       control={form.control}
-                      name="address.city"
+                      name="city"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>City</FormLabel>
@@ -337,7 +361,7 @@ const CreateBranch = (params: CreateType) => {
 
                     <FormField
                       control={form.control}
-                      name="address.state"
+                      name="state"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>State</FormLabel>
@@ -351,7 +375,7 @@ const CreateBranch = (params: CreateType) => {
 
                     <FormField
                       control={form.control}
-                      name="address.postcode"
+                      name="postcode"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Postcode</FormLabel>
