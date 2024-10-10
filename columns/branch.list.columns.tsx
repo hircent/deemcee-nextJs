@@ -48,23 +48,14 @@ export const BranchListColumns: ColumnDef<BranchProps>[] = [
         //   </DropdownMenuTrigger>
         //   <DropdownMenuContent align="end" className="bg-white">
         //     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        //     <DropdownMenuItem className="hover:bg-slate-400 cursor-pointer"
-        //       onClick={() => navigator.clipboard.writeText(branch.id.toString())}
-        //     >
-        //       Copy payment ID
-        //     </DropdownMenuItem>
         //     <DropdownMenuSeparator />
         //     <DropdownMenuItem className="hover:bg-slate-400 cursor-pointer">
-        //         <Pencil
-        //           size={18}
-        //           className="text-gray-500 group-hover:text-blue-500 transition-colors"
-        //         />
+        //       <EditBranch type={"branch"} id={branch.id} />
+        //       Edit
         //     </DropdownMenuItem>
         //     <DropdownMenuItem className="hover:bg-slate-400 cursor-pointer">
-        //         <Trash2
-        //           size={18}
-        //           className="text-gray-500 group-hover:text-red-500 transition-colors"
-        //         />
+        //       <DeleteBranch type={"branch"} name={branch.name} id={branch.id} />
+        //       Delete
         //     </DropdownMenuItem>
         //   </DropdownMenuContent>
         // </DropdownMenu>

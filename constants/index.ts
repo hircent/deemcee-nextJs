@@ -3,19 +3,37 @@ export const sidebarLinks = [
     imgURL: "/icons/home.svg",
     route: "/",
     label: "Home",
-    visible:["superadmin","principal","manager","teacher"]
-  },
-  {
-    imgURL: "/icons/users.svg",
-    route: "/user-management",
-    label: "Teacher",
-    visible:["superadmin","principal","manager","teacher"]
+    visible: ["superadmin", "principal", "manager", "teacher"],
   },
   {
     imgURL: "/icons/home.svg",
     route: "/branch",
     label: "Branch",
-    visible:["superadmin","principal","manager"]
+    visible: ["superadmin", "principal", "manager"],
+  },
+  {
+    imgURL: "/icons/users.svg",
+    route: "/superadmin",
+    label: "Superadmin",
+    visible: ["superadmin"],
+  },
+  {
+    imgURL: "/icons/users.svg",
+    route: "/principal",
+    label: "Principal",
+    visible: ["superadmin", "principal"],
+  },
+  {
+    imgURL: "/icons/users.svg",
+    route: "/manager",
+    label: "Manager",
+    visible: ["superadmin", "principal", "manager"],
+  },
+  {
+    imgURL: "/icons/users.svg",
+    route: "/teacher",
+    label: "Teacher",
+    visible: ["superadmin", "principal", "manager", "teacher"],
   },
   // {
   //   imgURL: "/icons/home.svg",

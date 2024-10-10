@@ -160,7 +160,7 @@ export function EditBranch({ type, id }: EditProps) {
           <Pencil
             size={18}
             className="text-gray-500 group-hover:text-blue-500 transition-colors"
-          />
+          />{" "}
         </Button>
       </DialogTrigger>
       <DialogOverlay

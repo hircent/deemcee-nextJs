@@ -4,7 +4,7 @@ import CreateBranch from "@/components/CreateBranch";
 import SearchBar from "@/components/SearchBar";
 import { Button } from "@/components/ui/button";
 import { BRANCH } from "@/constants/message";
-import { getAllPrincipalAndBranchGrade, getBranchList } from "@/lib/actions/branch.action";
+import { getBranchList } from "@/lib/actions/branch.action";
 import { authUser } from "@/lib/actions/user.actions";
 import { getUserRole } from "@/lib/utils";
 import { BranchListProps, SearchParamProps } from "@/types/index";
@@ -13,7 +13,6 @@ import Link from "next/link";
 import React from "react";
 
 export default async function Branch({ searchParams }: SearchParamProps) {
-
   try {
     const user = await authUser();
     const userRole = getUserRole(user);
@@ -27,9 +26,7 @@ export default async function Branch({ searchParams }: SearchParamProps) {
       <div className="home-content">
         <div className="flex justify-between">
           <SearchBar />
-          {userRole.includes("superadmin") && (
-              <CreateBranch type={BRANCH}/>
-          )}
+          {userRole.includes("superadmin") && <CreateBranch type={BRANCH} />}
         </div>
         <BranchListTable columns={BranchListColumns} data={result.data} />
 
