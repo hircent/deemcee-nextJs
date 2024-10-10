@@ -178,7 +178,6 @@ export async function createBranch(formData: FormData) {
         postcode,
       },
     };
-    console.log({ payload });
     const response = await fetch(`${process.env.API_URL}/branch/create`, {
       method: "POST",
       headers: {

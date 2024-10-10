@@ -18,6 +18,7 @@ export const branchFormSchema = z.object({
   business_reg_no: z
     .string()
     .min(1, "Business registration number is required"),
+  operation_date:z.string(),
   address_line_1: z.string(),
   address_line_2: z.string(),
   address_line_3: z.string(),

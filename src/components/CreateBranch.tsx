@@ -31,7 +31,7 @@ import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus } from "lucide-react";
+import { Plus ,Calendar as CalendarIcon} from "lucide-react";
 import { branchFormSchema, BranchFormValues } from "@/constants/form";
 import { BranchGrade, Principal } from "@/types/index";
 import {
@@ -79,6 +79,7 @@ const CreateBranch = (params: CreateType) => {
       display_name: "",
       description: "",
       business_reg_no: "",
+      operation_date: "",
       address_line_1: "",
       address_line_2: "",
       address_line_3: "",
@@ -91,7 +92,7 @@ const CreateBranch = (params: CreateType) => {
   const submitForm = async (formData: FormData) => {
     formData.append("principal", principalID);
     formData.append("branch_grade", branchGradeID);
-    console.log("Form Data:", Object.fromEntries(formData));
+    console.log({formData});
     try {
       await createBranch(formData);
       toast({
@@ -278,6 +279,20 @@ const CreateBranch = (params: CreateType) => {
                         <FormLabel>Description</FormLabel>
                         <FormControl>
                           <Input {...field} className="w-full" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="operation_date"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Operation Date</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="date" className="w-full" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

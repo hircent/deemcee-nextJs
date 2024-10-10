@@ -58,14 +58,13 @@ export function EditBranch({ type, id }: EditProps) {
       display_name: "",
       description: "",
       business_reg_no: "",
-      address: {
-        address_line_1: "",
-        address_line_2: "",
-        address_line_3: "",
-        city: "",
-        postcode: "",
-        state: "",
-      },
+      operation_date: "",
+      address_line_1: "",
+      address_line_2: "",
+      address_line_3: "",
+      city: "",
+      postcode: "",
+      state: "",
     },
   });
 
@@ -88,8 +87,7 @@ export function EditBranch({ type, id }: EditProps) {
         getBranchDetails({ id }),
         getSelectFromPrincipalAndBranchGrade(), // Fetch select options alongside branch details
       ]);
-      // setBranch(branchData);
-
+      
       form.reset({
         principal: {
           id: branchData.principal?.id || 0,
@@ -101,14 +99,13 @@ export function EditBranch({ type, id }: EditProps) {
         display_name: branchData?.display_name || "",
         description: branchData?.description || "",
         business_reg_no: branchData?.business_reg_no || "",
-        address: {
-          address_line_1: branchData?.address.address_line_1 || "",
-          address_line_2: branchData?.address.address_line_2 || "",
-          address_line_3: branchData?.address.address_line_3 || "",
-          city: branchData?.address.city || "",
-          postcode: branchData?.address.postcode || "",
-          state: branchData?.address.state || "",
-        },
+        operation_date: branchData?.operation_date || "",
+        address_line_1: branchData?.address.address_line_1 || "",
+        address_line_2: branchData?.address.address_line_2 || "",
+        address_line_3: branchData?.address.address_line_3 || "",
+        city: branchData?.address.city || "",
+        postcode: branchData?.address.postcode || "",
+        state: branchData?.address.state || "",
       });
     } catch (error) {
       console.error("Failed to fetch branch details:", error);
@@ -307,7 +304,7 @@ export function EditBranch({ type, id }: EditProps) {
                   <div className="grid gap-4">
                     <FormField
                       control={form.control}
-                      name="address.address_line_1"
+                      name="address_line_1"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Address Line 1</FormLabel>
@@ -325,7 +322,7 @@ export function EditBranch({ type, id }: EditProps) {
 
                     <FormField
                       control={form.control}
-                      name="address.address_line_2"
+                      name="address_line_2"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Address Line 2</FormLabel>
@@ -343,7 +340,7 @@ export function EditBranch({ type, id }: EditProps) {
 
                     <FormField
                       control={form.control}
-                      name="address.address_line_3"
+                      name="address_line_3"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Address Line 3</FormLabel>
@@ -362,7 +359,7 @@ export function EditBranch({ type, id }: EditProps) {
                     <div className="grid gap-4 sm:grid-cols-3">
                       <FormField
                         control={form.control}
-                        name="address.city"
+                        name="city"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>City</FormLabel>
@@ -376,7 +373,7 @@ export function EditBranch({ type, id }: EditProps) {
 
                       <FormField
                         control={form.control}
-                        name="address.state"
+                        name="state"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>State</FormLabel>
@@ -390,7 +387,7 @@ export function EditBranch({ type, id }: EditProps) {
 
                       <FormField
                         control={form.control}
-                        name="address.postcode"
+                        name="postcode"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Postcode</FormLabel>
