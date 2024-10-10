@@ -13,9 +13,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
-  FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
@@ -25,7 +23,6 @@ import { signIn } from "@/lib/actions/user.actions";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { HOME_REDIRECT } from "@/constants/message";
-import { appConfig } from "@/app.config";
 import { signInResponse } from "@/types/index";
 import { useAuthContext } from "@/context/userContext";
 
@@ -35,7 +32,7 @@ const formSchema = z.object({
 });
 
 const AuthForm = ({ type }: { type: string }) => {
-  const { user,setUser } = useAuthContext()
+  const { user, setUser } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
@@ -69,7 +66,7 @@ const AuthForm = ({ type }: { type: string }) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    
+
     setIsLoading(true);
     try {
       const res: signInResponse = await signIn({
@@ -82,11 +79,10 @@ const AuthForm = ({ type }: { type: string }) => {
       }
 
       toastResponse(res);
-      
+
       setTimeout(() => {
         router.push("/");
       }, 2100);
-
     } catch (error) {
       toast({
         title: "Error",
@@ -123,64 +119,64 @@ const AuthForm = ({ type }: { type: string }) => {
         </div>
       </header>
       <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <div className="form-item">
-                    <FormLabel className="form-label">Email</FormLabel>
-                    <div className="flex w-full flex-col">
-                      <FormControl>
-                        <Input
-                          id={field.name}
-                          placeholder="Enter you email"
-                          className="input-class"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage className="form-message mt-2" />
-                    </div>
-                  </div>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <div className="form-item">
-                    <FormLabel className="form-label">Password</FormLabel>
-                    <div className="flex w-full flex-col">
-                      <FormControl>
-                        <Input
-                          id={field.name}
-                          placeholder="Enter you password"
-                          className="input-class"
-                          type="password"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage className="form-message mt-2" />
-                    </div>
-                  </div>
-                )}
-              />
-              <div className="flex flex-col gap-4">
-                <Button type="submit" className="form-btn" disabled={isLoading}>
-                  {isLoading ? (
-                    <>
-                      <Loader2 size={20} className="animate-spin" />{" "}
-                      &nbsp;Loading...
-                    </>
-                  ) : type === "sign-in" ? (
-                    "Sign In"
-                  ) : (
-                    "Sign Up"
-                  )}
-                </Button>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <div className="form-item">
+                <FormLabel className="form-label">Email</FormLabel>
+                <div className="flex w-full flex-col">
+                  <FormControl>
+                    <Input
+                      id={field.name}
+                      placeholder="Enter you email"
+                      className="input-class"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="form-message mt-2" />
+                </div>
               </div>
-            </form>
-          </Form>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <div className="form-item">
+                <FormLabel className="form-label">Password</FormLabel>
+                <div className="flex w-full flex-col">
+                  <FormControl>
+                    <Input
+                      id={field.name}
+                      placeholder="Enter you password"
+                      className="input-class"
+                      type="password"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="form-message mt-2" />
+                </div>
+              </div>
+            )}
+          />
+          <div className="flex flex-col gap-4">
+            <Button type="submit" className="form-btn" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 size={20} className="animate-spin" />{" "}
+                  &nbsp;Loading...
+                </>
+              ) : type === "sign-in" ? (
+                "Sign In"
+              ) : (
+                "Sign Up"
+              )}
+            </Button>
+          </div>
+        </form>
+      </Form>
     </section>
   );
 };
