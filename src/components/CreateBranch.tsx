@@ -31,8 +31,8 @@ import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, Calendar as CalendarIcon } from "lucide-react";
-import { branchFormSchema, BranchFormValues } from "@/constants/form";
+import { Plus } from "lucide-react";
+import { BranchCustomInput, branchFormSchema, BranchFormValues } from "@/constants/form";
 import { BranchGrade, Principal } from "@/types/index";
 import {
   createBranch,
@@ -41,6 +41,31 @@ import {
 import { useToast } from "./ui/use-toast";
 import { camelCase, cn } from "@/lib/utils";
 
+
+const CustomInput = ({ control, name, label, placeholder,type }: BranchCustomInput) => {
+  return (
+    <FormField
+      control={control}
+      name={name}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>
+            {label}
+          </FormLabel>
+          <FormControl>
+            <Input 
+              placeholder={placeholder}
+              className="w-full"
+              type={type}
+              {...field}
+            />
+          </FormControl>
+          <FormMessage/>
+        </FormItem>
+      )}
+    />
+  )
+}
 const CreateBranch = (params: CreateType) => {
   const { type } = params;
   const [open, setOpen] = useState<boolean>(false);
@@ -71,12 +96,8 @@ const CreateBranch = (params: CreateType) => {
   const form = useForm<BranchFormValues>({
     resolver: zodResolver(branchFormSchema),
     defaultValues: {
-      principal: {
-        id: 0, // or null, depending on your needs
-      },
-      branch_grade: {
-        id: 0, // or null, depending on your needs
-      },
+      principal: 0, 
+      branch_grade: 0,
       name: "",
       business_name: "",
       display_name: "",
@@ -107,7 +128,12 @@ const CreateBranch = (params: CreateType) => {
       form.reset();
       setOpen(false);
     } catch (error) {
-      console.log(error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred.",
+        duration: 4000,
+        className: cn("bottom-0 left-0 bg-error-100"),
+      });
     }
   };
   return (
@@ -146,7 +172,7 @@ const CreateBranch = (params: CreateType) => {
                 <div className="grid gap-4 sm:grid-cols-2">
                   <FormField
                     control={form.control}
-                    name="principal.id"
+                    name="principal"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Principal</FormLabel>
@@ -181,7 +207,7 @@ const CreateBranch = (params: CreateType) => {
 
                   <FormField
                     control={form.control}
-                    name="branch_grade.id"
+                    name="branch_grade"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Branch Grade</FormLabel>
@@ -219,88 +245,12 @@ const CreateBranch = (params: CreateType) => {
               <div className="space-y-4">
                 <h3 className="text-lg font-medium">Basic Information</h3>
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Name</FormLabel>
-                        <FormControl>
-                          <Input {...field} className="w-full" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="business_name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Business Name</FormLabel>
-                        <FormControl>
-                          <Input {...field} className="w-full" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="display_name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Display Name</FormLabel>
-                        <FormControl>
-                          <Input {...field} className="w-full" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="business_reg_no"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Registration Number</FormLabel>
-                        <FormControl>
-                          <Input {...field} className="w-full" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Description</FormLabel>
-                        <FormControl>
-                          <Input {...field} className="w-full" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="operation_date"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Operation Date</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="date" className="w-full" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <CustomInput control={form.control} name="name" label="Name" placeholder="Enter your Branch Name" type="text"/>
+                  <CustomInput control={form.control} name="business_name" label="Business Name" placeholder="Enter your Business Name" type="text"/>
+                  <CustomInput control={form.control} name="display_name" label="Display Name" placeholder="Enter your Display Name" type="text"/>
+                  <CustomInput control={form.control} name="business_reg_no" label="Registration Number" placeholder="Enter your Registration Number" type="text"/>
+                  <CustomInput control={form.control} name="description" label="Description" placeholder="Enter your Description" type="text"/>
+                  <CustomInput control={form.control} name="operation_date" label="Operation Date" placeholder="Enter your Operation Date" type="date"/>
                 </div>
               </div>
 
@@ -308,102 +258,15 @@ const CreateBranch = (params: CreateType) => {
               <div className="space-y-4">
                 <h3 className="text-lg font-medium">Address Details</h3>
                 <div className="grid gap-4">
-                  <FormField
-                    control={form.control}
-                    name="address_line_1"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Address Line 1</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            value={field.value || ""}
-                            className="w-full"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="address_line_2"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Address Line 2</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            value={field.value || ""}
-                            className="w-full"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="address_line_3"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Address Line 3</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            value={field.value || ""}
-                            className="w-full"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <CustomInput control={form.control} name="address_line_1" label="Address Line 1" placeholder="Enter your Address Line 1" type="text"/>
+                  <CustomInput control={form.control} name="address_line_2" label="Address Line 2" placeholder="Enter your Address Line 2" type="text"/>
+                  <CustomInput control={form.control} name="address_line_3" label="Address Line 3" placeholder="Enter your Address Line 3" type="text"/>
+             
 
                   <div className="grid gap-4 sm:grid-cols-3">
-                    <FormField
-                      control={form.control}
-                      name="city"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>City</FormLabel>
-                          <FormControl>
-                            <Input {...field} className="w-full" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="state"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>State</FormLabel>
-                          <FormControl>
-                            <Input {...field} className="w-full" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="postcode"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Postcode</FormLabel>
-                          <FormControl>
-                            <Input {...field} className="w-full" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    <CustomInput control={form.control} name="city" label="City" placeholder="Enter your City" type="text"/>
+                    <CustomInput control={form.control} name="state" label="State" placeholder="Enter your State" type="text"/>
+                    <CustomInput control={form.control} name="postcode" label="Postcode" placeholder="Enter your Postcode" type="text"/>
                   </div>
                 </div>
               </div>

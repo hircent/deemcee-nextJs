@@ -53,12 +53,8 @@ export function EditBranch({ type, id }: EditProps) {
   const form = useForm<BranchFormValues>({
     resolver: zodResolver(branchFormSchema),
     defaultValues: {
-      principal: {
-        id: 0, // or null, depending on your needs
-      },
-      branch_grade: {
-        id: 0, // or null, depending on your needs
-      },
+      principal: 0,
+      branch_grade: 0,
       business_name: "",
       display_name: "",
       description: "",
@@ -94,12 +90,8 @@ export function EditBranch({ type, id }: EditProps) {
       ]);
 
       form.reset({
-        principal: {
-          id: branchData.principal?.id || 0,
-        },
-        branch_grade: {
-          id: branchData.branch_grade?.id || 0,
-        },
+        principal: branchData.principal?.id || 0,
+        branch_grade: branchData.branch_grade?.id || 0,
         name: branchData?.name || "",
         business_name: branchData?.business_name || "",
         display_name: branchData?.display_name || "",
@@ -193,7 +185,7 @@ export function EditBranch({ type, id }: EditProps) {
                   <div className="grid gap-4 sm:grid-cols-2">
                     <FormField
                       control={form.control}
-                      name="principal.id"
+                      name="principal"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Principal</FormLabel>
@@ -230,7 +222,7 @@ export function EditBranch({ type, id }: EditProps) {
 
                     <FormField
                       control={form.control}
-                      name="branch_grade.id"
+                      name="branch_grade"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Branch Grade</FormLabel>
