@@ -31,7 +31,7 @@ import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus ,Calendar as CalendarIcon} from "lucide-react";
+import { Plus, Calendar as CalendarIcon } from "lucide-react";
 import { branchFormSchema, BranchFormValues } from "@/constants/form";
 import { BranchGrade, Principal } from "@/types/index";
 import {
@@ -62,8 +62,11 @@ const CreateBranch = (params: CreateType) => {
         console.error("Failed to fetch select options:", error);
       }
     }
-    getSelectFromPrincipalAndBranchGrade();
-  }, []);
+
+    if (open) {
+      getSelectFromPrincipalAndBranchGrade();
+    }
+  }, [open]);
 
   const form = useForm<BranchFormValues>({
     resolver: zodResolver(branchFormSchema),
@@ -92,7 +95,7 @@ const CreateBranch = (params: CreateType) => {
   const submitForm = async (formData: FormData) => {
     formData.append("principal", principalID);
     formData.append("branch_grade", branchGradeID);
-    console.log({formData});
+    console.log({ formData });
     try {
       await createBranch(formData);
       toast({

@@ -22,6 +22,7 @@ import { Input } from "@/components/ui/input";
 import {
   getAllPrincipalAndBranchGrade,
   getBranchDetails,
+  updateBranch,
 } from "@/lib/actions/branch.action";
 import { BranchGrade, EditProps, Principal } from "@/types/index";
 import { Pencil } from "lucide-react";
@@ -36,7 +37,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { useToast } from "./ui/use-toast";
+import { cn } from "@/lib/utils";
 import { branchFormSchema, BranchFormValues } from "@/constants/form";
 
 export function EditBranch({ type, id }: EditProps) {
@@ -44,6 +46,9 @@ export function EditBranch({ type, id }: EditProps) {
   const [open, setOpen] = useState<boolean>(false);
   const [principals, setPrincipals] = useState<Principal[]>([]);
   const [branchGrades, setBranchGrades] = useState<BranchGrade[]>([]);
+  const [principalID, setPrincipalID] = useState("");
+  const [branchGradeID, setBranchGradeID] = useState("");
+  const { toast } = useToast();
 
   const form = useForm<BranchFormValues>({
     resolver: zodResolver(branchFormSchema),
@@ -87,7 +92,7 @@ export function EditBranch({ type, id }: EditProps) {
         getBranchDetails({ id }),
         getSelectFromPrincipalAndBranchGrade(), // Fetch select options alongside branch details
       ]);
-      
+
       form.reset({
         principal: {
           id: branchData.principal?.id || 0,
@@ -95,6 +100,7 @@ export function EditBranch({ type, id }: EditProps) {
         branch_grade: {
           id: branchData.branch_grade?.id || 0,
         },
+        name: branchData?.name || "",
         business_name: branchData?.business_name || "",
         display_name: branchData?.display_name || "",
         description: branchData?.description || "",
@@ -107,6 +113,15 @@ export function EditBranch({ type, id }: EditProps) {
         postcode: branchData?.address.postcode || "",
         state: branchData?.address.state || "",
       });
+      setPrincipalID(branchData.principal.id.toString());
+      setBranchGradeID(branchData.branch_grade.id.toString());
+      setPrincipals((prevPrincipal) => [
+        ...prevPrincipal,
+        {
+          id: branchData.principal.id,
+          username: branchData.principal.username,
+        },
+      ]);
     } catch (error) {
       console.error("Failed to fetch branch details:", error);
     } finally {
@@ -114,8 +129,18 @@ export function EditBranch({ type, id }: EditProps) {
     }
   }
 
-  async function onSubmit(data: BranchFormValues) {
+  async function onSubmit(formData: FormData) {
+    formData.append("principal", principalID);
+    formData.append("branch_grade", branchGradeID);
     try {
+      await updateBranch(formData, id);
+      toast({
+        title: "Success",
+        description: `New Branch has been created successfully.`,
+        duration: 2000,
+        className: cn("bottom-0 left-0 bg-success-100"),
+      });
+      form.reset();
       setOpen(false);
     } catch (error) {
       console.error("Failed to update branch:", error);
@@ -159,7 +184,7 @@ export function EditBranch({ type, id }: EditProps) {
           </div>
         ) : (
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form action={onSubmit} className="space-y-6">
               <div className="grid gap-6">
                 {/* Principal and Branch Grade Section */}
 
@@ -173,9 +198,10 @@ export function EditBranch({ type, id }: EditProps) {
                         <FormItem>
                           <FormLabel>Principal</FormLabel>
                           <Select
-                            onValueChange={(value) =>
-                              field.onChange(Number(value))
-                            }
+                            onValueChange={(value) => {
+                              field.onChange(Number(value));
+                              setPrincipalID(value);
+                            }}
                             value={
                               field.value ? String(field.value) : undefined
                             }
@@ -190,6 +216,7 @@ export function EditBranch({ type, id }: EditProps) {
                                 <SelectItem
                                   key={principal.id}
                                   value={String(principal.id)}
+                                  className="hover:bg-slate-300 cursor-pointer"
                                 >
                                   {principal.username}
                                 </SelectItem>
@@ -208,9 +235,10 @@ export function EditBranch({ type, id }: EditProps) {
                         <FormItem>
                           <FormLabel>Branch Grade</FormLabel>
                           <Select
-                            onValueChange={(value) =>
-                              field.onChange(Number(value))
-                            }
+                            onValueChange={(value) => {
+                              field.onChange(Number(value));
+                              setBranchGradeID(value);
+                            }}
                             value={
                               field.value ? String(field.value) : undefined
                             }
@@ -225,6 +253,7 @@ export function EditBranch({ type, id }: EditProps) {
                                 <SelectItem
                                   key={grade.id}
                                   value={String(grade.id)}
+                                  className="hover:bg-slate-300 cursor-pointer"
                                 >
                                   {grade.name}
                                 </SelectItem>
@@ -241,6 +270,20 @@ export function EditBranch({ type, id }: EditProps) {
                 <div className="space-y-4">
                   <h3 className="text-lg font-medium">Basic Information</h3>
                   <div className="grid gap-4 sm:grid-cols-2">
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Name</FormLabel>
+                          <FormControl>
+                            <Input {...field} className="w-full" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
                     <FormField
                       control={form.control}
                       name="business_name"
@@ -290,6 +333,20 @@ export function EditBranch({ type, id }: EditProps) {
                           <FormLabel>Description</FormLabel>
                           <FormControl>
                             <Input {...field} className="w-full" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="operation_date"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Operation Date</FormLabel>
+                          <FormControl>
+                            <Input {...field} type="date" className="w-full" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>

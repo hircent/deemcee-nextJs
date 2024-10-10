@@ -124,6 +124,7 @@ export async function getAllPrincipalAndBranchGrade(): Promise<
           "Content-Type": "application/json",
           Authorization: `Bearer ${token?.value}`,
         },
+        cache: "no-cache",
       }
     );
 
@@ -180,6 +181,71 @@ export async function createBranch(formData: FormData) {
     };
     const response = await fetch(`${process.env.API_URL}/branch/create`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      // Handle different types of errors
+      if (response.status === 400) {
+        const errorData = await response.json();
+        throw new Error(JSON.stringify(errorData));
+      } else if (response.status === 401) {
+        throw new Error("Unauthorized. Please log in again.");
+      } else if (response.status === 403) {
+        throw new Error("You do not have permission to create a branch.");
+      } else {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    }
+
+    revalidatePath("/branch");
+  } catch (error) {
+    console.error("Error creating branch:", error);
+    throw error;
+  }
+}
+export async function updateBranch(formData: FormData, id: number) {
+  const token = getToken();
+
+  try {
+    const formDataObject = Object.fromEntries(formData);
+    const {
+      address_line_1,
+      address_line_2,
+      address_line_3,
+      city,
+      state,
+      postcode,
+      ...rest
+    } = formDataObject;
+    // Transform data as needed
+    const payload = {
+      ...rest,
+      // Ensure numeric fields are sent as numbers
+      principal: rest.principal ? Number(rest.principal) : null,
+      branch_grade: rest.branch_grade ? Number(rest.branch_grade) : null,
+      // Add any date transformations if needed
+      operation_date: rest.operation_date
+        ? rest.operation_date
+        : new Date().toISOString().split("T")[0],
+
+      // Handle nested address data if present
+      address: {
+        address_line_1,
+        address_line_2,
+        address_line_3,
+        city,
+        state,
+        postcode,
+      },
+    };
+
+    const response = await fetch(`${process.env.API_URL}/branch/update/${id}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token?.value}`,
