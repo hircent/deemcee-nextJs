@@ -39,7 +39,7 @@ import {
   getAllPrincipalAndBranchGrade,
 } from "@/lib/actions/branch.action";
 import { useToast } from "./ui/use-toast";
-import { cn } from "@/lib/utils";
+import { camelCase, cn } from "@/lib/utils";
 
 const CreateBranch = (params: CreateType) => {
   const { type } = params;
@@ -120,7 +120,7 @@ const CreateBranch = (params: CreateType) => {
           className="group p-2 bg-gray-100 rounded-md hover:bg-yellow-2"
         >
           <Plus size={18} className="text-red-600 group-hover:text-gray-600" />{" "}
-          {type.toUpperCase()}
+          {camelCase(type)}
         </Button>
       </DialogTrigger>
       <DialogOverlay

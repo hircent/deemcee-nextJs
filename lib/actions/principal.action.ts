@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { getToken } from "./superadmin.action";
 
 export async function getSuperadminList() {
-  const token = getToken();
+  const token = await getToken();
 
   try {
     const response = await fetch(`${process.env.API_URL}/branch/list`, {

@@ -3,22 +3,26 @@
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { ListProps, SuperadminProps } from "@/types/index";
 
-export async function getSuperadminList() {
-  const token = getToken();
+export async function getSuperadminList(): Promise<ListProps<SuperadminProps>> {
+  const token = await getToken();
 
   try {
-    const response = await fetch(`${process.env.API_URL}/branch/list`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token?.value}`,
-      },
-      // next:{
-      //     revalidate:3300
-      // },
-      cache: "no-cache",
-    });
+    const response = await fetch(
+      `${process.env.API_URL}/users/superadmin/branch/12/list`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+        },
+        // next:{
+        //     revalidate:3300
+        // },
+        cache: "no-cache",
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`HTTP Error! Status: ${response.status}`);
@@ -30,7 +34,7 @@ export async function getSuperadminList() {
   }
 }
 
-export function getToken() {
+export async function getToken() {
   const cookieStore = cookies();
   const token = cookieStore.get("deemceeAuth");
 

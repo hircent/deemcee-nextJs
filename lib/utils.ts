@@ -243,3 +243,8 @@ export const getUserRole = (user: User | undefined): string[] => {
   if (!user || !user.branch_role) return [];
   return user.branch_role.map((branch) => branch.branch_role);
 };
+
+export const camelCase = (word: string) => {
+  const firstLetterUppercase = word.charAt(0).toUpperCase() + word.slice(1);
+  return firstLetterUppercase;
+};

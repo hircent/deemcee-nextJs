@@ -371,12 +371,23 @@ export type BranchProps = {
   operation_date: string;
 };
 
-export type BranchListProps = {
+export type SuperadminProps = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  username: string;
+  email: string;
+  is_active: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ListProps<T> = {
   success: boolean;
   total: number;
   next: string | null;
   previous: string | null;
-  data: BranchProps[];
+  data: T[];
 };
 
 export type BranchListFilterProps = {
@@ -464,5 +475,5 @@ export type PrincipalsAndBranchGrade = {
 };
 
 export type CreateType = {
-  type:string;
-}
+  type: string;
+};

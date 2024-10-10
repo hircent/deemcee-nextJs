@@ -7,7 +7,7 @@ import { BRANCH } from "@/constants/message";
 import { getBranchList } from "@/lib/actions/branch.action";
 import { authUser } from "@/lib/actions/user.actions";
 import { getUserRole } from "@/lib/utils";
-import { BranchListProps, SearchParamProps } from "@/types/index";
+import { BranchProps, ListProps, SearchParamProps } from "@/types/index";
 import Link from "next/link";
 
 import React from "react";
@@ -16,7 +16,7 @@ export default async function Branch({ searchParams }: SearchParamProps) {
   try {
     const user = await authUser();
     const userRole = getUserRole(user);
-    let result: BranchListProps;
+    let result: ListProps<BranchProps>;
     result = await getBranchList({
       page: searchParams.page ? +searchParams.page : 1,
       searchQuery: searchParams.q ? searchParams.q.toString() : undefined,
