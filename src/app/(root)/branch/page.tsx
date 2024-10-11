@@ -1,5 +1,5 @@
 import { BranchListColumns } from "@/columns/branch.list.columns";
-import { BranchListTable } from "@/components/BranchList";
+import { PageListTable } from "@/components/PageList";
 import CreateBranch from "@/components/CreateBranch";
 import SearchBar from "@/components/SearchBar";
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,7 @@ export default async function Branch({ searchParams }: SearchParamProps) {
           <SearchBar />
           {userRole.includes("superadmin") && <CreateBranch type={BRANCH} />}
         </div>
-        <BranchListTable columns={BranchListColumns} data={result.data} />
+        <PageListTable columns={BranchListColumns} data={result.data} />
 
         <div className="flex flex-col">
           {result.next ? (

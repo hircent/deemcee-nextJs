@@ -1,7 +1,7 @@
 "use client";
-import { BranchProps } from "@/types/index";
+import { SuperadminProps } from "@/types/index";
 import { ColumnDef } from "@tanstack/react-table";
-import { Pencil, Trash2 } from "lucide-react";
+import { CircleCheck, CircleX, Pencil, Trash2 } from "lucide-react";
 import { MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -16,28 +16,44 @@ import {
 import { EditBranch } from "@/components/EditBranch";
 import { DeleteBranch } from "@/components/DeleteBranch";
 
-export const BranchListColumns: ColumnDef<BranchProps>[] = [
+export const PrincipalListColumns: ColumnDef<SuperadminProps>[] = [
   {
     accessorKey: "id",
     header: "ID",
   },
   {
-    accessorKey: "name",
-    header: "Name",
+    accessorKey: "username",
+    header: "Username",
   },
   {
-    accessorKey: "business_reg_no",
-    header: "Business_reg_no",
+    accessorKey: "email",
+    header: "Email",
   },
   {
-    accessorKey: "operation_date",
-    header: "Operation Date",
+    accessorKey: "is_active",
+    header: "Is Active",
+    cell: ({ row }) => {
+      const isActive = row.getValue("is_active");
+      if (isActive) {
+        return (
+          <div>
+            <CircleCheck color="green" />
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <CircleX color="red" />
+          </div>
+        );
+      }
+    },
   },
   {
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
-      const branch = row.original;
+      const principal = row.original;
 
       return (
         // <DropdownMenu>
@@ -60,9 +76,9 @@ export const BranchListColumns: ColumnDef<BranchProps>[] = [
         //     </DropdownMenuItem>
         //   </DropdownMenuContent>
         // </DropdownMenu>
-        <div className="flex gap-4">
-          <EditBranch type={"branch"} id={branch.id} />
-          <DeleteBranch type={"branch"} name={branch.name} id={branch.id} />
+        <div className="flex gap-4 text-black-2">
+          <div>Edit</div>
+          <div>Delete</div>
         </div>
       );
     },

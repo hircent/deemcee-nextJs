@@ -8,7 +8,7 @@ import { authUser } from "@/lib/actions/user.actions";
 import { getUserRole } from "@/lib/utils";
 import React from "react";
 
-const Principal = async () => {
+const Student = async () => {
   try {
     const result = await getSuperadminList();
     const user = await authUser();
@@ -28,4 +28,4 @@ const Principal = async () => {
   }
 };
 
-export default Principal;
+export default Student;
