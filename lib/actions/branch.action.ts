@@ -284,3 +284,9 @@ function getToken() {
 
   return token;
 }
+
+export async function setBranchCookie(id: string, path: string) {
+  cookies().set("BranchId", id);
+  console.log(`here:${cookies().get("BranchId")?.value}`);
+  revalidatePath(path);
+}

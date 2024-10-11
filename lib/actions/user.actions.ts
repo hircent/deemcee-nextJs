@@ -86,9 +86,6 @@ export const authUser = async (): Promise<User | undefined> => {
 
 export const setCookieDefaultBranch = async (userData: User) => {
   cookies().set("BranchId", userData.branch_role[0].branch_id.toString());
-
-  console.log(`here:${cookies().get("BranchId")?.name}`);
-  console.log(`here:${cookies().get("BranchId")?.value}`);
 };
 // export const getUserInfo = async ({ userId }: getUserInfoProps) => {
 //   try {

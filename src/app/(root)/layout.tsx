@@ -4,13 +4,17 @@ import Sidebar from "@/components/Sidebar";
 import { authUser } from "@/lib/actions/user.actions";
 import { getUserRole } from "@/lib/utils";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 import React from "react";
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
-  const user = await authUser()
+  const user = await authUser();
+  if (!user) {
+    redirect("/sign-in");
+  }
   return (
     <main className="flex h-screen w-full font-inter">
-      <Sidebar user={user}/>
+      <Sidebar user={user} />
 
       <div className="flex size-full flex-col">
         <div className="root-layout">
@@ -23,7 +27,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
           <HeaderBox
             type="greeting"
             title="Welcome"
-            user={user?.username || "Guest"}
+            user={user}
             subtext="Access and manage your account and ...."
           />
         </header>

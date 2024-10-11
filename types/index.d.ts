@@ -153,7 +153,7 @@ declare interface HeaderBoxProps {
   type?: "title" | "greeting";
   title: string;
   subtext: string;
-  user?: string;
+  user: User;
 }
 
 declare interface MobileNavProps {
@@ -341,6 +341,7 @@ declare interface signInResponse {
 
 export type BranchRole = {
   branch_id: number;
+  branch_name: string;
   branch_role: string;
 };
 

@@ -60,6 +60,7 @@ const AuthForm = ({ type }: { type: string }) => {
         duration: 5000,
         className: cn("bottom-0 left-0 bg-error-100"),
       });
+      setIsLoading(false);
     }
   };
 
@@ -84,13 +85,13 @@ const AuthForm = ({ type }: { type: string }) => {
         router.push("/");
       }, 2100);
     } catch (error) {
+      setIsLoading(false);
       toast({
         title: "Error",
         description: "An unexpected error occurred.",
         duration: 4000,
         className: cn("bottom-0 left-0 bg-error-100"),
       });
-      setIsLoading(false);
     }
   };
 
