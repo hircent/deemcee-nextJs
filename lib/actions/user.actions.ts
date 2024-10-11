@@ -10,7 +10,6 @@ import {
 import { signInProps, signInResponse, User } from "@/types/index";
 import { jwtDecode } from "jwt-decode";
 
-
 // import { revalidatePath } from "next/cache";
 
 export const signIn = async ({
@@ -47,28 +46,27 @@ export const signIn = async ({
       secure: process.env.ENVIRONMENT !== "development",
     });
 
-    const userData = jwtDecode(data.access)
-
-    return parseStringify({ 
-      success: true, 
+    const userData = jwtDecode<User>(data.access);
+    await setCookieDefaultBranch(userData);
+    return parseStringify({
+      success: true,
       msg: LOGIN_SUCCESSFUL,
-      data:userData 
+      data: userData,
     });
   } catch (error: any) {
     return parseStringify({
       success: false,
       msg: SERVER_ERROR,
-      data:undefined
+      data: undefined,
     });
   }
 };
 
-export const signOut = async ()=>{
-  const cookieStore = cookies()
+export const signOut = async () => {
+  const cookieStore = cookies();
 
-  cookieStore.delete("deemceeAuth")
-
-}
+  cookieStore.delete("deemceeAuth");
+};
 
 export const authUser = async (): Promise<User | undefined> => {
   const cookieStore = cookies();
@@ -84,6 +82,13 @@ export const authUser = async (): Promise<User | undefined> => {
     }
   }
   return undefined;
+};
+
+export const setCookieDefaultBranch = async (userData: User) => {
+  cookies().set("BranchId", userData.branch_role[0].branch_id.toString());
+
+  console.log(`here:${cookies().get("BranchId")?.name}`);
+  console.log(`here:${cookies().get("BranchId")?.value}`);
 };
 // export const getUserInfo = async ({ userId }: getUserInfoProps) => {
 //   try {

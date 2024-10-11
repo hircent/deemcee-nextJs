@@ -7,15 +7,17 @@ import { ListProps, SuperadminProps } from "@/types/index";
 
 export async function getSuperadminList(): Promise<ListProps<SuperadminProps>> {
   const token = await getToken();
+  const id = cookies().get("BranchId")?.value;
 
   try {
     const response = await fetch(
-      `${process.env.API_URL}/users/superadmin/branch/12/list`,
+      `${process.env.API_URL}/users/superadmin/list`,
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token?.value}`,
+          BranchId: `${id?.toString()}`,
         },
         // next:{
         //     revalidate:3300
