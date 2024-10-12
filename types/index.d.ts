@@ -372,7 +372,7 @@ export type BranchProps = {
   operation_date: string;
 };
 
-export type SuperadminProps = {
+export type TypeUserProps = {
   id: number;
   first_name: string;
   last_name: string;

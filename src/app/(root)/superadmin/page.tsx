@@ -3,14 +3,14 @@ import { PageListTable } from "@/components/PageList";
 import Create from "@/components/Create";
 import SearchBar from "@/components/SearchBar";
 import { SUPERADMIN } from "@/constants/message";
-import { getSuperadminList } from "@/lib/actions/superadmin.action";
+import { getUserListByType } from "@/lib/actions/superadmin.action";
 import { authUser } from "@/lib/actions/user.actions";
 import { getUserRole } from "@/lib/utils";
 import React from "react";
 
 const Superadmin = async () => {
   try {
-    const result = await getSuperadminList();
+    const result = await getUserListByType('superadmin');
     const user = await authUser();
     const userRole = getUserRole(user);
     console.log(result.data);

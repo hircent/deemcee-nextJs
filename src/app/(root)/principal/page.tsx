@@ -2,15 +2,15 @@ import { PrincipalListColumns } from "@/columns/principal.list.columns";
 import { PageListTable } from "@/components/PageList";
 import Create from "@/components/Create";
 import SearchBar from "@/components/SearchBar";
-import { SUPERADMIN } from "@/constants/message";
-import { getSuperadminList } from "@/lib/actions/superadmin.action";
+import { PRINCIPAL } from "@/constants/message";
+import { getUserListByType } from "@/lib/actions/superadmin.action";
 import { authUser } from "@/lib/actions/user.actions";
 import { getUserRole } from "@/lib/utils";
 import React from "react";
 
 const Principal = async () => {
   try {
-    const result = await getSuperadminList();
+    const result = await getUserListByType(PRINCIPAL);
     const user = await authUser();
     const userRole = getUserRole(user);
     console.log(result.data);
@@ -18,7 +18,7 @@ const Principal = async () => {
       <div className="home-content">
         <div className="flex justify-between">
           <SearchBar />
-          {userRole.includes("superadmin") && <Create type={SUPERADMIN} />}
+          {userRole.includes("superadmin") && <Create type={PRINCIPAL} />}
         </div>
         <PageListTable columns={PrincipalListColumns} data={result.data} />
       </div>

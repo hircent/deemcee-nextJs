@@ -6,3 +6,6 @@ export const HOME_REDIRECT = "Redirecting you to home page...";
 
 export const BRANCH = "branch";
 export const SUPERADMIN = "superadmin";
+export const PRINCIPAL = "principal";
+export const MANAGER = "manager";
+export const TEACHER = "teacher";

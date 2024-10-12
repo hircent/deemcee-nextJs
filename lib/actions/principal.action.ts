@@ -3,16 +3,18 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { getToken } from "./superadmin.action";
+import { cookies } from "next/headers";
 
-export async function getSuperadminList() {
+export async function getPrincipalList() {
   const token = await getToken();
-
+  const id = cookies().get("BranchId")?.value;
   try {
-    const response = await fetch(`${process.env.API_URL}/branch/list`, {
+    const response = await fetch(`${process.env.API_URL}/users/principal/list`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token?.value}`,
+        BranchId: `${id?.toString()}`,
       },
       // next:{
       //     revalidate:3300

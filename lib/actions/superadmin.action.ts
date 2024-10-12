@@ -3,15 +3,15 @@
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { ListProps, SuperadminProps } from "@/types/index";
+import { ListProps, TypeUserProps } from "@/types/index";
 
-export async function getSuperadminList(): Promise<ListProps<SuperadminProps>> {
+export async function getUserListByType(type:string): Promise<ListProps<TypeUserProps>> {
   const token = await getToken();
   const id = cookies().get("BranchId")?.value;
 
   try {
     const response = await fetch(
-      `${process.env.API_URL}/users/superadmin/list`,
+      `${process.env.API_URL}/users/${type}/list`,
       {
         method: "GET",
         headers: {
