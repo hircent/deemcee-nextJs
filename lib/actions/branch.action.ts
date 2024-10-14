@@ -10,10 +10,11 @@ import {
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { getToken } from "./user.actions";
 
 export async function getBranchList(params: BranchListFilterProps) {
   const { page, searchQuery } = params;
-  const token = getToken();
+  const token = await getToken();
 
   let url = `${process.env.API_URL}/branch/list`;
 
@@ -53,7 +54,7 @@ export async function deleteBranch({
   confirmName,
   id,
 }: DeleteBranchProps) {
-  const token = getToken();
+  const token = await getToken();
   if (name !== confirmName) {
     throw new Error(
       "Names do not match! Please enter the exact name to confirm deletion."
@@ -85,7 +86,7 @@ export async function deleteBranch({
 export async function getBranchDetails({
   id,
 }: GetBranchDetailProps): Promise<BranchDetailProps> {
-  const token = getToken();
+  const token = await getToken();
 
   try {
     const response = await fetch(
@@ -114,7 +115,7 @@ export async function getBranchDetails({
 export async function getAllPrincipalAndBranchGrade(): Promise<
   PrincipalsAndBranchGrade | undefined
 > {
-  const token = getToken();
+  const token = await getToken();
   try {
     const response = await fetch(
       `${process.env.API_URL}/branch/principals/branch_grade`,
@@ -145,7 +146,7 @@ export async function getAllPrincipalAndBranchGrade(): Promise<
 }
 
 export async function createBranch(formData: FormData) {
-  const token = getToken();
+  const token = await getToken();
 
   try {
     const formDataObject = Object.fromEntries(formData);
@@ -209,7 +210,7 @@ export async function createBranch(formData: FormData) {
   }
 }
 export async function updateBranch(formData: FormData, id: number) {
-  const token = getToken();
+  const token = await getToken();
 
   try {
     const formDataObject = Object.fromEntries(formData);
@@ -272,17 +273,6 @@ export async function updateBranch(formData: FormData, id: number) {
     console.error("Error creating branch:", error);
     throw error;
   }
-}
-
-function getToken() {
-  const cookieStore = cookies();
-  const token = cookieStore.get("deemceeAuth");
-
-  if (!token) {
-    redirect("/sign-in");
-  }
-
-  return token;
 }
 
 export async function setBranchCookie(id: string, path: string) {

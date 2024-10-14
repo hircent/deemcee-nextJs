@@ -23,6 +23,7 @@ import { useState } from "react";
 import { deleteBranch } from "@/lib/actions/branch.action";
 import { useToast } from "./ui/use-toast";
 import { camelCase, cn } from "@/lib/utils";
+import { deleteUser } from "@/lib/actions/user.actions";
 
 const deleteFormSchema = z.object({
   name: z.string(),
@@ -44,10 +45,10 @@ export function DeleteUser({ type, name, id }: DeleteProps) {
     setOpen(false);
 
     try {
-      await deleteBranch({ name: values.name, confirmName: name, id });
+      await deleteUser({ type ,name: values.name, confirmName: name, id });
       toast({
         title: "Success",
-        description: `${type} "${name}" has been deleted successfully.`,
+        description: `${camelCase(type)} "${name}" has been deleted successfully.`,
         duration: 2000,
         className: cn("bottom-0 left-0 bg-success-100"),
       });

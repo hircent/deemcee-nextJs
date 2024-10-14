@@ -430,6 +430,13 @@ export type DeleteBranchProps = {
   id: number;
 };
 
+export type DeleteUserProps = {
+  type: string;
+  name: string;
+  confirmName: string;
+  id: number;
+};
+
 export type GetBranchDetailProps = {
   id: number;
 };

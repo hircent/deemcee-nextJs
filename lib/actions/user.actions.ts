@@ -7,10 +7,11 @@ import {
   LOGIN_SUCCESSFUL,
   SERVER_ERROR,
 } from "@/constants/message";
-import { signInProps, signInResponse, User } from "@/types/index";
+import { DeleteUserProps, signInProps, signInResponse, User } from "@/types/index";
 import { jwtDecode } from "jwt-decode";
 import { redirect } from "next/navigation";
 import { ListProps, TypeUserProps, UserListFilterProps } from "@/types/index";
+import { revalidatePath } from "next/cache";
 
 // import { revalidatePath } from "next/cache";
 
@@ -142,6 +143,44 @@ export async function getUserListByType(params:UserListFilterProps): Promise<Lis
     throw error;
   }
 }
+
+export async function deleteUser({
+  type,
+  name,
+  confirmName,
+  id,
+}: DeleteUserProps) {
+  const token = await getToken();
+  const branchId = cookies().get("BranchId")?.value;
+  if (name !== confirmName) {
+    throw new Error(
+      "Names do not match! Please enter the exact name to confirm deletion."
+    );
+  }
+
+  try {
+    const response = await fetch(`${process.env.API_URL}/users/delete/${type}/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+        BranchId: `${branchId?.toString()}`,
+      },
+    });
+
+    if (response.status == 404) {
+      throw new Error(`User ${response.statusText}`);
+    }
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error! Status: ${response.status}`);
+    }
+    revalidatePath(`/${type}`);
+  } catch (error) {
+    throw error;
+  }
+}
+
 // export const getUserInfo = async ({ userId }: getUserInfoProps) => {
 //   try {
 //     const { database } = await createAdminClient();
