@@ -7,7 +7,12 @@ import {
   LOGIN_SUCCESSFUL,
   SERVER_ERROR,
 } from "@/constants/message";
-import { DeleteUserProps, signInProps, signInResponse, User } from "@/types/index";
+import {
+  DeleteUserProps,
+  signInProps,
+  signInResponse,
+  User,
+} from "@/types/index";
 import { jwtDecode } from "jwt-decode";
 import { redirect } from "next/navigation";
 import { ListProps, TypeUserProps, UserListFilterProps } from "@/types/index";
@@ -102,8 +107,10 @@ export async function getToken() {
   return token;
 }
 
-export async function getUserListByType(params:UserListFilterProps): Promise<ListProps<TypeUserProps>> {
-  const { type ,page, searchQuery } = params;
+export async function getUserListByType(
+  params: UserListFilterProps
+): Promise<ListProps<TypeUserProps>> {
+  const { type, page, searchQuery } = params;
   const token = await getToken();
   const id = cookies().get("BranchId")?.value;
 
@@ -116,23 +123,20 @@ export async function getUserListByType(params:UserListFilterProps): Promise<Lis
   if (page && page > 1) {
     url = `${url}?page=${page}`;
   }
-  
+
   try {
-    const response = await fetch(
-      url,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token?.value}`,
-          BranchId: `${id?.toString()}`,
-        },
-        // next:{
-        //     revalidate:3300
-        // },
-        cache: "no-cache",
-      }
-    );
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+        BranchId: `${id?.toString()}`,
+      },
+      // next:{
+      //     revalidate:3300
+      // },
+      cache: "no-cache",
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP Error! Status: ${response.status}`);
@@ -159,14 +163,17 @@ export async function deleteUser({
   }
 
   try {
-    const response = await fetch(`${process.env.API_URL}/users/delete/${type}/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token?.value}`,
-        BranchId: `${branchId?.toString()}`,
-      },
-    });
+    const response = await fetch(
+      `${process.env.API_URL}/users/delete/${type}/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+      }
+    );
 
     if (response.status == 404) {
       throw new Error(`User ${response.statusText}`);
@@ -174,6 +181,65 @@ export async function deleteUser({
 
     if (!response.ok) {
       throw new Error(`HTTP Error! Status: ${response.status}`);
+    }
+    revalidatePath(`/${type}`);
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function createUser(formData: FormData, type: string) {
+  const token = await getToken();
+  const branchId = cookies().get("BranchId")?.value;
+  try {
+    const formDataObject = Object.fromEntries(formData);
+
+    const {
+      address_line_1,
+      address_line_2,
+      address_line_3,
+      city,
+      state,
+      postcode,
+      username,
+      email,
+      confirm_password,
+      password,
+    } = formDataObject;
+
+    if (password !== confirm_password) {
+      throw new Error("Password doesnt match");
+    }
+    const payload = {
+      username,
+      email,
+      password,
+      address: {
+        address_line_1,
+        address_line_2,
+        address_line_3,
+        city,
+        state,
+        postcode,
+      },
+    };
+
+    const response = await fetch(
+      `${process.env.API_URL}/users/create/${type}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(JSON.stringify(errorData));
     }
     revalidatePath(`/${type}`);
   } catch (error) {

@@ -32,7 +32,11 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react";
-import { BranchCustomInput, branchFormSchema, BranchFormValues } from "@/constants/form";
+import {
+  BranchCustomInput,
+  branchFormSchema,
+  BranchFormValues,
+} from "@/constants/form";
 import { BranchGrade, Principal } from "@/types/index";
 import {
   createBranch,
@@ -41,8 +45,14 @@ import {
 import { useToast } from "./ui/use-toast";
 import { camelCase, cn } from "@/lib/utils";
 
-
-const CustomInput = ({ control, name, label, placeholder,type }: BranchCustomInput) => {
+const CustomInput = ({
+  control,
+  name,
+  label,
+  placeholder,
+  type,
+  required,
+}: BranchCustomInput) => {
   return (
     <FormField
       control={control}
@@ -50,22 +60,22 @@ const CustomInput = ({ control, name, label, placeholder,type }: BranchCustomInp
       render={({ field }) => (
         <FormItem>
           <FormLabel>
-            {label}
+            {label} {required && <span className="text-red-500">*</span>}
           </FormLabel>
           <FormControl>
-            <Input 
+            <Input
               placeholder={placeholder}
               className="w-full"
               type={type}
               {...field}
             />
           </FormControl>
-          <FormMessage/>
+          <FormMessage className="text-red-500" />
         </FormItem>
       )}
     />
-  )
-}
+  );
+};
 const CreateBranch = (params: CreateType) => {
   const { type } = params;
   const [open, setOpen] = useState<boolean>(false);
@@ -96,7 +106,7 @@ const CreateBranch = (params: CreateType) => {
   const form = useForm<BranchFormValues>({
     resolver: zodResolver(branchFormSchema),
     defaultValues: {
-      principal: 0, 
+      principal: 0,
       branch_grade: 0,
       name: "",
       business_name: "",
@@ -175,7 +185,9 @@ const CreateBranch = (params: CreateType) => {
                     name="principal"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Principal</FormLabel>
+                        <FormLabel>
+                          Principal <span className="text-red-500">*</span>
+                        </FormLabel>
                         <Select
                           onValueChange={(value) => {
                             field.onChange(Number(value));
@@ -200,7 +212,7 @@ const CreateBranch = (params: CreateType) => {
                             ))}
                           </SelectContent>
                         </Select>
-                        <FormMessage />
+                        <FormMessage className="text-red-500" />
                       </FormItem>
                     )}
                   />
@@ -210,7 +222,9 @@ const CreateBranch = (params: CreateType) => {
                     name="branch_grade"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Branch Grade</FormLabel>
+                        <FormLabel>
+                          Branch Grade <span className="text-red-500">*</span>
+                        </FormLabel>
                         <Select
                           onValueChange={(value) => {
                             field.onChange(Number(value));
@@ -235,7 +249,7 @@ const CreateBranch = (params: CreateType) => {
                             ))}
                           </SelectContent>
                         </Select>
-                        <FormMessage />
+                        <FormMessage className="text-red-500" />
                       </FormItem>
                     )}
                   />
@@ -245,12 +259,53 @@ const CreateBranch = (params: CreateType) => {
               <div className="space-y-4">
                 <h3 className="text-lg font-medium">Basic Information</h3>
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <CustomInput control={form.control} name="name" label="Name" placeholder="Enter your Branch Name" type="text"/>
-                  <CustomInput control={form.control} name="business_name" label="Business Name" placeholder="Enter your Business Name" type="text"/>
-                  <CustomInput control={form.control} name="display_name" label="Display Name" placeholder="Enter your Display Name" type="text"/>
-                  <CustomInput control={form.control} name="business_reg_no" label="Registration Number" placeholder="Enter your Registration Number" type="text"/>
-                  <CustomInput control={form.control} name="description" label="Description" placeholder="Enter your Description" type="text"/>
-                  <CustomInput control={form.control} name="operation_date" label="Operation Date" placeholder="Enter your Operation Date" type="date"/>
+                  <CustomInput
+                    control={form.control}
+                    name="name"
+                    label="Name"
+                    placeholder="Enter your Branch Name"
+                    type="text"
+                    required={true}
+                  />
+                  <CustomInput
+                    control={form.control}
+                    name="business_name"
+                    label="Business Name"
+                    placeholder="Enter your Business Name"
+                    type="text"
+                    required={true}
+                  />
+                  <CustomInput
+                    control={form.control}
+                    name="display_name"
+                    label="Display Name"
+                    placeholder="Enter your Display Name"
+                    type="text"
+                    required={true}
+                  />
+                  <CustomInput
+                    control={form.control}
+                    name="business_reg_no"
+                    label="Registration Number"
+                    placeholder="Enter your Registration Number"
+                    type="text"
+                    required={true}
+                  />
+                  <CustomInput
+                    control={form.control}
+                    name="description"
+                    label="Description"
+                    placeholder="Enter your Description"
+                    type="text"
+                  />
+                  <CustomInput
+                    control={form.control}
+                    name="operation_date"
+                    label="Operation Date"
+                    placeholder="Enter your Operation Date"
+                    type="date"
+                    required={true}
+                  />
                 </div>
               </div>
 
@@ -258,15 +313,54 @@ const CreateBranch = (params: CreateType) => {
               <div className="space-y-4">
                 <h3 className="text-lg font-medium">Address Details</h3>
                 <div className="grid gap-4">
-                  <CustomInput control={form.control} name="address_line_1" label="Address Line 1" placeholder="Enter your Address Line 1" type="text"/>
-                  <CustomInput control={form.control} name="address_line_2" label="Address Line 2" placeholder="Enter your Address Line 2" type="text"/>
-                  <CustomInput control={form.control} name="address_line_3" label="Address Line 3" placeholder="Enter your Address Line 3" type="text"/>
-             
+                  <CustomInput
+                    control={form.control}
+                    name="address_line_1"
+                    label="Address Line 1"
+                    placeholder="Enter your Address Line 1"
+                    type="text"
+                    required={true}
+                  />
+                  <CustomInput
+                    control={form.control}
+                    name="address_line_2"
+                    label="Address Line 2"
+                    placeholder="Enter your Address Line 2"
+                    type="text"
+                  />
+                  <CustomInput
+                    control={form.control}
+                    name="address_line_3"
+                    label="Address Line 3"
+                    placeholder="Enter your Address Line 3"
+                    type="text"
+                  />
 
                   <div className="grid gap-4 sm:grid-cols-3">
-                    <CustomInput control={form.control} name="city" label="City" placeholder="Enter your City" type="text"/>
-                    <CustomInput control={form.control} name="state" label="State" placeholder="Enter your State" type="text"/>
-                    <CustomInput control={form.control} name="postcode" label="Postcode" placeholder="Enter your Postcode" type="text"/>
+                    <CustomInput
+                      control={form.control}
+                      name="city"
+                      label="City"
+                      placeholder="Enter your City"
+                      type="text"
+                      required={true}
+                    />
+                    <CustomInput
+                      control={form.control}
+                      name="state"
+                      label="State"
+                      placeholder="Enter your State"
+                      type="text"
+                      required={true}
+                    />
+                    <CustomInput
+                      control={form.control}
+                      name="postcode"
+                      label="Postcode"
+                      placeholder="Enter your Postcode"
+                      type="text"
+                      required={true}
+                    />
                   </div>
                 </div>
               </div>
