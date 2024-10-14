@@ -395,6 +395,13 @@ export type BranchListFilterProps = {
   page?: number;
   pageSize?: number;
   searchQuery?: string;
+};
+
+export type UserListFilterProps = {
+  type:string;
+  page?: number;
+  pageSize?: number;
+  searchQuery?: string;
   filter?: string;
 };
 
@@ -404,15 +411,16 @@ export type PRINCIPAL = "principal";
 export type MANAGER = "manager";
 export type TEACHER = "teacher";
 export type STUDENT = "student";
+export type PARENT = "parent";
 
 export type DeleteProps = {
-  type: BRANCH | PRINCIPAL | MANAGER | TEACHER | STUDENT;
+  type: BRANCH | PRINCIPAL | MANAGER | TEACHER | STUDENT | SUPERADMIN | PARENT;
   name: string;
   id: number;
 };
 
 export type EditProps = {
-  type: BRANCH | PRINCIPAL | MANAGER | TEACHER | STUDENT;
+  type: BRANCH | PRINCIPAL | MANAGER | TEACHER | STUDENT | SUPERADMIN | PARENT;
   id: number;
 };
 

@@ -248,3 +248,9 @@ export const camelCase = (word: string) => {
   const firstLetterUppercase = word.charAt(0).toUpperCase() + word.slice(1);
   return firstLetterUppercase;
 };
+
+export function extractDate(isoTimestamp: string): string {
+  // Split the string at 'T' to separate the date and time
+  const [date] = isoTimestamp.split('T');
+  return date;
+}

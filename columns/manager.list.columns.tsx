@@ -19,7 +19,7 @@ import { extractDate } from "@/lib/utils";
 import { EditUser } from "@/components/EditUser";
 import { DeleteUser } from "@/components/DeleteUser";
 
-export const PrincipalListColumns: ColumnDef<TypeUserProps>[] = [
+export const ManagerlListColumns: ColumnDef<TypeUserProps>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -63,7 +63,7 @@ export const PrincipalListColumns: ColumnDef<TypeUserProps>[] = [
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
-      const principal = row.original;
+      const manager = row.original;
 
       return (
         // <DropdownMenu>
@@ -87,8 +87,8 @@ export const PrincipalListColumns: ColumnDef<TypeUserProps>[] = [
         //   </DropdownMenuContent>
         // </DropdownMenu>
         <div className="flex gap-4 text-black-2">
-          <EditUser type={'principal'} id={principal.id}/>
-          <DeleteUser type={'principal'} name={principal.username} id={principal.id}/>
+          <EditUser type={'manager'} id={manager.id}/>
+          <DeleteUser type={'manager'} name={manager.username} id={manager.id}/>
         </div>
       );
     },

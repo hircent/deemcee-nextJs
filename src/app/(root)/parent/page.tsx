@@ -1,30 +1,30 @@
 import { PageListTable } from "@/components/PageList";
 import Create from "@/components/Create";
 import SearchBar from "@/components/SearchBar";
-import { SUPERADMIN } from "@/constants/message";
+import { PARENT } from "@/constants/message";
 import { getUserListByType } from "@/lib/actions/superadmin.action";
 import { authUser } from "@/lib/actions/user.actions";
 import { getUserRole } from "@/lib/utils";
 import React from "react";
-import { SuperadminListColumns } from "@/columns/superadmin.list.columns";
+import { ParentListColumns } from "@/columns/parent.list.columns";
 import { SearchParamProps } from "@/types/index";
 
-const Superadmin = async ({ searchParams }: SearchParamProps) => {
+const Parent = async ({ searchParams }: SearchParamProps) => {
   try {
     const result = await getUserListByType({
-      type:SUPERADMIN,
-      page: searchParams.page ? +searchParams.page : 1,
-      searchQuery: searchParams.q ? searchParams.q.toString() : undefined
-    });
+        type:PARENT,
+        page: searchParams.page ? +searchParams.page : 1,
+        searchQuery: searchParams.q ? searchParams.q.toString() : undefined
+      });
     const user = await authUser();
     const userRole = getUserRole(user);
     return (
       <div className="home-content">
         <div className="flex justify-between">
           <SearchBar />
-          {userRole.includes("superadmin") && <Create type={SUPERADMIN} />}
+          {userRole.includes("superadmin") && <Create type={PARENT} />}
         </div>
-        <PageListTable columns={SuperadminListColumns} data={result.data} />
+        <PageListTable columns={ParentListColumns} data={result.data} />
       </div>
     );
   } catch (error) {
@@ -32,4 +32,4 @@ const Superadmin = async ({ searchParams }: SearchParamProps) => {
   }
 };
 
-export default Superadmin;
+export default Parent;

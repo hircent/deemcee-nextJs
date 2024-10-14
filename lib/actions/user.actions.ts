@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { encryptId, extractCustomerIdFromUrl, parseStringify } from "../utils";
+import { parseStringify } from "../utils";
 import {
   LOGIN_FAILED,
   LOGIN_SUCCESSFUL,
@@ -87,6 +87,7 @@ export const authUser = async (): Promise<User | undefined> => {
 export const setCookieDefaultBranch = async (userData: User) => {
   cookies().set("BranchId", userData.branch_role[0].branch_id.toString());
 };
+
 // export const getUserInfo = async ({ userId }: getUserInfoProps) => {
 //   try {
 //     const { database } = await createAdminClient();

@@ -3,15 +3,27 @@
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { ListProps, TypeUserProps } from "@/types/index";
+import { ListProps, TypeUserProps, UserListFilterProps } from "@/types/index";
 
-export async function getUserListByType(type:string): Promise<ListProps<TypeUserProps>> {
+
+export async function getUserListByType(params:UserListFilterProps): Promise<ListProps<TypeUserProps>> {
+  const { type ,page, searchQuery } = params;
   const token = await getToken();
   const id = cookies().get("BranchId")?.value;
 
+  let url = `${process.env.API_URL}/users/${type}/list`;
+
+  if (searchQuery) {
+    url = `${url}?q=${searchQuery}`;
+  }
+
+  if (page && page > 1) {
+    url = `${url}?page=${page}`;
+  }
+  
   try {
     const response = await fetch(
-      `${process.env.API_URL}/users/${type}/list`,
+      url,
       {
         method: "GET",
         headers: {

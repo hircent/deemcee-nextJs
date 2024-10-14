@@ -7,13 +7,17 @@ import { getUserListByType } from "@/lib/actions/superadmin.action";
 import { authUser } from "@/lib/actions/user.actions";
 import { getUserRole } from "@/lib/utils";
 import React from "react";
+import { SearchParamProps } from "@/types/index";
 
-const Principal = async () => {
+const Principal = async ({ searchParams }: SearchParamProps) => {
   try {
-    const result = await getUserListByType(PRINCIPAL);
+    const result = await getUserListByType({
+      type:PRINCIPAL,
+      page: searchParams.page ? +searchParams.page : 1,
+      searchQuery: searchParams.q ? searchParams.q.toString() : undefined
+    });
     const user = await authUser();
     const userRole = getUserRole(user);
-    console.log(result.data);
     return (
       <div className="home-content">
         <div className="flex justify-between">

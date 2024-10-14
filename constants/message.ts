@@ -9,3 +9,4 @@ export const SUPERADMIN = "superadmin";
 export const PRINCIPAL = "principal";
 export const MANAGER = "manager";
 export const TEACHER = "teacher";
+export const PARENT = "parent";

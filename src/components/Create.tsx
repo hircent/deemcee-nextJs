@@ -46,9 +46,9 @@ const Create = ({ type }: { type: string }) => {
         >
           <Plus
             size={18}
-            className="text-red-600 group-hover:text-gray-600 mr-2"
+            className="text-red-600 group-hover:text-gray-600 mr-1"
           />
-          {camelCase(type)}
+          Add
         </Button>
       </DialogTrigger>
       <DialogOverlay
