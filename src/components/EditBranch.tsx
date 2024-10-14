@@ -128,7 +128,7 @@ export function EditBranch({ type, id }: EditProps) {
       await updateBranch(formData, id);
       toast({
         title: "Success",
-        description: `New Branch has been created successfully.`,
+        description: `Edited.`,
         duration: 2000,
         className: cn("bottom-0 left-0 bg-success-100"),
       });
