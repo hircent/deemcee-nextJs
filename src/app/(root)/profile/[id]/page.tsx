@@ -1,9 +1,9 @@
 import React from 'react'
 
-const page = ({id}:{id:URLSearchParams}) => {
+const page = ({ params }: { params: { id: number } }) => {
   return (
     <div className='text-white'>
-      {id}
+      {params.id}
     </div>
   )
 }

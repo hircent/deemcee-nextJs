@@ -1,7 +1,7 @@
 "use client";
 import { User, LogOut } from 'lucide-react';
 import { HeaderBoxProps } from "@/types/index";
-import React from "react";
+import { useState } from "react";
 import { Button } from "./ui/button";
 import { signOut } from "@/lib/actions/user.actions";
 import { useRouter } from "next/navigation";
@@ -19,6 +19,7 @@ import Link from 'next/link';
 
 const HeaderBox = ({ type, title, user, subtext }: HeaderBoxProps) => {
   const router = useRouter();
+  const [open, setOpen] = useState<boolean>(false);
   const userSignOut = async () => {
     await signOut();
     router.refresh();
@@ -39,7 +40,7 @@ const HeaderBox = ({ type, title, user, subtext }: HeaderBoxProps) => {
         <BranchSelector userRole={user.branch_role} />
       </div>
       <div className="flex justify-center">
-        <DropdownMenu>
+        <DropdownMenu open={open} onOpenChange={setOpen}>
           <DropdownMenuTrigger>
             <div className="h-7 w-7 rounded-full bg-slate-500 flex items-center justify-center text-white">{user?.username[0].toUpperCase()}</div>
           </DropdownMenuTrigger>
@@ -52,7 +53,7 @@ const HeaderBox = ({ type, title, user, subtext }: HeaderBoxProps) => {
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="flex items-center gap-2">
-              <Link href={`/profile/${user.user_id}`} className="flex items-center gap-2">
+              <Link href={`/profile/${user.user_id}`} className="flex items-center gap-2" onClick={()=>{setOpen(false)}}>
                 <User size={16} /> Profile
               </Link>
             </DropdownMenuItem>
