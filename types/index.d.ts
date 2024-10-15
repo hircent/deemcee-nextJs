@@ -383,6 +383,18 @@ export type TypeUserProps = {
   updated_at: string;
 };
 
+export type TypeUserDetailsProps = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  username: string;
+  email: string;
+  is_active: string;
+  created_at: string;
+  updated_at: string;
+  details:string;
+  address:Address;
+};
 export type ListProps<T> = {
   success: boolean;
   total: number;
@@ -439,6 +451,11 @@ export type DeleteUserProps = {
 
 export type GetBranchDetailProps = {
   id: number;
+};
+
+export type GetUserDetailProps = {
+  id: number;
+  type:string;
 };
 
 export type Address = {

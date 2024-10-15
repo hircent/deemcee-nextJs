@@ -9,8 +9,10 @@ import {
 } from "@/constants/message";
 import {
   DeleteUserProps,
+  GetUserDetailProps,
   signInProps,
   signInResponse,
+  TypeUserDetailsProps,
   User,
 } from "@/types/index";
 import { jwtDecode } from "jwt-decode";
@@ -247,6 +249,36 @@ export async function createUser(formData: FormData, type: string) {
   }
 }
 
+
+export async function getUserDetails({
+  id,
+  type
+}: GetUserDetailProps):Promise<TypeUserDetailsProps>{
+  const token = await getToken();
+
+  try {
+    const response = await fetch(
+      `${process.env.API_URL}/users/${type}/details/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log(data)
+    return data.data;
+  } catch (error) {
+    throw error;
+  }
+}
 // export const getUserInfo = async ({ userId }: getUserInfoProps) => {
 //   try {
 //     const { database } = await createAdminClient();
