@@ -53,7 +53,7 @@ const HeaderBox = ({ type, title, user, subtext }: HeaderBoxProps) => {
           >
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="flex items-center gap-2">
+            <DropdownMenuItem className="flex items-center gap-2 hover:bg-slate-300">
               <Link
                 href={`/profile/${user.user_id}`}
                 className="flex items-center gap-2"
@@ -64,7 +64,7 @@ const HeaderBox = ({ type, title, user, subtext }: HeaderBoxProps) => {
                 <User size={16} /> Profile
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem className="hover:bg-slate-300">
               <Button
                 onClick={userSignOut}
                 className="flex items-center gap-2 px-0"
