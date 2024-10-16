@@ -106,8 +106,6 @@ const CreateBranch = (params: CreateType) => {
   const form = useForm<BranchFormValues>({
     resolver: zodResolver(branchFormSchema),
     defaultValues: {
-      principal: 0,
-      branch_grade: 0,
       name: "",
       business_name: "",
       display_name: "",
@@ -175,86 +173,6 @@ const CreateBranch = (params: CreateType) => {
         <Form {...form}>
           <form action={submitForm} className="space-y-6">
             <div className="grid gap-6">
-              {/* Principal and Branch Grade Section */}
-
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium">Branch Details</h3>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <FormField
-                    control={form.control}
-                    name="principal"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          Principal <span className="text-red-500">*</span>
-                        </FormLabel>
-                        <Select
-                          onValueChange={(value) => {
-                            field.onChange(Number(value));
-                            setPrincipalID(value);
-                          }}
-                          value={field.value ? String(field.value) : undefined}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a principal" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent className="bg-white max-h-[200px] overflow-y-auto">
-                            {principals.map((principal) => (
-                              <SelectItem
-                                key={principal.id}
-                                value={String(principal.id)}
-                                className="hover:bg-slate-300 cursor-pointer"
-                              >
-                                {principal.username}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage className="text-red-500" />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="branch_grade"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          Branch Grade <span className="text-red-500">*</span>
-                        </FormLabel>
-                        <Select
-                          onValueChange={(value) => {
-                            field.onChange(Number(value));
-                            setBranchGradeID(value);
-                          }}
-                          value={field.value ? String(field.value) : undefined}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a branch grade" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent className="bg-white max-h-[200px] overflow-y-auto">
-                            {branchGrades.map((grade) => (
-                              <SelectItem
-                                key={grade.id}
-                                value={String(grade.id)}
-                                className="hover:bg-slate-300 cursor-pointer"
-                              >
-                                {grade.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage className="text-red-500" />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
               {/* Basic Information Section */}
               <div className="space-y-4">
                 <h3 className="text-lg font-medium">Basic Information</h3>

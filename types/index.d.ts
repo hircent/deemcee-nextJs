@@ -392,8 +392,8 @@ export type TypeUserDetailsProps = {
   is_active: string;
   created_at: string;
   updated_at: string;
-  details:string;
-  address:Address;
+  details: string;
+  address: Address;
 };
 export type ListProps<T> = {
   success: boolean;
@@ -410,7 +410,7 @@ export type BranchListFilterProps = {
 };
 
 export type UserListFilterProps = {
-  type:string;
+  type: string;
   page?: number;
   pageSize?: number;
   searchQuery?: string;
@@ -455,7 +455,7 @@ export type GetBranchDetailProps = {
 
 export type GetUserDetailProps = {
   id: number;
-  type:string;
+  type: string;
 };
 
 export type Address = {
@@ -497,7 +497,13 @@ export type Principal = {
   id: number;
   username: string;
 };
+
 export type BranchGrade = {
+  id: number;
+  name: string;
+};
+
+export type BranchSelectorProps = {
   id: number;
   name: string;
 };

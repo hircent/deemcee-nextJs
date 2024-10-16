@@ -2,8 +2,6 @@ import * as z from "zod";
 import { Control, FieldPath } from "react-hook-form";
 
 export const branchFormSchema = z.object({
-  principal: z.number().min(1, "Principal is required"),
-  branch_grade: z.number().min(1, "Branch grade is required"),
   name: z.string().min(2, "Business name must be at least 2 characters"),
   business_name: z
     .string()

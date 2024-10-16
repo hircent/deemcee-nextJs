@@ -6,6 +6,7 @@ import {
   DeleteBranchProps,
   BranchDetailProps,
   PrincipalsAndBranchGrade,
+  BranchSelectorProps,
 } from "@/types/index";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
@@ -145,6 +146,30 @@ export async function getAllPrincipalAndBranchGrade(): Promise<
   }
 }
 
+export async function getBranchSelector(): Promise<BranchSelectorProps[]> {
+  const token = await getToken();
+  try {
+    const response = await fetch(`${process.env.API_URL}/branch/selector`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+      },
+      cache: "no-cache",
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    return data.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function createBranch(formData: FormData) {
   const token = await getToken();
 
@@ -162,9 +187,6 @@ export async function createBranch(formData: FormData) {
     // Transform data as needed
     const payload = {
       ...rest,
-      // Ensure numeric fields are sent as numbers
-      principal: rest.principal ? Number(rest.principal) : null,
-      branch_grade: rest.branch_grade ? Number(rest.branch_grade) : null,
       // Add any date transformations if needed
       operation_date: rest.operation_date
         ? rest.operation_date
