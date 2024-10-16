@@ -59,3 +59,25 @@ export type CreateUserCustomInput = {
   placeholder: string;
   required?: boolean;
 };
+
+export const UpdateUserFormSchema = z.object({
+  username: z.string().min(8, "Min 8 characters"),
+  email: z.string().min(1, "Email is required").email(),
+  address_line_1: z.string().min(1, "Address line 1 is required"),
+  address_line_2: z.string(),
+  address_line_3: z.string(),
+  city: z.string().min(1, "City is required"),
+  postcode: z.string().min(1, "Postcode is required"),
+  state: z.string().min(1, "State is required"),
+});
+
+export type UpdateUserFormValues = z.infer<typeof UpdateUserFormSchema>;
+
+export type UpdateUserCustomInput = {
+  control: Control<z.infer<typeof UpdateUserFormSchema>>;
+  name: FieldPath<z.infer<typeof UpdateUserFormSchema>>;
+  label: string;
+  type: string;
+  placeholder: string;
+  required?: boolean;
+};

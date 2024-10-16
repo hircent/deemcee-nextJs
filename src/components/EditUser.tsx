@@ -26,13 +26,14 @@ import {
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "./ui/use-toast";
-import { camelCase } from "@/lib/utils";
+import { camelCase, cn } from "@/lib/utils";
 import {
-  CreateUserCustomInput,
-  CreateUserFormSchema,
-  CreateUserFormValues,
+  UpdateUserCustomInput,
+  UpdateUserFormSchema,
+  UpdateUserFormValues,
 } from "@/constants/form";
-import { getUserDetails } from "@/lib/actions/user.actions";
+import { getUserDetails, updateUser } from "@/lib/actions/user.actions";
+import { z } from "zod";
 
 const CustomInput = ({
   control,
@@ -41,7 +42,7 @@ const CustomInput = ({
   placeholder,
   type,
   required,
-}: CreateUserCustomInput) => {
+}: UpdateUserCustomInput) => {
   return (
     <FormField
       control={control}
@@ -68,15 +69,15 @@ const CustomInput = ({
 
 export function EditUser({ type, id }: EditProps) {
   const [isLoading, setLoading] = useState<boolean>(true);
+  const [isSubmitting, setSubmitting] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const { toast } = useToast();
 
-  const form = useForm<CreateUserFormValues>({
-    resolver: zodResolver(CreateUserFormSchema),
+  const form = useForm<UpdateUserFormValues>({
+    resolver: zodResolver(UpdateUserFormSchema),
     defaultValues: {
+      username: "",
       email: "",
-      password: "",
-      confirm_password: "",
       address_line_1: "",
       address_line_2: "",
       address_line_3: "",
@@ -92,8 +93,6 @@ export function EditUser({ type, id }: EditProps) {
       form.reset({
         username: userData.username,
         email: userData.email,
-        password: "asd",
-        confirm_password: "asd",
         address_line_1: userData.address.address_line_1,
         address_line_2: userData.address.address_line_2,
         address_line_3: userData.address.address_line_3,
@@ -107,8 +106,27 @@ export function EditUser({ type, id }: EditProps) {
     }
   };
 
-  const onSubmit = async (formData: FormData) => {
-    // console.log(formData)
+  const onSubmit = async (formData: z.infer<typeof UpdateUserFormSchema>) => {
+    setSubmitting(true);
+    try {
+      await updateUser({ id, type, formData });
+      setSubmitting(false);
+      setOpen(false);
+      toast({
+        title: "Success",
+        description: `Edited.`,
+        duration: 2000,
+        className: cn("bottom-0 left-0 bg-success-100"),
+      });
+    } catch (error) {
+      setSubmitting(false);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred.",
+        duration: 4000,
+        className: cn("bottom-0 left-0 bg-error-100"),
+      });
+    }
   };
 
   return (
@@ -131,7 +149,7 @@ export function EditUser({ type, id }: EditProps) {
         className="bg-black/80"
         style={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}
       />
-      <DialogContent className="w-full max-w-[1000px] h-[90vh] overflow-y-auto custom-scrollbar bg-white">
+      <DialogContent className="w-full max-w-[1000px] h-auto overflow-y-auto custom-scrollbar bg-white">
         <DialogHeader>
           <DialogTitle className="text-xl sm:text-2xl font-semibold">
             Edit {camelCase(type)}
@@ -146,7 +164,7 @@ export function EditUser({ type, id }: EditProps) {
           </div>
         ) : (
           <Form {...form}>
-            <form action={onSubmit} className="space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid gap-6">
                 <div className="space-y-4">
                   <h3 className="text-lg font-medium">User Information</h3>
@@ -165,22 +183,6 @@ export function EditUser({ type, id }: EditProps) {
                       label="Email"
                       placeholder="Enter your Email"
                       type="text"
-                      required={true}
-                    />
-                    <CustomInput
-                      control={form.control}
-                      name="password"
-                      label="Password"
-                      placeholder="Enter your Password"
-                      type="password"
-                      required={true}
-                    />
-                    <CustomInput
-                      control={form.control}
-                      name="confirm_password"
-                      label="Confirm Password"
-                      placeholder="Confirm Your Password"
-                      type="password"
                       required={true}
                     />
                   </div>
@@ -242,8 +244,12 @@ export function EditUser({ type, id }: EditProps) {
                 </div>
               </div>
               <DialogFooter className="gap-4 sm:gap-0">
-                <Button type="submit" className="bg-[#000] text-white">
-                  Create
+                <Button
+                  type="submit"
+                  className="bg-[#000] text-white"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Saving" : "Save"}
                 </Button>
               </DialogFooter>
             </form>

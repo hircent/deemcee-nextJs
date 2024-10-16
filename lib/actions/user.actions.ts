@@ -14,6 +14,7 @@ import {
   signInResponse,
   TypeUserDetailsProps,
   User,
+  UpdateUserDetailProps,
 } from "@/types/index";
 import { jwtDecode } from "jwt-decode";
 import { redirect } from "next/navigation";
@@ -274,6 +275,60 @@ export async function getUserDetails({
 
     const data = await response.json();
     return data.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function updateUser({
+  id,
+  type,
+  formData,
+}: UpdateUserDetailProps) {
+  const token = await getToken();
+  const branchId = cookies().get("BranchId")?.value;
+
+  try {
+    const {
+      address_line_1,
+      address_line_2,
+      address_line_3,
+      city,
+      state,
+      postcode,
+      ...rest
+    } = formData;
+
+    const payload = {
+      ...rest,
+      address: {
+        address_line_1,
+        address_line_2,
+        address_line_3,
+        city,
+        state,
+        postcode,
+      },
+    };
+
+    const response = await fetch(
+      `${process.env.API_URL}/users/update/${type}/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error! Status: ${response.status}`);
+    }
+
+    revalidatePath(`/${type}`);
   } catch (error) {
     throw error;
   }

@@ -457,6 +457,11 @@ export type GetUserDetailProps = {
   id: number;
   type: string;
 };
+export type UpdateUserDetailProps = {
+  id: number;
+  type: string;
+  formData: CreateUserFormValues;
+};
 
 export type Address = {
   address_line_1: string;
