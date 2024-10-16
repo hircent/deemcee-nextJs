@@ -68,6 +68,7 @@ export async function deleteBranch({
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token?.value}`,
+        BranchId: `${id?.toString()}`,
       },
     });
 
@@ -88,7 +89,6 @@ export async function getBranchDetails({
   id,
 }: GetBranchDetailProps): Promise<BranchDetailProps> {
   const token = await getToken();
-
   try {
     const response = await fetch(
       `${process.env.API_URL}/branch/details/${id}`,
@@ -299,6 +299,5 @@ export async function updateBranch(formData: FormData, id: number) {
 
 export async function setBranchCookie(id: string, path: string) {
   cookies().set("BranchId", id);
-  console.log(`here:${cookies().get("BranchId")?.value}`);
   revalidatePath(path);
 }

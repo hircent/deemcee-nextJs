@@ -1,6 +1,3 @@
-"use client";
-import * as React from "react";
-
 import {
   Select,
   SelectContent,
@@ -17,12 +14,14 @@ import {
 } from "@/lib/actions/branch.action";
 import { usePathname } from "next/navigation";
 import { camelCase } from "@/lib/utils";
+import { branchSelectorPermission } from "@/constants/index";
 
 export function BranchSelector({ userRole }: { userRole: BranchRole[] }) {
   const [branch, setBranch] = useState(userRole[0].branch_id.toString());
   const [branchSelector, setBranchSelector] = useState<BranchSelectorProps[]>(
     []
   );
+  const [ableSelect, setAbleSelect] = useState<boolean>(false);
   const pathName = usePathname();
 
   useEffect(() => {
@@ -30,22 +29,35 @@ export function BranchSelector({ userRole }: { userRole: BranchRole[] }) {
       const branchData = await getBranchSelector();
       setBranchSelector(branchData);
     };
-    getBranchSelectorData();
-  }, []);
+
+    if (userRole[0].branch_role == "superadmin") {
+      getBranchSelectorData();
+    } else {
+      setBranchSelector([
+        { id: userRole[0].branch_id, name: userRole[0].branch_name },
+      ]);
+    }
+  }, [userRole]);
 
   useEffect(() => {
     const changeBranch = async () => {
       await setBranchCookie(branch, pathName);
     };
     changeBranch();
-  }, [branch, pathName]);
 
+    if (branchSelectorPermission.includes(pathName)) {
+      setAbleSelect(false);
+    } else {
+      setAbleSelect(true);
+    }
+  }, [branch, pathName]);
   return (
     <Select
       onValueChange={(value) => {
         setBranch(value);
       }}
       value={branch}
+      disabled={ableSelect}
     >
       <SelectTrigger className=" bg-yellow-2 border-yellow-11 w-[300px]">
         <SelectValue placeholder="Select a branch" />

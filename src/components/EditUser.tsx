@@ -27,7 +27,11 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "./ui/use-toast";
 import { camelCase } from "@/lib/utils";
-import { CreateUserCustomInput, CreateUserFormSchema, CreateUserFormValues } from "@/constants/form";
+import {
+  CreateUserCustomInput,
+  CreateUserFormSchema,
+  CreateUserFormValues,
+} from "@/constants/form";
 import { getUserDetails } from "@/lib/actions/user.actions";
 
 const CustomInput = ({
@@ -66,7 +70,7 @@ export function EditUser({ type, id }: EditProps) {
   const [isLoading, setLoading] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false);
   const { toast } = useToast();
-  
+
   const form = useForm<CreateUserFormValues>({
     resolver: zodResolver(CreateUserFormSchema),
     defaultValues: {
@@ -82,9 +86,9 @@ export function EditUser({ type, id }: EditProps) {
     },
   });
 
-  const getUser = async () =>{
+  const getUser = async () => {
     try {
-      const userData = await getUserDetails({id, type})
+      const userData = await getUserDetails({ id, type });
       form.reset({
         username: userData.username,
         email: userData.email,
@@ -96,15 +100,15 @@ export function EditUser({ type, id }: EditProps) {
         city: userData.address.city,
         postcode: userData.address.postcode,
         state: userData.address.state,
-      })
-      setLoading(false)
+      });
+      setLoading(false);
     } catch (error) {
       console.error("Failed to fetch user details:", error);
     }
-  }
+  };
 
   const onSubmit = async (formData: FormData) => {
-    console.log(formData)
+    // console.log(formData)
   };
 
   return (
@@ -113,7 +117,7 @@ export function EditUser({ type, id }: EditProps) {
         <Button
           onClick={() => {
             setOpen(true);
-            getUser()
+            getUser();
           }}
           className="group p-2 hover:bg-gray-100 rounded-full transition-colors"
         >
@@ -133,8 +137,7 @@ export function EditUser({ type, id }: EditProps) {
             Edit {camelCase(type)}
           </DialogTitle>
           <DialogDescription className="text-sm sm:text-base">
-            Make changes to your details here. Click save when
-            you&apos;re done.
+            Make changes to your details here. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         {isLoading ? (
@@ -142,109 +145,109 @@ export function EditUser({ type, id }: EditProps) {
             <p>Loading...</p>
           </div>
         ) : (
-        <Form {...form}>
-          <form action={onSubmit} className="space-y-6">
-            <div className="grid gap-6">
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium">User Information</h3>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <CustomInput
-                    control={form.control}
-                    name="username"
-                    label="Username"
-                    placeholder="Enter your Username"
-                    type="text"
-                    required={true}
-                  />
-                  <CustomInput
-                    control={form.control}
-                    name="email"
-                    label="Email"
-                    placeholder="Enter your Email"
-                    type="text"
-                    required={true}
-                  />
-                  <CustomInput
-                    control={form.control}
-                    name="password"
-                    label="Password"
-                    placeholder="Enter your Password"
-                    type="password"
-                    required={true}
-                  />
-                  <CustomInput
-                    control={form.control}
-                    name="confirm_password"
-                    label="Confirm Password"
-                    placeholder="Confirm Your Password"
-                    type="password"
-                    required={true}
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium">Address Details</h3>
-                <div className="grid gap-4">
-                  <CustomInput
-                    control={form.control}
-                    name="address_line_1"
-                    label="Address Line 1"
-                    placeholder="Enter your Address Line 1"
-                    type="text"
-                    required={true}
-                  />
-                  <CustomInput
-                    control={form.control}
-                    name="address_line_2"
-                    label="Address Line 2"
-                    placeholder="Enter your Address Line 2"
-                    type="text"
-                  />
-                  <CustomInput
-                    control={form.control}
-                    name="address_line_3"
-                    label="Address Line 3"
-                    placeholder="Enter your Address Line 3"
-                    type="text"
-                  />
-
-                  <div className="grid gap-4 sm:grid-cols-3">
+          <Form {...form}>
+            <form action={onSubmit} className="space-y-6">
+              <div className="grid gap-6">
+                <div className="space-y-4">
+                  <h3 className="text-lg font-medium">User Information</h3>
+                  <div className="grid gap-4 sm:grid-cols-2">
                     <CustomInput
                       control={form.control}
-                      name="city"
-                      label="City"
-                      placeholder="Enter your City"
+                      name="username"
+                      label="Username"
+                      placeholder="Enter your Username"
                       type="text"
                       required={true}
                     />
                     <CustomInput
                       control={form.control}
-                      name="state"
-                      label="State"
-                      placeholder="Enter your State"
+                      name="email"
+                      label="Email"
+                      placeholder="Enter your Email"
                       type="text"
                       required={true}
                     />
                     <CustomInput
                       control={form.control}
-                      name="postcode"
-                      label="Postcode"
-                      placeholder="Enter your Postcode"
-                      type="text"
+                      name="password"
+                      label="Password"
+                      placeholder="Enter your Password"
+                      type="password"
+                      required={true}
+                    />
+                    <CustomInput
+                      control={form.control}
+                      name="confirm_password"
+                      label="Confirm Password"
+                      placeholder="Confirm Your Password"
+                      type="password"
                       required={true}
                     />
                   </div>
                 </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-lg font-medium">Address Details</h3>
+                  <div className="grid gap-4">
+                    <CustomInput
+                      control={form.control}
+                      name="address_line_1"
+                      label="Address Line 1"
+                      placeholder="Enter your Address Line 1"
+                      type="text"
+                      required={true}
+                    />
+                    <CustomInput
+                      control={form.control}
+                      name="address_line_2"
+                      label="Address Line 2"
+                      placeholder="Enter your Address Line 2"
+                      type="text"
+                    />
+                    <CustomInput
+                      control={form.control}
+                      name="address_line_3"
+                      label="Address Line 3"
+                      placeholder="Enter your Address Line 3"
+                      type="text"
+                    />
+
+                    <div className="grid gap-4 sm:grid-cols-3">
+                      <CustomInput
+                        control={form.control}
+                        name="city"
+                        label="City"
+                        placeholder="Enter your City"
+                        type="text"
+                        required={true}
+                      />
+                      <CustomInput
+                        control={form.control}
+                        name="state"
+                        label="State"
+                        placeholder="Enter your State"
+                        type="text"
+                        required={true}
+                      />
+                      <CustomInput
+                        control={form.control}
+                        name="postcode"
+                        label="Postcode"
+                        placeholder="Enter your Postcode"
+                        type="text"
+                        required={true}
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <DialogFooter className="gap-4 sm:gap-0">
-              <Button type="submit" className="bg-[#000] text-white">
-                Create
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
+              <DialogFooter className="gap-4 sm:gap-0">
+                <Button type="submit" className="bg-[#000] text-white">
+                  Create
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
         )}
       </DialogContent>
     </Dialog>

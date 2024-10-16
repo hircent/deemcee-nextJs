@@ -53,8 +53,7 @@ export function EditBranch({ type, id }: EditProps) {
   const form = useForm<BranchFormValues>({
     resolver: zodResolver(branchFormSchema),
     defaultValues: {
-      principal: 0,
-      branch_grade: 0,
+      name: "",
       business_name: "",
       display_name: "",
       description: "",
@@ -84,14 +83,12 @@ export function EditBranch({ type, id }: EditProps) {
   async function getBranch() {
     setLoading(true);
     try {
-      const [branchData, _] = await Promise.all([
+      const [branchData] = await Promise.all([
         getBranchDetails({ id }),
-        getSelectFromPrincipalAndBranchGrade(), // Fetch select options alongside branch details
+        // getSelectFromPrincipalAndBranchGrade(), // Fetch select options alongside branch details
       ]);
 
       form.reset({
-        principal: branchData.principal?.id || 0,
-        branch_grade: branchData.branch_grade?.id || 0,
         name: branchData?.name || "",
         business_name: branchData?.business_name || "",
         display_name: branchData?.display_name || "",
@@ -178,86 +175,6 @@ export function EditBranch({ type, id }: EditProps) {
           <Form {...form}>
             <form action={onSubmit} className="space-y-6">
               <div className="grid gap-6">
-                {/* Principal and Branch Grade Section */}
-
-                <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Branch Details</h3>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <FormField
-                      control={form.control}
-                      name="principal"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Principal</FormLabel>
-                          <Select
-                            onValueChange={(value) => {
-                              field.onChange(Number(value));
-                              setPrincipalID(value);
-                            }}
-                            value={
-                              field.value ? String(field.value) : undefined
-                            }
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select a principal" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent className="bg-white">
-                              {principals.map((principal) => (
-                                <SelectItem
-                                  key={principal.id}
-                                  value={String(principal.id)}
-                                  className="hover:bg-slate-300 cursor-pointer"
-                                >
-                                  {principal.username}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="branch_grade"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Branch Grade</FormLabel>
-                          <Select
-                            onValueChange={(value) => {
-                              field.onChange(Number(value));
-                              setBranchGradeID(value);
-                            }}
-                            value={
-                              field.value ? String(field.value) : undefined
-                            }
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select a branch grade" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent className="bg-white">
-                              {branchGrades.map((grade) => (
-                                <SelectItem
-                                  key={grade.id}
-                                  value={String(grade.id)}
-                                  className="hover:bg-slate-300 cursor-pointer"
-                                >
-                                  {grade.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
                 {/* Basic Information Section */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-medium">Basic Information</h3>

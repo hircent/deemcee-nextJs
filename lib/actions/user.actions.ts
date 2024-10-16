@@ -249,13 +249,12 @@ export async function createUser(formData: FormData, type: string) {
   }
 }
 
-
 export async function getUserDetails({
   id,
-  type
-}: GetUserDetailProps):Promise<TypeUserDetailsProps>{
+  type,
+}: GetUserDetailProps): Promise<TypeUserDetailsProps> {
   const token = await getToken();
-
+  const branchId = cookies().get("BranchId")?.value;
   try {
     const response = await fetch(
       `${process.env.API_URL}/users/${type}/details/${id}`,
@@ -264,6 +263,7 @@ export async function getUserDetails({
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
         },
       }
     );
@@ -273,7 +273,6 @@ export async function getUserDetails({
     }
 
     const data = await response.json();
-    console.log(data)
     return data.data;
   } catch (error) {
     throw error;

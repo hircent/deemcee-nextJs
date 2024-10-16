@@ -1,5 +1,5 @@
 "use client";
-import { User, LogOut } from 'lucide-react';
+import { User, LogOut } from "lucide-react";
 import { HeaderBoxProps } from "@/types/index";
 import { useState } from "react";
 import { Button } from "./ui/button";
@@ -13,9 +13,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import Link from 'next/link';
-
+} from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
 const HeaderBox = ({ type, title, user, subtext }: HeaderBoxProps) => {
   const router = useRouter();
@@ -42,23 +41,34 @@ const HeaderBox = ({ type, title, user, subtext }: HeaderBoxProps) => {
       <div className="flex justify-center">
         <DropdownMenu open={open} onOpenChange={setOpen}>
           <DropdownMenuTrigger>
-            <div className="h-7 w-7 rounded-full bg-slate-500 flex items-center justify-center text-white">{user?.username[0].toUpperCase()}</div>
+            <div className="h-7 w-7 rounded-full bg-slate-500 flex items-center justify-center text-white">
+              {user?.username[0].toUpperCase()}
+            </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent 
+          <DropdownMenuContent
             className="bg-yellow-2"
-            align="end" 
+            align="end"
             alignOffset={-15}
             sideOffset={5}
           >
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="flex items-center gap-2">
-              <Link href={`/profile/${user.user_id}`} className="flex items-center gap-2" onClick={()=>{setOpen(false)}}>
+              <Link
+                href={`/profile/${user.user_id}`}
+                className="flex items-center gap-2"
+                onClick={() => {
+                  setOpen(false);
+                }}
+              >
                 <User size={16} /> Profile
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Button onClick={userSignOut} className="flex items-center gap-2 px-0">
+              <Button
+                onClick={userSignOut}
+                className="flex items-center gap-2 px-0"
+              >
                 <LogOut size={16} /> Sign Out
               </Button>
             </DropdownMenuItem>

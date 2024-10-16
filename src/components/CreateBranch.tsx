@@ -124,7 +124,6 @@ const CreateBranch = (params: CreateType) => {
   const submitForm = async (formData: FormData) => {
     formData.append("principal", principalID);
     formData.append("branch_grade", branchGradeID);
-    console.log({ formData });
     try {
       await createBranch(formData);
       toast({
