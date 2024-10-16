@@ -8,6 +8,8 @@ import React from "react";
 import { ManagerlListColumns } from "@/columns/manager.list.columns";
 import { SearchParamProps } from "@/types/index";
 
+const IsAbleCreateManager = ["superadmin", "principal"];
+
 const Manager = async ({ searchParams }: SearchParamProps) => {
   try {
     const result = await getUserListByType({
@@ -21,7 +23,9 @@ const Manager = async ({ searchParams }: SearchParamProps) => {
       <div className="home-content">
         <div className="flex justify-between">
           <SearchBar />
-          {userRole.includes("superadmin") && <Create type={MANAGER} />}
+          {IsAbleCreateManager.includes(userRole[0]) && (
+            <Create type={MANAGER} />
+          )}
         </div>
         <PageListTable columns={ManagerlListColumns} data={result.data} />
       </div>

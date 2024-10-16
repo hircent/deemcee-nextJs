@@ -8,12 +8,14 @@ import React from "react";
 import { TeacherListColumns } from "@/columns/teacher.list.columns";
 import { SearchParamProps } from "@/types/index";
 
+const IsAbleCreateTeacher = ["superadmin", "principal", "manager"];
+
 const Teacher = async ({ searchParams }: SearchParamProps) => {
   try {
     const result = await getUserListByType({
-      type:TEACHER,
+      type: TEACHER,
       page: searchParams.page ? +searchParams.page : 1,
-      searchQuery: searchParams.q ? searchParams.q.toString() : undefined
+      searchQuery: searchParams.q ? searchParams.q.toString() : undefined,
     });
     const user = await authUser();
     const userRole = getUserRole(user);
@@ -21,7 +23,9 @@ const Teacher = async ({ searchParams }: SearchParamProps) => {
       <div className="home-content">
         <div className="flex justify-between">
           <SearchBar />
-          {userRole.includes("superadmin") && <Create type={TEACHER} />}
+          {IsAbleCreateTeacher.includes(userRole[0]) && (
+            <Create type={TEACHER} />
+          )}
         </div>
         <PageListTable columns={TeacherListColumns} data={result.data} />
       </div>

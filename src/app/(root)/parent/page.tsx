@@ -8,20 +8,22 @@ import React from "react";
 import { ParentListColumns } from "@/columns/parent.list.columns";
 import { SearchParamProps } from "@/types/index";
 
+const IsAbleCreateParent = ["superadmin", "principal", "manager"];
+
 const Parent = async ({ searchParams }: SearchParamProps) => {
   try {
     const result = await getUserListByType({
-        type:PARENT,
-        page: searchParams.page ? +searchParams.page : 1,
-        searchQuery: searchParams.q ? searchParams.q.toString() : undefined
-      });
+      type: PARENT,
+      page: searchParams.page ? +searchParams.page : 1,
+      searchQuery: searchParams.q ? searchParams.q.toString() : undefined,
+    });
     const user = await authUser();
     const userRole = getUserRole(user);
     return (
       <div className="home-content">
         <div className="flex justify-between">
           <SearchBar />
-          {userRole.includes("superadmin") && <Create type={PARENT} />}
+          {IsAbleCreateParent.includes(userRole[0]) && <Create type={PARENT} />}
         </div>
         <PageListTable columns={ParentListColumns} data={result.data} />
       </div>

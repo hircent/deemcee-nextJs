@@ -2,7 +2,7 @@ import { PrincipalListColumns } from "@/columns/principal.list.columns";
 import { PageListTable } from "@/components/PageList";
 import Create from "@/components/Create";
 import SearchBar from "@/components/SearchBar";
-import { SUPERADMIN } from "@/constants/message";
+import { PRINCIPAL, SUPERADMIN } from "@/constants/message";
 import { authUser, getUserListByType } from "@/lib/actions/user.actions";
 import { getUserRole } from "@/lib/utils";
 import React from "react";
@@ -11,9 +11,9 @@ import { SearchParamProps } from "@/types/index";
 const Student = async ({ searchParams }: SearchParamProps) => {
   try {
     const result = await getUserListByType({
-      type:SUPERADMIN,
+      type: PRINCIPAL,
       page: searchParams.page ? +searchParams.page : 1,
-      searchQuery: searchParams.q ? searchParams.q.toString() : undefined
+      searchQuery: searchParams.q ? searchParams.q.toString() : undefined,
     });
     const user = await authUser();
     const userRole = getUserRole(user);
@@ -21,7 +21,7 @@ const Student = async ({ searchParams }: SearchParamProps) => {
       <div className="home-content">
         <div className="flex justify-between">
           <SearchBar />
-          {userRole.includes("superadmin") && <Create type={SUPERADMIN} />}
+          {userRole.includes("superadmin") && <Create type={PRINCIPAL} />}
         </div>
         <PageListTable columns={PrincipalListColumns} data={result.data} />
       </div>
