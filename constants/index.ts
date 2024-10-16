@@ -47,6 +47,12 @@ export const sidebarLinks = [
     label: "Student",
     visible: ["superadmin", "principal", "manager", "teacher"],
   },
+  {
+    imgURL: "/icons/users.svg",
+    route: "/calendar",
+    label: "Calendar",
+    visible: ["superadmin", "principal", "manager", "teacher"],
+  },
   // {
   //   imgURL: "/icons/home.svg",
   //   route: "/user-management",

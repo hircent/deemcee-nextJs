@@ -398,6 +398,7 @@ export type TypeUserDetailsProps = {
 export type ListProps<T> = {
   success: boolean;
   total: number;
+  page_size: number;
   next: string | null;
   previous: string | null;
   data: T[];
