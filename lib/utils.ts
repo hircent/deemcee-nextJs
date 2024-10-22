@@ -4,6 +4,8 @@ import qs from "query-string";
 import { twMerge } from "tailwind-merge";
 import { z } from "zod";
 import { User } from "../types";
+import { CalendarData, ProcessedCalendarEvent } from "@/types/calendar";
+import { EventInput } from "@fullcalendar/core/index.js";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -251,6 +253,81 @@ export const camelCase = (word: string) => {
 
 export function extractDate(isoTimestamp: string): string {
   // Split the string at 'T' to separate the date and time
-  const [date] = isoTimestamp.split('T');
+  const [date] = isoTimestamp.split("T");
   return date;
+}
+
+export function processCalendarData(data: CalendarData[]): EventInput[] {
+  return data.map((event) => {
+    const colors = getEventColor(event.entry_type);
+    return {
+      title: event.title,
+      start: event.start_datetime,
+      end: event.end_datetime,
+      backgroundColor: colors.backgroundColor,
+      borderColor: colors.borderColor,
+      textColor: colors.textColor,
+      extendedProps: {
+        description: event.description,
+        entry_type: event.entry_type,
+      },
+    };
+  });
+}
+
+function getEventColor(entryType: string): {
+  backgroundColor: string;
+  borderColor: string;
+  textColor: string;
+} {
+  switch (entryType.toLowerCase()) {
+    case "centre holiday":
+      return {
+        backgroundColor: "#FDE68A", // Soft yellow
+        borderColor: "#F59E0B", // Darker yellow
+        textColor: "#92400E", // Dark brown
+      };
+    case "public holiday":
+      return {
+        backgroundColor: "#BBF7D0", // Soft green
+        borderColor: "#22C55E", // Darker green
+        textColor: "#166534", // Dark green
+      };
+    case "event":
+      return {
+        backgroundColor: "#BFDBFE", // Soft blue
+        borderColor: "#3B82F6", // Darker blue
+        textColor: "#1E40AF", // Dark blue
+      };
+    default:
+      return {
+        backgroundColor: "#FDA4AF", // Soft pink
+        borderColor: "#F43F5E", // Darker pink
+        textColor: "#9F1239", // Dark pink
+      };
+  }
+}
+
+export function filterCalendarEvents(calendarData: CalendarData[]) {
+  const holidayEvents: CalendarData[] = [];
+  const eventList: CalendarData[] = [];
+  const otherEvents: CalendarData[] = [];
+
+  calendarData.forEach((event) => {
+    switch (event.entry_type.toLowerCase()) {
+      case "centre holiday":
+      case "public holiday":
+        holidayEvents.push(event);
+        break;
+      case "event":
+        eventList.push(event);
+        break;
+      case "other":
+      default:
+        otherEvents.push(event);
+        break;
+    }
+  });
+
+  return { holidayEvents, eventList, otherEvents };
 }
