@@ -7,6 +7,7 @@ import { getUserRole } from "@/lib/utils";
 import React from "react";
 import { SuperadminListColumns } from "@/columns/superadmin.list.columns";
 import { SearchParamProps } from "@/types/index";
+import { IsSuperadmin } from "@/constants/index";
 
 const Superadmin = async ({ searchParams }: SearchParamProps) => {
   try {
@@ -21,7 +22,7 @@ const Superadmin = async ({ searchParams }: SearchParamProps) => {
       <div className="home-content">
         <div className="flex justify-between">
           <SearchBar />
-          {userRole.includes("superadmin") && <Create type={SUPERADMIN} />}
+          {IsSuperadmin.includes(userRole[0]) && <Create type={SUPERADMIN} />}
         </div>
         <PageListTable columns={SuperadminListColumns} data={result.data} />
       </div>

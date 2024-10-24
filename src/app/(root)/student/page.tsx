@@ -7,6 +7,7 @@ import { authUser, getUserListByType } from "@/lib/actions/user.actions";
 import { getUserRole } from "@/lib/utils";
 import React from "react";
 import { SearchParamProps } from "@/types/index";
+import { IsPrincipalOrHigher } from "@/constants/index";
 
 const Student = async ({ searchParams }: SearchParamProps) => {
   try {
@@ -21,7 +22,7 @@ const Student = async ({ searchParams }: SearchParamProps) => {
       <div className="home-content">
         <div className="flex justify-between">
           <SearchBar />
-          {userRole.includes("superadmin") && <Create type={PRINCIPAL} />}
+          {IsPrincipalOrHigher.includes(userRole[0]) && <Create type={PRINCIPAL} />}
         </div>
         <PageListTable columns={PrincipalListColumns} data={result.data} />
       </div>

@@ -100,6 +100,14 @@ export const sidebarLinks = [
   // },
 ];
 
+export const IsSuperadmin = ['superadmin'];
+
+export const IsPrincipalOrHigher = [
+  'superadmin','principal'
+]
+
+export const IsManagerOrHigher = ["superadmin", "principal", "manager"];
+
 export const branchSelectorPermission = [
   "/principal",
   "/manager",

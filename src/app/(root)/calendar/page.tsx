@@ -7,6 +7,7 @@ import { CalendarListTable } from "@/components/CalendarListPage";
 import { authUser } from "@/lib/actions/user.actions";
 import { getUserRole } from "@/lib/utils";
 import CreateHolidayEvent from "@/components/CreateHolidayEvent";
+import { IsPrincipalOrHigher } from "@/constants/index";
 
 const page = async () => {
   const calendarData = await getCalendarData();
@@ -18,7 +19,7 @@ const page = async () => {
     <div className="home-content">
       <div className="flex justify-between">
           <div></div>
-          {userRole.includes("superadmin") && <CreateHolidayEvent/>}
+          {IsPrincipalOrHigher.includes(userRole[0]) && <CreateHolidayEvent/>}
         </div>
       <div className="bg-yellow-2 p-8">
         <Tabs defaultValue="calendar">

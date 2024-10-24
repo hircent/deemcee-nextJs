@@ -7,8 +7,7 @@ import { getUserRole } from "@/lib/utils";
 import React from "react";
 import { TeacherListColumns } from "@/columns/teacher.list.columns";
 import { SearchParamProps } from "@/types/index";
-
-const IsAbleCreateTeacher = ["superadmin", "principal", "manager"];
+import { IsManagerOrHigher } from "@/constants/index";
 
 const Teacher = async ({ searchParams }: SearchParamProps) => {
   try {
@@ -23,7 +22,7 @@ const Teacher = async ({ searchParams }: SearchParamProps) => {
       <div className="home-content">
         <div className="flex justify-between">
           <SearchBar />
-          {IsAbleCreateTeacher.includes(userRole[0]) && (
+          {IsManagerOrHigher.includes(userRole[0]) && (
             <Create type={TEACHER} />
           )}
         </div>

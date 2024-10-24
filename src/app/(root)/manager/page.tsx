@@ -7,8 +7,7 @@ import { getUserRole } from "@/lib/utils";
 import React from "react";
 import { ManagerlListColumns } from "@/columns/manager.list.columns";
 import { SearchParamProps } from "@/types/index";
-
-const IsAbleCreateManager = ["superadmin", "principal"];
+import { IsPrincipalOrHigher } from "@/constants/index";
 
 const Manager = async ({ searchParams }: SearchParamProps) => {
   try {
@@ -23,7 +22,7 @@ const Manager = async ({ searchParams }: SearchParamProps) => {
       <div className="home-content">
         <div className="flex justify-between">
           <SearchBar />
-          {IsAbleCreateManager.includes(userRole[0]) && (
+          {IsPrincipalOrHigher.includes(userRole[0]) && (
             <Create type={MANAGER} />
           )}
         </div>

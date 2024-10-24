@@ -7,6 +7,7 @@ import { getUserRole } from "@/lib/utils";
 import React from "react";
 import { ParentListColumns } from "@/columns/parent.list.columns";
 import { SearchParamProps } from "@/types/index";
+import { IsManagerOrHigher } from "@/constants/index";
 
 const IsAbleCreateParent = ["superadmin", "principal", "manager"];
 
@@ -23,7 +24,7 @@ const Parent = async ({ searchParams }: SearchParamProps) => {
       <div className="home-content">
         <div className="flex justify-between">
           <SearchBar />
-          {IsAbleCreateParent.includes(userRole[0]) && <Create type={PARENT} />}
+          {IsManagerOrHigher.includes(userRole[0]) &&  <Create type={PARENT} />}
         </div>
         <PageListTable columns={ParentListColumns} data={result.data} />
       </div>

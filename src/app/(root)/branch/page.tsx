@@ -11,6 +11,7 @@ import { BranchProps, ListProps, SearchParamProps } from "@/types/index";
 import Link from "next/link";
 
 import React from "react";
+import { IsSuperadmin } from "@/constants/index";
 
 export default async function Branch({ searchParams }: SearchParamProps) {
   try {
@@ -26,7 +27,7 @@ export default async function Branch({ searchParams }: SearchParamProps) {
       <div className="home-content">
         <div className="flex justify-between">
           <SearchBar />
-          {userRole.includes("superadmin") && <CreateBranch type={BRANCH} />}
+          {IsSuperadmin.includes(userRole[0]) && <CreateBranch type={BRANCH} />}
         </div>
         <PageListTable columns={BranchListColumns} data={result.data} />
 
