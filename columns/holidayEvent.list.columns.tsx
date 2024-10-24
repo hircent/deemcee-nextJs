@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { CalendarData } from "@/types/calendar";
 import { extractDate } from "@/lib/utils";
+import Actions from "@/components/Actions";
 
 export const HolidayEventListColumns: ColumnDef<CalendarData>[] = [
   {
@@ -32,22 +33,26 @@ export const HolidayEventListColumns: ColumnDef<CalendarData>[] = [
   {
     accessorKey: "start_datetime",
     header: "Start Date",
-    cell:({row}) => {
-      const date = row.original
-      return <>
-        <div>{extractDate(date.start_datetime)}</div>
-      </>
-    }
+    cell: ({ row }) => {
+      const date = row.original;
+      return (
+        <>
+          <div>{extractDate(date.start_datetime)}</div>
+        </>
+      );
+    },
   },
   {
     accessorKey: "end_datetime",
     header: "End Date",
-    cell:({row}) => {
-      const date = row.original
-      return <>
-        <div>{extractDate(date.end_datetime)}</div>
-      </>
-    }
+    cell: ({ row }) => {
+      const date = row.original;
+      return (
+        <>
+          <div>{extractDate(date.end_datetime)}</div>
+        </>
+      );
+    },
   },
   {
     accessorKey: "year",
@@ -80,10 +85,7 @@ export const HolidayEventListColumns: ColumnDef<CalendarData>[] = [
         //     </DropdownMenuItem>
         //   </DropdownMenuContent>
         // </DropdownMenu>
-        <div className="flex gap-4">
-          <p>Edit</p>
-          <p>Delete</p>
-        </div>
+        <Actions />
       );
     },
   },
