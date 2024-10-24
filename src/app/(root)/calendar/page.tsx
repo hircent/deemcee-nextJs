@@ -1,29 +1,27 @@
 import { HolidayEventListColumns } from "@/columns/holidayEvent.list.columns";
 import CalendarTable from "@/components/Calendar";
-import { PageListTable } from "@/components/PageList";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getCalendarData } from "@/lib/actions/calendar.action";
 import { filterCalendarEvents } from "@/lib/utils";
+import { CalendarListTable } from "@/components/CalendarListPage";
+import { authUser } from "@/lib/actions/user.actions";
+import { getUserRole } from "@/lib/utils";
+import CreateHolidayEvent from "@/components/CreateHolidayEvent";
 
 const page = async () => {
   const calendarData = await getCalendarData();
   const { holidayEvents, eventList, otherEvents } =
     filterCalendarEvents(calendarData);
+  const user = await authUser();
+  const userRole = getUserRole(user);
   return (
     <div className="home-content">
+      <div className="flex justify-between">
+          <div></div>
+          {userRole.includes("superadmin") && <CreateHolidayEvent/>}
+        </div>
       <div className="bg-yellow-2 p-8">
-        <Tabs defaultValue="calendar" className="">
+        <Tabs defaultValue="calendar">
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="calendar">Calendar</TabsTrigger>
             <TabsTrigger value="holidays">Holidays</TabsTrigger>
@@ -34,16 +32,16 @@ const page = async () => {
             <CalendarTable data={calendarData} />
           </TabsContent>
           <TabsContent value="holidays">
-            <PageListTable
+            <CalendarListTable
               columns={HolidayEventListColumns}
               data={holidayEvents}
             />
           </TabsContent>
           <TabsContent value="events">
-            <PageListTable columns={HolidayEventListColumns} data={eventList} />
+            <CalendarListTable columns={HolidayEventListColumns} data={eventList} />
           </TabsContent>
           <TabsContent value="others">
-            <PageListTable
+            <CalendarListTable
               columns={HolidayEventListColumns}
               data={otherEvents}
             />

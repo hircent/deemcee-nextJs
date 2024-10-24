@@ -4,7 +4,7 @@ export type CalendarData = {
   description: string;
   start_datetime: string;
   end_datetime: string;
-  year: number;
+  year: string;
   month: number;
   entry_type: string;
   branch_id: number;

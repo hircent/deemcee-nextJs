@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { CalendarData } from "@/types/calendar";
+import { extractDate } from "@/lib/utils";
 
 export const HolidayEventListColumns: ColumnDef<CalendarData>[] = [
   {
@@ -31,10 +32,26 @@ export const HolidayEventListColumns: ColumnDef<CalendarData>[] = [
   {
     accessorKey: "start_datetime",
     header: "Start Date",
+    cell:({row}) => {
+      const date = row.original
+      return <>
+        <div>{extractDate(date.start_datetime)}</div>
+      </>
+    }
   },
   {
     accessorKey: "end_datetime",
     header: "End Date",
+    cell:({row}) => {
+      const date = row.original
+      return <>
+        <div>{extractDate(date.end_datetime)}</div>
+      </>
+    }
+  },
+  {
+    accessorKey: "year",
+    header: "Year",
   },
   {
     id: "actions",
