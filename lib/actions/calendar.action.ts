@@ -34,3 +34,17 @@ export async function getCalendarData(
     return [];
   }
 }
+
+type STATE = {
+  zodErr?:string | null,
+  success?:string | null,
+  error?:string | null,
+}
+
+export async function createHoliday(prevState:STATE,formData:FormData):Promise<STATE>{
+  try {
+    return {success:"true"}
+  } catch (error) {
+    return {error:"false"}
+  }
+}

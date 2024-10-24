@@ -518,3 +518,7 @@ export type PrincipalsAndBranchGrade = {
   principals: Principal[];
   branch_grades: BranchGrade[];
 };
+
+export type CreateType = {
+  type:string
+}
