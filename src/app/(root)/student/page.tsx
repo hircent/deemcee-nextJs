@@ -22,7 +22,9 @@ const Student = async ({ searchParams }: SearchParamProps) => {
       <div className="home-content">
         <div className="flex justify-between">
           <SearchBar />
-          {IsPrincipalOrHigher.includes(userRole[0]) && <Create type={PRINCIPAL} />}
+          {IsPrincipalOrHigher.includes(userRole[0]) && (
+            <Create type={PRINCIPAL} />
+          )}
         </div>
         <PageListTable columns={PrincipalListColumns} data={result.data} />
       </div>

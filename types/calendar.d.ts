@@ -27,3 +27,11 @@ export type ProcessedCalendarEvent = {
     entry_type: string;
   };
 };
+
+export type HolidayEventError = {
+  title?: string[];
+  description?: string[];
+  entry_type?: string[];
+  start_datetime?: string[];
+  end_datetime?: string[];
+};

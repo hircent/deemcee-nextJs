@@ -520,5 +520,12 @@ export type PrincipalsAndBranchGrade = {
 };
 
 export type CreateType = {
-  type:string
-}
+  type: string;
+};
+
+export type STATE<T> = {
+  zodErr?: T | null;
+  success?: boolean | null;
+  error?: boolean | null;
+  msg?: string;
+};

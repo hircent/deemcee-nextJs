@@ -19,34 +19,61 @@ import {
 import { useToast } from "./ui/use-toast";
 import { camelCase, cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Plus } from "lucide-react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { useFormState } from "react-dom";
 import { createHoliday } from "@/lib/actions/calendar.action";
+import { HolidayEventError } from "@/types/calendar";
 
 const SERVER_ACTION_STATE = {
-  zodErr:null,
-  success:null,
-  error:null,
-}
+  zodErr: null,
+  success: null,
+  error: null,
+  msg: "",
+};
 
 const CreateHolidayEvent = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const [holidayEventType,setHolidayEventType] = useState<string>("")
+  const [holidayEventType, setHolidayEventType] = useState<string>("");
+  const [zoderror, setZodError] = useState<HolidayEventError | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
 
-  const submitEvent = async (formData:FormData)=>{
-    formData.append("event_type",holidayEventType)
-    const data = Object.fromEntries(formData)
-    console.log(data)
-  }
+  const [state, formAction] = useFormState(createHoliday, SERVER_ACTION_STATE);
 
-  const [state , formAction] = useFormState(createHoliday,SERVER_ACTION_STATE)
-
-  useEffect(()=>{},[state])
+  useEffect(() => {
+    if (state.zodErr) {
+      setZodError(state.zodErr);
+    }
+    if (state.success) {
+      formRef.current?.reset();
+      setOpen(false);
+      toast({
+        title: "Success",
+        description: state.msg,
+        className: cn(
+          `bottom-0 left-0`,
+          "bg-success-100"
+        ),
+        duration: 3000,
+      });
+    }
+    if (state.error) {
+      toast({
+        title: "Error",
+        description: state.msg,
+        className: cn(
+          `bottom-0 left-0`,
+          "bg-error-100"
+        ),
+        duration: 3000,
+      });
+    }
+    
+  }, [state, toast]);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -73,83 +100,126 @@ const CreateHolidayEvent = () => {
             Click create when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
-        
-        <form action={formAction} className="space-y-4 sm:space-y-6 mt-4">
+
+        <form
+          action={formAction}
+          className="space-y-4 sm:space-y-6 mt-4"
+          ref={formRef}
+        >
           <div className="space-y-2">
-            <Label htmlFor="title" className="text-sm sm:text-base">Title <span className="text-red-500">*</span></Label>
+            <Label htmlFor="title" className="text-sm sm:text-base">
+              Title <span className="text-red-500">*</span>
+            </Label>
             <Input
               id="title"
               name="title"
               placeholder="Enter event title"
               className="w-full text-sm sm:text-base"
-              required
             />
+            <small className="text-red-500">{zoderror?.title?.[0]}</small>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description" className="text-sm sm:text-base">Description</Label>
+            <Label htmlFor="description" className="text-sm sm:text-base">
+              Description
+            </Label>
             <Textarea
               id="description"
               name="description"
               placeholder="Enter event description"
               className="w-full min-h-[100px] text-sm sm:text-base"
-              required
             />
+            <small className="text-red-500">{zoderror?.description?.[0]}</small>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="start_datetime" className="text-sm sm:text-base">Start Date <span className="text-red-500">*</span></Label>
+              <Label htmlFor="start_datetime" className="text-sm sm:text-base">
+                Start Date <span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="start_datetime"
                 name="start_datetime"
                 type="date"
                 className="w-full text-sm sm:text-base"
-                required
               />
+              <small className="text-red-500">
+                {zoderror?.start_datetime?.[0]}
+              </small>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="end_datetime" className="text-sm sm:text-base">End Date <span className="text-red-500">*</span></Label>
+              <Label htmlFor="end_datetime" className="text-sm sm:text-base">
+                End Date <span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="end_datetime"
                 name="end_datetime"
                 type="date"
                 className="w-full text-sm sm:text-base"
-                required
               />
+              <small className="text-red-500">
+                {zoderror?.end_datetime?.[0]}
+              </small>
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="entry_type" className="text-sm sm:text-base">Event Type <span className="text-red-500">*</span></Label>
+            <Label htmlFor="entry_type" className="text-sm sm:text-base">
+              Event Type <span className="text-red-500">*</span>
+            </Label>
+            <Input type="hidden" name="entry_type" value={holidayEventType} />
             <Select
               value={holidayEventType}
-              onValueChange={(value)=>{
-                setHolidayEventType(value)
+              onValueChange={(value) => {
+                setHolidayEventType(value);
               }}
             >
               <SelectTrigger className="w-full text-sm sm:text-base">
                 <SelectValue placeholder="Select an Event" />
               </SelectTrigger>
               <SelectContent className="bg-white">
-                <SelectItem value="public" className="text-sm sm:text-base cursor-pointer hover:bg-yellow-6">Public Holiday</SelectItem>
-                <SelectItem value="company" className="text-sm sm:text-base cursor-pointer hover:bg-yellow-6">Company Event</SelectItem>
-                <SelectItem value="team" className="text-sm sm:text-base cursor-pointer hover:bg-yellow-6">Team Event</SelectItem>
-                <SelectItem value="personal" className="text-sm sm:text-base cursor-pointer hover:bg-yellow-6">Personal Event</SelectItem>
+                <SelectItem
+                  value="centre holiday"
+                  className="text-sm sm:text-base cursor-pointer hover:bg-yellow-6"
+                >
+                  Centre Holiday
+                </SelectItem>
+                <SelectItem
+                  value="public holiday"
+                  className="text-sm sm:text-base cursor-pointer hover:bg-yellow-6"
+                >
+                  Public Holiday
+                </SelectItem>
+                <SelectItem
+                  value="event"
+                  className="text-sm sm:text-base cursor-pointer hover:bg-yellow-6"
+                >
+                  Event
+                </SelectItem>
+                <SelectItem
+                  value="other"
+                  className="text-sm sm:text-base cursor-pointer hover:bg-yellow-6"
+                >
+                  Other
+                </SelectItem>
               </SelectContent>
             </Select>
+            <small className="text-red-500">{zoderror?.entry_type?.[0]}</small>
           </div>
 
           <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
-            <Button type="submit" className="w-full sm:w-auto bg-[#000] text-white text-sm sm:text-base px-6 py-2">
+            <Button
+              type="submit"
+              className="w-full sm:w-auto bg-[#000] text-white text-sm sm:text-base px-6 py-2"
+            >
               Create
             </Button>
           </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
-export default CreateHolidayEvent
+export default CreateHolidayEvent;

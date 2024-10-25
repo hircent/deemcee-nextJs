@@ -9,48 +9,55 @@ import { getUserRole } from "@/lib/utils";
 import CreateHolidayEvent from "@/components/CreateHolidayEvent";
 import { IsPrincipalOrHigher } from "@/constants/index";
 
-const page = async () => {
-  const calendarData = await getCalendarData();
-  const { holidayEvents, eventList, otherEvents } =
-    filterCalendarEvents(calendarData);
-  const user = await authUser();
-  const userRole = getUserRole(user);
-  return (
-    <div className="home-content">
-      <div className="flex justify-between">
+const Page = async () => {
+  try {
+    const calendarData = await getCalendarData();
+    const { holidayEvents, eventList, otherEvents } =
+      filterCalendarEvents(calendarData);
+    const user = await authUser();
+    const userRole = getUserRole(user);
+    return (
+      <div className="home-content">
+        <div className="flex justify-between">
           <div></div>
-          {IsPrincipalOrHigher.includes(userRole[0]) && <CreateHolidayEvent/>}
+          {IsPrincipalOrHigher.includes(userRole[0]) && <CreateHolidayEvent />}
         </div>
-      <div className="bg-yellow-2 p-8">
-        <Tabs defaultValue="calendar">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="calendar">Calendar</TabsTrigger>
-            <TabsTrigger value="holidays">Holidays</TabsTrigger>
-            <TabsTrigger value="events">Events</TabsTrigger>
-            <TabsTrigger value="others">Others</TabsTrigger>
-          </TabsList>
-          <TabsContent value="calendar">
-            <CalendarTable data={calendarData} />
-          </TabsContent>
-          <TabsContent value="holidays">
-            <CalendarListTable
-              columns={HolidayEventListColumns}
-              data={holidayEvents}
-            />
-          </TabsContent>
-          <TabsContent value="events">
-            <CalendarListTable columns={HolidayEventListColumns} data={eventList} />
-          </TabsContent>
-          <TabsContent value="others">
-            <CalendarListTable
-              columns={HolidayEventListColumns}
-              data={otherEvents}
-            />
-          </TabsContent>
-        </Tabs>
+        <div className="bg-yellow-2 p-8">
+          <Tabs defaultValue="calendar">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="calendar">Calendar</TabsTrigger>
+              <TabsTrigger value="holidays">Holidays</TabsTrigger>
+              <TabsTrigger value="events">Events</TabsTrigger>
+              <TabsTrigger value="others">Others</TabsTrigger>
+            </TabsList>
+            <TabsContent value="calendar">
+              <CalendarTable data={calendarData} />
+            </TabsContent>
+            <TabsContent value="holidays">
+              <CalendarListTable
+                columns={HolidayEventListColumns}
+                data={holidayEvents}
+              />
+            </TabsContent>
+            <TabsContent value="events">
+              <CalendarListTable
+                columns={HolidayEventListColumns}
+                data={eventList}
+              />
+            </TabsContent>
+            <TabsContent value="others">
+              <CalendarListTable
+                columns={HolidayEventListColumns}
+                data={otherEvents}
+              />
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
-    </div>
-  );
+    );
+  } catch (error) {
+    return;
+  }
 };
 
-export default page;
+export default Page;

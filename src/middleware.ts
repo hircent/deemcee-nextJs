@@ -28,5 +28,6 @@ export const config = {
     "/branch/:path*",
     "/sign-in",
     "/",
+    "/calendar/:path*",
   ],
 };

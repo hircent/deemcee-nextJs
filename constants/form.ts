@@ -1,5 +1,6 @@
 import * as z from "zod";
 import { Control, FieldPath } from "react-hook-form";
+import { title } from "process";
 
 export const branchFormSchema = z.object({
   name: z.string().min(2, "Business name must be at least 2 characters"),
@@ -81,3 +82,13 @@ export type UpdateUserCustomInput = {
   placeholder: string;
   required?: boolean;
 };
+
+export const HolidayEventSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string().optional(),
+  entry_type: z.string().min(1, "Entry type is required"),
+  start_datetime: z.string().min(1, "Start date is required"),
+  end_datetime: z.string().min(1, "End date is required"),
+});
+
+export type HolidayEventValues = z.infer<typeof HolidayEventSchema>;
