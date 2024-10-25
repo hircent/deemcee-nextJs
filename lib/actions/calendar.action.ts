@@ -7,8 +7,8 @@ import {
 import { getToken } from "./user.actions";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { HolidayEventSchema } from "@/constants/form";
-import { STATE } from "@/types/index";
+import { HolidayEventSchema,DeleteHolidayEventSchema } from "@/constants/form";
+import { DeleteCalendarProps, STATE } from "@/types/index";
 
 export async function getCalendarData(
   year: string | null = null
@@ -81,6 +81,54 @@ export async function createHoliday(
     }
     revalidatePath("/calendar");
     return { success: true, msg: "Holiday event created successfully" };
+  } catch (error) {
+    return { error: true, msg: (error as Error).message };
+  }
+}
+
+export async function deleteCalendar(
+  prevState:STATE<HolidayEventError>,
+  formData:FormData
+): Promise<STATE<HolidayEventError>>{
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
+
+    const obj = Object.fromEntries(formData)
+    const data = {
+      ...obj,
+      id: Number(formData.get('id'))  // Convert id to number
+    };
+
+    if(obj.name !== obj.confirmName){
+      return {...prevState, error:true,msg:"Name must be excatly the same."}
+    }
+
+    const validated = DeleteHolidayEventSchema.safeParse(data);
+    if (!validated.success) {
+      return {
+        ...prevState,
+        error: true,
+        zodErr: validated.error.flatten().fieldErrors as HolidayEventError,
+        msg: "Validation Failed",
+      };
+    }
+
+    const response = await fetch(`${process.env.API_URL}/calendars/delete/${data.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+        BranchId: `${branchId?.toString()}`,
+      },
+    });
+
+    if (!response.ok) {
+      return { success: false, msg: response.statusText };
+    }
+
+    revalidatePath("/calendar");
+    return {success:true,msg:`Calendar ${obj.name} is deleted`}
   } catch (error) {
     return { error: true, msg: (error as Error).message };
   }

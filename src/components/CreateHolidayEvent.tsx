@@ -27,13 +27,7 @@ import { Textarea } from "./ui/textarea";
 import { useFormState } from "react-dom";
 import { createHoliday } from "@/lib/actions/calendar.action";
 import { HolidayEventError } from "@/types/calendar";
-
-const SERVER_ACTION_STATE = {
-  zodErr: null,
-  success: null,
-  error: null,
-  msg: "",
-};
+import { SERVER_ACTION_STATE } from "@/constants/index";
 
 const CreateHolidayEvent = () => {
   const [open, setOpen] = useState<boolean>(false);

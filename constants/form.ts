@@ -92,3 +92,11 @@ export const HolidayEventSchema = z.object({
 });
 
 export type HolidayEventValues = z.infer<typeof HolidayEventSchema>;
+
+export const DeleteHolidayEventSchema = z.object({
+  id:z.number().min(1,"Id is required"),
+  name: z.string().min(1, "Name is required"),
+  confirmName: z.string().min(1, "Confirm name is required"),
+})
+
+export type DeleteHolidayEventValues = z.infer<typeof DeleteHolidayEventSchema>;

@@ -62,7 +62,7 @@ export const HolidayEventListColumns: ColumnDef<CalendarData>[] = [
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
-      const branch = row.original;
+      const calendar = row.original;
 
       return (
         // <DropdownMenu>
@@ -85,7 +85,7 @@ export const HolidayEventListColumns: ColumnDef<CalendarData>[] = [
         //     </DropdownMenuItem>
         //   </DropdownMenuContent>
         // </DropdownMenu>
-        <Actions />
+        <Actions id={+calendar.id} name={calendar.title} type="calendar"/>
       );
     },
   },

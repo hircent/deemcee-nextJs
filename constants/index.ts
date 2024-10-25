@@ -115,6 +115,13 @@ export const branchSelectorPermission = [
   "/student",
   "/calendar",
 ];
+
+export const SERVER_ACTION_STATE = {
+  zodErr: null,
+  success: null,
+  error: null,
+  msg: "",
+};
 // good_user / good_password - Bank of America
 export const TEST_USER_ID = "6627ed3d00267aa6fa3e";
 

@@ -433,7 +433,7 @@ export type DeleteProps = {
 };
 
 export type EditProps = {
-  type: BRANCH | PRINCIPAL | MANAGER | TEACHER | STUDENT | SUPERADMIN | PARENT;
+  type: string;
   id: number;
 };
 
@@ -443,12 +443,25 @@ export type DeleteBranchProps = {
   id: number;
 };
 
+export type DeleteCalendarProps = {
+  name: string;
+  confirmName?: string;
+  type: string;
+  id: number;
+};
+
 export type DeleteUserProps = {
   type: string;
   name: string;
   confirmName: string;
   id: number;
 };
+
+export type DeleteActionProps = {
+  type: string;
+  name: string;
+  id: number;
+}
 
 export type GetBranchDetailProps = {
   id: number;

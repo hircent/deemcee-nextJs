@@ -34,4 +34,5 @@ export type HolidayEventError = {
   entry_type?: string[];
   start_datetime?: string[];
   end_datetime?: string[];
+  name?: string[];
 };
