@@ -1,16 +1,20 @@
 import { useAuthContext } from "@/context/userContext";
 import React from "react";
 import { DeleteCalendar } from "./DeleteCalendar";
-import { DeleteActionProps } from "@/types/index";
+import { BranchRole, DeleteActionProps } from "@/types/index";
 import { IsPrincipalOrHigher } from "@/constants/index";
 import { EditCalendar } from "./EditCalendar";
 
 const Actions = ({id,type,name}:DeleteActionProps) => {
-  const { userRole } = useAuthContext();
+  const { user } = useAuthContext();
 
+  let role :string = 'none';
+  if(user){
+    role = user.branch_role[0].branch_role
+  }
   return (
     <div>
-      {IsPrincipalOrHigher.includes(userRole[0]) ? (
+      {IsPrincipalOrHigher.includes(role) ? (
         <div className="flex gap-4">
           <EditCalendar type={type} id={id}/>
           <DeleteCalendar name={name} id={id} type={type}/>

@@ -251,10 +251,13 @@ export const camelCase = (word: string) => {
   return firstLetterUppercase;
 };
 
-export function extractDate(isoTimestamp: string): string {
+export function extractDate(isoTimestamp: string | undefined): string {
   // Split the string at 'T' to separate the date and time
-  const [date] = isoTimestamp.split("T");
-  return date;
+  if(isoTimestamp){
+    const [date] = isoTimestamp.split("T");
+    return date;
+  }
+  return ""
 }
 
 export function processCalendarData(data: CalendarData[]): EventInput[] {

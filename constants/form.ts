@@ -2,6 +2,29 @@ import * as z from "zod";
 import { Control, FieldPath } from "react-hook-form";
 import { title } from "process";
 
+export const HolidayEntryType = [
+  {
+    id:1,
+    value:"centre holiday",
+    label:"Centre Holiday"
+  },
+  {
+    id:2,
+    value:"public holiday",
+    label:"Public Holiday"
+  },
+  {
+    id:3,
+    value:"event",
+    label:"Event"
+  },
+  {
+    id:4,
+    value:"other",
+    label:"Other"
+  },
+]
+
 export const branchFormSchema = z.object({
   name: z.string().min(2, "Business name must be at least 2 characters"),
   business_name: z

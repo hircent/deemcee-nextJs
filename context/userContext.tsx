@@ -10,8 +10,8 @@ type UserRole = string[];
 type UserContextProps = {
   user: User | undefined;
   setUser: (user: User | undefined) => void;
-  userRole: UserRole;
-  setUserRole: React.Dispatch<React.SetStateAction<UserRole>>;
+  userRole: UserRole | undefined;
+  setUserRole: (user: UserRole | undefined) => void;
 };
 const AuthContext = createContext<UserContextProps | undefined>(undefined);
 
@@ -21,7 +21,7 @@ export const AuthContextWrapper = ({
   children: React.ReactNode;
 }) => {
   const [user, setUser] = useState<User | undefined>(undefined);
-  const [userRole, setUserRole] = useState<UserRole>([]);
+  const [userRole, setUserRole] = useState<UserRole | undefined>(undefined);
 
   useEffect(() => {
     const fetchUserRole = async () => {

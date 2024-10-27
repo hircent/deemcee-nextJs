@@ -28,6 +28,7 @@ import { useFormState } from "react-dom";
 import { createHoliday } from "@/lib/actions/calendar.action";
 import { HolidayEventError } from "@/types/calendar";
 import { SERVER_ACTION_STATE } from "@/constants/index";
+import { HolidayEntryType } from "@/constants/form";
 
 const CreateHolidayEvent = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -173,30 +174,11 @@ const CreateHolidayEvent = () => {
                 <SelectValue placeholder="Select an Event" />
               </SelectTrigger>
               <SelectContent className="bg-white">
-                <SelectItem
-                  value="centre holiday"
-                  className="text-sm sm:text-base cursor-pointer hover:bg-yellow-6"
-                >
-                  Centre Holiday
-                </SelectItem>
-                <SelectItem
-                  value="public holiday"
-                  className="text-sm sm:text-base cursor-pointer hover:bg-yellow-6"
-                >
-                  Public Holiday
-                </SelectItem>
-                <SelectItem
-                  value="event"
-                  className="text-sm sm:text-base cursor-pointer hover:bg-yellow-6"
-                >
-                  Event
-                </SelectItem>
-                <SelectItem
-                  value="other"
-                  className="text-sm sm:text-base cursor-pointer hover:bg-yellow-6"
-                >
-                  Other
-                </SelectItem>
+                {HolidayEntryType.map((v)=>(
+                    <SelectItem key={v.id} value={v.value} className="text-sm sm:text-base cursor-pointer hover:bg-yellow-6">
+                      {v.label}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
             <small className="text-red-500">{zoderror?.entry_type?.[0]}</small>

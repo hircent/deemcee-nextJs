@@ -133,3 +133,78 @@ export async function deleteCalendar(
     return { error: true, msg: (error as Error).message };
   }
 }
+
+export async function getCalendarDetails(
+  id:number
+): Promise<CalendarData> {
+  const token = await getToken();
+  const branchId = cookies().get("BranchId")?.value;
+
+  try {
+    const response = await fetch(`${process.env.API_URL}/calendars/details/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+        BranchId: `${branchId?.toString()}`,
+      },
+      cache:"no-cache"
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch calendar data " + response.statusText);
+    }
+
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function editCalendar(
+  prevState:STATE<HolidayEventError>,
+  formData:FormData
+): Promise<STATE<HolidayEventError>>{
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
+
+    const data = Object.fromEntries(formData);
+
+    if (data.end_datetime) {
+      const dateOnly = (data.end_datetime as string).split("T")[0];
+      data.end_datetime = `${dateOnly}T23:59:59`;
+    }
+
+    const validated = HolidayEventSchema.safeParse(data);
+
+    if (!validated.success) {
+      return {
+        ...prevState,
+        error: true,
+        zodErr: validated.error.flatten().fieldErrors as HolidayEventError,
+        msg: "Validation Failed",
+      };
+    }
+
+    const response = await fetch(`${process.env.API_URL}/calendars/update/${data.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+        BranchId: `${branchId?.toString()}`,
+      },
+      body:JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+      return { ...prevState,error: true, msg: response.statusText };
+    }
+
+    revalidatePath("/calendar");
+    return {...prevState,success:true,msg:`Calendar is updated`}
+  } catch (error) {
+    return { ...prevState,error: true, msg: (error as Error).message };
+  }
+}
