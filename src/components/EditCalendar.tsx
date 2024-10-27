@@ -30,6 +30,7 @@ import { HolidayEntryType } from "@/constants/form";
 import { cn, extractDate } from "@/lib/utils";
 import { useFormState } from "react-dom";
 import { SERVER_ACTION_STATE } from "@/constants/index";
+import SubmitButton from "./SubmitButton";
 
 export function EditCalendar({ type, id }: EditProps) {
   const [isLoading, setLoading] = useState<boolean>(true);
@@ -76,6 +77,7 @@ export function EditCalendar({ type, id }: EditProps) {
     try {
       const data = await getCalendarDetails(id)
       setCalendarData(data)
+      setHolidayEventType(data.entry_type)
       setLoading(false)
     } catch (error) {
       console.error("Failed to fetch calendar details:", error);
@@ -115,7 +117,7 @@ export function EditCalendar({ type, id }: EditProps) {
         {isLoading ? (
           <div>Loading...</div>
         ):(
-          <form action={formAction} ref={formRef}>
+          <form action={formAction} ref={formRef} className="space-y-4 sm:space-y-6">
             <Input type="hidden" id="id" name="id" defaultValue={id}/>
             <div className="space-y-2">
               <Label htmlFor="title" className="text-sm sm:text-base">
@@ -183,7 +185,7 @@ export function EditCalendar({ type, id }: EditProps) {
               <Label htmlFor="entry_type" className="text-sm sm:text-base">
                 Event Type <span className="text-red-500">*</span>
               </Label>
-              <Input type="hidden" name="entry_type" defaultValue={calendarData?.entry_type} value={holidayEventType}/>
+              <Input type="hidden" name="entry_type" defaultValue={holidayEventType} value={holidayEventType}/>
               <Select
                 defaultValue={calendarData?.entry_type}
                 onValueChange={(value) => {
@@ -205,12 +207,7 @@ export function EditCalendar({ type, id }: EditProps) {
             </div>
 
             <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
-              <Button
-                type="submit"
-                className="w-full sm:w-auto bg-[#000] text-white text-sm sm:text-base px-6 py-2"
-              >
-                Save
-              </Button>
+              <SubmitButton label='Save' submitLabel="Saving"/>
             </DialogFooter>
           </form>
         )}

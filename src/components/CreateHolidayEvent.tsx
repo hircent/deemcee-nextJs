@@ -29,6 +29,7 @@ import { createHoliday } from "@/lib/actions/calendar.action";
 import { HolidayEventError } from "@/types/calendar";
 import { SERVER_ACTION_STATE } from "@/constants/index";
 import { HolidayEntryType } from "@/constants/form";
+import SubmitButton from "./SubmitButton";
 
 const CreateHolidayEvent = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -185,12 +186,7 @@ const CreateHolidayEvent = () => {
           </div>
 
           <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
-            <Button
-              type="submit"
-              className="w-full sm:w-auto bg-[#000] text-white text-sm sm:text-base px-6 py-2"
-            >
-              Create
-            </Button>
+            <SubmitButton label='Create' submitLabel="Creating"/>
           </DialogFooter>
         </form>
       </DialogContent>
