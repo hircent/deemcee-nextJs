@@ -1,6 +1,5 @@
 "use client";
 
-import { CreateType } from "@/types/index";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,8 +18,7 @@ import { useToast } from "./ui/use-toast";
 import { camelCase, cn } from "@/lib/utils";
 
 
-const CreateCategory = (params: CreateType) => {
-  const { type } = params;
+const CreateCategory = () => {
   const [open, setOpen] = useState<boolean>(false);
   const { toast } = useToast();
 
