@@ -29,5 +29,6 @@ export const config = {
     "/sign-in",
     "/",
     "/calendar/:path*",
+    "/structure/:path*",
   ],
 };

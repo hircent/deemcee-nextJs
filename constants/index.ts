@@ -1,56 +1,74 @@
+import { LayoutDashboard,Calendar,Home,User2,BookA } from "lucide-react";
+
 export const sidebarLinks = [
   {
     imgURL: "/icons/home.svg",
     route: "/",
     label: "Home",
+    icon: LayoutDashboard,
     visible: ["superadmin", "principal", "manager", "teacher"],
   },
   {
     imgURL: "/icons/home.svg",
     route: "/branch",
     label: "Branch",
+    icon: Home,
     visible: ["superadmin", "principal", "manager"],
+  },
+  {
+    imgURL: "/icons/home.svg",
+    route: "/structure",
+    label: "Structure",
+    icon: BookA,
+    visible: ["superadmin", "principal", "manager", "teacher"],
   },
   {
     imgURL: "/icons/users.svg",
     route: "/superadmin",
     label: "Superadmin",
+    icon: User2,
     visible: ["superadmin"],
   },
   {
     imgURL: "/icons/users.svg",
     route: "/principal",
     label: "Principal",
+    icon: User2,
     visible: ["superadmin", "principal"],
   },
   {
     imgURL: "/icons/users.svg",
     route: "/manager",
     label: "Manager",
+    icon: User2,
     visible: ["superadmin", "principal", "manager"],
   },
   {
     imgURL: "/icons/users.svg",
     route: "/teacher",
     label: "Teacher",
+    icon: User2,
     visible: ["superadmin", "principal", "manager", "teacher"],
   },
   {
     imgURL: "/icons/users.svg",
     route: "/parent",
     label: "Parent",
+    icon: User2,
     visible: ["superadmin", "principal", "manager", "teacher"],
   },
   {
     imgURL: "/icons/users.svg",
     route: "/student",
     label: "Student",
+    icon: User2,
     visible: ["superadmin", "principal", "manager", "teacher"],
   },
   {
     imgURL: "/icons/users.svg",
     route: "/calendar",
     label: "Calendar",
+    icon: Calendar,
     visible: ["superadmin", "principal", "manager", "teacher"],
   },
   // {
