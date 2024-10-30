@@ -24,9 +24,10 @@ const catList = [
 ]
 
 export default function CategoryPage() {
+    const yearNow = new Date().getFullYear().toString()
     const [selectedCategory, setSelectedCategory] = useState<typeof catList[0] | null>(null)
-    const [statusFilter, setStatusFilter] = useState<'all' | boolean>('all')
-    const [yearFilter, setYearFilter] = useState<string>('all')
+    const [statusFilter, setStatusFilter] = useState<'all' | boolean>(true)
+    const [yearFilter, setYearFilter] = useState<string>(yearNow)
 
     const filteredCategories = catList.filter(cat => {
         if (statusFilter !== 'all' && cat.isActive !== statusFilter) return false
