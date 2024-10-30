@@ -12,17 +12,6 @@ import {
 } from "@/components/ui/select"
 import { CategoryData } from "@/types/structure";
 
-const catList = [
-    { id: 1, name: 'KIDDOS', year: "2025", isActive: true },
-    { id: 2, name: 'KIDDOS', year: "2023", isActive: false },
-    { id: 3, name: 'KIDS', year: "2023", isActive: true },
-    { id: 4, name: 'KIDDOS', year: "2024", isActive: true },
-    { id: 5, name: 'KIDS', year: "2025", isActive: true },
-    { id: 6, name: 'SUPERKIDS', year: "2023", isActive: false },
-    { id: 7, name: 'SUPERKIDS', year: "2025", isActive: false },
-    { id: 8, name: 'SUPERKIDS', year: "2024", isActive: true },
-]
-
 const CategorySection = ({userRole,data}:{userRole:string[],data:CategoryData[]}) => {
     const yearNow = new Date().getFullYear().toString()
     const [selectedCategory, setSelectedCategory] = useState<typeof data[0] | null>(null)
