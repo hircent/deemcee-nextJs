@@ -71,63 +71,71 @@ const EditCategory = ({data}: {data: CategoryData}) => {
         </DialogHeader>
         <form action={formAction} className="space-y-4 sm:space-y-6" ref={formRef}>
             <Input type="hidden" id="id" name="id" defaultValue={data?.id}/>
-            <div className="flex flex-col gap-4">
-                <div className="grid grid-cols-3 gap-4">
-                    <Label htmlFor="name" className="text-sm sm:text-base">
-                    Name <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                    id="name"
-                    name="name"
-                    placeholder="Enter event title"
-                    defaultValue={data?.name}
-                    className="w-full text-sm sm:text-base col-span-2"
-                    />
+            <div className="flex flex-col space-y-6">
+                <div>
+                    <div className="grid grid-cols-3 gap-4">
+                        <Label htmlFor="name" className="text-sm sm:text-base">
+                        Name <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                        id="name"
+                        name="name"
+                        placeholder="Enter event title"
+                        defaultValue={data?.name}
+                        className="w-full text-sm sm:text-base col-span-2"
+                        />
+                    </div>
                     <small className="text-red-500">{zoderror?.name?.[0]}</small>
                 </div>
-                <div className="grid grid-cols-3 gap-4">
-                    <Label htmlFor="label" className="text-sm sm:text-base">
-                        Label <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                        id="label"
-                        name="label"
-                        placeholder="Enter event title"
-                        defaultValue={data?.label}
-                        className="w-full text-sm sm:text-base col-span-2"
-                    />
+                <div>
+                    <div className="grid grid-cols-3 gap-4">
+                        <Label htmlFor="label" className="text-sm sm:text-base">
+                            Label <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                            id="label"
+                            name="label"
+                            placeholder="Enter event title"
+                            defaultValue={data?.label}
+                            className="w-full text-sm sm:text-base col-span-2"
+                            />
+                    </div>
                     <small className="text-red-500">{zoderror?.label?.[0]}</small>
                 </div>
-                <div className="grid grid-cols-3 gap-4">
-                    <Label htmlFor="year" className="text-sm sm:text-base">
-                        Year <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                        id="year"
-                        name="year"
-                        placeholder="Enter event title"
-                        defaultValue={data?.year}
-                        className="w-full text-sm sm:text-base col-span-2"
-                    />
+                <div>
+                    <div className="grid grid-cols-3 gap-4">
+                        <Label htmlFor="year" className="text-sm sm:text-base">
+                            Year <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                            id="year"
+                            name="year"
+                            placeholder="Enter event title"
+                            defaultValue={data?.year}
+                            className="w-full text-sm sm:text-base col-span-2"
+                        />
+                    </div>
                     <small className="text-red-500">{zoderror?.year?.[0]}</small>
                 </div>
-                <div className="grid grid-cols-3 gap-4 items-center">
-                    <Input type="hidden" name="is_active" value={isActive ? "true" : "false"}/>
-                    <Label htmlFor="status" className="text-sm sm:text-base">
-                        Status <span className="text-red-500">*</span>
-                    </Label>
-                    <div className="col-span-2 flex items-center space-x-2">
-                        <Checkbox
-                            id="status"
-                            defaultChecked={isActive}
-                            className={cn("h-5 w-5 border-gray-300", {
-                                " text-green-400 ": isActive
-                            })}
-                            onClick={()=>{setIsActive(!isActive)}}
-                        />
-                        <Label htmlFor="status" className="text-sm text-gray-600">
-                            Active
+                <div>
+                    <div className="grid grid-cols-3 gap-4 items-center">
+                        <Input type="hidden" name="is_active" value={isActive ? "true" : "false"}/>
+                        <Label htmlFor="status" className="text-sm sm:text-base">
+                            Status <span className="text-red-500">*</span>
                         </Label>
+                        <div className="col-span-2 flex items-center space-x-2">
+                            <Checkbox
+                                id="status"
+                                defaultChecked={isActive}
+                                className={cn("h-5 w-5 border-gray-300", {
+                                    " text-green-400 ": isActive
+                                })}
+                                onClick={()=>{setIsActive(!isActive)}}
+                            />
+                            <Label htmlFor="status" className="text-sm text-gray-600">
+                                Active
+                            </Label>
+                        </div>
                     </div>
                     <small className="text-red-500">{zoderror?.is_active}</small>
                 </div>
