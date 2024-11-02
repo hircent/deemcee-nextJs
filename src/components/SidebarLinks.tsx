@@ -29,7 +29,7 @@ const SidebarLinks = ({ userRole }: { userRole: string[] }) => {
           >
             <div className="relative size-6 flex justify-center items-center">
               <item.icon size={20} className={cn("w-5 h-5", {
-                  "brightness-[3] invert-0 text-yellow-11": isActive,
+                  "brightness-[3] invert-0 text-white": isActive,
                 })}/>
             </div>
             <p

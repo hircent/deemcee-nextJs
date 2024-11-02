@@ -5,3 +5,10 @@ export type CategoryData = {
     year: number;
     is_active: boolean;
 }
+
+export type CategoryFormErrors = {
+    name?: string;
+    label?: string;
+    year?: string;
+    is_active?: boolean;
+  };

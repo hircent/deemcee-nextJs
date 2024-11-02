@@ -123,3 +123,12 @@ export const DeleteHolidayEventSchema = z.object({
 })
 
 export type DeleteHolidayEventValues = z.infer<typeof DeleteHolidayEventSchema>;
+
+export const CategoryFormSchema = z.object({
+  name: z.string().min(2, "Business name must be at least 2 characters"),
+  label: z.string().min(2, "Display name must be at least 2 characters"),
+  year: z.string().min(1, "Year is required"),
+  is_active: z.string().min(1,"Check or uncheck"),
+});
+
+export type CategoryFormValues = z.infer<typeof CategoryFormSchema>;

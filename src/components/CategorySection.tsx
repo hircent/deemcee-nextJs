@@ -1,7 +1,6 @@
 'use client';
-import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Edit, Eye, Filter } from "lucide-react"
+import { Filter } from "lucide-react"
 import { useState } from "react"
 import {
     Select,
@@ -11,10 +10,11 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { CategoryData } from "@/types/structure";
+import EditCategory from "./EditCategory";
+import ViewCategory from "./ViewCategory";
 
 const CategorySection = ({userRole,data}:{userRole:string[],data:CategoryData[]}) => {
     const yearNow = new Date().getFullYear().toString()
-    const [selectedCategory, setSelectedCategory] = useState<typeof data[0] | null>(null)
     const [statusFilter, setStatusFilter] = useState<'all' | boolean>(true)
     const [yearFilter, setYearFilter] = useState<string>(yearNow)
 
@@ -78,22 +78,8 @@ const CategorySection = ({userRole,data}:{userRole:string[],data:CategoryData[]}
                                 {category.name}
                             </h2>
                             <div className="flex gap-2">
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    className="h-8 w-8 text-gray-500 hover:text-blue-600 hover:bg-blue-50"
-                                    onClick={() => setSelectedCategory(category)}
-                                >
-                                    <Eye className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    className="h-8 w-8 text-gray-500 hover:text-blue-600 hover:bg-blue-50"
-                                    onClick={() => setSelectedCategory(category)}
-                                >
-                                    <Edit className="h-4 w-4" />
-                                </Button>
+                                <EditCategory data={category}/>
+                                <ViewCategory data={category}/>
                             </div>
                         </div>
                         <div className="flex justify-between items-center">
@@ -112,43 +98,6 @@ const CategorySection = ({userRole,data}:{userRole:string[],data:CategoryData[]}
             ))}
         </div>
 
-        {/* View/Edit Modal */}
-        {selectedCategory && (
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-20" style={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}>
-                <Card className="w-full max-w-md p-6 bg-white">
-                    <h2 className="text-xl font-semibold mb-4">
-                        {selectedCategory.name}
-                    </h2>
-                    <div className="flex items-center gap-2 mb-4">
-                        <span className={`inline-block w-2 h-2 rounded-full ${
-                            selectedCategory.is_active ? 'bg-green-400' : 'bg-gray-400'
-                        }`}></span>
-                        <span className="text-sm text-gray-600">
-                            {selectedCategory.is_active ? 'Active' : 'Inactive'}
-                        </span>
-                        <span className="text-sm text-gray-600 ml-4">
-                            Year: {selectedCategory.year}
-                        </span>
-                    </div>
-                    <div className="flex justify-end gap-2">
-                        <Button
-                            variant="outline"
-                            onClick={() => setSelectedCategory(null)}
-                        >
-                            Close
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                // Handle save
-                                setSelectedCategory(null)
-                            }}
-                        >
-                            Save Changes
-                        </Button>
-                    </div>
-                </Card>
-            </div>
-        )}
     </div>
   )
 }
