@@ -16,12 +16,14 @@ import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import { useToast } from "./ui/use-toast";
 import { camelCase, cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
 
 const CreateCategory = () => {
   const [open, setOpen] = useState<boolean>(false);
   const { toast } = useToast();
-
+  const pathname = usePathname();
+  console.log(pathname);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

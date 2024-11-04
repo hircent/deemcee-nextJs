@@ -6,6 +6,13 @@ export type CategoryData = {
     is_active: boolean;
 }
 
+export type GradeData = {
+    id: number;
+    grade_level: number;
+    category: string;
+    price: number;
+}
+
 export type CategoryFormErrors = {
     name?: string;
     label?: string;

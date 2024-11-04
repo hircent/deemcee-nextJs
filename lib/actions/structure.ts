@@ -2,12 +2,10 @@
 
 import { cookies } from "next/headers";
 import { getToken } from "./user.actions";
-import { CategoryData, CategoryFormErrors } from "@/types/structure";
+import { CategoryData, CategoryFormErrors, GradeData } from "@/types/structure";
 import { STATE } from "@/types/index";
 import { CategoryFormSchema } from "@/constants/form";
 import { revalidatePath } from "next/cache";
-
-
 
 export async function getCategoryData(
     year: string | null = null
@@ -34,6 +32,30 @@ export async function getCategoryData(
     }
   }
 
+  export async function getGradeData(
+    year: string | null = null
+  ): Promise<GradeData[]> {
+    const token = await getToken();
+  
+    try {
+      const response = await fetch(`${process.env.API_URL}/grade/list`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to fetch category data " + response.statusText);
+      }
+  
+      const data = await response.json();
+      return data.data;
+    } catch (error) {
+      return [];
+    }
+  }
 
 export async function editCategory(
   prevState:STATE<CategoryFormErrors>,

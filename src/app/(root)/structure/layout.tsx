@@ -15,7 +15,8 @@ const Layout = async({children}:{children:React.ReactNode}) => {
     <section className="home">
         <div className="home-content">
             <div className="flex justify-between">
-              <SearchBar />
+              {/* <SearchBar /> */}
+              <div></div>
               {IsSuperadmin.includes(userRole[0]) && <CreateCategory/>}
             </div>
             <div className='rounded-md border bg-yellow-2 text-gray-500 p-2 px-4'>
