@@ -1,12 +1,12 @@
-import { authUser } from "@/lib/actions/user.actions"
-import { getUserRole } from "@/lib/utils"
-import GradeSection from "@/components/GradeSection"
-import { getGradeData } from "@/lib/actions/structure";
+import { authUser } from "@/lib/actions/user.actions";
+import { getUserRole } from "@/lib/utils";
+import GradeSection from "@/components/GradeSection";
+import { getGradeList } from "@/lib/actions/structure";
 
 const Grade = async () => {
   const user = await authUser();
-  const userRole = getUserRole(user)
-  const gradeData = await getGradeData()
+  const userRole = getUserRole(user);
+  const gradeData = await getGradeList();
 
   return (
     <div className="p-4">
@@ -14,9 +14,9 @@ const Grade = async () => {
         <h1 className="text-2xl font-semibold text-gray-900">Grade</h1>
       </div>
 
-      <GradeSection data={gradeData}/>
+      <GradeSection data={gradeData} />
     </div>
-  )
-}
+  );
+};
 
-export default Grade
+export default Grade;
