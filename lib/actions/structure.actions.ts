@@ -6,10 +6,11 @@ import {
   CategoryData,
   CategoryFormErrors,
   GradeData,
+  GradeDataErrors,
   ThemeData,
 } from "@/types/structure";
 import { STATE } from "@/types/index";
-import { CategoryFormSchema } from "@/constants/form";
+import { CategoryFormSchema, GradeDataSchema } from "@/constants/form";
 import { revalidatePath } from "next/cache";
 
 export async function getCategoryList(
@@ -60,6 +61,44 @@ export async function getGradeList(
   } catch (error) {
     return [];
   }
+}
+
+export async function updateGrade(prevState:STATE<GradeDataErrors>,formData:FormData):Promise<STATE<GradeDataErrors>>{
+  try {
+    const token = await getToken();
+
+    const data = Object.fromEntries(formData);
+    const validated = GradeDataSchema.safeParse(data);
+
+    if (!validated.success) {
+      return {
+        ...prevState,
+        error: true,
+        zodErr: validated.error.flatten().fieldErrors as GradeDataErrors,
+        msg: "Validation Failed",
+      };
+    }
+
+    const response = await fetch(`${process.env.API_URL}/grade/update/${data.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+      },
+      body:JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+      const res = await response.json();
+      return { ...prevState,error: true, msg: res.msg };
+    }
+
+    revalidatePath("/structure/grade");
+    return { success:true,msg:"Grade is updated"}
+  } catch (error) {
+    return {error:true,msg:(error as Error).message}
+  }
+
 }
 
 export async function getThemeList(

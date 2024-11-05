@@ -1,7 +1,7 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,28 +13,65 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Edit, Trash2 } from "lucide-react";
 import SubmitButton from "./SubmitButton";
-import { GradeData } from "@/types/structure";
+import { GradeData, GradeDataErrors } from "@/types/structure";
+import { useFormState } from "react-dom";
+import { updateGrade } from "@/lib/actions/structure.actions";
+import { SERVER_ACTION_STATE } from "@/constants/index";
+import { useToast } from "./ui/use-toast";
+import { cn } from "@/lib/utils";
 
-interface EditGradeProps {
-  grade: GradeData;
-  onEdit: (updatedGrade: GradeData) => void;
-}
 
-const EditGrade = ({ grade, onEdit }: EditGradeProps) => {
-  const [editedGrade, setEditedGrade] = useState<GradeData>({ ...grade });
-  const [isOpen, setIsOpen] = useState(false);
+const EditGrade = ({ grade }: {grade: GradeData}) => {
+  const [category,setCategory] = useState<string>(grade.category);
+  const [isOpen, setOpen] = useState(false);
+  const [zoderror, setZodError] = useState<GradeDataErrors | null>(null);
+  const { toast } = useToast();
+  const formRef = useRef<HTMLFormElement>(null);
+  const [state , formAction] = useFormState(updateGrade,SERVER_ACTION_STATE);
 
-  const handleSubmit = () => {
-    onEdit(editedGrade);
-    setIsOpen(false);
-  };
-
+  useEffect(() => {
+    if (state.zodErr) {
+      setZodError(state.zodErr);
+    }
+    if (state.success) {
+      formRef.current?.reset();
+      setOpen(false);
+      toast({
+        title: "Success",
+        description: state.msg,
+        className: cn(
+          `bottom-0 left-0`,
+          "bg-success-100"
+        ),
+        duration: 3000,
+      });
+    }
+    if (state.error) {
+      toast({
+        title: "Error",
+        description: state.msg,
+        className: cn(
+          `bottom-0 left-0`,
+          "bg-error-100"
+        ),
+        duration: 3000,
+      });
+    }
+    
+  }, [state, toast]);
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           variant="ghost"
@@ -52,41 +89,66 @@ const EditGrade = ({ grade, onEdit }: EditGradeProps) => {
         <DialogHeader>
           <DialogTitle>Edit Grade</DialogTitle>
         </DialogHeader>
-        <form action="">
+        <form action={formAction} ref={formRef}>
+          <Input type="hidden" id="id" name="id" defaultValue={grade.id}/>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Grade</Label>
+              <Label htmlFor="grade_level">Grade</Label>
               <Input
-                id="name"
-                value={editedGrade.grade_level}
-                onChange={(e) =>
-                  setEditedGrade({ ...editedGrade, category: e.target.value })
-                }
+                id="grade_level"
+                type="number"
+                defaultValue={grade.grade_level}
+                name="grade_level"
               />
+              <small className="text-red-500">{zoderror?.grade_level}</small>
             </div>
             <div className="space-y-2">
               <Label htmlFor="category">Category</Label>
               <Input
                 id="category"
-                value={editedGrade.category}
-                onChange={(e) =>
-                  setEditedGrade({ ...editedGrade, category: e.target.value })
-                }
+                type="hidden"
+                name="category"
+                value={category}
               />
+              <Select
+                value={category}
+                onValueChange={(value) => setCategory(value)}
+              >
+              <SelectTrigger>
+                <SelectValue placeholder="KIDDOS" />
+              </SelectTrigger>
+              <SelectContent className="bg-white">
+                <SelectItem
+                  value="KIDDOS"
+                  className="cursor-pointer hover:bg-yellow-9"
+                >
+                  KIDDOS
+                </SelectItem>
+                <SelectItem
+                  value="KIDS"
+                  className="cursor-pointer hover:bg-yellow-9"
+                >
+                  KIDS
+                </SelectItem>
+                <SelectItem
+                  value="SUPERKIDS"
+                  className="cursor-pointer hover:bg-yellow-9"
+                >
+                  SUPERKIDS
+                </SelectItem>
+              </SelectContent>
+            </Select>
+            <small className="text-red-500">{zoderror?.category?.[0]}</small>
             </div>
             <div className="space-y-2">
               <Label htmlFor="price">Price</Label>
               <Input
                 id="price"
                 type="number"
-                value={editedGrade.price}
-                onChange={(e) =>
-                  setEditedGrade({
-                    ...editedGrade,
-                    price: Number(e.target.value),
-                  })
-                }
+                name="price"
+                defaultValue={grade.price}
               />
+              <small className="text-red-500">{zoderror?.price}</small>
             </div>
           </div>
           <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
@@ -161,20 +223,11 @@ const DeleteGrade = ({
 };
 
 const GradeSection = ({ data }: { data: GradeData[] }) => {
-  const [grades, setGrades] = useState<GradeData[]>(data);
 
   const handleEdit = (updatedGrade: GradeData) => {
-    setGrades(
-      grades.map((grade) =>
-        grade.id === updatedGrade.id ? updatedGrade : grade
-      )
-    );
   };
 
   const handleDelete = (gradeId: number) => {
-    if (window.confirm("Are you sure you want to delete this grade?")) {
-      setGrades(grades.filter((grade) => grade.id !== gradeId));
-    }
   };
 
   return (
@@ -190,7 +243,7 @@ const GradeSection = ({ data }: { data: GradeData[] }) => {
                 Grade {grade.grade_level}
               </h2>
               <div className="flex gap-2">
-                <EditGrade grade={grade} onEdit={handleEdit} />
+                <EditGrade grade={grade}/>
                 <DeleteGrade
                   type="Grade"
                   name={grade.category}

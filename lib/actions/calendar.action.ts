@@ -199,7 +199,8 @@ export async function editCalendar(
     });
 
     if (!response.ok) {
-      return { ...prevState,error: true, msg: response.statusText };
+      const res = await response.json();
+      return { ...prevState,error: true, msg: res.msg };
     }
 
     revalidatePath("/calendar");

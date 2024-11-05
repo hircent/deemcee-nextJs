@@ -13,6 +13,12 @@ export type GradeData = {
   price: number;
 };
 
+export type GradeDataErrors = {
+  grade_level?: number;
+  category?: string;
+  price?: number;
+};
+
 export type ThemeData = {
   id: number;
   name: string;

@@ -2,7 +2,7 @@ import React from "react";
 import { authUser } from "@/lib/actions/user.actions";
 import { getUserRole } from "@/lib/utils";
 import ThemeSection from "@/components/ThemeSection";
-import { getThemeList } from "@/lib/actions/structure";
+import { getThemeList } from "@/lib/actions/structure.actions";
 
 const Page = async () => {
   const user = await authUser();

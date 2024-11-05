@@ -1,5 +1,5 @@
 import CategorySection from "@/components/CategorySection";
-import { getCategoryList } from "@/lib/actions/structure";
+import { getCategoryList } from "@/lib/actions/structure.actions";
 import { authUser } from "@/lib/actions/user.actions";
 import { getUserRole } from "@/lib/utils";
 

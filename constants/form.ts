@@ -132,3 +132,9 @@ export const CategoryFormSchema = z.object({
 });
 
 export type CategoryFormValues = z.infer<typeof CategoryFormSchema>;
+
+export const GradeDataSchema = z.object({
+  grade_level: z.string().min(1, "Grade level is required"),
+  category: z.string().min(1, "Category is required"),
+  price: z.string().min(1, "Price is required"),
+});

@@ -11,7 +11,7 @@ import { useState , useRef ,useEffect } from "react"
 import { useToast } from "./ui/use-toast"
 import { useFormState } from "react-dom";
 import { SERVER_ACTION_STATE } from "@/constants/index";
-import { editCategory } from "@/lib/actions/structure"
+import { editCategory } from "@/lib/actions/structure.actions"
 
 const EditCategory = ({data}: {data: CategoryData}) => {
     const [isActive, setIsActive] = useState<boolean>(data?.is_active)

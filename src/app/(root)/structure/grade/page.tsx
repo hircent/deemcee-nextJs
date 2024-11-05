@@ -1,7 +1,7 @@
 import { authUser } from "@/lib/actions/user.actions";
 import { getUserRole } from "@/lib/utils";
 import GradeSection from "@/components/GradeSection";
-import { getGradeList } from "@/lib/actions/structure";
+import { getGradeList } from "@/lib/actions/structure.actions";
 
 const Grade = async () => {
   const user = await authUser();
