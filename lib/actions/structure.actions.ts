@@ -1,6 +1,5 @@
 "use server";
 
-import { cookies } from "next/headers";
 import { getToken } from "./user.actions";
 import {
   CategoryData,
@@ -94,12 +93,47 @@ export async function updateGrade(prevState:STATE<GradeDataErrors>,formData:Form
     }
 
     revalidatePath("/structure/grade");
-    return { success:true,msg:"Grade is updated"}
+    return { success:true,msg:"Grade has been updated"}
   } catch (error) {
     return {error:true,msg:(error as Error).message}
   }
 
 }
+
+export async function deleteGrade(prevState:STATE<GradeDataErrors>,formData:FormData):Promise<STATE<GradeDataErrors>>{
+    try {
+      const token = await getToken();
+  
+      const obj = Object.fromEntries(formData);
+    
+      const data = {
+        ...obj,
+        id: Number(formData.get('id'))  // Convert id to number
+      };
+  
+      if(obj.name !== obj.confirmName){
+        return {...prevState, error:true,msg:"Name must be excatly the same."}
+      }
+  
+      const response = await fetch(`${process.env.API_URL}/grade/delete/${data.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+        }
+      });
+  
+      if (!response.ok) {
+        const res = await response.json();
+        return { error: true, msg: res.msg };
+      }
+      
+      return { success:true,msg:"Grade has been deleted"}  
+    } catch (error) {
+      return {error:true,msg:(error as Error).message}
+    }
+  
+  }
 
 export async function getThemeList(
   year: string | null = null

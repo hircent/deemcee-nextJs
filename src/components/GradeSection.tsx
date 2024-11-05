@@ -1,5 +1,5 @@
 "use client";
-
+import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -26,7 +26,7 @@ import { Edit, Trash2 } from "lucide-react";
 import SubmitButton from "./SubmitButton";
 import { GradeData, GradeDataErrors } from "@/types/structure";
 import { useFormState } from "react-dom";
-import { updateGrade } from "@/lib/actions/structure.actions";
+import { deleteGrade, updateGrade } from "@/lib/actions/structure.actions";
 import { SERVER_ACTION_STATE } from "@/constants/index";
 import { useToast } from "./ui/use-toast";
 import { cn } from "@/lib/utils";
@@ -169,10 +169,47 @@ const DeleteGrade = ({
   name: string;
   gradeId: number;
 }) => {
-  const [isLoading, setLoading] = useState<boolean>(false);
-  const [open, setOpen] = useState<boolean>(false);
+  const [isOpen, setOpen] = useState(false);
+  const [zoderror, setZodError] = useState<GradeDataErrors | null>(null);
+  const { toast } = useToast();
+  const formRef = useRef<HTMLFormElement>(null);
+  const [state , formAction] = useFormState(deleteGrade,SERVER_ACTION_STATE);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (state.zodErr) {
+      setZodError(state.zodErr);
+    }
+    if (state.success) {
+      toast({
+        title: "Success",
+        description: state.msg,
+        className: cn(
+          `bottom-0 left-0`,
+          "bg-success-100"
+        ),
+        duration: 3000,
+      });
+      formRef.current?.reset();
+      setOpen(false);
+      router.refresh()
+    }
+    if (state.error) {
+      toast({
+        title: "Error",
+        description: state.msg,
+        className: cn(
+          `bottom-0 left-0`,
+          "bg-error-100"
+        ),
+        duration: 3000,
+      });
+    }
+    
+  }, [state, toast]);
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           variant="ghost"
@@ -194,13 +231,15 @@ const DeleteGrade = ({
             <span className="font-bold">{name}</span>?
           </DialogDescription>
         </DialogHeader>
-        <form>
+        <form action={formAction} ref={formRef}>
+          <Input id="name" type="hidden" name="name" value={name}/>
+          <Input id="id" type="hidden" name="id" value={gradeId}/>
           <div className="grid gap-4 py-4 border-b-2">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="branchName" className="text-left">
+              <Label htmlFor="delete-name" className="text-left">
                 Name:
               </Label>
-              <Input id="branchName" className="col-span-3" />
+              <Input id="delete-name" name="confirmName" className="col-span-3" />
             </div>
           </div>
 
@@ -208,13 +247,7 @@ const DeleteGrade = ({
             {`Please key in the ${type} name to confirm delete.`}
           </small>
           <DialogFooter>
-            <Button
-              type="submit"
-              className="bg-red-500 text-white"
-              disabled={isLoading}
-            >
-              {isLoading ? "Deleting.." : "Delete"}
-            </Button>
+            <SubmitButton label="Delete" submitLabel="Deleting" btnColor="bg-red-500"/>
           </DialogFooter>
         </form>
       </DialogContent>
@@ -223,12 +256,6 @@ const DeleteGrade = ({
 };
 
 const GradeSection = ({ data }: { data: GradeData[] }) => {
-
-  const handleEdit = (updatedGrade: GradeData) => {
-  };
-
-  const handleDelete = (gradeId: number) => {
-  };
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
