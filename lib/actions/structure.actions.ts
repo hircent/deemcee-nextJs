@@ -259,7 +259,6 @@ export async function editTheme(_prevState:STATE<ThemeDetailsError>,formData:For
       return { error: true, msg: res.msg };
     }
 
-    revalidatePath("/structure/theme");
     return { success: true, msg: "Theme is updated" };
   } catch (error) {
     return { error:true,msg:(error as Error).message}

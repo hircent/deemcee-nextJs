@@ -29,7 +29,7 @@ export type ThemeData = {
 export type ThemeDetails = {
   id: number;
   name: string;
-  category: string;
+  category: number;
   lessons:{
     id: number;
     title: string;

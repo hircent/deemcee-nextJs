@@ -35,13 +35,14 @@ import { useRouter } from "next/navigation";
 
 const EditTheme = ({ id ,categorySelectionList }: { id:number, categorySelectionList:CategoryData[]}) => {
   const [editedTheme, setEditedTheme] = useState<ThemeDetails | null>(null);
-  const [catID,setCatID] = useState<number>(id);
+  const [catID,setCatID] = useState<string|null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const [zoderror, setZodError] = useState<ThemeDetailsError | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const [state , formAction] = useFormState(editTheme,SERVER_ACTION_STATE);
+  const router = useRouter();
 
   useEffect(() => {
     if (state.zodErr) {
@@ -60,6 +61,9 @@ const EditTheme = ({ id ,categorySelectionList }: { id:number, categorySelection
       formRef.current?.reset();
       setZodError(null);
       setIsOpen(false);
+      setTimeout(() => {
+        router.refresh()
+      }, 300);
     }
     if (state.error) {
       toast({
@@ -81,6 +85,7 @@ const EditTheme = ({ id ,categorySelectionList }: { id:number, categorySelection
     try {
       const themeData = await getThemeDetails(id);
       setEditedTheme(themeData);
+      setCatID(themeData.category.toString());
       setIsLoading(false);
     } catch (error) {
       toast({
@@ -135,11 +140,11 @@ const EditTheme = ({ id ,categorySelectionList }: { id:number, categorySelection
               <small className="text-red-500">{zoderror?.name?.[0]}</small>
             </div>
             <div className="space-y-2">
-              <Input type="hidden" name="category" defaultValue={catID}/>
+              <Input type="hidden" name="category" defaultValue={catID!}/>
               <Label htmlFor="category">Category <span className="text-red-500">*</span></Label>
               <Select
-                value={String(editedTheme?.id)}
-                onValueChange={(value)=>{setCatID(Number(value))}}
+                value={catID!}
+                onValueChange={(value)=>{setCatID(value)}}
               >
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="KIDDOS" />
