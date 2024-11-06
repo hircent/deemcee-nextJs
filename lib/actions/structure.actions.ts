@@ -63,6 +63,42 @@ export async function getCategorySelectionList(): Promise<CategoryData[]> {
   }
 }
 
+export async function createCategory(prevState:STATE<CategoryFormErrors>,formData:FormData):Promise<STATE<CategoryFormErrors>>{
+  try {
+    const token = await getToken();
+
+    const data = Object.fromEntries(formData);
+    const validated = CategoryFormSchema.safeParse(data);
+
+    if (!validated.success) {
+      return {
+        ...prevState,
+        error: true,
+        zodErr: validated.error.flatten().fieldErrors as CategoryFormErrors,
+        msg: "Validation Failed",
+      };
+    }
+
+    const response = await fetch(`${process.env.API_URL}/category/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      return { ...prevState, error: true, msg: response.statusText };
+    }
+
+    return { success:true,msg:"Category has been created"}
+  } catch (error) {
+    return {error:true,msg:(error as Error).message}
+  }
+
+}
+
 export async function getGradeList(
   year: string | null = null
 ): Promise<GradeData[]> {
