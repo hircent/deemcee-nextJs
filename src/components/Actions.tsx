@@ -1,7 +1,7 @@
 import { useAuthContext } from "@/context/userContext";
 import React from "react";
 import { DeleteCalendar } from "./DeleteCalendar";
-import { BranchRole, DeleteActionProps } from "@/types/index";
+import { DeleteActionProps } from "@/types/index";
 import { IsPrincipalOrHigher } from "@/constants/index";
 import { EditCalendar } from "./EditCalendar";
 

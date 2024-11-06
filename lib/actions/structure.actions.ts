@@ -49,6 +49,7 @@ export async function getCategorySelectionList(): Promise<CategoryData[]> {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token?.value}`,
       },
+      cache: "no-cache",
     });
 
     if (!response.ok) {
@@ -310,4 +311,38 @@ export async function editCategory(
   } catch (error) {
     return { ...prevState, error: true, msg: (error as Error).message };
   }
+}
+
+export async function deleteTheme(prevState:STATE<ThemeDetailsError>,formData:FormData):Promise<STATE<ThemeDetailsError>>{
+  try {
+    const token = await getToken();
+
+    const obj = Object.fromEntries(formData);
+  
+    const data = {
+      ...obj
+    };
+
+    if(obj.name !== obj.confirmName){
+      return {...prevState, error:true,msg:"Name must be excatly the same."}
+    }
+
+    const response = await fetch(`${process.env.API_URL}/theme/delete/${data.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+      }
+    });
+
+    if (!response.ok) {
+      const res = await response.json();
+      return { error: true, msg: res.msg };
+    }
+    
+    return { success:true,msg:"Theme has been deleted"}  
+  } catch (error) {
+    return {error:true,msg:(error as Error).message}
+  }
+
 }
