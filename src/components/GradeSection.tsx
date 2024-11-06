@@ -45,8 +45,6 @@ const EditGrade = ({ grade }: {grade: GradeData}) => {
       setZodError(state.zodErr);
     }
     if (state.success) {
-      formRef.current?.reset();
-      setOpen(false);
       toast({
         title: "Success",
         description: state.msg,
@@ -56,8 +54,11 @@ const EditGrade = ({ grade }: {grade: GradeData}) => {
         ),
         duration: 3000,
       });
+      formRef.current?.reset();
+      setOpen(false);
     }
     if (state.error) {
+      console.log(state.msg);
       toast({
         title: "Error",
         description: state.msg,

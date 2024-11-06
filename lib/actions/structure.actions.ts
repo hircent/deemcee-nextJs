@@ -7,9 +7,11 @@ import {
   GradeData,
   GradeDataErrors,
   ThemeData,
+  ThemeDetails,
+  ThemeDetailsError,
 } from "@/types/structure";
 import { STATE } from "@/types/index";
-import { CategoryFormSchema, GradeDataSchema } from "@/constants/form";
+import { CategoryFormSchema, GradeDataSchema, ThemeDetailsSchema } from "@/constants/form";
 import { revalidatePath } from "next/cache";
 
 export async function getCategoryList(
@@ -19,6 +21,29 @@ export async function getCategoryList(
 
   try {
     const response = await fetch(`${process.env.API_URL}/category/list`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch category data " + response.statusText);
+    }
+
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    return [];
+  }
+}
+
+export async function getCategorySelectionList(): Promise<CategoryData[]> {
+  const token = await getToken();
+
+  try {
+    const response = await fetch(`${process.env.API_URL}/category/selection-list`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -89,7 +114,7 @@ export async function updateGrade(prevState:STATE<GradeDataErrors>,formData:Form
 
     if (!response.ok) {
       const res = await response.json();
-      return { ...prevState,error: true, msg: res.msg };
+      return { error: true, msg: res.msg };
     }
 
     revalidatePath("/structure/grade");
@@ -158,6 +183,87 @@ export async function getThemeList(
   } catch (error) {
     return [];
   }
+}
+
+export async function getThemeDetails(id: number): Promise<ThemeDetails> {
+  try {
+    const token = await getToken();
+    const response = await fetch(`${process.env.API_URL}/theme/details/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+      },
+    });
+
+    if (!response.ok) {
+      const res = await response.json();
+      throw new Error("Failed to fetch theme details " + res.msg);
+    }
+
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function editTheme(_prevState:STATE<ThemeDetailsError>,formData:FormData):Promise<STATE<ThemeDetailsError>>{
+  try {
+    const token = await getToken();
+
+    const data = Object.fromEntries(formData);
+    const validated = ThemeDetailsSchema.safeParse(data);
+    
+    if (!validated.success) {
+      return {
+        error: true,
+        zodErr: validated.error.flatten().fieldErrors as ThemeDetailsError,
+        msg: "Validation Failed",
+      };
+    }
+
+    const {
+      lesson_one,
+      lesson_two,
+      lesson_three,
+      lesson_four,
+      name,
+      category
+    } = data;
+
+    const payload = {
+      name,
+      category,
+      lessons: {
+        title:name,
+        lesson_one,
+        lesson_two,
+        lesson_three,
+        lesson_four,
+      }
+    };
+
+    const response = await fetch(`${process.env.API_URL}/theme/update/${data.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      const res = await response.json();
+      return { error: true, msg: res.msg };
+    }
+
+    revalidatePath("/structure/theme");
+    return { success: true, msg: "Theme is updated" };
+  } catch (error) {
+    return { error:true,msg:(error as Error).message}
+  }
+
 }
 
 export async function editCategory(

@@ -1,7 +1,7 @@
 "use client";
 import { Card } from "@/components/ui/card";
 import { Filter } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Edit, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,21 +23,80 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ThemeData } from "@/types/structure";
+import { CategoryData, ThemeData, ThemeDetails, ThemeDetailsError } from "@/types/structure";
 import SubmitButton from "./SubmitButton";
+import { editTheme, getThemeDetails } from "@/lib/actions/structure.actions";
+import { useToast } from "./ui/use-toast"
+import { cn } from "@/lib/utils";
+import { useFormState } from "react-dom";
+import { SERVER_ACTION_STATE } from "@/constants/index";
 
-interface EditThemeProps {
-  theme: ThemeData;
-}
 
-const EditTheme = ({ theme }: EditThemeProps) => {
-  const [editedTheme, setEditedTheme] = useState<ThemeData>({ ...theme });
+const EditTheme = ({ id ,categorySelectionList }: { id:number, categorySelectionList:CategoryData[]}) => {
+  const [editedTheme, setEditedTheme] = useState<ThemeDetails | null>(null);
+  const [catID,setCatID] = useState<number>(id);
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+  const [zoderror, setZodError] = useState<ThemeDetailsError | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [state , formAction] = useFormState(editTheme,SERVER_ACTION_STATE);
+
+  useEffect(() => {
+    if (state.zodErr) {
+      setZodError(state.zodErr);
+    }
+    if (state.success) {
+      toast({
+        title: "Success",
+        description: state.msg,
+        className: cn(
+          `bottom-0 left-0`,
+          "bg-success-100"
+        ),
+        duration: 3000,
+      });
+      formRef.current?.reset();
+      setZodError(null);
+      setIsOpen(false);
+    }
+    if (state.error) {
+      toast({
+        title: "Error",
+        description: state.msg,
+        className: cn(
+          `bottom-0 left-0`,
+          "bg-error-100"
+        ),
+        duration: 3000,
+      });
+    }
+    
+  }, [state, toast]);
+
+  const getTheme = async () => {
+    setIsLoading(true);
+    
+    try {
+      const themeData = await getThemeDetails(id);
+      setEditedTheme(themeData);
+      setIsLoading(false);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to fetch theme details" + error,
+        duration: 2000,
+        className: cn("bottom-0 left-0 bg-red-100"),
+      });
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
+          onClick={getTheme}
           variant="ghost"
           size="icon"
           className="h-8 w-8 text-gray-500 hover:text-blue-600 hover:bg-blue-50"
@@ -49,51 +108,97 @@ const EditTheme = ({ theme }: EditThemeProps) => {
         className="bg-black/80"
         style={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}
       />
-      <DialogContent>
+      <DialogContent className="max-h-[90vh] overflow-y-auto custom-scrollbar bg-white">
         <DialogHeader>
           <DialogTitle>Edit Theme</DialogTitle>
+          <DialogDescription className="text-sm sm:text-base">
+            Make changes to your Theme details here. Click save when
+            you&apos;re done.
+          </DialogDescription>
         </DialogHeader>
-        <form action="">
+        {isLoading ? (
+          <div className="flex justify-center items-center h-48">
+            <p>Loading...</p>
+          </div>
+        ) : (
+        <form action={formAction} ref={formRef}>
+          <Input type="hidden" id="id" name="id" defaultValue={id}/>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label htmlFor="name">Theme</Label>
               <Input
                 id="name"
-                value={editedTheme.name}
-                onChange={(e) =>
-                  setEditedTheme({ ...editedTheme, category: e.target.value })
-                }
+                name="name"
+                defaultValue={editedTheme?.name}
               />
+              <small className="text-red-500">{zoderror?.name?.[0]}</small>
             </div>
             <div className="space-y-2">
+              <Input type="hidden" name="category" defaultValue={catID}/>
               <Label htmlFor="category">Category</Label>
-              <Input
-                id="category"
-                value={editedTheme.category}
-                onChange={(e) =>
-                  setEditedTheme({ ...editedTheme, category: e.target.value })
-                }
-              />
+              <Select
+                value={String(editedTheme?.id)}
+                onValueChange={(value)=>{setCatID(Number(value))}}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="KIDDOS" />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  {categorySelectionList.map((cat) => (
+                    <SelectItem
+                      key={cat.id}
+                      value={cat.id.toString()}
+                      className="cursor-pointer hover:bg-yellow-9"
+                    >
+                      {cat.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <small className="text-red-500">{zoderror?.category?.[0]}</small>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="year">Year</Label>
+              <Label htmlFor="lesson_one">Lesson 1</Label>
               <Input
-                id="year"
-                type="number"
-                value={editedTheme.year}
-                onChange={(e) =>
-                  setEditedTheme({
-                    ...editedTheme,
-                    year: Number(e.target.value),
-                  })
-                }
+                id="lesson_one"
+                name="lesson_one"
+                defaultValue={editedTheme?.lessons?.lesson_one}
               />
+              <small className="text-red-500">{zoderror?.lesson_one?.[0]}</small>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="lesson_two">Lesson 2</Label>
+              <Input
+                id="lesson_two"
+                name="lesson_two"
+                defaultValue={editedTheme?.lessons?.lesson_two}
+              />
+              <small className="text-red-500">{zoderror?.lesson_two?.[0]}</small>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="lesson_three">Lesson 3</Label>
+              <Input
+                id="lesson_three"
+                name="lesson_three"
+                defaultValue={editedTheme?.lessons?.lesson_three}
+              />
+              <small className="text-red-500">{zoderror?.lesson_three?.[0]}</small>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="lesson_four">Lesson 4</Label>
+              <Input
+                id="lesson_four"
+                name="lesson_four"
+                defaultValue={editedTheme?.lessons?.lesson_four}
+              />
+              <small className="text-red-500">{zoderror?.lesson_four?.[0]}</small>
             </div>
           </div>
           <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
             <SubmitButton label="Save" submitLabel="Saving" />
           </DialogFooter>
         </form>
+        )}
       </DialogContent>
     </Dialog>
   );
@@ -164,21 +269,22 @@ const DeleteTheme = ({
 const ThemeSection = ({
   userRole,
   data,
+  categorySelectionList
 }: {
   userRole: string[];
   data: ThemeData[];
+  categorySelectionList: CategoryData[];
 }) => {
   const yearNow = new Date().getFullYear().toString();
-  const [categoryFilter, setCategoryFilter] = useState<string>("KIDDOS");
-  const [yearFilter, setYearFilter] = useState<string>(yearNow);
+  const [categoryFilter, setCategoryFilter] = useState<string>(categorySelectionList[0].label);
+  // const [yearFilter, setYearFilter] = useState<string>(yearNow);
 
   const filteredThemes = data.filter((cat) => {
     if (categoryFilter && cat.category !== categoryFilter) return false; // Add this line
-    if (yearFilter !== "all" && cat.year.toString() !== yearFilter)
-      return false;
+    // if (yearFilter !== "all" && cat.year.toString() !== yearFilter) return false;
     return true;
   });
-
+  console.log({data});
   const years = Array.from(new Set(data.map((cat) => cat.year.toString())));
   return (
     <div>
@@ -193,33 +299,25 @@ const ThemeSection = ({
           <Select
             value={String(categoryFilter)}
             onValueChange={(value) => setCategoryFilter(value)}
+            
           >
-            <SelectTrigger className="w-[140px] bg-yellow-2">
+            <SelectTrigger className="w-[180px] bg-yellow-2">
               <SelectValue placeholder="KIDDOS" />
             </SelectTrigger>
             <SelectContent className="bg-yellow-2">
-              <SelectItem
-                value="KIDDOS"
-                className="cursor-pointer hover:bg-yellow-9"
-              >
-                KIDDOS
-              </SelectItem>
-              <SelectItem
-                value="KIDS"
-                className="cursor-pointer hover:bg-yellow-9"
-              >
-                KIDS
-              </SelectItem>
-              <SelectItem
-                value="SUPERKIDS"
-                className="cursor-pointer hover:bg-yellow-9"
-              >
-                SUPERKIDS
-              </SelectItem>
+              {categorySelectionList.map((cat) => (
+                <SelectItem
+                  key={cat.id}
+                  value={cat.label}
+                  className="cursor-pointer hover:bg-yellow-9"
+                >
+                  {cat.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
-          <Select value={yearFilter} onValueChange={setYearFilter}>
+          {/* <Select value={yearFilter} onValueChange={setYearFilter}>
             <SelectTrigger className="w-[140px] bg-yellow-2">
               <SelectValue placeholder="Year" />
             </SelectTrigger>
@@ -234,7 +332,7 @@ const ThemeSection = ({
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
+          </Select> */}
         </div>
       </Card>
 
@@ -250,7 +348,7 @@ const ThemeSection = ({
                   {theme.name}
                 </h2>
                 <div className="flex gap-2">
-                  <EditTheme theme={theme} />
+                  <EditTheme id={theme.id} categorySelectionList={categorySelectionList} />
                   <DeleteTheme
                     type="Theme"
                     name={theme.name}

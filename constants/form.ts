@@ -138,3 +138,12 @@ export const GradeDataSchema = z.object({
   category: z.string().min(1, "Category is required"),
   price: z.string().min(1, "Price is required"),
 });
+
+export const ThemeDetailsSchema = z.object({
+  name: z.string().min(2, "Lesson name must be at least 2 characters"),
+  category: z.string().min(1, "Category must be chosen"),
+  lesson_one: z.string().min(2, "Lesson one must be at least 2 characters"),
+  lesson_two: z.string().min(2, "Lesson two must be at least 2 characters"),
+  lesson_three: z.string().min(2, "Lesson three must be at least 2 characters"),
+  lesson_four: z.string().min(2, "Lesson four must be at least 2 characters"),
+});

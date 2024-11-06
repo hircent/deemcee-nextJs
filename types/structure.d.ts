@@ -26,6 +26,30 @@ export type ThemeData = {
   year: number;
 };
 
+export type ThemeDetails = {
+  id: number;
+  name: string;
+  category: string;
+  lessons:{
+    id: number;
+    title: string;
+    lesson_one: string;
+    lesson_two: string;
+    lesson_three: string;
+    lesson_four: string;
+  }
+}
+
+export type ThemeDetailsError = {
+  name?: string;
+  category?: string;
+  lesson_one?: string;
+  lesson_two?: string;
+  lesson_three?: string;
+  lesson_four?: string;
+  
+}
+
 export type CategoryFormErrors = {
   name?: string;
   label?: string;
