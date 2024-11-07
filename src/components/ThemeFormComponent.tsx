@@ -31,7 +31,7 @@ import { createTheme, getCategorySelectionList } from "@/lib/actions/structure.a
 import { CategoryData, ThemeDetailsError } from "@/types/structure";
 
 const ThemeForm = ({type}:{type:string}) => {
-  const [category,setCategory] = useState<string>("all");
+  const [category,setCategory] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [zoderror, setZodError] = useState<ThemeDetailsError | null>(null);
     const [categorySelectionList, setCategorySelectionList] = useState<CategoryData[]>([]);
@@ -138,11 +138,10 @@ const ThemeForm = ({type}:{type:string}) => {
                 value={category}
                 onValueChange={(value) => setCategory(value)}
               >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="all" />
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
-                  <SelectItem value="all" className="cursor-pointer hover:bg-yellow-9">Select a category</SelectItem>
                   {categorySelectionList.map((cat) => (
                     <SelectItem
                       key={cat.id}

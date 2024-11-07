@@ -31,8 +31,7 @@ import { createGrade } from "@/lib/actions/structure.actions";
 import { GradeDataErrors } from "@/types/structure";
 
 const GradeForm = ({type}:{type:string}) => {
-    const [category,setCategory] = useState<string>("KIDDOS");
-    const [isActive, setIsActive] = useState<boolean>(true)
+    const [category,setCategory] = useState<string>("");
     const [zoderror, setZodError] = useState<GradeDataErrors | null>(null);
     const [open, setOpen] = useState<boolean>(false);
     const formRef = useRef<HTMLFormElement>(null);
@@ -120,7 +119,7 @@ const GradeForm = ({type}:{type:string}) => {
                 onValueChange={(value) => setCategory(value)}
               >
               <SelectTrigger>
-                <SelectValue placeholder="KIDDOS" />
+                <SelectValue placeholder="Select a category" />
               </SelectTrigger>
               <SelectContent className="bg-white">
                 <SelectItem
