@@ -1,19 +1,17 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { 
   CalendarIcon, 
   MailIcon, 
   BuildingIcon, 
   UserIcon,
   Users2Icon,
-  CreditCardIcon,
-  PencilIcon,
-  KeyIcon
+  CreditCardIcon
 } from "lucide-react";
 import { camelCase, cn, formatDateTime } from '@/lib/utils';
 import { getUserFullDetails } from '@/lib/actions/user.actions';
+import UserProfileActions from '@/components/UserProfileActions';
 
 export default async function ProfilePage({ params }:{params:{id:number}}) {
   const { id }= params;
@@ -34,25 +32,7 @@ export default async function ProfilePage({ params }:{params:{id:number}}) {
               <p className="text-sm sm:text-base text-slate-500 mt-1">Manage your personal information and preferences</p>
             </div>
 
-            {/* Actions Section */}
-            <div className="flex flex-col-reverse sm:flex-row items-start sm:items-center space-y-4 space-y-reverse sm:space-y-0 sm:space-x-4">
-              {/* Buttons Container */}
-              
-              <div className="flex w-full sm:w-auto space-x-3">
-                <Button 
-                  className="flex-1 sm:flex-none bg-blue-600 text-white hover:bg-blue-700 flex items-center justify-center space-x-2 transition-colors duration-200 text-sm sm:text-base px-3 py-2"
-                >
-                  <PencilIcon className="w-4 h-4" />
-                  <span>Edit Profile</span>
-                </Button>
-                <Button 
-                  className="flex-1 sm:flex-none bg-purple-600 text-white hover:bg-purple-700 flex items-center justify-center space-x-2 transition-colors duration-200 text-sm sm:text-base px-3 py-2"
-                >
-                  <KeyIcon className="w-4 h-4" />
-                  <span>Change Password</span>
-                </Button>
-              </div>
-            </div>
+            <UserProfileActions/>
           </div>
 
           {/* Main Profile Card */}
