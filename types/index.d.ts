@@ -395,6 +395,45 @@ export type TypeUserDetailsProps = {
   details: string;
   address: Address;
 };
+
+export type UserAddress = {
+  address_line_1: string;
+  address_line_2: string;
+  address_line_3: string;
+  city: string;
+  postcode: string;
+  state: string;
+};
+
+export type UserDetails = {
+  gender:string;
+  dob:string;
+  ic_number:string;
+  occupation:string;
+  spouse_name:string;
+  spouse_phone:string;
+  spouse_occupation:string;
+  no_of_children:string;
+  personal_email:string;
+  bank_name:string;
+  bank_account_name:string;
+  bank_account_number:string;
+}
+
+export type UserFullDetailsData = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  username: string;
+  email: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  details: UserDetails;
+  address: UserAddress;
+  user_branch_roles:BranchRole[];
+};
+
 export type ListProps<T> = {
   success: boolean;
   total: number;
@@ -469,7 +508,6 @@ export type GetBranchDetailProps = {
 
 export type GetUserDetailProps = {
   id: number;
-  type: string;
 };
 export type UpdateUserDetailProps = {
   id: number;

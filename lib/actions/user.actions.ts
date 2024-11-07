@@ -15,6 +15,7 @@ import {
   TypeUserDetailsProps,
   User,
   UpdateUserDetailProps,
+  UserFullDetailsData,
 } from "@/types/index";
 import { jwtDecode } from "jwt-decode";
 import { redirect } from "next/navigation";
@@ -251,14 +252,42 @@ export async function createUser(formData: FormData, type: string) {
 }
 
 export async function getUserDetails({
-  id,
-  type,
+  id
 }: GetUserDetailProps): Promise<TypeUserDetailsProps> {
   const token = await getToken();
   const branchId = cookies().get("BranchId")?.value;
   try {
     const response = await fetch(
-      `${process.env.API_URL}/users/${type}/details/${id}`,
+      `${process.env.API_URL}/users/details/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getUserFullDetails({
+  id
+}: GetUserDetailProps): Promise<UserFullDetailsData> {
+  const token = await getToken();
+  const branchId = cookies().get("BranchId")?.value;
+  try {
+    const response = await fetch(
+      `${process.env.API_URL}/users/details/${id}`,
       {
         method: "GET",
         headers: {

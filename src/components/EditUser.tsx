@@ -89,7 +89,7 @@ export function EditUser({ type, id }: EditProps) {
 
   const getUser = async () => {
     try {
-      const userData = await getUserDetails({ id, type });
+      const userData = await getUserDetails({ id });
       form.reset({
         username: userData.username,
         email: userData.email,
