@@ -12,7 +12,7 @@ import {
   PencilIcon,
   KeyIcon
 } from "lucide-react";
-import { cn, formatDateTime } from '@/lib/utils';
+import { camelCase, cn, formatDateTime } from '@/lib/utils';
 import { getUserFullDetails } from '@/lib/actions/user.actions';
 
 export default async function ProfilePage({ params }:{params:{id:number}}) {
@@ -20,7 +20,7 @@ export default async function ProfilePage({ params }:{params:{id:number}}) {
 
   const profile = await getUserFullDetails({id});
 
-  const {dateOnly} = formatDateTime(new Date(profile.created_at));
+  const { dateOnly } = formatDateTime(new Date(profile.created_at));
 
   return (
     <div className='home-content'>
@@ -30,7 +30,7 @@ export default async function ProfilePage({ params }:{params:{id:number}}) {
           <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between">
             {/* Title Section */}
             <div className="flex-1 min-w-0">
-              <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 truncate">Profile Details</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-yellow-12 truncate">Profile Details</h1>
               <p className="text-sm sm:text-base text-slate-500 mt-1">Manage your personal information and preferences</p>
             </div>
 
@@ -60,11 +60,11 @@ export default async function ProfilePage({ params }:{params:{id:number}}) {
             <CardHeader className="border-b border-slate-200 bg-slate-50 flex flex-row justify-between">
               <div className="flex items-center space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-semibold">
-                  {profile.username.charAt(0)}
+                  {profile.username.charAt(0).toLocaleUpperCase()}
                 </div>
                 <div>
-                  <CardTitle className="text-2xl text-slate-900">
-                    {profile.username}
+                  <CardTitle className="text-2xl text-yellow-12">
+                    {camelCase(profile.username)}
                   </CardTitle>
                   <div className="flex items-center mt-1 text-slate-500">
                     <BuildingIcon className="w-4 h-4 mr-1" />
@@ -88,7 +88,7 @@ export default async function ProfilePage({ params }:{params:{id:number}}) {
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6">
               {/* Basic Information */}
               <div className="space-y-6">
-                <h3 className="text-lg font-semibold text-slate-900">Basic Information</h3>
+                <h3 className="text-lg font-semibold text-yellow-12">Basic Information</h3>
                 <div className="space-y-4">
                   <div className="flex items-center space-x-2 text-slate-600">
                     <MailIcon className="w-4 h-4" />
@@ -107,7 +107,7 @@ export default async function ProfilePage({ params }:{params:{id:number}}) {
 
               {/* Branch Information */}
               <div className="space-y-6">
-                <h3 className="text-lg font-semibold text-slate-900">Branch Details</h3>
+                <h3 className="text-lg font-semibold text-yellow-12">Branch Details</h3>
                 <div className="space-y-4">
                   <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
                     <div className="font-medium text-blue-800 capitalize">
@@ -122,7 +122,7 @@ export default async function ProfilePage({ params }:{params:{id:number}}) {
 
               {/* Family Information */}
               <div className="space-y-6">
-                <h3 className="text-lg font-semibold text-slate-900">Family Information</h3>
+                <h3 className="text-lg font-semibold text-yellow-12">Family Information</h3>
                 <div className="space-y-4 bg-white rounded-lg">
                   <div className="grid grid-cols-1 gap-4">
                     <div className="space-y-3">
@@ -158,7 +158,7 @@ export default async function ProfilePage({ params }:{params:{id:number}}) {
 
               {/* Banking Information */}
               <div className="space-y-6">
-                <h3 className="text-lg font-semibold text-slate-900">Banking Information</h3>
+                <h3 className="text-lg font-semibold text-yellow-12">Banking Information</h3>
                 <div className="space-y-4 bg-white rounded-lg">
                   <div className="grid grid-cols-1 gap-3">
                     <div className="text-sm flex items-center space-x-2">
@@ -182,7 +182,7 @@ export default async function ProfilePage({ params }:{params:{id:number}}) {
 
               {/* Address Information */}
               <div className="space-y-6">
-                <h3 className="text-lg font-semibold text-slate-900">Address</h3>
+                <h3 className="text-lg font-semibold text-yellow-12">Address</h3>
                 <div className="space-y-2 text-slate-600">
                   {profile.address.address_line_1 || profile.address.address_line_2 || 
                   profile.address.address_line_3 ? (
@@ -203,7 +203,7 @@ export default async function ProfilePage({ params }:{params:{id:number}}) {
 
               {/* Additional Details */}
               <div className="space-y-6">
-                <h3 className="text-lg font-semibold text-slate-900">Additional Details</h3>
+                <h3 className="text-lg font-semibold text-yellow-12">Additional Details</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <p className="text-sm text-slate-500">Personal Email</p>

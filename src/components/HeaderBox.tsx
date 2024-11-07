@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { camelCase } from "@/lib/utils";
 
 const HeaderBox = ({ type, title, user, subtext }: HeaderBoxProps) => {
   const router = useRouter();
@@ -30,7 +31,7 @@ const HeaderBox = ({ type, title, user, subtext }: HeaderBoxProps) => {
         <h1 className="header-box-title">
           {title}
           {type === "greeting" && (
-            <span className="text-bankGradient">&nbsp;{user?.username}</span>
+            <span className="text-blue-600">&nbsp;{camelCase(user?.username)}</span>
           )}
         </h1>
         {/* <p className="header-box-subtext">{subtext}</p> */}
