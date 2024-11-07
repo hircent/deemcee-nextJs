@@ -125,6 +125,42 @@ export async function getGradeList(
   }
 }
 
+export  async function createGrade(_prevState:STATE<GradeDataErrors>,formData:FormData):Promise<STATE<GradeDataErrors>>{
+  try {
+    const token = await getToken();
+
+    const data = Object.fromEntries(formData);
+    const validated = GradeDataSchema.safeParse(data);
+
+    if (!validated.success) {
+      return {
+        error: true,
+        zodErr: validated.error.flatten().fieldErrors as GradeDataErrors,
+        msg: "Validation Failed",
+      };
+    }
+
+    const response = await fetch(`${process.env.API_URL}/grade/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const res = await response.json();
+      return { error: true, msg: res.msg };
+    }
+
+    revalidatePath("/structure/grade");
+    return { success:true,msg:"Grade has been created" }
+  } catch (error) {
+    return { error:true,msg:(error as Error).message }
+  }
+} 
+
 export async function updateGrade(prevState:STATE<GradeDataErrors>,formData:FormData):Promise<STATE<GradeDataErrors>>{
   try {
     const token = await getToken();

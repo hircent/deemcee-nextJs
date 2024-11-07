@@ -20,7 +20,6 @@ import {
   } from "@/components/ui/select";
 import { Label } from "./ui/label"
 import { Input } from "./ui/input"
-import { Checkbox } from "./ui/checkbox"
 import { useEffect, useRef, useState } from "react";
 import { Plus } from "lucide-react";
 import { useToast } from "./ui/use-toast";
@@ -28,8 +27,8 @@ import { camelCase, cn } from "@/lib/utils";
 import SubmitButton from "./SubmitButton";
 import { SERVER_ACTION_STATE } from "@/constants/index";
 import { useFormState } from "react-dom";
-import { createCategory } from "@/lib/actions/structure.actions";
-import { CategoryFormErrors, GradeDataErrors } from "@/types/structure";
+import { createGrade } from "@/lib/actions/structure.actions";
+import { GradeDataErrors } from "@/types/structure";
 
 const GradeForm = ({type}:{type:string}) => {
     const [category,setCategory] = useState<string>("KIDDOS");
@@ -38,38 +37,38 @@ const GradeForm = ({type}:{type:string}) => {
     const [open, setOpen] = useState<boolean>(false);
     const formRef = useRef<HTMLFormElement>(null);
     const { toast } = useToast();
-    const [state, formAction] = useFormState(createCategory, SERVER_ACTION_STATE);
+    const [state, formAction] = useFormState(createGrade, SERVER_ACTION_STATE);
 
-    // useEffect(() => {
-    //     if (state.zodErr) {
-    //       setZodError(state.zodErr);
-    //     }
-    //     if (state.success) {
-    //       formRef.current?.reset();
-    //       setOpen(false);
-    //       toast({
-    //         title: "Success",
-    //         description: state.msg,
-    //         className: cn(
-    //           `bottom-0 left-0`,
-    //           "bg-success-100"
-    //         ),
-    //         duration: 3000,
-    //       });
-    //     }
-    //     if (state.error) {
-    //       toast({
-    //         title: "Error",
-    //         description: state.msg,
-    //         className: cn(
-    //           `bottom-0 left-0`,
-    //           "bg-error-100"
-    //         ),
-    //         duration: 3000,
-    //       });
-    //     }
+    useEffect(() => {
+        if (state.zodErr) {
+          setZodError(state.zodErr);
+        }
+        if (state.success) {
+          formRef.current?.reset();
+          setOpen(false);
+          toast({
+            title: "Success",
+            description: state.msg,
+            className: cn(
+              `bottom-0 left-0`,
+              "bg-success-100"
+            ),
+            duration: 3000,
+          });
+        }
+        if (state.error) {
+          toast({
+            title: "Error",
+            description: state.msg,
+            className: cn(
+              `bottom-0 left-0`,
+              "bg-error-100"
+            ),
+            duration: 3000,
+          });
+        }
         
-    //   }, [state, toast]);
+      }, [state, toast]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -114,6 +113,7 @@ const GradeForm = ({type}:{type:string}) => {
                 id="category"
                 type="hidden"
                 name="category"
+                value={category}
               />
               <Select
                 value={category}
@@ -156,7 +156,7 @@ const GradeForm = ({type}:{type:string}) => {
             </div>
           </div>
           <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
-            <SubmitButton label="Save" submitLabel="Saving" />
+            <SubmitButton label="Create" submitLabel="Creating" />
           </DialogFooter>
         </form>
       </DialogContent>
