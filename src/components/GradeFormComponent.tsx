@@ -100,7 +100,7 @@ const GradeForm = ({type}:{type:string}) => {
         <form action={formAction} ref={formRef}>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="grade_level">Grade</Label>
+              <Label htmlFor="grade_level">Grade <span className="text-red-500">*</span></Label>
               <Input
                 id="grade_level"
                 type="number"
@@ -109,7 +109,7 @@ const GradeForm = ({type}:{type:string}) => {
               <small className="text-red-500">{zoderror?.grade_level}</small>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="category">Category</Label>
+              <Label htmlFor="category">Category <span className="text-red-500">*</span></Label>
               <Input
                 id="category"
                 type="hidden"
@@ -142,11 +142,11 @@ const GradeForm = ({type}:{type:string}) => {
                   SUPERKIDS
                 </SelectItem>
               </SelectContent>
-            </Select>
+              </Select>
             <small className="text-red-500">{zoderror?.category?.[0]}</small>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="price">Price</Label>
+              <Label htmlFor="price">Price <span className="text-red-500">*</span></Label>
               <Input
                 id="price"
                 type="number"

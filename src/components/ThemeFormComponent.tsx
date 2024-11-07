@@ -37,8 +37,6 @@ const ThemeForm = ({type}:{type:string}) => {
           setZodError(state.zodErr);
         }
         if (state.success) {
-          formRef.current?.reset();
-          setOpen(false);
           toast({
             title: "Success",
             description: state.msg,
@@ -48,6 +46,9 @@ const ThemeForm = ({type}:{type:string}) => {
             ),
             duration: 3000,
           });
+          formRef.current?.reset();
+          setOpen(false);
+          setZodError(null);
         }
         if (state.error) {
           toast({

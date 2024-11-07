@@ -11,6 +11,13 @@ import {
   DialogTrigger,
   DialogOverlay,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Label } from "./ui/label"
 import { Input } from "./ui/input"
 import { Checkbox } from "./ui/checkbox"
@@ -26,7 +33,7 @@ import { createCategory } from "@/lib/actions/structure.actions";
 import { CategoryFormErrors } from "@/types/structure";
 
 const CategoryForm = ({type}:{type:string}) => {
-    const pathname = usePathname()
+    const [category,setCategory] = useState<string>("KIDDOS");
     const [isActive, setIsActive] = useState<boolean>(true)
     const [zoderror, setZodError] = useState<CategoryFormErrors | null>(null);
     const [open, setOpen] = useState<boolean>(false);
@@ -41,6 +48,7 @@ const CategoryForm = ({type}:{type:string}) => {
         if (state.success) {
           formRef.current?.reset();
           setOpen(false);
+          setZodError(null);
           toast({
             title: "Success",
             description: state.msg,
@@ -99,11 +107,39 @@ const CategoryForm = ({type}:{type:string}) => {
                         Name <span className="text-red-500">*</span>
                         </Label>
                         <Input
-                        id="name"
-                        name="name"
-                        placeholder="Enter category name"
-                        className="w-full text-sm sm:text-base col-span-2"
+                          id="name"
+                          type="hidden"
+                          name="name"
+                          value={category}
                         />
+                        <Select
+                          value={category}
+                          onValueChange={(value) => setCategory(value)}
+                        >
+                        <SelectTrigger className="w-full text-sm sm:text-base col-span-2">
+                          <SelectValue placeholder="KIDDOS" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white">
+                          <SelectItem
+                            value="KIDDOS"
+                            className="cursor-pointer hover:bg-yellow-9"
+                          >
+                            KIDDOS
+                          </SelectItem>
+                          <SelectItem
+                            value="KIDS"
+                            className="cursor-pointer hover:bg-yellow-9"
+                          >
+                            KIDS
+                          </SelectItem>
+                          <SelectItem
+                            value="SUPERKIDS"
+                            className="cursor-pointer hover:bg-yellow-9"
+                          >
+                            SUPERKIDS
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                     <small className="text-red-500">{zoderror?.name?.[0]}</small>
                 </div>

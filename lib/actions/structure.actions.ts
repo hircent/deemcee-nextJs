@@ -63,7 +63,7 @@ export async function getCategorySelectionList(): Promise<CategoryData[]> {
   }
 }
 
-export async function createCategory(prevState:STATE<CategoryFormErrors>,formData:FormData):Promise<STATE<CategoryFormErrors>>{
+export async function createCategory(_prevState:STATE<CategoryFormErrors>,formData:FormData):Promise<STATE<CategoryFormErrors>>{
   try {
     const token = await getToken();
 
@@ -72,7 +72,6 @@ export async function createCategory(prevState:STATE<CategoryFormErrors>,formDat
 
     if (!validated.success) {
       return {
-        ...prevState,
         error: true,
         zodErr: validated.error.flatten().fieldErrors as CategoryFormErrors,
         msg: "Validation Failed",
@@ -89,12 +88,14 @@ export async function createCategory(prevState:STATE<CategoryFormErrors>,formDat
     });
 
     if (!response.ok) {
-      return { ...prevState, error: true, msg: response.statusText };
+      const res = await response.json();
+      return { error: true, msg: res.msg };
     }
 
-    return { success:true,msg:"Category has been created"}
+    revalidatePath("/structure/category");
+    return { success:true,msg:"Category has been created" }
   } catch (error) {
-    return {error:true,msg:(error as Error).message}
+    return { error:true,msg:(error as Error).message }
   }
 
 }
