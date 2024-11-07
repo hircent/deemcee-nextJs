@@ -11,9 +11,15 @@ import {
   DialogTrigger,
   DialogOverlay,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Label } from "./ui/label"
 import { Input } from "./ui/input"
-import { Checkbox } from "./ui/checkbox"
 import { useEffect, useRef, useState } from "react";
 import { Plus } from "lucide-react";
 import { useToast } from "./ui/use-toast";
@@ -21,16 +27,18 @@ import { camelCase, cn } from "@/lib/utils";
 import SubmitButton from "./SubmitButton";
 import { SERVER_ACTION_STATE } from "@/constants/index";
 import { useFormState } from "react-dom";
-import { createCategory } from "@/lib/actions/structure.actions";
-import { CategoryFormErrors } from "@/types/structure";
+import { createTheme, getCategorySelectionList } from "@/lib/actions/structure.actions";
+import { CategoryData, ThemeDetailsError } from "@/types/structure";
 
 const ThemeForm = ({type}:{type:string}) => {
-    const [isActive, setIsActive] = useState<boolean>(true)
-    const [zoderror, setZodError] = useState<CategoryFormErrors | null>(null);
+  const [category,setCategory] = useState<string>("all");
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [zoderror, setZodError] = useState<ThemeDetailsError | null>(null);
+    const [categorySelectionList, setCategorySelectionList] = useState<CategoryData[]>([]);
     const [open, setOpen] = useState<boolean>(false);
     const formRef = useRef<HTMLFormElement>(null);
     const { toast } = useToast();
-    const [state, formAction] = useFormState(createCategory, SERVER_ACTION_STATE);
+    const [state, formAction] = useFormState(createTheme, SERVER_ACTION_STATE);
 
     useEffect(() => {
         if (state.zodErr) {
@@ -64,12 +72,30 @@ const ThemeForm = ({type}:{type:string}) => {
         
       }, [state, toast]);
 
+      const getCategoryList = async () => {
+        setIsLoading(true);
+        setOpen(true);
+        try {
+          const categoryData = await getCategorySelectionList();
+          setCategorySelectionList(categoryData);
+          setIsLoading(false);
+        } catch (error) {
+          toast({
+            title: "Error",
+            description: "Failed to fetch category data" + error,
+            duration: 2000,
+            className: cn("bottom-0 left-0 bg-red-100"),
+          });
+          setIsLoading(false);
+        }
+      };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           onClick={() => {
-            setOpen(true);
+            getCategoryList();
           }}
           className="group p-2 bg-gray-100 rounded-md hover:bg-yellow-2"
         >
@@ -90,64 +116,84 @@ const ThemeForm = ({type}:{type:string}) => {
             Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
-        <form action={formAction} className="space-y-4 sm:space-y-6" ref={formRef}>
-            <div className="flex flex-col space-y-6">
-                <div>
-                    <div className="grid grid-cols-3 gap-4">
-                        <Label htmlFor="name" className="text-sm sm:text-base">
-                        Name <span className="text-red-500">*</span>
-                        </Label>
-                        <Input
-                        id="name"
-                        name="name"
-                        placeholder="Enter category name"
-                        className="w-full text-sm sm:text-base col-span-2"
-                        />
-                    </div>
-                    <small className="text-red-500">{zoderror?.name?.[0]}</small>
-                </div>
-                <div>
-                    <div className="grid grid-cols-3 gap-4">
-                        <Label htmlFor="year" className="text-sm sm:text-base">
-                            Year <span className="text-red-500">*</span>
-                        </Label>
-                        <Input
-                            id="year"
-                            type="number"
-                            name="year"
-                            placeholder="Enter category year"
-                            className="w-full text-sm sm:text-base col-span-2"
-                        />
-                    </div>
-                    <small className="text-red-500">{zoderror?.year?.[0]}</small>
-                </div>
-                <div>
-                    <div className="grid grid-cols-3 gap-4 items-center">
-                        <Input type="hidden" name="is_active" value={isActive ? "true" : "false"}/>
-                        <Label htmlFor="status" className="text-sm sm:text-base">
-                            Status <span className="text-red-500">*</span>
-                        </Label>
-                        <div className="col-span-2 flex items-center space-x-2">
-                            <Checkbox
-                                id="status"
-                                defaultChecked={isActive}
-                                className={cn("h-5 w-5 border-gray-300", {
-                                    " text-green-400 ": isActive
-                                })}
-                                onClick={()=>{setIsActive(!isActive)}}
-                            />
-                            <Label htmlFor="status" className="text-sm text-gray-600">
-                                Active
-                            </Label>
-                        </div>
-                    </div>
-                    <small className="text-red-500">{zoderror?.is_active}</small>
-                </div>
+        {isLoading ? (
+          <div className="flex justify-center items-center h-48">
+            <p>Loading...</p>
+          </div>
+        ) : (
+        <form action={formAction} ref={formRef}>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Theme <span className="text-red-500">*</span></Label>
+              <Input
+                id="name"
+                name="name"
+              />
+              <small className="text-red-500">{zoderror?.name?.[0]}</small>
             </div>
-            <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
-                <SubmitButton label='Save' submitLabel="Saving"/>
-            </DialogFooter>
+            <div className="space-y-2">
+              <Label htmlFor="category">Category <span className="text-red-500">*</span></Label>
+              <Input id="category" name="category" type="hidden" value={category}/>
+              <Select
+                value={category}
+                onValueChange={(value) => setCategory(value)}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="all" />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="all" className="cursor-pointer hover:bg-yellow-9">Select a category</SelectItem>
+                  {categorySelectionList.map((cat) => (
+                    <SelectItem
+                      key={cat.id}
+                      value={cat.id.toString()}
+                      className="cursor-pointer hover:bg-yellow-9"
+                    >
+                      {cat.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <small className="text-red-500">{zoderror?.category?.[0]}</small>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="lesson_one">Lesson 1 <span className="text-red-500">*</span></Label>
+              <Input
+                id="lesson_one"
+                name="lesson_one"
+              />
+              <small className="text-red-500">{zoderror?.lesson_one?.[0]}</small>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="lesson_two">Lesson 2 <span className="text-red-500">*</span></Label>
+              <Input
+                id="lesson_two"
+                name="lesson_two"
+              />
+              <small className="text-red-500">{zoderror?.lesson_two?.[0]}</small>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="lesson_three">Lesson 3 <span className="text-red-500">*</span></Label>
+              <Input
+                id="lesson_three"
+                name="lesson_three"
+              />
+              <small className="text-red-500">{zoderror?.lesson_three?.[0]}</small>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="lesson_four">Lesson 4 <span className="text-red-500">*</span></Label>
+              <Input
+                id="lesson_four"
+                name="lesson_four"
+              />
+              <small className="text-red-500">{zoderror?.lesson_four?.[0]}</small>
+            </div>
+          </div>
+          <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
+            <SubmitButton label="Save" submitLabel="Saving" />
+          </DialogFooter>
         </form>
+        )}
       </DialogContent>
     </Dialog>
   );

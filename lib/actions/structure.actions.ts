@@ -97,7 +97,52 @@ export async function createCategory(_prevState:STATE<CategoryFormErrors>,formDa
   } catch (error) {
     return { error:true,msg:(error as Error).message }
   }
+}
 
+export async function editCategory(
+  prevState: STATE<CategoryFormErrors>,
+  formData: FormData
+): Promise<STATE<CategoryFormErrors>> {
+  try {
+    const token = await getToken();
+    const obj = Object.fromEntries(formData);
+    const data = {
+      ...obj,
+      id: Number(formData.get("id")), // Convert id to number
+    };
+
+    const validated = CategoryFormSchema.safeParse(data);
+
+    if (!validated.success) {
+      return {
+        ...prevState,
+        error: true,
+        zodErr: validated.error.flatten().fieldErrors as CategoryFormErrors,
+        msg: "Validation Failed",
+      };
+    }
+
+    const response = await fetch(
+      `${process.env.API_URL}/category/update/${data.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      return { ...prevState, error: true, msg: response.statusText };
+    }
+
+    revalidatePath("/structure/category");
+    return { ...prevState, success: true, msg: "Category is updated" };
+  } catch (error) {
+    return { ...prevState, error: true, msg: (error as Error).message };
+  }
 }
 
 export async function getGradeList(
@@ -282,6 +327,63 @@ export async function getThemeDetails(id: number): Promise<ThemeDetails> {
   }
 }
 
+export async function createTheme(_prevState:STATE<ThemeDetailsError>,formData:FormData):Promise<STATE<ThemeDetailsError>>{
+  try {
+    const token = await getToken();
+
+    const data = Object.fromEntries(formData);
+    const validated = ThemeDetailsSchema.safeParse(data);
+    
+    if (!validated.success) {
+      return {
+        error: true,
+        zodErr: validated.error.flatten().fieldErrors as ThemeDetailsError,
+        msg: "Validation Failed",
+      };
+    }
+
+    const {
+      lesson_one,
+      lesson_two,
+      lesson_three,
+      lesson_four,
+      name,
+      category
+    } = data;
+
+    const payload = {
+      name,
+      category,
+      lessons: {
+        title:name,
+        lesson_one,
+        lesson_two,
+        lesson_three,
+        lesson_four,
+      }
+    };
+
+    const response = await fetch(`${process.env.API_URL}/theme/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      const res = await response.json();
+      return { error: true, msg: res.msg };
+    }
+
+    revalidatePath("/structure/theme");
+    return { success: true, msg: "Theme is created" };
+  }catch (error) {
+    return { error:true,msg:(error as Error).message}
+  }
+}
+
 export async function editTheme(_prevState:STATE<ThemeDetailsError>,formData:FormData):Promise<STATE<ThemeDetailsError>>{
   try {
     const token = await getToken();
@@ -337,52 +439,6 @@ export async function editTheme(_prevState:STATE<ThemeDetailsError>,formData:For
     return { error:true,msg:(error as Error).message}
   }
 
-}
-
-export async function editCategory(
-  prevState: STATE<CategoryFormErrors>,
-  formData: FormData
-): Promise<STATE<CategoryFormErrors>> {
-  try {
-    const token = await getToken();
-    const obj = Object.fromEntries(formData);
-    const data = {
-      ...obj,
-      id: Number(formData.get("id")), // Convert id to number
-    };
-
-    const validated = CategoryFormSchema.safeParse(data);
-
-    if (!validated.success) {
-      return {
-        ...prevState,
-        error: true,
-        zodErr: validated.error.flatten().fieldErrors as CategoryFormErrors,
-        msg: "Validation Failed",
-      };
-    }
-
-    const response = await fetch(
-      `${process.env.API_URL}/category/update/${data.id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token?.value}`,
-        },
-        body: JSON.stringify(data),
-      }
-    );
-
-    if (!response.ok) {
-      return { ...prevState, error: true, msg: response.statusText };
-    }
-
-    revalidatePath("/structure/category");
-    return { ...prevState, success: true, msg: "Category is updated" };
-  } catch (error) {
-    return { ...prevState, error: true, msg: (error as Error).message };
-  }
 }
 
 export async function deleteTheme(prevState:STATE<ThemeDetailsError>,formData:FormData):Promise<STATE<ThemeDetailsError>>{
