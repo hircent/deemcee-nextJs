@@ -27,39 +27,37 @@ export default async function ProfilePage({ params }:{params:{id:number}}) {
       <div className="h-max bg-yellow-2 rounded-md p-8 ">
         <div className="mx-auto space-y-6">
           {/* Header Section */}
-          <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-slate-900">Profile Details</h1>
-            <p className="text-slate-500 mt-1">Manage your personal information and preferences</p>
+          <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between">
+            {/* Title Section */}
+            <div className="flex-1 min-w-0">
+              <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 truncate">Profile Details</h1>
+              <p className="text-sm sm:text-base text-slate-500 mt-1">Manage your personal information and preferences</p>
+            </div>
+
+            {/* Actions Section */}
+            <div className="flex flex-col-reverse sm:flex-row items-start sm:items-center space-y-4 space-y-reverse sm:space-y-0 sm:space-x-4">
+              {/* Buttons Container */}
+              
+              <div className="flex w-full sm:w-auto space-x-3">
+                <Button 
+                  className="flex-1 sm:flex-none bg-blue-600 text-white hover:bg-blue-700 flex items-center justify-center space-x-2 transition-colors duration-200 text-sm sm:text-base px-3 py-2"
+                >
+                  <PencilIcon className="w-4 h-4" />
+                  <span>Edit Profile</span>
+                </Button>
+                <Button 
+                  className="flex-1 sm:flex-none bg-purple-600 text-white hover:bg-purple-700 flex items-center justify-center space-x-2 transition-colors duration-200 text-sm sm:text-base px-3 py-2"
+                >
+                  <KeyIcon className="w-4 h-4" />
+                  <span>Change Password</span>
+                </Button>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center space-x-4">
-            <Badge
-              className={cn("px-4 py-1",{
-                "bg-success-100 text-success-600": profile.is_active,
-                "bg-error-100 text-error-600": !profile.is_active
-              })}
-            >
-              {profile.is_active ? "Active" : "Inactive"}
-            </Badge>
-            <Button 
-              className="bg-blue-600 text-white hover:bg-blue-700 flex items-center space-x-2 transition-colors duration-200"
-            >
-              <PencilIcon className="w-4 h-4" />
-              <span>Edit Profile</span>
-            </Button>
-            <Button 
-              className="bg-purple-600 text-white hover:bg-purple-700 flex items-center space-x-2 transition-colors duration-200"
-            >
-              <KeyIcon className="w-4 h-4" />
-              <span>Change Password</span>
-            </Button>
-            
-          </div>
-        </div>
 
           {/* Main Profile Card */}
           <Card className="bg-white shadow-md">
-            <CardHeader className="border-b border-slate-200 bg-slate-50">
+            <CardHeader className="border-b border-slate-200 bg-slate-50 flex flex-row justify-between">
               <div className="flex items-center space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-semibold">
                   {profile.username.charAt(0)}
@@ -73,6 +71,17 @@ export default async function ProfilePage({ params }:{params:{id:number}}) {
                     <span className="capitalize">{profile.user_branch_roles[0].branch_name}</span>
                   </div>
                 </div>
+              </div>
+              <div className='flex'>
+                {/* Badge */}
+                <Badge
+                  className={cn("self-end sm:self-center px-4 py-1", {
+                    "bg-success-100 text-success-600": profile.is_active,
+                    "bg-error-100 text-error-600": !profile.is_active
+                  })}
+                >
+                  {profile.is_active ? "Active" : "Inactive"}
+                </Badge>
               </div>
             </CardHeader>
             
