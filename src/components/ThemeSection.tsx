@@ -279,7 +279,7 @@ const DeleteTheme = ({
         duration: 3000,
       });
     }
-  }, [state, toast]);
+  }, [state, toast, router]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
