@@ -11,7 +11,11 @@ import {
   ThemeDetailsError,
 } from "@/types/structure";
 import { STATE } from "@/types/index";
-import { CategoryFormSchema, GradeDataSchema, ThemeDetailsSchema } from "@/constants/form";
+import {
+  CategoryFormSchema,
+  GradeDataSchema,
+  ThemeDetailsSchema,
+} from "@/constants/form";
 import { revalidatePath } from "next/cache";
 
 export async function getCategoryList(
@@ -43,14 +47,17 @@ export async function getCategorySelectionList(): Promise<CategoryData[]> {
   const token = await getToken();
 
   try {
-    const response = await fetch(`${process.env.API_URL}/category/selection-list`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token?.value}`,
-      },
-      cache: "no-cache",
-    });
+    const response = await fetch(
+      `${process.env.API_URL}/category/selection-list`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+        },
+        cache: "no-cache",
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to fetch category data " + response.statusText);
@@ -63,7 +70,10 @@ export async function getCategorySelectionList(): Promise<CategoryData[]> {
   }
 }
 
-export async function createCategory(_prevState:STATE<CategoryFormErrors>,formData:FormData):Promise<STATE<CategoryFormErrors>>{
+export async function createCategory(
+  _prevState: STATE<CategoryFormErrors>,
+  formData: FormData
+): Promise<STATE<CategoryFormErrors>> {
   try {
     const token = await getToken();
 
@@ -93,9 +103,9 @@ export async function createCategory(_prevState:STATE<CategoryFormErrors>,formDa
     }
 
     revalidatePath("/structure/category");
-    return { success:true,msg:"Category has been created" }
+    return { success: true, msg: "Category has been created" };
   } catch (error) {
-    return { error:true,msg:(error as Error).message }
+    return { error: true, msg: (error as Error).message };
   }
 }
 
@@ -170,7 +180,10 @@ export async function getGradeList(
   }
 }
 
-export  async function createGrade(_prevState:STATE<GradeDataErrors>,formData:FormData):Promise<STATE<GradeDataErrors>>{
+export async function createGrade(
+  _prevState: STATE<GradeDataErrors>,
+  formData: FormData
+): Promise<STATE<GradeDataErrors>> {
   try {
     const token = await getToken();
 
@@ -200,13 +213,16 @@ export  async function createGrade(_prevState:STATE<GradeDataErrors>,formData:Fo
     }
 
     revalidatePath("/structure/grade");
-    return { success:true,msg:"Grade has been created" }
+    return { success: true, msg: "Grade has been created" };
   } catch (error) {
-    return { error:true,msg:(error as Error).message }
+    return { error: true, msg: (error as Error).message };
   }
-} 
+}
 
-export async function updateGrade(prevState:STATE<GradeDataErrors>,formData:FormData):Promise<STATE<GradeDataErrors>>{
+export async function updateGrade(
+  prevState: STATE<GradeDataErrors>,
+  formData: FormData
+): Promise<STATE<GradeDataErrors>> {
   try {
     const token = await getToken();
 
@@ -222,14 +238,17 @@ export async function updateGrade(prevState:STATE<GradeDataErrors>,formData:Form
       };
     }
 
-    const response = await fetch(`${process.env.API_URL}/grade/update/${data.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token?.value}`,
-      },
-      body:JSON.stringify(data)
-    });
+    const response = await fetch(
+      `${process.env.API_URL}/grade/update/${data.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+        },
+        body: JSON.stringify(data),
+      }
+    );
 
     if (!response.ok) {
       const res = await response.json();
@@ -237,47 +256,55 @@ export async function updateGrade(prevState:STATE<GradeDataErrors>,formData:Form
     }
 
     revalidatePath("/structure/grade");
-    return { success:true,msg:"Grade has been updated"}
+    return { success: true, msg: "Grade has been updated" };
   } catch (error) {
-    return {error:true,msg:(error as Error).message}
+    return { error: true, msg: (error as Error).message };
   }
-
 }
 
-export async function deleteGrade(prevState:STATE<GradeDataErrors>,formData:FormData):Promise<STATE<GradeDataErrors>>{
-    try {
-      const token = await getToken();
-  
-      const obj = Object.fromEntries(formData);
-    
-      const data = {
-        ...obj,
-        id: Number(formData.get('id'))  // Convert id to number
+export async function deleteGrade(
+  prevState: STATE<GradeDataErrors>,
+  formData: FormData
+): Promise<STATE<GradeDataErrors>> {
+  try {
+    const token = await getToken();
+
+    const obj = Object.fromEntries(formData);
+
+    const data = {
+      ...obj,
+      id: Number(formData.get("id")), // Convert id to number
+    };
+
+    if (obj.name !== obj.confirmName) {
+      return {
+        ...prevState,
+        error: true,
+        msg: "Name must be excatly the same.",
       };
-  
-      if(obj.name !== obj.confirmName){
-        return {...prevState, error:true,msg:"Name must be excatly the same."}
-      }
-  
-      const response = await fetch(`${process.env.API_URL}/grade/delete/${data.id}`, {
+    }
+
+    const response = await fetch(
+      `${process.env.API_URL}/grade/delete/${data.id}`,
+      {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token?.value}`,
-        }
-      });
-  
-      if (!response.ok) {
-        const res = await response.json();
-        return { error: true, msg: res.msg };
+        },
       }
-      
-      return { success:true,msg:"Grade has been deleted"}  
-    } catch (error) {
-      return {error:true,msg:(error as Error).message}
+    );
+
+    if (!response.ok) {
+      const res = await response.json();
+      return { error: true, msg: res.msg };
     }
-  
+
+    return { success: true, msg: "Grade has been deleted" };
+  } catch (error) {
+    return { error: true, msg: (error as Error).message };
   }
+}
 
 export async function getThemeList(
   year: string | null = null
@@ -323,17 +350,20 @@ export async function getThemeDetails(id: number): Promise<ThemeDetails> {
     const data = await response.json();
     return data.data;
   } catch (error) {
-    throw error
+    throw error;
   }
 }
 
-export async function createTheme(_prevState:STATE<ThemeDetailsError>,formData:FormData):Promise<STATE<ThemeDetailsError>>{
+export async function createTheme(
+  _prevState: STATE<ThemeDetailsError>,
+  formData: FormData
+): Promise<STATE<ThemeDetailsError>> {
   try {
     const token = await getToken();
 
     const data = Object.fromEntries(formData);
     const validated = ThemeDetailsSchema.safeParse(data);
-    
+
     if (!validated.success) {
       return {
         error: true,
@@ -348,19 +378,19 @@ export async function createTheme(_prevState:STATE<ThemeDetailsError>,formData:F
       lesson_three,
       lesson_four,
       name,
-      category
+      category,
     } = data;
 
     const payload = {
       name,
       category,
       lessons: {
-        title:name,
+        title: name,
         lesson_one,
         lesson_two,
         lesson_three,
         lesson_four,
-      }
+      },
     };
 
     const response = await fetch(`${process.env.API_URL}/theme/create`, {
@@ -369,7 +399,7 @@ export async function createTheme(_prevState:STATE<ThemeDetailsError>,formData:F
         "Content-Type": "application/json",
         Authorization: `Bearer ${token?.value}`,
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
@@ -379,20 +409,24 @@ export async function createTheme(_prevState:STATE<ThemeDetailsError>,formData:F
 
     revalidatePath("/structure/theme");
     return { success: true, msg: "Theme is created" };
-  }catch (error) {
-    return { error:true,msg:(error as Error).message}
+  } catch (error) {
+    return { error: true, msg: (error as Error).message };
   }
 }
 
-export async function editTheme(_prevState:STATE<ThemeDetailsError>,formData:FormData):Promise<STATE<ThemeDetailsError>>{
+export async function editTheme(
+  prevState: STATE<ThemeDetailsError>,
+  formData: FormData
+): Promise<STATE<ThemeDetailsError>> {
   try {
     const token = await getToken();
 
     const data = Object.fromEntries(formData);
     const validated = ThemeDetailsSchema.safeParse(data);
-    
+
     if (!validated.success) {
       return {
+        ...prevState,
         error: true,
         zodErr: validated.error.flatten().fieldErrors as ThemeDetailsError,
         msg: "Validation Failed",
@@ -405,29 +439,32 @@ export async function editTheme(_prevState:STATE<ThemeDetailsError>,formData:For
       lesson_three,
       lesson_four,
       name,
-      category
+      category,
     } = data;
 
     const payload = {
       name,
       category,
       lessons: {
-        title:name,
+        title: name,
         lesson_one,
         lesson_two,
         lesson_three,
         lesson_four,
-      }
+      },
     };
 
-    const response = await fetch(`${process.env.API_URL}/theme/update/${data.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token?.value}`,
-      },
-      body: JSON.stringify(payload)
-    });
+    const response = await fetch(
+      `${process.env.API_URL}/theme/update/${data.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+        },
+        body: JSON.stringify(payload),
+      }
+    );
 
     if (!response.ok) {
       const res = await response.json();
@@ -436,41 +473,49 @@ export async function editTheme(_prevState:STATE<ThemeDetailsError>,formData:For
 
     return { success: true, msg: "Theme is updated" };
   } catch (error) {
-    return { error:true,msg:(error as Error).message}
+    return { error: true, msg: (error as Error).message };
   }
-
 }
 
-export async function deleteTheme(prevState:STATE<ThemeDetailsError>,formData:FormData):Promise<STATE<ThemeDetailsError>>{
+export async function deleteTheme(
+  prevState: STATE<ThemeDetailsError>,
+  formData: FormData
+): Promise<STATE<ThemeDetailsError>> {
   try {
     const token = await getToken();
 
     const obj = Object.fromEntries(formData);
-  
+
     const data = {
-      ...obj
+      ...obj,
     };
 
-    if(obj.name !== obj.confirmName){
-      return {...prevState, error:true,msg:"Name must be excatly the same."}
+    if (obj.name !== obj.confirmName) {
+      return {
+        ...prevState,
+        error: true,
+        msg: "Name must be excatly the same.",
+      };
     }
 
-    const response = await fetch(`${process.env.API_URL}/theme/delete/${data.id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token?.value}`,
+    const response = await fetch(
+      `${process.env.API_URL}/theme/delete/${data.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+        },
       }
-    });
+    );
 
     if (!response.ok) {
       const res = await response.json();
       return { error: true, msg: res.msg };
     }
-    
-    return { success:true,msg:"Theme has been deleted"}  
-  } catch (error) {
-    return {error:true,msg:(error as Error).message}
-  }
 
+    return { success: true, msg: "Theme has been deleted" };
+  } catch (error) {
+    return { error: true, msg: (error as Error).message };
+  }
 }

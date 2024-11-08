@@ -23,25 +23,40 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { CategoryData, GradeDataErrors, ThemeData, ThemeDetails, ThemeDetailsError } from "@/types/structure";
+import {
+  CategoryData,
+  GradeDataErrors,
+  ThemeData,
+  ThemeDetails,
+  ThemeDetailsError,
+} from "@/types/structure";
 import SubmitButton from "./SubmitButton";
-import { deleteTheme, editTheme, getThemeDetails } from "@/lib/actions/structure.actions";
-import { useToast } from "./ui/use-toast"
+import {
+  deleteTheme,
+  editTheme,
+  getThemeDetails,
+} from "@/lib/actions/structure.actions";
+import { useToast } from "./ui/use-toast";
 import { cn } from "@/lib/utils";
 import { useFormState } from "react-dom";
 import { IsSuperadmin, SERVER_ACTION_STATE } from "@/constants/index";
 import { useRouter } from "next/navigation";
 
-
-const EditTheme = ({ id ,categorySelectionList }: { id:number, categorySelectionList:CategoryData[]}) => {
+const EditTheme = ({
+  id,
+  categorySelectionList,
+}: {
+  id: number;
+  categorySelectionList: CategoryData[];
+}) => {
   const [editedTheme, setEditedTheme] = useState<ThemeDetails | null>(null);
-  const [catID,setCatID] = useState<string|null>(null);
+  const [catID, setCatID] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const [zoderror, setZodError] = useState<ThemeDetailsError | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const [state , formAction] = useFormState(editTheme,SERVER_ACTION_STATE);
+  const [state, formAction] = useFormState(editTheme, SERVER_ACTION_STATE);
   const router = useRouter();
 
   useEffect(() => {
@@ -52,36 +67,29 @@ const EditTheme = ({ id ,categorySelectionList }: { id:number, categorySelection
       toast({
         title: "Success",
         description: state.msg,
-        className: cn(
-          `bottom-0 left-0`,
-          "bg-success-100"
-        ),
+        className: cn(`bottom-0 left-0`, "bg-success-100"),
         duration: 3000,
       });
       formRef.current?.reset();
       setZodError(null);
       setIsOpen(false);
       setTimeout(() => {
-        router.refresh()
+        router.refresh();
       }, 300);
     }
     if (state.error) {
       toast({
         title: "Error",
         description: state.msg,
-        className: cn(
-          `bottom-0 left-0`,
-          "bg-error-100"
-        ),
+        className: cn(`bottom-0 left-0`, "bg-error-100"),
         duration: 3000,
       });
     }
-    
-  }, [state, toast]);
+  }, [state, toast, router]);
 
   const getTheme = async () => {
     setIsLoading(true);
-    
+
     try {
       const themeData = await getThemeDetails(id);
       setEditedTheme(themeData);
@@ -118,8 +126,8 @@ const EditTheme = ({ id ,categorySelectionList }: { id:number, categorySelection
         <DialogHeader>
           <DialogTitle>Edit Theme</DialogTitle>
           <DialogDescription className="text-sm sm:text-base">
-            Make changes to your Theme details here. Click save when
-            you&apos;re done.
+            Make changes to your Theme details here. Click save when you&apos;re
+            done.
           </DialogDescription>
         </DialogHeader>
         {isLoading ? (
@@ -127,83 +135,103 @@ const EditTheme = ({ id ,categorySelectionList }: { id:number, categorySelection
             <p>Loading...</p>
           </div>
         ) : (
-        <form action={formAction} ref={formRef}>
-          <Input type="hidden" id="id" name="id" defaultValue={id}/>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Theme <span className="text-red-500">*</span></Label>
-              <Input
-                id="name"
-                name="name"
-                defaultValue={editedTheme?.name}
-              />
-              <small className="text-red-500">{zoderror?.name?.[0]}</small>
+          <form action={formAction} ref={formRef}>
+            <Input type="hidden" id="id" name="id" defaultValue={id} />
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">
+                  Theme <span className="text-red-500">*</span>
+                </Label>
+                <Input id="name" name="name" defaultValue={editedTheme?.name} />
+                <small className="text-red-500">{zoderror?.name?.[0]}</small>
+              </div>
+              <div className="space-y-2">
+                <Input type="hidden" name="category" defaultValue={catID!} />
+                <Label htmlFor="category">
+                  Category <span className="text-red-500">*</span>
+                </Label>
+                <Select
+                  value={catID!}
+                  onValueChange={(value) => {
+                    setCatID(value);
+                  }}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="KIDDOS" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white">
+                    {categorySelectionList.map((cat) => (
+                      <SelectItem
+                        key={cat.id}
+                        value={cat.id.toString()}
+                        className="cursor-pointer hover:bg-yellow-9"
+                      >
+                        {cat.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <small className="text-red-500">
+                  {zoderror?.category?.[0]}
+                </small>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lesson_one">
+                  Lesson 1 <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="lesson_one"
+                  name="lesson_one"
+                  defaultValue={editedTheme?.lessons?.lesson_one}
+                />
+                <small className="text-red-500">
+                  {zoderror?.lesson_one?.[0]}
+                </small>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lesson_two">
+                  Lesson 2 <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="lesson_two"
+                  name="lesson_two"
+                  defaultValue={editedTheme?.lessons?.lesson_two}
+                />
+                <small className="text-red-500">
+                  {zoderror?.lesson_two?.[0]}
+                </small>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lesson_three">
+                  Lesson 3 <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="lesson_three"
+                  name="lesson_three"
+                  defaultValue={editedTheme?.lessons?.lesson_three}
+                />
+                <small className="text-red-500">
+                  {zoderror?.lesson_three?.[0]}
+                </small>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lesson_four">
+                  Lesson 4 <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="lesson_four"
+                  name="lesson_four"
+                  defaultValue={editedTheme?.lessons?.lesson_four}
+                />
+                <small className="text-red-500">
+                  {zoderror?.lesson_four?.[0]}
+                </small>
+              </div>
             </div>
-            <div className="space-y-2">
-              <Input type="hidden" name="category" defaultValue={catID!}/>
-              <Label htmlFor="category">Category <span className="text-red-500">*</span></Label>
-              <Select
-                value={catID!}
-                onValueChange={(value)=>{setCatID(value)}}
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="KIDDOS" />
-                </SelectTrigger>
-                <SelectContent className="bg-white">
-                  {categorySelectionList.map((cat) => (
-                    <SelectItem
-                      key={cat.id}
-                      value={cat.id.toString()}
-                      className="cursor-pointer hover:bg-yellow-9"
-                    >
-                      {cat.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <small className="text-red-500">{zoderror?.category?.[0]}</small>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="lesson_one">Lesson 1 <span className="text-red-500">*</span></Label>
-              <Input
-                id="lesson_one"
-                name="lesson_one"
-                defaultValue={editedTheme?.lessons?.lesson_one}
-              />
-              <small className="text-red-500">{zoderror?.lesson_one?.[0]}</small>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="lesson_two">Lesson 2 <span className="text-red-500">*</span></Label>
-              <Input
-                id="lesson_two"
-                name="lesson_two"
-                defaultValue={editedTheme?.lessons?.lesson_two}
-              />
-              <small className="text-red-500">{zoderror?.lesson_two?.[0]}</small>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="lesson_three">Lesson 3 <span className="text-red-500">*</span></Label>
-              <Input
-                id="lesson_three"
-                name="lesson_three"
-                defaultValue={editedTheme?.lessons?.lesson_three}
-              />
-              <small className="text-red-500">{zoderror?.lesson_three?.[0]}</small>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="lesson_four">Lesson 4 <span className="text-red-500">*</span></Label>
-              <Input
-                id="lesson_four"
-                name="lesson_four"
-                defaultValue={editedTheme?.lessons?.lesson_four}
-              />
-              <small className="text-red-500">{zoderror?.lesson_four?.[0]}</small>
-            </div>
-          </div>
-          <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
-            <SubmitButton label="Save" submitLabel="Saving" />
-          </DialogFooter>
-        </form>
+            <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
+              <SubmitButton label="Save" submitLabel="Saving" />
+            </DialogFooter>
+          </form>
         )}
       </DialogContent>
     </Dialog>
@@ -221,9 +249,9 @@ const DeleteTheme = ({
 }) => {
   const [open, setOpen] = useState<boolean>(false);
   const { toast } = useToast();
-  const [ _,setZodError] = useState<GradeDataErrors | null>(null);
+  const [_, setZodError] = useState<GradeDataErrors | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const [state , formAction] = useFormState(deleteTheme,SERVER_ACTION_STATE);
+  const [state, formAction] = useFormState(deleteTheme, SERVER_ACTION_STATE);
   const router = useRouter();
   useEffect(() => {
     if (state.zodErr) {
@@ -233,33 +261,25 @@ const DeleteTheme = ({
       toast({
         title: "Success",
         description: state.msg,
-        className: cn(
-          `bottom-0 left-0`,
-          "bg-success-100"
-        ),
+        className: cn(`bottom-0 left-0`, "bg-success-100"),
         duration: 3000,
       });
       formRef.current?.reset();
       setZodError(null);
       setOpen(false);
       setTimeout(() => {
-        router.refresh()
+        router.refresh();
       }, 300);
     }
     if (state.error) {
       toast({
         title: "Error",
         description: state.msg,
-        className: cn(
-          `bottom-0 left-0`,
-          "bg-error-100"
-        ),
+        className: cn(`bottom-0 left-0`, "bg-error-100"),
         duration: 3000,
       });
     }
-    
   }, [state, toast]);
-
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -285,14 +305,18 @@ const DeleteTheme = ({
           </DialogDescription>
         </DialogHeader>
         <form action={formAction} ref={formRef}>
-          <Input id="id" type="hidden" name="id" value={themeId}/>
-          <Input id="name" type="hidden" name="name" value={name}/>
+          <Input id="id" type="hidden" name="id" value={themeId} />
+          <Input id="name" type="hidden" name="name" value={name} />
           <div className="grid gap-4 py-4 border-b-2">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="confirmName" className="text-left">
                 Name:
               </Label>
-              <Input id="confirmName" name="confirmName" className="col-span-3" />
+              <Input
+                id="confirmName"
+                name="confirmName"
+                className="col-span-3"
+              />
             </div>
           </div>
 
@@ -300,7 +324,11 @@ const DeleteTheme = ({
             {`Please key in the ${type} name to confirm delete.`}
           </small>
           <DialogFooter>
-            <SubmitButton label="Save" submitLabel="Saving" btnColor="bg-red-500"/>
+            <SubmitButton
+              label="Save"
+              submitLabel="Saving"
+              btnColor="bg-red-500"
+            />
           </DialogFooter>
         </form>
       </DialogContent>
@@ -311,14 +339,16 @@ const DeleteTheme = ({
 const ThemeSection = ({
   userRole,
   data,
-  categorySelectionList
+  categorySelectionList,
 }: {
   userRole: string[];
   data: ThemeData[];
   categorySelectionList: CategoryData[];
 }) => {
   const yearNow = new Date().getFullYear().toString();
-  const [categoryFilter, setCategoryFilter] = useState<string>(categorySelectionList[0].label);
+  const [categoryFilter, setCategoryFilter] = useState<string>(
+    categorySelectionList[0].label
+  );
   // const [yearFilter, setYearFilter] = useState<string>(yearNow);
 
   const filteredThemes = data.filter((cat) => {
@@ -341,7 +371,6 @@ const ThemeSection = ({
           <Select
             value={String(categoryFilter)}
             onValueChange={(value) => setCategoryFilter(value)}
-            
           >
             <SelectTrigger className="w-[180px] bg-yellow-2">
               <SelectValue placeholder="KIDDOS" />
@@ -391,7 +420,10 @@ const ThemeSection = ({
                 </h2>
                 {IsSuperadmin.includes(userRole[0]) && (
                   <div className="flex gap-2">
-                    <EditTheme id={theme.id} categorySelectionList={categorySelectionList} />
+                    <EditTheme
+                      id={theme.id}
+                      categorySelectionList={categorySelectionList}
+                    />
                     <DeleteTheme
                       type="Theme"
                       name={theme.name}
