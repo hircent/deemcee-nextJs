@@ -580,3 +580,9 @@ export type STATE<T> = {
   error?: boolean | null;
   msg?: string;
 };
+
+
+export type SectionNavLink = {
+  href: string;
+  label: string;
+}

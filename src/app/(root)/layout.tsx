@@ -34,6 +34,9 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
         <section className="home overflow-y-scroll custom-scrollbar">
           {children}
         </section>
+        {/* <footer className="w-full bg-yellow-2 px-5 max-md:hidden sm:px-8 py-4">
+          here
+        </footer> */}
       </div>
     </main>
   );

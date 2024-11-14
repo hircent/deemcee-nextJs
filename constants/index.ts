@@ -1,4 +1,4 @@
-import { LayoutDashboard,Calendar,Home,User2,BookA } from "lucide-react";
+import { LayoutDashboard, Calendar, Home, User2, BookA, BookOpenText } from "lucide-react";
 
 export const sidebarLinks = [
   {
@@ -20,6 +20,13 @@ export const sidebarLinks = [
     route: "/structure",
     label: "Structure",
     icon: BookA,
+    visible: ["superadmin", "principal", "manager", "teacher"],
+  },
+  {
+    imgURL: "/icons/home.svg",
+    route: "/class",
+    label: "Classes",
+    icon: BookOpenText,
     visible: ["superadmin", "principal", "manager", "teacher"],
   },
   {
@@ -71,52 +78,20 @@ export const sidebarLinks = [
     icon: Calendar,
     visible: ["superadmin", "principal", "manager", "teacher"],
   },
-  // {
-  //   imgURL: "/icons/home.svg",
-  //   route: "/user-management",
-  //   label: "User Management",
-  // },
-  // {
-  //   imgURL: "/icons/home.svg",
-  //   route: "/branch",
-  //   label: "Branch",
-  // },
-  // {
-  //   imgURL: "/icons/home.svg",
-  //   route: "/user-management",
-  //   label: "User Management",
-  // },
-  // {
-  //   imgURL: "/icons/home.svg",
-  //   route: "/branch",
-  //   label: "Branch",
-  // },
-  // {
-  //   imgURL: "/icons/home.svg",
-  //   route: "/user-management",
-  //   label: "User Management",
-  // },
-  // {
-  //   imgURL: "/icons/home.svg",
-  //   route: "/branch",
-  //   label: "Branch",
-  // },
-  // {
-  //   imgURL: "/icons/home.svg",
-  //   route: "/user-management",
-  //   label: "User Management",
-  // },
-  // {
-  //   imgURL: "/icons/home.svg",
-  //   route: "/branch",
-  //   label: "Branch",
-  // },
-  // {
-  //   imgURL: "/icons/money-send.svg",
-  //   route: "/payment-transfer",
-  //   label: "Transfer Funds",
-  // },
 ];
+
+export const StructureLinks = [
+  { href: '/structure', label: 'Main' },
+  { href: '/structure/category', label: 'Category' },
+  { href: '/structure/grade', label: 'Grade' },
+  { href: '/structure/theme', label: 'Theme' },
+]
+
+export const ClassLinks = [
+  { href: '/class', label: 'Timetable' },
+  { href: '/class/attendance', label: 'Attendance' },
+  { href: '/class/manage', label: 'Manage Classes' },
+]
 
 export const IsSuperadmin = ['superadmin'];
 
