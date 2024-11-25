@@ -49,6 +49,12 @@ export type ThemeDetailsError = {
   lesson_4?: string;
 };
 
+export type ThemeLessonErrorKeys =
+  | "lesson_1"
+  | "lesson_2"
+  | "lesson_3"
+  | "lesson_4";
+
 export type CategoryFormErrors = {
   name?: string;
   label?: string;

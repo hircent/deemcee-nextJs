@@ -408,7 +408,7 @@ export async function createTheme(
 }
 
 export async function editTheme(
-  prevState: STATE<ThemeDetailsError>,
+  _prevState: STATE<ThemeDetailsError>,
   formData: FormData
 ): Promise<STATE<ThemeDetailsError>> {
   try {
@@ -419,7 +419,6 @@ export async function editTheme(
 
     if (!validated.success) {
       return {
-        ...prevState,
         error: true,
         zodErr: validated.error.flatten().fieldErrors as ThemeDetailsError,
         msg: "Validation Failed",

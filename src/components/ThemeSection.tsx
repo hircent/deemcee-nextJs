@@ -29,6 +29,7 @@ import {
   ThemeData,
   ThemeDetails,
   ThemeDetailsError,
+  ThemeLessonErrorKeys,
 } from "@/types/structure";
 import SubmitButton from "./SubmitButton";
 import {
@@ -176,22 +177,27 @@ const EditTheme = ({
                 </small>
               </div>
 
-              {editedTheme?.lessons.map((v, i) => (
-                <div className="space-y-2" key={v.id}>
-                  <Label htmlFor={v.name}>
-                    {"Lesson " + v.order}{" "}
-                    <span className="text-red-500">*</span>
-                  </Label>
-                  <Input
-                    id={v.name}
-                    name={"lesson_" + v.order}
-                    defaultValue={v.name}
-                  />
-                  <small className="text-red-500">
-                    {/* {zoderror?.[v.name]?.[0]} */}
-                  </small>
-                </div>
-              ))}
+              {editedTheme?.lessons.map((v, i) => {
+                const lessonErrorKey =
+                  `lesson_${v.order}` as ThemeLessonErrorKeys;
+
+                return (
+                  <div className="space-y-2" key={v.id}>
+                    <Label htmlFor={v.name}>
+                      {"Lesson " + v.order}{" "}
+                      <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      id={v.name}
+                      name={lessonErrorKey}
+                      defaultValue={v.name}
+                    />
+                    <small className="text-red-500">
+                      {zoderror?.[lessonErrorKey]?.[0]}
+                    </small>
+                  </div>
+                );
+              })}
             </div>
             <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
               <SubmitButton label="Save" submitLabel="Saving" />
