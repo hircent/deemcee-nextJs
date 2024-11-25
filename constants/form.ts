@@ -4,26 +4,26 @@ import { title } from "process";
 
 export const HolidayEntryType = [
   {
-    id:1,
-    value:"centre holiday",
-    label:"Centre Holiday"
+    id: 1,
+    value: "centre holiday",
+    label: "Centre Holiday",
   },
   {
-    id:2,
-    value:"public holiday",
-    label:"Public Holiday"
+    id: 2,
+    value: "public holiday",
+    label: "Public Holiday",
   },
   {
-    id:3,
-    value:"event",
-    label:"Event"
+    id: 3,
+    value: "event",
+    label: "Event",
   },
   {
-    id:4,
-    value:"other",
-    label:"Other"
+    id: 4,
+    value: "other",
+    label: "Other",
   },
-]
+];
 
 export const branchFormSchema = z.object({
   name: z.string().min(2, "Business name must be at least 2 characters"),
@@ -117,17 +117,17 @@ export const HolidayEventSchema = z.object({
 export type HolidayEventValues = z.infer<typeof HolidayEventSchema>;
 
 export const DeleteHolidayEventSchema = z.object({
-  id:z.number().min(1,"Id is required"),
+  id: z.number().min(1, "Id is required"),
   name: z.string().min(1, "Name is required"),
   confirmName: z.string().min(1, "Confirm name is required"),
-})
+});
 
 export type DeleteHolidayEventValues = z.infer<typeof DeleteHolidayEventSchema>;
 
 export const CategoryFormSchema = z.object({
   name: z.string().min(2, "Category name must be at least 2 characters"),
   year: z.string().min(1, "Year is required"),
-  is_active: z.string().min(1,"Check or uncheck"),
+  is_active: z.string().min(1, "Check or uncheck"),
 });
 
 export type CategoryFormValues = z.infer<typeof CategoryFormSchema>;
@@ -141,8 +141,8 @@ export const GradeDataSchema = z.object({
 export const ThemeDetailsSchema = z.object({
   name: z.string().min(2, "Lesson name must be at least 2 characters"),
   category: z.string().min(1, "Category must be chosen"),
-  lesson_one: z.string().min(2, "Lesson one must be at least 2 characters"),
-  lesson_two: z.string().min(2, "Lesson two must be at least 2 characters"),
-  lesson_three: z.string().min(2, "Lesson three must be at least 2 characters"),
-  lesson_four: z.string().min(2, "Lesson four must be at least 2 characters"),
+  lesson_1: z.string().min(2, "Lesson one must be at least 2 characters"),
+  lesson_2: z.string().min(2, "Lesson two must be at least 2 characters"),
+  lesson_3: z.string().min(2, "Lesson three must be at least 2 characters"),
+  lesson_4: z.string().min(2, "Lesson four must be at least 2 characters"),
 });

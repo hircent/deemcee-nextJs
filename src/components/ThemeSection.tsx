@@ -175,58 +175,23 @@ const EditTheme = ({
                   {zoderror?.category?.[0]}
                 </small>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="lesson_one">
-                  Lesson 1 <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="lesson_one"
-                  name="lesson_one"
-                  defaultValue={editedTheme?.lessons?.lesson_one}
-                />
-                <small className="text-red-500">
-                  {zoderror?.lesson_one?.[0]}
-                </small>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="lesson_two">
-                  Lesson 2 <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="lesson_two"
-                  name="lesson_two"
-                  defaultValue={editedTheme?.lessons?.lesson_two}
-                />
-                <small className="text-red-500">
-                  {zoderror?.lesson_two?.[0]}
-                </small>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="lesson_three">
-                  Lesson 3 <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="lesson_three"
-                  name="lesson_three"
-                  defaultValue={editedTheme?.lessons?.lesson_three}
-                />
-                <small className="text-red-500">
-                  {zoderror?.lesson_three?.[0]}
-                </small>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="lesson_four">
-                  Lesson 4 <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="lesson_four"
-                  name="lesson_four"
-                  defaultValue={editedTheme?.lessons?.lesson_four}
-                />
-                <small className="text-red-500">
-                  {zoderror?.lesson_four?.[0]}
-                </small>
-              </div>
+
+              {editedTheme?.lessons.map((v, i) => (
+                <div className="space-y-2" key={v.id}>
+                  <Label htmlFor={v.name}>
+                    {"Lesson " + v.order}{" "}
+                    <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id={v.name}
+                    name={"lesson_" + v.order}
+                    defaultValue={v.name}
+                  />
+                  <small className="text-red-500">
+                    {/* {zoderror?.[v.name]?.[0]} */}
+                  </small>
+                </div>
+              ))}
             </div>
             <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
               <SubmitButton label="Save" submitLabel="Saving" />
@@ -416,7 +381,7 @@ const ThemeSection = ({
             <div className="space-y-3">
               <div className="flex justify-between items-start">
                 <h2 className="text-lg font-medium text-gray-900">
-                  {theme.name}
+                  {theme.order + ". " + theme.name}
                 </h2>
                 {IsSuperadmin.includes(userRole[0]) && (
                   <div className="flex gap-2">

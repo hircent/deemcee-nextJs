@@ -22,33 +22,32 @@ export type GradeDataErrors = {
 export type ThemeData = {
   id: number;
   name: string;
+  order: number;
   category: string;
   year: number;
+};
+
+export type ThemeLesson = {
+  id: number;
+  name: string;
+  order: number;
 };
 
 export type ThemeDetails = {
   id: number;
   name: string;
   category: number;
-  lessons:{
-    id: number;
-    title: string;
-    lesson_one: string;
-    lesson_two: string;
-    lesson_three: string;
-    lesson_four: string;
-  }
-}
+  lessons: ThemeLesson[];
+};
 
 export type ThemeDetailsError = {
   name?: string;
   category?: string;
-  lesson_one?: string;
-  lesson_two?: string;
-  lesson_three?: string;
-  lesson_four?: string;
-  
-}
+  lesson_1?: string;
+  lesson_2?: string;
+  lesson_3?: string;
+  lesson_4?: string;
+};
 
 export type CategoryFormErrors = {
   name?: string;

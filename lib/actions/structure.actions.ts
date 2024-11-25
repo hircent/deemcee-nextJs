@@ -372,24 +372,17 @@ export async function createTheme(
       };
     }
 
-    const {
-      lesson_one,
-      lesson_two,
-      lesson_three,
-      lesson_four,
-      name,
-      category,
-    } = data;
+    const { lesson_1, lesson_2, lesson_3, lesson_4, name, category } = data;
 
     const payload = {
       name,
       category,
       lessons: {
         title: name,
-        lesson_one,
-        lesson_two,
-        lesson_three,
-        lesson_four,
+        lesson_one: lesson_1,
+        lesson_two: lesson_2,
+        lesson_three: lesson_3,
+        lesson_four: lesson_4,
       },
     };
 
@@ -433,24 +426,17 @@ export async function editTheme(
       };
     }
 
-    const {
-      lesson_one,
-      lesson_two,
-      lesson_three,
-      lesson_four,
-      name,
-      category,
-    } = data;
+    const { lesson_1, lesson_2, lesson_3, lesson_4, name, category } = data;
 
     const payload = {
       name,
       category,
       lessons: {
         title: name,
-        lesson_one,
-        lesson_two,
-        lesson_three,
-        lesson_four,
+        lesson_one: lesson_1,
+        lesson_two: lesson_2,
+        lesson_three: lesson_3,
+        lesson_four: lesson_4,
       },
     };
 
