@@ -9,7 +9,7 @@ const SearchBar = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const query = searchParams.get("q");
+  const query = searchParams?.get("q");
 
   const [search, setSearch] = useState<string>(query || "");
   const handleGlobalSearch = (val: string) => {
@@ -24,7 +24,7 @@ const SearchBar = () => {
     const delayDebounceFn = setTimeout(() => {
       if (search) {
         const newUrl = formUrlQuery({
-          params: searchParams.toString(),
+          params: searchParams!.toString(),
           key: "q",
           value: search,
         });
@@ -32,7 +32,7 @@ const SearchBar = () => {
         router.push(newUrl, { scroll: false });
       } else {
         const newUrl = removeKeysFromQuery({
-          params: searchParams.toString(),
+          params: searchParams!.toString(),
           keysToRemove: ["q"],
         });
         router.push(newUrl, { scroll: false });

@@ -9,11 +9,36 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { useRouter, useSearchParams } from "next/navigation";
+import { generateYearRange } from "@/lib/utils";
 
-// Generate an array of years (last 5 years to next 5 years)
-const generateYearRange = () => {
-  const currentYear = new Date().getFullYear();
-  return Array.from({ length: 11 }, (_, i) => (currentYear - 5 + i).toString());
+const useFilterUrl = () => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const updateUrlParams = (params: Record<string, string | undefined>) => {
+    // Create a new URLSearchParams object
+    const currentParams = new URLSearchParams(searchParams?.toString());
+
+    // Clear out existing filter-related parameters
+    const filterKeys = ["year", "month", "day"];
+    filterKeys.forEach((key) => currentParams.delete(key));
+
+    // Add new parameters, skipping undefined values
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== "none") {
+        currentParams.set(key, value);
+      }
+    });
+
+    // Construct the new URL
+    const newUrl = `${window.location.pathname}?${currentParams.toString()}`;
+
+    // Navigate to the new URL
+    router.push(newUrl, { scroll: false });
+  };
+
+  return updateUrlParams;
 };
 
 // Generate month names
@@ -51,6 +76,16 @@ export const CalendarThemeLessonFilterComponent = () => {
     (new Date().getMonth() + 1).toString()
   );
   const [selectedDay, setSelectedDay] = useState<string | undefined>(undefined);
+
+  const updateUrlParams = useFilterUrl();
+
+  const filterHandler = () => {
+    updateUrlParams({
+      year: selectedYear,
+      month: selectedMonth,
+      day: selectedDay,
+    });
+  };
 
   return (
     <div className="flex flex-col md:flex-row gap-4 p-4 shadow-md rounded-lg my-4 bg-yellow-2">
@@ -101,6 +136,12 @@ export const CalendarThemeLessonFilterComponent = () => {
             <SelectValue placeholder="Select Day" />
           </SelectTrigger>
           <SelectContent className="bg-yellow-2">
+            <SelectItem
+              value="none"
+              className="cursor-pointer hover:bg-yellow-6"
+            >
+              None
+            </SelectItem>
             {DAYS.map((day) => (
               <SelectItem
                 key={day}
@@ -115,7 +156,9 @@ export const CalendarThemeLessonFilterComponent = () => {
       </div>
 
       <div className="flex items-end">
-        <Button className="mt-auto">Apply Filter</Button>
+        <Button onClick={filterHandler} className="mt-auto">
+          Apply Filter
+        </Button>
       </div>
     </div>
   );

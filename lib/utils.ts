@@ -110,6 +110,12 @@ export function formUrlQuery({ params, key, value }: UrlQueryParams) {
   );
 }
 
+// Generate an array of years (last 5 years to next 5 years)
+export const generateYearRange = () => {
+  const currentYear = new Date().getFullYear();
+  return Array.from({ length: 11 }, (_, i) => (currentYear - 5 + i).toString());
+};
+
 interface removeKeysParams {
   params: string;
   keysToRemove: string[];
