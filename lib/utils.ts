@@ -4,7 +4,12 @@ import qs from "query-string";
 import { twMerge } from "tailwind-merge";
 import { z } from "zod";
 import { User } from "../types";
-import { CalendarData, ProcessedCalendarEvent } from "@/types/calendar";
+import {
+  CalendarData,
+  GroupedLesson,
+  LessonData,
+  ProcessedCalendarEvent,
+} from "@/types/calendar";
 import { EventInput } from "@fullcalendar/core/index.js";
 
 export function cn(...inputs: ClassValue[]) {
@@ -253,11 +258,11 @@ export const camelCase = (word: string) => {
 
 export function extractDate(isoTimestamp: string | undefined): string {
   // Split the string at 'T' to separate the date and time
-  if(isoTimestamp){
+  if (isoTimestamp) {
     const [date] = isoTimestamp.split("T");
     return date;
   }
-  return ""
+  return "";
 }
 
 export function processCalendarData(data: CalendarData[]): EventInput[] {
@@ -333,4 +338,47 @@ export function filterCalendarEvents(calendarData: CalendarData[]) {
   });
 
   return { holidayEvents, eventList, otherEvents };
+}
+
+function groupLessonsByDate(data: LessonData[]): GroupedLesson[] {
+  const groupedLessons: Record<string, GroupedLesson> = {};
+
+  data.forEach((lesson) => {
+    const dateKey = lesson.lesson_date;
+
+    // Initialize the date entry if it doesn't exist
+    if (!groupedLessons[dateKey]) {
+      groupedLessons[dateKey] = {
+        date: lesson.lesson_date,
+        month: lesson.month,
+        year: lesson.year,
+        day: lesson.day,
+        theme_lesson_kids: null,
+        theme_lesson_kiddo: null,
+        theme_lesson_superkids: null,
+      };
+    }
+
+    // Assign theme lessons based on category
+    switch (lesson.category) {
+      case "KIDS":
+        groupedLessons[dateKey].theme_lesson_kids = lesson.theme_lesson.name;
+        break;
+      case "KIDDO":
+        groupedLessons[dateKey].theme_lesson_kiddo = lesson.theme_lesson.name;
+        break;
+      case "SUPERKIDS":
+        groupedLessons[dateKey].theme_lesson_superkids =
+          lesson.theme_lesson.name;
+        break;
+    }
+  });
+
+  // Convert the object to an array and return
+  return Object.values(groupedLessons);
+}
+
+// Example usage
+export function processLessonData(data: LessonData[]): GroupedLesson[] {
+  return groupLessonsByDate(data);
 }

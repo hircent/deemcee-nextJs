@@ -31,14 +31,13 @@ import { SERVER_ACTION_STATE } from "@/constants/index";
 import { useToast } from "./ui/use-toast";
 import { cn } from "@/lib/utils";
 
-
-const EditGrade = ({ grade }: {grade: GradeData}) => {
-  const [category,setCategory] = useState<string>(grade.category);
+const EditGrade = ({ grade }: { grade: GradeData }) => {
+  const [category, setCategory] = useState<string>(grade.category);
   const [isOpen, setOpen] = useState(false);
   const [zoderror, setZodError] = useState<GradeDataErrors | null>(null);
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
-  const [state , formAction] = useFormState(updateGrade,SERVER_ACTION_STATE);
+  const [state, formAction] = useFormState(updateGrade, SERVER_ACTION_STATE);
 
   useEffect(() => {
     if (state.zodErr) {
@@ -48,28 +47,20 @@ const EditGrade = ({ grade }: {grade: GradeData}) => {
       toast({
         title: "Success",
         description: state.msg,
-        className: cn(
-          `bottom-0 left-0`,
-          "bg-success-100"
-        ),
+        className: cn(`bottom-0 left-0`, "bg-success-100"),
         duration: 3000,
       });
       formRef.current?.reset();
       setOpen(false);
     }
     if (state.error) {
-      console.log(state.msg);
       toast({
         title: "Error",
         description: state.msg,
-        className: cn(
-          `bottom-0 left-0`,
-          "bg-error-100"
-        ),
+        className: cn(`bottom-0 left-0`, "bg-error-100"),
         duration: 3000,
       });
     }
-    
   }, [state, toast]);
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
@@ -91,7 +82,7 @@ const EditGrade = ({ grade }: {grade: GradeData}) => {
           <DialogTitle>Edit Grade</DialogTitle>
         </DialogHeader>
         <form action={formAction} ref={formRef}>
-          <Input type="hidden" id="id" name="id" defaultValue={grade.id}/>
+          <Input type="hidden" id="id" name="id" defaultValue={grade.id} />
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label htmlFor="grade_level">Grade</Label>
@@ -115,31 +106,31 @@ const EditGrade = ({ grade }: {grade: GradeData}) => {
                 value={category}
                 onValueChange={(value) => setCategory(value)}
               >
-              <SelectTrigger>
-                <SelectValue placeholder="KIDDOS" />
-              </SelectTrigger>
-              <SelectContent className="bg-white">
-                <SelectItem
-                  value="KIDDOS"
-                  className="cursor-pointer hover:bg-yellow-9"
-                >
-                  KIDDOS
-                </SelectItem>
-                <SelectItem
-                  value="KIDS"
-                  className="cursor-pointer hover:bg-yellow-9"
-                >
-                  KIDS
-                </SelectItem>
-                <SelectItem
-                  value="SUPERKIDS"
-                  className="cursor-pointer hover:bg-yellow-9"
-                >
-                  SUPERKIDS
-                </SelectItem>
-              </SelectContent>
-            </Select>
-            <small className="text-red-500">{zoderror?.category?.[0]}</small>
+                <SelectTrigger>
+                  <SelectValue placeholder="KIDDOS" />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem
+                    value="KIDDOS"
+                    className="cursor-pointer hover:bg-yellow-9"
+                  >
+                    KIDDOS
+                  </SelectItem>
+                  <SelectItem
+                    value="KIDS"
+                    className="cursor-pointer hover:bg-yellow-9"
+                  >
+                    KIDS
+                  </SelectItem>
+                  <SelectItem
+                    value="SUPERKIDS"
+                    className="cursor-pointer hover:bg-yellow-9"
+                  >
+                    SUPERKIDS
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              <small className="text-red-500">{zoderror?.category?.[0]}</small>
             </div>
             <div className="space-y-2">
               <Label htmlFor="price">Price</Label>
@@ -174,7 +165,7 @@ const DeleteGrade = ({
   const [zoderror, setZodError] = useState<GradeDataErrors | null>(null);
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
-  const [state , formAction] = useFormState(deleteGrade,SERVER_ACTION_STATE);
+  const [state, formAction] = useFormState(deleteGrade, SERVER_ACTION_STATE);
   const router = useRouter();
 
   useEffect(() => {
@@ -185,28 +176,21 @@ const DeleteGrade = ({
       toast({
         title: "Success",
         description: state.msg,
-        className: cn(
-          `bottom-0 left-0`,
-          "bg-success-100"
-        ),
+        className: cn(`bottom-0 left-0`, "bg-success-100"),
         duration: 3000,
       });
       formRef.current?.reset();
       setOpen(false);
-      router.refresh()
+      router.refresh();
     }
     if (state.error) {
       toast({
         title: "Error",
         description: state.msg,
-        className: cn(
-          `bottom-0 left-0`,
-          "bg-error-100"
-        ),
+        className: cn(`bottom-0 left-0`, "bg-error-100"),
         duration: 3000,
       });
     }
-    
   }, [state, toast]);
 
   return (
@@ -233,14 +217,18 @@ const DeleteGrade = ({
           </DialogDescription>
         </DialogHeader>
         <form action={formAction} ref={formRef}>
-          <Input id="name" type="hidden" name="name" value={name}/>
-          <Input id="id" type="hidden" name="id" value={gradeId}/>
+          <Input id="name" type="hidden" name="name" value={name} />
+          <Input id="id" type="hidden" name="id" value={gradeId} />
           <div className="grid gap-4 py-4 border-b-2">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="delete-name" className="text-left">
                 Name:
               </Label>
-              <Input id="delete-name" name="confirmName" className="col-span-3" />
+              <Input
+                id="delete-name"
+                name="confirmName"
+                className="col-span-3"
+              />
             </div>
           </div>
 
@@ -248,7 +236,11 @@ const DeleteGrade = ({
             {`Please key in the ${type} name to confirm delete.`}
           </small>
           <DialogFooter>
-            <SubmitButton label="Delete" submitLabel="Deleting" btnColor="bg-red-500"/>
+            <SubmitButton
+              label="Delete"
+              submitLabel="Deleting"
+              btnColor="bg-red-500"
+            />
           </DialogFooter>
         </form>
       </DialogContent>
@@ -257,7 +249,6 @@ const DeleteGrade = ({
 };
 
 const GradeSection = ({ data }: { data: GradeData[] }) => {
-
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {data.map((grade) => (
@@ -271,7 +262,7 @@ const GradeSection = ({ data }: { data: GradeData[] }) => {
                 Grade {grade.grade_level}
               </h2>
               <div className="flex gap-2">
-                <EditGrade grade={grade}/>
+                <EditGrade grade={grade} />
                 <DeleteGrade
                   type="Grade"
                   name={grade.category}

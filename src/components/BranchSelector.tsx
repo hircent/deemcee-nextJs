@@ -41,11 +41,11 @@ export function BranchSelector({ userRole }: { userRole: BranchRole[] }) {
 
   useEffect(() => {
     const changeBranch = async () => {
-      await setBranchCookie(branch, pathName);
+      await setBranchCookie(branch, pathName!);
     };
     changeBranch();
 
-    if (branchSelectorPermission.includes(pathName)) {
+    if (branchSelectorPermission.includes(pathName!)) {
       setAbleSelect(false);
     } else {
       setAbleSelect(true);
