@@ -61,3 +61,7 @@ export type CategoryFormErrors = {
   year?: string;
   is_active?: boolean;
 };
+
+export type GenerateCalendarThemeLessonError = {
+  year?: string;
+};

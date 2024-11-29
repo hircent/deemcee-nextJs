@@ -44,15 +44,19 @@ export async function getCalendarData(
 
 export async function getCalendarThemeLessonData(
   year: string,
-  month: string,
+  month: string | null,
   day: string | null
 ): Promise<GroupedLesson[]> {
   const token = await getToken();
   const branchId = cookies().get("BranchId")?.value;
 
-  let url = `${process.env.API_URL}/calendars/theme-lesson/list?year=${year}&month=${month}`;
+  let url = `${process.env.API_URL}/calendars/theme-lesson/list?year=${year}`;
+
+  if (month !== null) {
+    url = url + `&month=${month}`;
+  }
   if (day !== null) {
-    url = `${process.env.API_URL}/calendars/theme-lesson/list?year=${year}&month=${month}&day=${day}`;
+    url = url + `&day=${day}`;
   }
 
   try {

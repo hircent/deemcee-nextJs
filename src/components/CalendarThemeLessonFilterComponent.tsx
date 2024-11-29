@@ -82,7 +82,7 @@ export const CalendarThemeLessonFilterComponent = () => {
   const filterHandler = () => {
     updateUrlParams({
       year: selectedYear,
-      month: selectedMonth,
+      month: selectedMonth == "none" ? undefined : selectedMonth,
       day: selectedDay,
     });
   };
@@ -116,6 +116,12 @@ export const CalendarThemeLessonFilterComponent = () => {
             <SelectValue placeholder="Select Month" />
           </SelectTrigger>
           <SelectContent className="bg-yellow-2">
+            <SelectItem
+              value="none"
+              className="cursor-pointer hover:bg-yellow-6"
+            >
+              All
+            </SelectItem>
             {MONTHS.map((month, index) => (
               <SelectItem
                 key={month}
@@ -156,7 +162,10 @@ export const CalendarThemeLessonFilterComponent = () => {
       </div>
 
       <div className="flex items-end">
-        <Button onClick={filterHandler} className="mt-auto">
+        <Button
+          onClick={filterHandler}
+          className="w-full sm:w-auto bg-blue-600 text-white hover:bg-blue-700 flex items-center justify-center space-x-2 transition-colors duration-200 text-xs sm:text-base px-3 py-2"
+        >
           Apply Filter
         </Button>
       </div>

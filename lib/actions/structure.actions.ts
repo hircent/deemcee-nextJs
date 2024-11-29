@@ -4,6 +4,7 @@ import { getToken } from "./user.actions";
 import {
   CategoryData,
   CategoryFormErrors,
+  GenerateCalendarThemeLessonError,
   GradeData,
   GradeDataErrors,
   ThemeData,
@@ -13,10 +14,12 @@ import {
 import { STATE } from "@/types/index";
 import {
   CategoryFormSchema,
+  GenerateThemeLessonSchema,
   GradeDataSchema,
   ThemeDetailsSchema,
 } from "@/constants/form";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 
 export async function getCategoryList(
   year: string | null = null
@@ -500,6 +503,49 @@ export async function deleteTheme(
     }
 
     return { success: true, msg: "Theme has been deleted" };
+  } catch (error) {
+    return { error: true, msg: (error as Error).message };
+  }
+}
+
+export async function generateCalendarThemeLesson(
+  _prevState: STATE<GenerateCalendarThemeLessonError>,
+  formData: FormData
+): Promise<STATE<GenerateCalendarThemeLessonError>> {
+  const token = await getToken();
+  const branchId = cookies().get("BranchId")?.value;
+  const data = Object.fromEntries(formData);
+  const validated = GenerateThemeLessonSchema.safeParse(data);
+  console.log(data);
+  if (!validated.success) {
+    return {
+      error: true,
+      zodErr: validated.error.flatten()
+        .fieldErrors as GenerateCalendarThemeLessonError,
+      msg: "Year is required",
+    };
+  }
+
+  try {
+    const response = await fetch(
+      `${process.env.API_URL}/generate_theme_lesson/${data.year}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const res = await response.json();
+      return { error: true, msg: res.message };
+    }
+
+    revalidatePath("/class");
+    return { success: true, msg: "Generate Theme Lesson is successful" };
   } catch (error) {
     return { error: true, msg: (error as Error).message };
   }

@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/table";
 import { useState } from "react";
 import { Button } from "./ui/button";
+import GenerateCalendarThemeLesson from "./GenerateCalendarThemeLesson";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -93,7 +94,10 @@ export function CalendarThemeLessonListTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  <div className="flex flex-col items-center align-middle gap-2">
+                    No Result.
+                    <GenerateCalendarThemeLesson />
+                  </div>
                 </TableCell>
               </TableRow>
             )}

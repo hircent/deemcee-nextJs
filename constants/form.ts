@@ -146,3 +146,11 @@ export const ThemeDetailsSchema = z.object({
   lesson_3: z.string().min(2, "Lesson three must be at least 2 characters"),
   lesson_4: z.string().min(2, "Lesson four must be at least 2 characters"),
 });
+
+export const GenerateThemeLessonSchema = z.object({
+  year: z.string().min(4, "Year must be at least 4 characters"),
+});
+
+export type GenerateThemeLessonValues = z.infer<
+  typeof GenerateThemeLessonSchema
+>;

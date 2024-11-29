@@ -7,12 +7,9 @@ import React from "react";
 
 const Page = async ({ searchParams }: SearchParamProps) => {
   let currentYear = new Date().getFullYear().toString();
-  let currentMonth = new Date().getMonth().toString();
 
   let year = searchParams.year ? searchParams.year.toString() : currentYear;
-  let month = searchParams.month
-    ? searchParams.month.toString()
-    : (+currentMonth + 1).toString();
+  let month = searchParams.month ? searchParams.month.toString() : null;
   let day = searchParams.day ? searchParams.day.toString() : null;
   try {
     const themeLessonData = await getCalendarThemeLessonData(year, month, day);
