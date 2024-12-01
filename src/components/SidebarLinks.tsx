@@ -15,7 +15,7 @@ const SidebarLinks = ({ userRole }: { userRole: string[] }) => {
         if (!isVisible) return null;
 
         const isActive =
-          pathName === item.route || pathName.startsWith(`${item.route}/`);
+          pathName === item.route || pathName?.startsWith(`${item.route}/`);
         return (
           <Link
             href={item.route}
@@ -28,9 +28,12 @@ const SidebarLinks = ({ userRole }: { userRole: string[] }) => {
             )}
           >
             <div className="relative size-6 flex justify-center items-center">
-              <item.icon size={20} className={cn("w-5 h-5", {
+              <item.icon
+                size={20}
+                className={cn("w-5 h-5", {
                   "brightness-[3] invert-0 text-white": isActive,
-                })}/>
+                })}
+              />
             </div>
             <p
               className={cn("hidden lg:block", {
