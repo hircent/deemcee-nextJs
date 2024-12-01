@@ -72,7 +72,7 @@ export const CalendarThemeLessonFilterComponent = () => {
   const [selectedYear, setSelectedYear] = useState<string>(
     new Date().getFullYear().toString()
   );
-  const [selectedMonth, setSelectedMonth] = useState<string>(
+  const [selectedMonth, setSelectedMonth] = useState<string | undefined>(
     (new Date().getMonth() + 1).toString()
   );
   const [selectedDay, setSelectedDay] = useState<string | undefined>(undefined);
@@ -146,7 +146,7 @@ export const CalendarThemeLessonFilterComponent = () => {
               value="none"
               className="cursor-pointer hover:bg-yellow-6"
             >
-              None
+              All
             </SelectItem>
             {DAYS.map((day) => (
               <SelectItem
