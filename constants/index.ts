@@ -1,54 +1,46 @@
-import {
-  LayoutDashboard,
-  Calendar,
-  Home,
-  User2,
-  Users,
-  BookA,
-  BookOpenText,
-} from "lucide-react";
+import * as LucideIcons from "lucide-react";
 
 export const sidebarLinks = [
   {
     imgURL: "/icons/home.svg",
     route: "/",
     label: "Home",
-    icon: LayoutDashboard,
+    icon: LucideIcons.LayoutDashboard,
     visible: ["superadmin", "principal", "manager", "teacher"],
   },
   {
     imgURL: "/icons/home.svg",
     route: "/users",
     label: "Users",
-    icon: Users,
+    icon: LucideIcons.Users,
     visible: ["superadmin", "principal", "manager", "teacher"],
   },
   {
     imgURL: "/icons/home.svg",
     route: "/branch",
     label: "Branch",
-    icon: Home,
+    icon: LucideIcons.Home,
     visible: ["superadmin", "principal", "manager"],
   },
   {
     imgURL: "/icons/home.svg",
     route: "/structure",
     label: "Structure",
-    icon: BookA,
+    icon: LucideIcons.BookA,
     visible: ["superadmin", "principal", "manager", "teacher"],
   },
   {
     imgURL: "/icons/home.svg",
     route: "/class",
     label: "Classes",
-    icon: BookOpenText,
+    icon: LucideIcons.BookOpenText,
     visible: ["superadmin", "principal", "manager", "teacher"],
   },
   {
     imgURL: "/icons/users.svg",
     route: "/calendar",
     label: "Calendar",
-    icon: Calendar,
+    icon: LucideIcons.Calendar,
     visible: ["superadmin", "principal", "manager", "teacher"],
   },
   // {
@@ -83,14 +75,14 @@ export const sidebarLinks = [
     imgURL: "/icons/users.svg",
     route: "/parent",
     label: "Parent",
-    icon: User2,
+    icon: LucideIcons.User2,
     visible: ["superadmin", "principal", "manager", "teacher"],
   },
   {
     imgURL: "/icons/users.svg",
     route: "/student",
     label: "Student",
-    icon: User2,
+    icon: LucideIcons.User2,
     visible: ["superadmin", "principal", "manager", "teacher"],
   },
 ];
