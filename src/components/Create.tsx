@@ -23,7 +23,7 @@ import {
 import { useToast } from "./ui/use-toast";
 import { Plus } from "lucide-react";
 import { camelCase, cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
   CreateUserCustomInput,
@@ -33,7 +33,6 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createUser } from "@/lib/actions/user.actions";
-import { usePathname } from "next/navigation";
 
 const CustomInput = ({
   control,
@@ -70,8 +69,6 @@ const CustomInput = ({
 const Create = ({ type }: { type: string }) => {
   const [open, setOpen] = useState<boolean>(false);
   const { toast } = useToast();
-  const pathname = usePathname();
-  console.log(pathname);
 
   const form = useForm<CreateUserFormValues>({
     resolver: zodResolver(CreateUserFormSchema),

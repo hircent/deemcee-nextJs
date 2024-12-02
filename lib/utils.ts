@@ -4,13 +4,20 @@ import qs from "query-string";
 import { twMerge } from "tailwind-merge";
 import { z } from "zod";
 import { User } from "../types";
-import {
-  CalendarData,
-  GroupedLesson,
-  LessonData,
-  ProcessedCalendarEvent,
-} from "@/types/calendar";
+import { CalendarData, GroupedLesson, LessonData } from "@/types/calendar";
 import { EventInput } from "@fullcalendar/core/index.js";
+import {
+  IsSuperadmin,
+  IsPrincipalOrHigher,
+  IsManagerOrHigher,
+} from "@/constants/index";
+import {
+  SUPERADMIN,
+  PARENT,
+  TEACHER,
+  PRINCIPAL,
+  MANAGER,
+} from "@/constants/message";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -387,4 +394,24 @@ function groupLessonsByDate(data: LessonData[]): GroupedLesson[] {
 // Example usage
 export function processLessonData(data: LessonData[]): GroupedLesson[] {
   return groupLessonsByDate(data);
+}
+
+export function getUserRoleAndUserType(pathname: string): {
+  role: string[] | undefined;
+  type: string | undefined;
+} {
+  switch (pathname) {
+    case "/users/superadmin":
+      return { role: IsSuperadmin, type: SUPERADMIN };
+    case "/users/principal":
+      return { role: IsPrincipalOrHigher, type: PRINCIPAL };
+    case "/users/manager":
+      return { role: IsManagerOrHigher, type: MANAGER };
+    case "/users/teacher":
+      return { role: IsManagerOrHigher, type: TEACHER };
+    case "/users/parent":
+      return { role: IsManagerOrHigher, type: PARENT };
+    default:
+      return { role: undefined, type: undefined };
+  }
 }
