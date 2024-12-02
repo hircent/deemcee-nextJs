@@ -79,12 +79,19 @@ export const CalendarThemeLessonFilterComponent = () => {
 
   const updateUrlParams = useFilterUrl();
 
+  const [isFiltering, setIsFiltering] = useState(false);
+
   const filterHandler = () => {
+    setIsFiltering(true);
     updateUrlParams({
       year: selectedYear,
       month: selectedMonth == "none" ? undefined : selectedMonth,
       day: selectedDay,
     });
+
+    setTimeout(() => {
+      setIsFiltering(false);
+    }, 600);
   };
 
   return (
@@ -164,9 +171,10 @@ export const CalendarThemeLessonFilterComponent = () => {
       <div className="flex items-end">
         <Button
           onClick={filterHandler}
+          disabled={isFiltering}
           className="w-full sm:w-auto bg-blue-600 text-white hover:bg-blue-700 flex items-center justify-center space-x-2 transition-colors duration-200 text-xs sm:text-base px-3 py-2"
         >
-          Apply Filter
+          {isFiltering ? "Filtering..." : "Apply Filter"}
         </Button>
       </div>
     </div>

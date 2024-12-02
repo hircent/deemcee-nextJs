@@ -516,7 +516,7 @@ export async function generateCalendarThemeLesson(
   const branchId = cookies().get("BranchId")?.value;
   const data = Object.fromEntries(formData);
   const validated = GenerateThemeLessonSchema.safeParse(data);
-  console.log(data);
+
   if (!validated.success) {
     return {
       error: true,
