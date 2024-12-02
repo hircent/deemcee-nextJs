@@ -3,6 +3,7 @@ import {
   Calendar,
   Home,
   User2,
+  Users,
   BookA,
   BookOpenText,
 } from "lucide-react";
@@ -13,6 +14,13 @@ export const sidebarLinks = [
     route: "/",
     label: "Home",
     icon: LayoutDashboard,
+    visible: ["superadmin", "principal", "manager", "teacher"],
+  },
+  {
+    imgURL: "/icons/home.svg",
+    route: "/users",
+    label: "Users",
+    icon: Users,
     visible: ["superadmin", "principal", "manager", "teacher"],
   },
   {
@@ -100,6 +108,30 @@ export const ClassLinks = [
   { href: "/class/manage", label: "Manage Classes" },
 ];
 
+export const UserManagementLinks = [
+  {
+    href: "/users",
+    label: "Main",
+    visible: ["superadmin", "principal", "manager", "teacher"],
+  },
+  { href: "/users/superadmin", label: "Superadmin", visible: ["superadmin"] },
+  {
+    href: "/users/principal",
+    label: "Principal",
+    visible: ["superadmin", "principal"],
+  },
+  {
+    href: "/users/manager",
+    label: "Manager",
+    visible: ["superadmin", "principal", "manager"],
+  },
+  {
+    href: "/users/teacher",
+    label: "Teacher",
+    visible: ["superadmin", "principal", "manager", "teacher"],
+  },
+];
+
 export const IsSuperadmin = ["superadmin"];
 
 export const IsPrincipalOrHigher = ["superadmin", "principal"];
@@ -107,13 +139,16 @@ export const IsPrincipalOrHigher = ["superadmin", "principal"];
 export const IsManagerOrHigher = ["superadmin", "principal", "manager"];
 
 export const branchSelectorPermission = [
+  "/users/principal",
+  "/users/manager",
+  "/users/teacher",
+  "/calendar",
+  "/class",
   "/principal",
   "/manager",
   "/teacher",
   "/student",
   "/parent",
-  "/calendar",
-  "/class",
 ];
 
 export const SERVER_ACTION_STATE = {
