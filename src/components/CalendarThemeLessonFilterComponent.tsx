@@ -85,8 +85,8 @@ export const CalendarThemeLessonFilterComponent = () => {
     setIsFiltering(true);
     updateUrlParams({
       year: selectedYear,
-      month: selectedMonth == "none" ? undefined : selectedMonth,
-      day: selectedDay,
+      month: selectedMonth == "none" ? "all" : selectedMonth,
+      day: selectedDay == "none" ? undefined : selectedDay,
     });
 
     setTimeout(() => {

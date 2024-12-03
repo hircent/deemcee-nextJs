@@ -52,7 +52,7 @@ export async function getCalendarThemeLessonData(
 
   let url = `${process.env.API_URL}/calendars/theme-lesson/list?year=${year}`;
 
-  if (month !== null) {
+  if (month !== "all" && month !== null) {
     url = url + `&month=${month}`;
   }
   if (day !== null) {
