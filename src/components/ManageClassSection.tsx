@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 
 import { ListProps } from "@/types/index";
 import Link from "next/link";
+import Pagination from "./Pagination";
 
 const ManageClassSection = ({
   classData,
@@ -16,23 +17,12 @@ const ManageClassSection = ({
   return (
     <div>
       <PageListTable columns={ClassListColumns} data={classData.data} />
-
-      <div className="flex flex-col mt-2">
-        {classData.next ? (
-          <Button className="p-4 bg-white w-20">
-            <Link href={`/class/manage?page=2`}>Next</Link>
-          </Button>
-        ) : (
-          <div></div>
-        )}
-
-        {classData.previous ? (
-          <Button className="p-4 bg-white w-20">
-            <Link href={`/class/manage`}>Pre</Link>
-          </Button>
-        ) : (
-          <div></div>
-        )}
+      <div>
+        <Pagination
+          next={classData.next}
+          previous={classData.previous}
+          baseUrl="/class/manage"
+        />
       </div>
     </div>
   );

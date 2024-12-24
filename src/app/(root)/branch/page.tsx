@@ -12,6 +12,7 @@ import Link from "next/link";
 
 import React from "react";
 import { IsSuperadmin } from "@/constants/index";
+import Pagination from "@/components/Pagination";
 
 export default async function Branch({ searchParams }: SearchParamProps) {
   try {
@@ -31,23 +32,11 @@ export default async function Branch({ searchParams }: SearchParamProps) {
         </div>
         <PageListTable columns={BranchListColumns} data={result.data} />
 
-        <div className="flex flex-col">
-          {result.next ? (
-            <Button className="p-4 bg-white w-20">
-              <Link href={`/branch?page=2`}>Next</Link>
-            </Button>
-          ) : (
-            <div></div>
-          )}
-
-          {result.previous ? (
-            <Button className="p-4 bg-white w-20">
-              <Link href={`/branch`}>Pre</Link>
-            </Button>
-          ) : (
-            <div></div>
-          )}
-        </div>
+        <Pagination
+          next={result.next}
+          previous={result.previous}
+          baseUrl="/branch"
+        />
       </div>
     );
   } catch (error) {

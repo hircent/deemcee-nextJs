@@ -168,11 +168,6 @@ declare interface PageHeaderProps {
   connectBank?: boolean;
 }
 
-declare interface PaginationProps {
-  page: number;
-  totalPages: number;
-}
-
 declare interface PlaidLinkProps {
   user: User;
   variant?: "primary" | "ghost";
@@ -442,6 +437,12 @@ export type ListProps<T> = {
   previous: string | null;
   data: T[];
 };
+
+export interface PaginationProps {
+  next: string | null;
+  previous: string | null;
+  baseUrl: string;
+}
 
 export type BranchListFilterProps = {
   page?: number;
