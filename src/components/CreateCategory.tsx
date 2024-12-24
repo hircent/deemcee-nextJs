@@ -13,7 +13,7 @@ const CreateCategory = () => {
 
   if (!name) {
     return (
-      <div>
+      <div className="hidden">
         <Button
           className="group p-2 bg-gray-100 rounded-md hover:bg-yellow-2"
           disabled

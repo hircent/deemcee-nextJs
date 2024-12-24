@@ -154,3 +154,12 @@ export const GenerateThemeLessonSchema = z.object({
 export type GenerateThemeLessonValues = z.infer<
   typeof GenerateThemeLessonSchema
 >;
+
+export const ClassFormSchema = z.object({
+  name: z.string().min(2, "Category name is required"),
+  label: z.string().min(1, "Label is required"),
+  start_date: z.string().min(1, "Start date is required"),
+  start_time: z.string().min(1, "Start time is required"),
+  end_time: z.string().min(1, "End time is required"),
+  day: z.string().min(1, "Day is required"),
+});

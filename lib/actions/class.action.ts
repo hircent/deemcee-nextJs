@@ -1,9 +1,10 @@
 "use server";
-import { ClassListData } from "@/types/class";
+import { ClassFormErrors, ClassListData } from "@/types/class";
 import { getToken } from "./user.actions";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { ListProps, SearchParamsFilterProps } from "@/types/index";
+import { ListProps, SearchParamsFilterProps, STATE } from "@/types/index";
+import { ClassFormSchema } from "@/constants/form";
 
 export async function getClassList(
   params: SearchParamsFilterProps
@@ -37,5 +38,46 @@ export async function getClassList(
     return data;
   } catch (error) {
     throw new Error("Failed to fetch class data " + error);
+  }
+}
+
+export async function createClass(
+  _prevState: STATE<ClassFormErrors>,
+  formData: FormData
+): Promise<STATE<ClassFormErrors>> {
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
+
+    const data = Object.fromEntries(formData);
+    const validated = ClassFormSchema.safeParse(data);
+
+    if (!validated.success) {
+      return {
+        error: true,
+        zodErr: validated.error.flatten().fieldErrors as ClassFormErrors,
+        msg: "Validation Failed",
+      };
+    }
+    console.log(data);
+    const response = await fetch(`${process.env.API_URL}/class/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+        BranchId: `${branchId?.toString()}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const res = await response.json();
+      return { error: true, msg: res.msg };
+    }
+
+    revalidatePath("/class/manage");
+    return { success: true, msg: "Category has been created" };
+  } catch (error) {
+    return { error: true, msg: (error as Error).message };
   }
 }

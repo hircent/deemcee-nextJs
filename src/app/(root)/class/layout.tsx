@@ -1,4 +1,4 @@
-import CreateCategory from "@/components/CreateCategory";
+import CreateClasses from "@/components/CreateClasses";
 import SectionNav from "@/components/SectionNav";
 import { ClassLinks, IsSuperadmin } from "@/constants/index";
 import { authUser } from "@/lib/actions/user.actions";
@@ -13,7 +13,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
       <div className="flex justify-between">
         {/* <SearchBar /> */}
         <div></div>
-        {/* {IsSuperadmin.includes(userRole[0]) && <CreateCategory/>} */}
+        {IsSuperadmin.includes(userRole[0]) && <CreateClasses />}
       </div>
       <div className="rounded-md border bg-yellow-2 text-gray-500 p-2 px-4">
         <SectionNav links={ClassLinks} />
