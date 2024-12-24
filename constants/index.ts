@@ -136,6 +136,8 @@ export const branchSelectorPermission = [
   "/users/teacher",
   "/calendar",
   "/class",
+  "/class/attendance",
+  "/class/manage",
   "/principal",
   "/manager",
   "/teacher",

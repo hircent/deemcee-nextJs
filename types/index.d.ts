@@ -406,19 +406,19 @@ export type UserAddress = {
 };
 
 export type UserDetails = {
-  gender:string;
-  dob:string;
-  ic_number:string;
-  occupation:string;
-  spouse_name:string;
-  spouse_phone:string;
-  spouse_occupation:string;
-  no_of_children:string;
-  personal_email:string;
-  bank_name:string;
-  bank_account_name:string;
-  bank_account_number:string;
-}
+  gender: string;
+  dob: string;
+  ic_number: string;
+  occupation: string;
+  spouse_name: string;
+  spouse_phone: string;
+  spouse_occupation: string;
+  no_of_children: string;
+  personal_email: string;
+  bank_name: string;
+  bank_account_name: string;
+  bank_account_number: string;
+};
 
 export type UserFullDetailsData = {
   id: number;
@@ -431,7 +431,7 @@ export type UserFullDetailsData = {
   updated_at: string;
   details: UserDetails;
   address: UserAddress;
-  user_branch_roles:BranchRole[];
+  user_branch_roles: BranchRole[];
 };
 
 export type ListProps<T> = {
@@ -444,6 +444,12 @@ export type ListProps<T> = {
 };
 
 export type BranchListFilterProps = {
+  page?: number;
+  pageSize?: number;
+  searchQuery?: string;
+};
+
+export type SearchParamsFilterProps = {
   page?: number;
   pageSize?: number;
   searchQuery?: string;
@@ -500,7 +506,7 @@ export type DeleteActionProps = {
   type: string;
   name: string;
   id: number;
-}
+};
 
 export type GetBranchDetailProps = {
   id: number;
@@ -581,8 +587,7 @@ export type STATE<T> = {
   msg?: string;
 };
 
-
 export type SectionNavLink = {
   href: string;
   label: string;
-}
+};

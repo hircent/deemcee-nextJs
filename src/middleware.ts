@@ -23,12 +23,12 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/((?!_next/static|favicon.ico|).*)",
-    "/my-banks/:path*",
-    "/user-management/:path*",
-    "/branch/:path*",
-    "/sign-in",
     "/",
+    "/branch/:path*",
     "/calendar/:path*",
+    "/class/:path*",
+    "/sign-in",
     "/structure/:path*",
+    "/user-management/:path*",
   ],
 };
