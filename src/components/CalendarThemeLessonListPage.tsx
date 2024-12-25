@@ -110,6 +110,7 @@ export function CalendarThemeLessonListTable<TData, TValue>({
           size="sm"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
+          className="bg-green-600 hover:bg-green-700 text-white"
         >
           Previous
         </Button>
@@ -118,6 +119,7 @@ export function CalendarThemeLessonListTable<TData, TValue>({
           size="sm"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
+          className="bg-green-600 hover:bg-green-700 text-white"
         >
           Next
         </Button>
