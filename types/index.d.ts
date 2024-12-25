@@ -496,6 +496,13 @@ export type DeleteCalendarProps = {
   id: number;
 };
 
+export type DeleteClassProps = {
+  name: string;
+  confirmName?: string;
+  type: string;
+  id: number;
+};
+
 export type DeleteUserProps = {
   type: string;
   name: string;

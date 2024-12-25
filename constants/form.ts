@@ -163,3 +163,9 @@ export const ClassFormSchema = z.object({
   end_time: z.string().min(1, "End time is required"),
   day: z.string().min(1, "Day is required"),
 });
+
+export const DeleteClassSchema = z.object({
+  id: z.number().min(1, "Id is required"),
+  name: z.string().min(1, "Name is required"),
+  confirmName: z.string().min(1, "Confirm name is required"),
+});

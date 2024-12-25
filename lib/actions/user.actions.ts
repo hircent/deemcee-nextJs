@@ -29,7 +29,7 @@ export const signIn = async ({
   password,
 }: signInProps): Promise<signInResponse> => {
   try {
-    const response = fetch("http://localhost:8000/api/login", {
+    const response = fetch("http://127.0.0.1:8000/api/login", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -252,22 +252,19 @@ export async function createUser(formData: FormData, type: string) {
 }
 
 export async function getUserDetails({
-  id
+  id,
 }: GetUserDetailProps): Promise<TypeUserDetailsProps> {
   const token = await getToken();
   const branchId = cookies().get("BranchId")?.value;
   try {
-    const response = await fetch(
-      `${process.env.API_URL}/users/details/${id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token?.value}`,
-          BranchId: `${branchId?.toString()}`,
-        },
-      }
-    );
+    const response = await fetch(`${process.env.API_URL}/users/details/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+        BranchId: `${branchId?.toString()}`,
+      },
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP Error! Status: ${response.status}`);
@@ -281,22 +278,19 @@ export async function getUserDetails({
 }
 
 export async function getUserFullDetails({
-  id
+  id,
 }: GetUserDetailProps): Promise<UserFullDetailsData> {
   const token = await getToken();
   const branchId = cookies().get("BranchId")?.value;
   try {
-    const response = await fetch(
-      `${process.env.API_URL}/users/details/${id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token?.value}`,
-          BranchId: `${branchId?.toString()}`,
-        },
-      }
-    );
+    const response = await fetch(`${process.env.API_URL}/users/details/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+        BranchId: `${branchId?.toString()}`,
+      },
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP Error! Status: ${response.status}`);

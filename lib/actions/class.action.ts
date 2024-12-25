@@ -4,7 +4,7 @@ import { getToken } from "./user.actions";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { ListProps, SearchParamsFilterProps, STATE } from "@/types/index";
-import { ClassFormSchema } from "@/constants/form";
+import { ClassFormSchema, DeleteClassSchema } from "@/constants/form";
 
 export async function getClassList(
   params: SearchParamsFilterProps
@@ -77,6 +77,61 @@ export async function createClass(
 
     revalidatePath("/class/manage");
     return { success: true, msg: "Category has been created" };
+  } catch (error) {
+    return { error: true, msg: (error as Error).message };
+  }
+}
+
+export async function deleteClass(
+  prevState: STATE<ClassFormErrors>,
+  formData: FormData
+): Promise<STATE<ClassFormErrors>> {
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
+
+    const obj = Object.fromEntries(formData);
+    const data = {
+      ...obj,
+      id: Number(formData.get("id")), // Convert id to number
+    };
+
+    if (obj.name !== obj.confirmName) {
+      return {
+        ...prevState,
+        error: true,
+        msg: "Name must be excatly the same.",
+      };
+    }
+
+    const validated = DeleteClassSchema.safeParse(data);
+    if (!validated.success) {
+      return {
+        ...prevState,
+        error: true,
+        zodErr: validated.error.flatten().fieldErrors as ClassFormErrors,
+        msg: "Validation Failed",
+      };
+    }
+
+    const response = await fetch(
+      `${process.env.API_URL}/class/delete/${data.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      return { success: false, msg: response.statusText };
+    }
+
+    revalidatePath("/class/manage");
+    return { success: true, msg: `Class ${obj.name} is deleted` };
   } catch (error) {
     return { error: true, msg: (error as Error).message };
   }
