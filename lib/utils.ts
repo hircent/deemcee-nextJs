@@ -374,13 +374,13 @@ function groupLessonsByDate(data: LessonData[]): GroupedLesson[] {
 
     // Assign theme lessons based on category
     switch (lesson.category) {
-      case "KIDS":
+      case "Kids":
         groupedLessons[dateKey].theme_lesson_kids = lesson.theme_lesson.name;
         break;
-      case "KIDDO":
+      case "Kiddo":
         groupedLessons[dateKey].theme_lesson_kiddo = lesson.theme_lesson.name;
         break;
-      case "SUPERKIDS":
+      case "Superkids":
         groupedLessons[dateKey].theme_lesson_superkids =
           lesson.theme_lesson.name;
         break;

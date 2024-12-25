@@ -65,7 +65,7 @@ export type LessonData = {
     id: number;
     name: string;
   };
-  category: "KIDS" | "KIDDO" | "SUPERKIDS";
+  category: "Kids" | "Kiddo" | "Superkids";
   branch: number;
   lesson_date: string;
   day: string;
