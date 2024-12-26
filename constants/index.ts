@@ -59,7 +59,7 @@ export const sidebarLinks = [
   // },
   {
     imgURL: "/icons/users.svg",
-    route: "/deusers",
+    route: "/deusers/parent",
     label: "DeUsers",
     icon: LucideIcons.User2,
     visible: ["superadmin", "principal", "manager", "teacher"],
@@ -74,7 +74,6 @@ export const StructureLinks = [
 ];
 
 export const DeUsersLinks = [
-  { href: "/deusers", label: "DeUsers" },
   { href: "/deusers/parent", label: "Parents" },
   { href: "/deusers/student", label: "Students" },
 ];
@@ -123,6 +122,9 @@ export const branchSelectorPermission = [
   "/class",
   "/class/attendance",
   "/class/manage",
+  "/deusers",
+  "/deusers/parent",
+  "/deusers/student",
   "/principal",
   "/manager",
   "/teacher",
