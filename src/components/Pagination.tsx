@@ -54,7 +54,7 @@ const Pagination = ({ next, previous, baseUrl }: PaginationProps) => {
 
       {!previous && (
         <Button
-          className={`${buttonBaseStyle} bg-gray-100 text-gray-400 cursor-not-allowed`}
+          className={`${buttonBaseStyle} bg-green-400 text-white cursor-not-allowed`}
           disabled
         >
           Previous
@@ -71,7 +71,7 @@ const Pagination = ({ next, previous, baseUrl }: PaginationProps) => {
 
       {!next && (
         <Button
-          className={`${buttonBaseStyle} bg-gray-100 text-gray-400 cursor-not-allowed`}
+          className={`${buttonBaseStyle} bg-green-400 text-white cursor-not-allowed`}
           disabled
         >
           Next

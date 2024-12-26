@@ -522,6 +522,13 @@ export type DeleteActionProps = {
   id: number;
 };
 
+export type DeleteProps = {
+  id: number;
+  name: string;
+  confirmName?: string;
+  type?: string;
+};
+
 export type GetBranchDetailProps = {
   id: number;
 };
