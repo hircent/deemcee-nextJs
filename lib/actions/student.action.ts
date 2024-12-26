@@ -9,7 +9,7 @@ import {
   StudentProps,
 } from "@/types/student";
 import { revalidatePath } from "next/cache";
-import { DeleteStudentSchema } from "@/constants/form";
+import { DeleteStudentSchema, StudentFormSchema } from "@/constants/form";
 
 export async function getStudentList(
   params: StudentListFilterProps
@@ -100,6 +100,48 @@ export async function deleteStudent(
 
     revalidatePath("/deusers/student");
     return { success: true, msg: `Student ${obj.name} is deleted` };
+  } catch (error) {
+    return { error: true, msg: (error as Error).message };
+  }
+}
+
+export async function createStudent(
+  _prevState: STATE<StudentFormErrors>,
+  formData: FormData
+): Promise<STATE<StudentFormErrors>> {
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
+
+    const data = Object.fromEntries(formData);
+    const validated = StudentFormSchema.safeParse(data);
+
+    if (!validated.success) {
+      return {
+        error: true,
+        zodErr: validated.error.flatten().fieldErrors as StudentFormErrors,
+        msg: "Validation Failed",
+      };
+    }
+
+    console.log(data);
+    // const response = await fetch(`${process.env.API_URL}/student/create`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${token?.value}`,
+    //     BranchId: `${branchId?.toString()}`,
+    //   },
+    //   body: JSON.stringify(data),
+    // });
+
+    // if (!response.ok) {
+    //   const res = await response.json();
+    //   return { error: true, msg: res.msg };
+    // }
+
+    revalidatePath("/deusers/student");
+    return { success: true, msg: "Student is created" };
   } catch (error) {
     return { error: true, msg: (error as Error).message };
   }

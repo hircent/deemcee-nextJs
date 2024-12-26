@@ -21,26 +21,54 @@ import {
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { useEffect, useRef, useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, Search, Check } from "lucide-react";
 import { useToast } from "./ui/use-toast";
-import { camelCase, cn } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import SubmitButton from "./SubmitButton";
 import { SERVER_ACTION_STATE } from "@/constants/index";
 import { useFormState } from "react-dom";
-import {
-  createTheme,
-  getCategorySelectionList,
-} from "@/lib/actions/structure.actions";
-import { CategoryData, ThemeDetailsError } from "@/types/structure";
+import { StudentFormErrors } from "@/types/student";
+import { createStudent } from "@/lib/actions/student.action";
 
 const StudentForm = () => {
-  const type = "student";
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [zoderror, setZodError] = useState<ThemeDetailsError | null>(null);
+  const [zoderror, setZodError] = useState<StudentFormErrors | null>(null);
   const [open, setOpen] = useState<boolean>(false);
+  const [parentSearchQuery, setParentSearchQuery] = useState<string>("");
+  const [selectedParent, setSelectedParent] = useState<any>(null);
+  const [gender, setGender] = useState<string | undefined>(undefined);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [parentSearchResults, setParentSearchResults] = useState<any[]>([]);
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
-  const [state, formAction] = useFormState(createTheme, SERVER_ACTION_STATE);
+  const [state, formAction] = useFormState(createStudent, SERVER_ACTION_STATE);
+
+  // Debounced parent search
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      if (parentSearchQuery.length >= 2) {
+        setIsSearching(true);
+        try {
+          // Replace with your actual API endpoint
+          // const response = await fetch(
+          //   `/api/search-parents?q=${parentSearchQuery}`
+          // );
+          // const data = await response.json();
+          setParentSearchResults([{ id: 1, name: "test" }]);
+        } catch (error) {
+          console.error("Error searching parents:", error);
+          toast({
+            title: "Error",
+            description: "Failed to search parents",
+            className: "bg-error-100",
+          });
+        }
+        setIsSearching(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [parentSearchQuery, toast]);
 
   useEffect(() => {
     if (state.zodErr) {
@@ -93,7 +121,192 @@ const StudentForm = () => {
             <p>Loading...</p>
           </div>
         ) : (
-          <form action={formAction} ref={formRef}>
+          <form action={formAction} ref={formRef} className="space-y-4">
+            {/* Personal Information */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <div className="space-y-2">
+                  <Label htmlFor="first_name">
+                    First Name <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="first_name"
+                    name="first_name"
+                    placeholder="Enter first name"
+                  />
+                </div>
+                <small className="text-red-500">{zoderror?.first_name}</small>
+              </div>
+
+              <div>
+                <div className="space-y-2">
+                  <Label htmlFor="last_name">
+                    Last Name <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="last_name"
+                    name="last_name"
+                    placeholder="Enter last name"
+                  />
+                </div>
+                <small className="text-red-500">{zoderror?.last_name}</small>
+              </div>
+            </div>
+
+            <div>
+              <div className="space-y-2">
+                <Label htmlFor="fullname">
+                  Fullname <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="fullname"
+                  name="fullname"
+                  placeholder="Enter fullname name"
+                />
+              </div>
+              <small className="text-red-500">{zoderror?.fullname}</small>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="gender">
+                Gender <span className="text-red-500">*</span>
+              </Label>
+              <Input type="hidden" name="gender" value={gender} />
+              <Select name="gender" onValueChange={(value) => setGender(value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select gender" />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem
+                    value="male"
+                    className="cursor-pointer hover:bg-yellow-9"
+                  >
+                    Male
+                  </SelectItem>
+                  <SelectItem
+                    value="female"
+                    className="cursor-pointer hover:bg-yellow-9"
+                  >
+                    Female
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              <small className="text-red-500">{zoderror?.gender}</small>
+            </div>
+
+            <div>
+              <div className="space-y-2">
+                <Label htmlFor="dob">
+                  Date of Birth <span className="text-red-500">*</span>
+                </Label>
+                <Input id="dob" name="dob" type="date" />
+              </div>
+              <small className="text-red-500">{zoderror?.dob}</small>
+            </div>
+
+            {/* School Information */}
+            <div>
+              <div className="space-y-2">
+                <Label htmlFor="school">
+                  School <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="school"
+                  name="school"
+                  placeholder="Enter school name"
+                />
+              </div>
+              <small className="text-red-500">{zoderror?.school}</small>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <div className="space-y-2">
+                  <Label htmlFor="deemcee_starting_grade">
+                    Starting Grade <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="deemcee_starting_grade"
+                    name="deemcee_starting_grade"
+                    type="number"
+                    min="1"
+                    max="6"
+                  />
+                </div>
+                <small className="text-red-500">
+                  {zoderror?.deemcee_starting_grade}
+                </small>
+              </div>
+
+              <div>
+                <div className="space-y-2">
+                  <Label htmlFor="enrolment_date">
+                    Enrollment Date <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="enrolment_date"
+                    name="enrolment_date"
+                    type="date"
+                  />
+                </div>
+                <small className="text-red-500">
+                  {zoderror?.enrolment_date}
+                </small>
+              </div>
+            </div>
+
+            {/* Parent Search Section */}
+            <div className="space-y-2">
+              <Label htmlFor="parent_search">
+                Search Parent <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                type="hidden"
+                name="parent"
+                value={selectedParent?.id || ""}
+              />
+              <div className="relative">
+                <Input
+                  id="parent_search"
+                  type="text"
+                  placeholder="Search parent by name"
+                  value={parentSearchQuery}
+                  onChange={(e) => setParentSearchQuery(e.target.value)}
+                  className="pr-10"
+                />
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  {isSearching ? (
+                    <div className="animate-spin h-5 w-5 border-2 border-gray-500 rounded-full border-t-transparent" />
+                  ) : selectedParent ? (
+                    <Check className="h-5 w-5 text-green-500" />
+                  ) : (
+                    <Search className="h-5 w-5 text-gray-400" />
+                  )}
+                </div>
+
+                {/* Parent search results dropdown */}
+                {parentSearchResults.length > 0 &&
+                  parentSearchQuery.length >= 2 && (
+                    <div className="absolute z-10 w-full bg-white border rounded-md shadow-lg mt-1">
+                      {parentSearchResults.map((parent) => (
+                        <div
+                          key={parent.id}
+                          className="p-2 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => {
+                            setSelectedParent(parent);
+                            setParentSearchQuery(parent.name);
+                            setParentSearchResults([]);
+                          }}
+                        >
+                          {parent.name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+              </div>
+              <small className="text-red-500">{zoderror?.parent}</small>
+            </div>
+
             <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
               <SubmitButton label="Save" submitLabel="Saving" />
             </DialogFooter>
