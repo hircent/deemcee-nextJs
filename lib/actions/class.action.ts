@@ -83,7 +83,7 @@ export async function createClass(
 }
 
 export async function deleteClass(
-  prevState: STATE<ClassFormErrors>,
+  _prevState: STATE<ClassFormErrors>,
   formData: FormData
 ): Promise<STATE<ClassFormErrors>> {
   try {
@@ -98,7 +98,6 @@ export async function deleteClass(
 
     if (obj.name !== obj.confirmName) {
       return {
-        ...prevState,
         error: true,
         msg: "Name must be excatly the same.",
       };
@@ -107,7 +106,6 @@ export async function deleteClass(
     const validated = DeleteClassSchema.safeParse(data);
     if (!validated.success) {
       return {
-        ...prevState,
         error: true,
         zodErr: validated.error.flatten().fieldErrors as ClassFormErrors,
         msg: "Validation Failed",
