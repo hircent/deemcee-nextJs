@@ -324,6 +324,8 @@ const ChangePassword = () => {
         className: cn(`bottom-0 left-0`, "bg-success-100"),
         duration: 3000,
       });
+      formRef.current?.reset();
+      setOpen(false);
     }
     if (state.error) {
       toast({
