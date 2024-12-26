@@ -18,6 +18,7 @@ import { EditUser } from "@/components/EditUser";
 import { DeleteUser } from "@/components/DeleteUser";
 import { ClassListData } from "@/types/class";
 import { DeleteClass } from "@/components/DeleteClass";
+import { EditClass } from "@/components/EditClass";
 
 export const ClassListColumns: ColumnDef<ClassListData>[] = [
   {
@@ -95,7 +96,7 @@ export const ClassListColumns: ColumnDef<ClassListData>[] = [
         //   </DropdownMenuContent>
         // </DropdownMenu>
         <div className="flex gap-4 text-black-2">
-          <div>Edit</div>
+          <EditClass type={"class"} id={classes.id} />
           <DeleteClass type={"class"} name={classes.label} id={classes.id} />
         </div>
       );

@@ -136,3 +136,73 @@ export async function deleteClass(
     return { error: true, msg: (error as Error).message };
   }
 }
+
+export async function editClass(
+  _prevState: STATE<ClassFormErrors>,
+  formData: FormData
+): Promise<STATE<ClassFormErrors>> {
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
+
+    const data = Object.fromEntries(formData);
+    const validated = ClassFormSchema.safeParse(data);
+
+    if (!validated.success) {
+      return {
+        error: true,
+        zodErr: validated.error.flatten().fieldErrors as ClassFormErrors,
+        msg: "Validation Failed",
+      };
+    }
+    console.log(data);
+    const response = await fetch(
+      `${process.env.API_URL}/class/update/${data.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      const res = await response.json();
+      return { error: true, msg: res.msg };
+    }
+
+    revalidatePath("/class/manage");
+    return { success: true, msg: `Class is updated` };
+  } catch (error) {
+    return { error: true, msg: (error as Error).message };
+  }
+}
+
+export async function getClassDetails(id: number): Promise<ClassListData> {
+  const token = await getToken();
+  const branchId = cookies().get("BranchId")?.value;
+
+  try {
+    const response = await fetch(`${process.env.API_URL}/class/details/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+        BranchId: `${branchId?.toString()}`,
+      },
+      cache: "no-cache",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch calendar data " + response.statusText);
+    }
+
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    throw error;
+  }
+}

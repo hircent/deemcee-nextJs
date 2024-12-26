@@ -24,7 +24,11 @@ import { useEffect, useRef, useState } from "react";
 import { Plus } from "lucide-react";
 import { useToast } from "./ui/use-toast";
 import SubmitButton from "./SubmitButton";
-import { SERVER_ACTION_STATE } from "@/constants/index";
+import {
+  CLASS_TYPES,
+  DAYS_OF_WEEK,
+  SERVER_ACTION_STATE,
+} from "@/constants/index";
 import { useFormState } from "react-dom";
 import { cn } from "@/lib/utils";
 import { createClass } from "@/lib/actions/class.action";
@@ -39,22 +43,6 @@ const ClassesForm = ({ type }: { type: string }) => {
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
   const [state, formAction] = useFormState(createClass, SERVER_ACTION_STATE);
-
-  const DAYS_OF_WEEK = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
-
-  const CLASS_TYPES = [
-    { value: "Kids", label: "Kids" },
-    { value: "Kiddo", label: "Kiddo" },
-    { value: "Superkids", label: "Superkids" },
-  ];
 
   useEffect(() => {
     if (state.zodErr) {

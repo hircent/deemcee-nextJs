@@ -1,12 +1,12 @@
 export type ClassListData = {
   id: number;
   branch: number;
+  name: string;
   label: string;
   start_date: string;
-  start_datetime: string;
   start_time: string;
   end_time: string;
-  day: number;
+  day: string;
 };
 
 export type ClassFormErrors = {
