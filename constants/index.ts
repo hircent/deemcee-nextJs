@@ -4,6 +4,7 @@ export const sidebarLinks = [
   {
     imgURL: "/icons/home.svg",
     route: "/",
+    baseRoute: "/",
     label: "Home",
     icon: LucideIcons.LayoutDashboard,
     visible: ["superadmin", "principal", "manager", "teacher"],
@@ -11,6 +12,7 @@ export const sidebarLinks = [
   {
     imgURL: "/icons/home.svg",
     route: "/users",
+    baseRoute: "/users",
     label: "Users",
     icon: LucideIcons.Users,
     visible: ["superadmin", "principal", "manager", "teacher"],
@@ -18,6 +20,7 @@ export const sidebarLinks = [
   {
     imgURL: "/icons/home.svg",
     route: "/branch",
+    baseRoute: "/branch",
     label: "Branch",
     icon: LucideIcons.Home,
     visible: ["superadmin", "principal", "manager"],
@@ -25,6 +28,7 @@ export const sidebarLinks = [
   {
     imgURL: "/icons/home.svg",
     route: "/structure",
+    baseRoute: "/structure",
     label: "Structure",
     icon: LucideIcons.BookA,
     visible: ["superadmin", "principal", "manager", "teacher"],
@@ -32,6 +36,7 @@ export const sidebarLinks = [
   {
     imgURL: "/icons/home.svg",
     route: "/class",
+    baseRoute: "/class",
     label: "Classes",
     icon: LucideIcons.BookOpenText,
     visible: ["superadmin", "principal", "manager", "teacher"],
@@ -39,6 +44,7 @@ export const sidebarLinks = [
   {
     imgURL: "/icons/users.svg",
     route: "/calendar",
+    baseRoute: "/calendar",
     label: "Calendar",
     icon: LucideIcons.Calendar,
     visible: ["superadmin", "principal", "manager", "teacher"],
@@ -59,6 +65,7 @@ export const sidebarLinks = [
   // },
   {
     imgURL: "/icons/users.svg",
+    baseRoute: "/deusers",
     route: "/deusers/parent",
     label: "DeUsers",
     icon: LucideIcons.User2,

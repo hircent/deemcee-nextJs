@@ -15,7 +15,7 @@ const SidebarLinks = ({ userRole }: { userRole: string[] }) => {
         if (!isVisible) return null;
 
         const isActive =
-          pathName === item.route || pathName?.startsWith(`${item.route}/`);
+          pathName === item.route || pathName?.startsWith(`${item.baseRoute}/`);
         return (
           <Link
             href={item.route}
