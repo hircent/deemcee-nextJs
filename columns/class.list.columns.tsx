@@ -17,6 +17,7 @@ import { extractDate } from "@/lib/utils";
 import { EditUser } from "@/components/EditUser";
 import { DeleteUser } from "@/components/DeleteUser";
 import { ClassListData } from "@/types/class";
+import { DeleteClass } from "@/components/DeleteClass";
 
 export const ClassListColumns: ColumnDef<ClassListData>[] = [
   {
@@ -71,6 +72,7 @@ export const ClassListColumns: ColumnDef<ClassListData>[] = [
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
+      const classes = row.original;
       return (
         // <DropdownMenu>
         //   <DropdownMenuTrigger asChild>
@@ -94,7 +96,7 @@ export const ClassListColumns: ColumnDef<ClassListData>[] = [
         // </DropdownMenu>
         <div className="flex gap-4 text-black-2">
           <div>Edit</div>
-          <div>Delete</div>
+          <DeleteClass type={"class"} name={classes.label} id={classes.id} />
         </div>
       );
     },
