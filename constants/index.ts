@@ -45,43 +45,22 @@ export const sidebarLinks = [
   },
   // {
   //   imgURL: "/icons/users.svg",
-  //   route: "/superadmin",
-  //   label: "Superadmin",
-  //   icon: User2,
-  //   visible: ["superadmin"],
+  //   route: "/parent",
+  //   label: "Parent",
+  //   icon: LucideIcons.User2,
+  //   visible: ["superadmin", "principal", "manager", "teacher"],
   // },
   // {
   //   imgURL: "/icons/users.svg",
-  //   route: "/principal",
-  //   label: "Principal",
-  //   icon: User2,
-  //   visible: ["superadmin", "principal"],
-  // },
-  // {
-  //   imgURL: "/icons/users.svg",
-  //   route: "/manager",
-  //   label: "Manager",
-  //   icon: User2,
-  //   visible: ["superadmin", "principal", "manager"],
-  // },
-  // {
-  //   imgURL: "/icons/users.svg",
-  //   route: "/teacher",
-  //   label: "Teacher",
-  //   icon: User2,
+  //   route: "/student",
+  //   label: "Student",
+  //   icon: LucideIcons.User2,
   //   visible: ["superadmin", "principal", "manager", "teacher"],
   // },
   {
     imgURL: "/icons/users.svg",
-    route: "/parent",
-    label: "Parent",
-    icon: LucideIcons.User2,
-    visible: ["superadmin", "principal", "manager", "teacher"],
-  },
-  {
-    imgURL: "/icons/users.svg",
-    route: "/student",
-    label: "Student",
+    route: "/deusers",
+    label: "DeUsers",
     icon: LucideIcons.User2,
     visible: ["superadmin", "principal", "manager", "teacher"],
   },
@@ -92,6 +71,12 @@ export const StructureLinks = [
   { href: "/structure/category", label: "Category" },
   { href: "/structure/grade", label: "Grade" },
   { href: "/structure/theme", label: "Theme" },
+];
+
+export const DeUsersLinks = [
+  { href: "/deusers", label: "DeUsers" },
+  { href: "/deusers/parent", label: "Parents" },
+  { href: "/deusers/student", label: "Students" },
 ];
 
 export const ClassLinks = [
