@@ -429,6 +429,12 @@ export type UserFullDetailsData = {
   user_branch_roles: BranchRole[];
 };
 
+export type ChangePasswordErrors = {
+  old_password?: string[];
+  new_password?: string[];
+  confirm_password?: string[];
+};
+
 export type ListProps<T> = {
   success: boolean;
   total: number;

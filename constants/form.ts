@@ -169,3 +169,22 @@ export const DeleteClassSchema = z.object({
   name: z.string().min(1, "Name is required"),
   confirmName: z.string().min(1, "Confirm name is required"),
 });
+
+export const ChangePasswordSchema = z
+  .object({
+    old_password: z.string().min(1, "Old password is required"),
+    new_password: z
+      .string()
+      .min(1, "New password is required")
+      .regex(/[A-Z]/, "New password must contain at least one uppercase letter")
+      .regex(/[a-z]/, "New password must contain at least one lowercase letter")
+      .regex(
+        /[!@#$%^&*(),.?":{}|<>]/,
+        "New password must contain at least one special character"
+      ),
+    confirm_password: z.string().min(1, "Confirm password is required"),
+  })
+  .refine((data) => data.new_password === data.confirm_password, {
+    message: "New password and confirm password must match",
+    path: ["confirmPassword"], // Specify where the error should appear
+  });

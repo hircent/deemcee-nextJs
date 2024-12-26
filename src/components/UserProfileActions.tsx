@@ -21,7 +21,9 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Card } from "./ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { UserFullDetailsData } from "@/types/index";
+import { ChangePasswordErrors, UserFullDetailsData } from "@/types/index";
+import { changePw } from "@/lib/actions/user.actions";
+import { cn } from "@/lib/utils";
 
 const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -308,6 +310,31 @@ const ChangePassword = () => {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [zoderror, setZodError] = useState<ChangePasswordErrors | null>(null);
+  const [state, formAction] = useFormState(changePw, SERVER_ACTION_STATE);
+
+  useEffect(() => {
+    if (state.zodErr) {
+      setZodError(state.zodErr);
+    }
+    if (state.success) {
+      toast({
+        title: "Success",
+        description: state.msg,
+        className: cn(`bottom-0 left-0`, "bg-success-100"),
+        duration: 3000,
+      });
+    }
+    if (state.error) {
+      toast({
+        title: "Error",
+        description: state.msg,
+        className: cn(`bottom-0 left-0`, "bg-error-100"),
+        duration: 3000,
+      });
+    }
+  }, [state, toast]);
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -332,7 +359,7 @@ const ChangePassword = () => {
             Enter your current password and choose a new password.
           </DialogDescription>
         </DialogHeader>
-        <form ref={formRef} className="mt-6 space-y-6">
+        <form action={formAction} ref={formRef} className="mt-6 space-y-6">
           {/* Old Password */}
           <div className="space-y-2">
             <Label className="text-sm sm:text-base" htmlFor="old_password">
@@ -361,6 +388,9 @@ const ChangePassword = () => {
                 )}
               </Button>
             </div>
+            <small className="text-red-500">
+              {zoderror?.old_password?.[0]}
+            </small>
           </div>
 
           {/* New Password */}
@@ -391,6 +421,9 @@ const ChangePassword = () => {
                 )}
               </Button>
             </div>
+            <small className="text-red-500">
+              {zoderror?.new_password?.[0]}
+            </small>
           </div>
 
           {/* Confirm Password */}
@@ -421,6 +454,9 @@ const ChangePassword = () => {
                 )}
               </Button>
             </div>
+            <small className="text-red-500">
+              {zoderror?.confirm_password?.[0]}
+            </small>
           </div>
 
           <DialogFooter className="mt-6 sm:mt-8">
