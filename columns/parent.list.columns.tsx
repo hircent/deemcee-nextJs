@@ -18,6 +18,7 @@ import { DeleteBranch } from "@/components/DeleteBranch";
 import { extractDate } from "@/lib/utils";
 import { EditUser } from "@/components/EditUser";
 import { DeleteUser } from "@/components/DeleteUser";
+import { EditParentProfile } from "@/components/EditParentProfile";
 
 export const ParentListColumns: ColumnDef<TypeUserProps>[] = [
   {
@@ -35,9 +36,9 @@ export const ParentListColumns: ColumnDef<TypeUserProps>[] = [
   {
     accessorKey: "updated_at",
     header: "Updated at",
-    cell:({row})=>{
-      return extractDate(row.getValue("updated_at"))
-    }
+    cell: ({ row }) => {
+      return extractDate(row.getValue("updated_at"));
+    },
   },
   // {
   //   accessorKey: "is_active",
@@ -87,8 +88,8 @@ export const ParentListColumns: ColumnDef<TypeUserProps>[] = [
         //   </DropdownMenuContent>
         // </DropdownMenu>
         <div className="flex gap-4 text-black-2">
-          <EditUser type={'parent'} id={parent.id}/>
-          <DeleteUser type={'parent'} name={parent.username} id={parent.id}/>
+          <EditParentProfile type={"parent"} id={parent.id} />
+          <DeleteUser type={"parent"} name={parent.username} id={parent.id} />
         </div>
       );
     },

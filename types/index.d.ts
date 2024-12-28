@@ -429,6 +429,40 @@ export type UserFullDetailsData = {
   user_branch_roles: BranchRole[];
 };
 
+export type Child = {
+  id: number;
+  fullname: string;
+  deemcee_starting_grade: number;
+  status: string;
+  enrolment_date: string;
+  enrolments: Enrolment[];
+};
+
+export type Enrolment = {
+  id: number;
+  start_date: string;
+  is_active: boolean;
+  status: string;
+  remaining_lessons: number;
+  freeze_lessons: number;
+  grade: number;
+};
+
+export type ParentFullDetailsData = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  username: string;
+  email: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  details: UserDetails;
+  address: UserAddress;
+  user_branch_roles: BranchRole[];
+  children: Child[];
+};
+
 export type ChangePasswordErrors = {
   old_password?: string[];
   new_password?: string[];

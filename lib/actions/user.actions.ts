@@ -18,6 +18,7 @@ import {
   UserFullDetailsData,
   STATE,
   ChangePasswordErrors,
+  ParentFullDetailsData,
 } from "@/types/index";
 import { jwtDecode } from "jwt-decode";
 import { redirect } from "next/navigation";
@@ -294,6 +295,35 @@ export async function getUserFullDetails({
         BranchId: `${branchId?.toString()}`,
       },
     });
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getParentFullDetails({
+  id,
+}: GetUserDetailProps): Promise<ParentFullDetailsData> {
+  const token = await getToken();
+  const branchId = cookies().get("BranchId")?.value;
+  try {
+    const response = await fetch(
+      `${process.env.API_URL}/parent/details/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`HTTP Error! Status: ${response.status}`);
