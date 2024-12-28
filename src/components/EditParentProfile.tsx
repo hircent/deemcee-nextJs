@@ -342,8 +342,13 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
             <TabsContent value="chilren" className="h-[60vh] relative">
               <div className="absolute inset-0 overflow-y-auto custom-scrollbar">
                 <div className="space-y-6">
-                  {parentData?.children?.map((child) => (
-                    <Card key={child.id} className="p-4 sm:p-6 space-y-6">
+                  {parentData?.children?.map((child, index) => (
+                    <Card
+                      key={child.id}
+                      className={`p-4 sm:p-6 space-y-6 ${
+                        index % 2 === 0 ? "bg-slate-100" : "bg-blue-50"
+                      }`}
+                    >
                       {/* Child's Basic Information */}
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
