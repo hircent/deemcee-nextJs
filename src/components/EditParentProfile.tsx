@@ -345,9 +345,11 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                   {parentData?.children?.map((child, index) => (
                     <Card
                       key={child.id}
-                      className={`p-4 sm:p-6 space-y-6 ${
-                        index % 2 === 0 ? "bg-slate-100" : "bg-blue-50"
-                      }`}
+                      className={cn(
+                        "p-4 sm:p-6 space-y-6",
+                        { "bg-slate-100": index % 2 === 0 },
+                        { "bg-yellow-2": index % 2 !== 0 }
+                      )}
                     >
                       {/* Child's Basic Information */}
                       <div className="space-y-4">
