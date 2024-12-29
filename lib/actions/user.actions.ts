@@ -19,12 +19,16 @@ import {
   STATE,
   ChangePasswordErrors,
   ParentFullDetailsData,
+  UpdateUserFullDetailsError,
 } from "@/types/index";
 import { jwtDecode } from "jwt-decode";
 import { redirect } from "next/navigation";
 import { ListProps, TypeUserProps, UserListFilterProps } from "@/types/index";
 import { revalidatePath } from "next/cache";
-import { ChangePasswordSchema } from "@/constants/form";
+import {
+  ChangePasswordSchema,
+  UpdateUserFullDetailsSchema,
+} from "@/constants/form";
 
 // import { revalidatePath } from "next/cache";
 
@@ -446,6 +450,105 @@ export async function changePw(
     }
 
     return { success: true, msg: "Password changed successfully" };
+  } catch (error) {
+    return { error: true, msg: (error as Error).message };
+  }
+}
+
+export async function updateUserFullDetails(
+  _prevState: STATE<UpdateUserFullDetailsError>,
+  formData: FormData
+): Promise<STATE<UpdateUserFullDetailsError>> {
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
+
+    const data = Object.fromEntries(formData);
+    const validated = UpdateUserFullDetailsSchema.safeParse(data);
+    // console.log({ hir: data.id });
+    if (!validated.success) {
+      console.log(validated.error.flatten().fieldErrors);
+      return {
+        error: true,
+        zodErr: validated.error.flatten()
+          .fieldErrors as UpdateUserFullDetailsError,
+        msg: "Validation Failed",
+      };
+    }
+
+    const {
+      first_name,
+      last_name,
+      username,
+      email,
+      address_line_1,
+      address_line_2,
+      address_line_3,
+      city,
+      state,
+      postcode,
+      gender,
+      dob,
+      ic_number,
+      occupation,
+      spouse_name,
+      spouse_phone,
+      spouse_occupation,
+      no_of_children,
+      personal_email,
+      bank_name,
+      bank_account_name,
+      bank_account_number,
+    } = data;
+
+    const payload = {
+      first_name,
+      last_name,
+      username,
+      email,
+      address: {
+        address_line_1,
+        address_line_2,
+        address_line_3,
+        city,
+        state,
+        postcode,
+      },
+      details: {
+        gender,
+        dob,
+        ic_number,
+        occupation,
+        spouse_name,
+        spouse_phone,
+        spouse_occupation,
+        no_of_children,
+        personal_email,
+        bank_name,
+        bank_account_name,
+        bank_account_number,
+      },
+    };
+
+    const response = await fetch(
+      `${process.env.API_URL}/users/update/parent/${+data.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (!response.ok) {
+      const res = await response.json();
+      return { error: true, msg: res.msg };
+    }
+
+    return { success: true, msg: `${username} is updated` };
   } catch (error) {
     return { error: true, msg: (error as Error).message };
   }

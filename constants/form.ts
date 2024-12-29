@@ -206,3 +206,28 @@ export const ChangePasswordSchema = z
     message: "New password and confirm password must match",
     path: ["confirmPassword"], // Specify where the error should appear
   });
+
+export const UpdateUserFullDetailsSchema = z.object({
+  first_name: z.string().optional(),
+  last_name: z.string().optional(),
+  username: z.string().min(8, "Min 8 characters"),
+  email: z.string().min(1, "Email is required").email(),
+  address_line_1: z.string().min(1, "Address line 1 is required"),
+  address_line_2: z.string().optional(),
+  address_line_3: z.string().optional(),
+  city: z.string().min(1, "City is required"),
+  postcode: z.string().min(1, "Postcode is required"),
+  state: z.string().min(1, "State is required"),
+  gender: z.string().min(1, "Gender is required"),
+  dob: z.string().optional(),
+  ic_number: z.string().optional(),
+  occupation: z.string().optional(),
+  spouse_name: z.string().optional(),
+  spouse_phone: z.string().optional(),
+  spouse_occupation: z.string().optional(),
+  no_of_children: z.string().optional(),
+  personal_email: z.string().optional(),
+  bank_name: z.string().optional(),
+  bank_account_name: z.string().optional(),
+  bank_account_number: z.string().optional(),
+});
