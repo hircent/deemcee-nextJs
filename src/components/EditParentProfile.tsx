@@ -59,24 +59,26 @@ const FormField = ({
   onChange,
 }: FormFieldProps) => {
   return (
-    <div className="space-y-2">
-      <Label className="text-sm sm:text-base" htmlFor={id}>
-        {label} {required && <span className="text-red-500">*</span>}
-      </Label>
-      <Input
-        id={id}
-        name={name}
-        defaultValue={defaultValue}
-        type={type}
-        min={min}
-        className={cn(
-          "text-sm sm:text-base",
-          readOnly && "bg-gray-50",
-          className
-        )}
-        readOnly={readOnly}
-        onChange={onChange}
-      />
+    <div>
+      <div className="space-y-2">
+        <Label className="text-sm sm:text-base" htmlFor={id}>
+          {label} {required && <span className="text-red-500">*</span>}
+        </Label>
+        <Input
+          id={id}
+          name={name}
+          defaultValue={defaultValue}
+          type={type}
+          min={min}
+          className={cn(
+            "text-sm sm:text-base",
+            readOnly && "bg-gray-50",
+            className
+          )}
+          readOnly={readOnly}
+          onChange={onChange}
+        />
+      </div>
     </div>
   );
 };

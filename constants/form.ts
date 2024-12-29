@@ -210,7 +210,7 @@ export const ChangePasswordSchema = z
 export const UpdateUserFullDetailsSchema = z.object({
   first_name: z.string().optional(),
   last_name: z.string().optional(),
-  username: z.string().min(8, "Min 8 characters"),
+  username: z.string().min(2, "Min 2 characters"),
   email: z.string().min(1, "Email is required").email(),
   address_line_1: z.string().min(1, "Address line 1 is required"),
   address_line_2: z.string().optional(),

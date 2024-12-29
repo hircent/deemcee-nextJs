@@ -548,6 +548,7 @@ export async function updateUserFullDetails(
       return { error: true, msg: res.msg };
     }
 
+    revalidatePath(`/deusers/parent`);
     return { success: true, msg: `${username} is updated` };
   } catch (error) {
     return { error: true, msg: (error as Error).message };
