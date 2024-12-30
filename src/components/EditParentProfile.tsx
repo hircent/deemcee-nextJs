@@ -31,80 +31,8 @@ import {
   getParentFullDetails,
   updateUserFullDetails,
 } from "@/lib/actions/user.actions";
+import EnrolmentStatusBadge from "./EnrolmentStatusBadge";
 import { Badge } from "./ui/badge";
-
-interface FormFieldProps {
-  id: string;
-  label: string;
-  defaultValue?: string | number;
-  type?: string;
-  required?: boolean;
-  readOnly?: boolean;
-  min?: string;
-  className?: string;
-  name?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
-
-const FormField = ({
-  id,
-  label,
-  defaultValue,
-  type = "text",
-  required = false,
-  readOnly = false,
-  min,
-  className,
-  name,
-  onChange,
-}: FormFieldProps) => {
-  return (
-    <div>
-      <div className="space-y-2">
-        <Label className="text-sm sm:text-base" htmlFor={id}>
-          {label} {required && <span className="text-red-500">*</span>}
-        </Label>
-        <Input
-          id={id}
-          name={name}
-          defaultValue={defaultValue}
-          type={type}
-          min={min}
-          className={cn(
-            "text-sm sm:text-base",
-            readOnly && "bg-gray-50",
-            className
-          )}
-          readOnly={readOnly}
-          onChange={onChange}
-        />
-      </div>
-    </div>
-  );
-};
-
-const EnrolmentStatus = ({ status }: { status: string }) => {
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "IN_PROGRESS":
-        return "bg-green-100 text-green-800";
-      case "GRADUATED":
-        return "bg-blue-100 text-blue-800";
-      case "DROPPED_OUT":
-        return "bg-red-100 text-yellow-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  return (
-    <Badge
-      className={`${getStatusColor(status)} font-medium text-xs px-2 py-1`}
-    >
-      {status.replace("_", " ")}
-    </Badge>
-  );
-};
 
 export const EditParentProfile = ({ type, id }: EditProps) => {
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -149,7 +77,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
     if (parentData) {
       setFormData({
         // Basic Info
-        id: id,
+        id: parentData.id,
         first_name: parentData.first_name,
         last_name: parentData.last_name,
         username: parentData.username,
@@ -270,37 +198,78 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
               <TabsContent value="basic">
                 <Card className="p-4 sm:p-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                    <FormField
-                      id="first_name"
-                      label="First Name"
-                      name="first_name"
-                      defaultValue={parentData?.first_name}
-                      onChange={handleInputChange}
-                    />
-                    <FormField
-                      id="last_name"
-                      label="Last Name"
-                      name="last_name"
-                      defaultValue={parentData?.last_name}
-                      onChange={handleInputChange}
-                    />
-                    <FormField
-                      id="username"
-                      label="Username"
-                      name="username"
-                      defaultValue={parentData?.username}
-                      onChange={handleInputChange}
-                      required
-                    />
-                    <FormField
-                      id="email"
-                      label="Email"
-                      name="email"
-                      defaultValue={parentData?.email}
-                      onChange={handleInputChange}
-                      type="email"
-                      required
-                    />
+                    <div>
+                      <div className="space-y-2">
+                        <Label
+                          className="text-sm sm:text-base"
+                          htmlFor="username"
+                        >
+                          Username <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                          id="username"
+                          name="username"
+                          defaultValue={parentData?.username}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <small className="text-red-500">
+                        {zoderror?.username?.[0]}
+                      </small>
+                    </div>
+
+                    <div>
+                      <div className="space-y-2">
+                        <Label className="text-sm sm:text-base" htmlFor="email">
+                          Email <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                          id="email"
+                          name="email"
+                          defaultValue={parentData?.email}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <small className="text-red-500">
+                        {zoderror?.email?.[0]}
+                      </small>
+                    </div>
+                    <div>
+                      <div className="space-y-2">
+                        <Label
+                          className="text-sm sm:text-base"
+                          htmlFor="first_name"
+                        >
+                          First Name
+                        </Label>
+                        <Input
+                          id="first_name"
+                          name="first_name"
+                          defaultValue={parentData?.first_name}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <div className="space-y-2">
+                        <Label
+                          className="text-sm sm:text-base"
+                          htmlFor="last_name"
+                        >
+                          Last Name
+                        </Label>
+                        <Input
+                          id="last_name"
+                          name="last_name"
+                          defaultValue={parentData?.last_name}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </Card>
               </TabsContent>
@@ -309,43 +278,96 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
               <TabsContent value="personal">
                 <Card className="p-4 sm:p-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                    <FormField
-                      id="gender"
-                      label="Gender"
-                      name="gender"
-                      defaultValue={parentData?.details.gender}
-                      onChange={handleInputChange}
-                    />
-                    <FormField
-                      id="dob"
-                      label="Date of Birth"
-                      name="dob"
-                      defaultValue={parentData?.created_at}
-                      onChange={handleInputChange}
-                      type="date"
-                    />
-                    <FormField
-                      id="ic_number"
-                      label="IC Number"
-                      name="ic_number"
-                      defaultValue={parentData?.details.ic_number}
-                      onChange={handleInputChange}
-                    />
-                    <FormField
-                      id="occupation"
-                      label="Occupation"
-                      name="occupation"
-                      defaultValue={parentData?.details.occupation}
-                      onChange={handleInputChange}
-                    />
-                    <FormField
-                      id="personal_email"
-                      label="Personal Email"
-                      name="personal_email"
-                      defaultValue={parentData?.details.personal_email}
-                      onChange={handleInputChange}
-                      type="email"
-                    />
+                    <div>
+                      <div className="space-y-2">
+                        <Label
+                          className="text-sm sm:text-base"
+                          htmlFor="gender"
+                        >
+                          Gender
+                        </Label>
+                        <Input
+                          id="gender"
+                          name="gender"
+                          defaultValue={parentData?.details.gender}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="space-y-2">
+                        <Label className="text-sm sm:text-base" htmlFor="dob">
+                          Date of Birth
+                        </Label>
+                        <Input
+                          id="dob"
+                          name="dob"
+                          type="date"
+                          defaultValue={parentData?.created_at}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="space-y-2">
+                        <Label
+                          className="text-sm sm:text-base"
+                          htmlFor="ic_number"
+                        >
+                          IC Number
+                        </Label>
+                        <Input
+                          id="ic_number"
+                          name="ic_number"
+                          defaultValue={parentData?.details.ic_number}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="space-y-2">
+                        <Label
+                          className="text-sm sm:text-base"
+                          htmlFor="occupation"
+                        >
+                          Occupation
+                        </Label>
+                        <Input
+                          id="occupation"
+                          name="occupation"
+                          defaultValue={parentData?.details.occupation}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="space-y-2">
+                        <Label
+                          className="text-sm sm:text-base"
+                          htmlFor="personal_email"
+                        >
+                          Personal Email
+                        </Label>
+                        <Input
+                          id="personal_email"
+                          name="personal_email"
+                          defaultValue={parentData?.details.personal_email}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <small className="text-red-500">
+                        {zoderror?.personal_email?.[0]}
+                      </small>
+                    </div>
                   </div>
                 </Card>
               </TabsContent>
@@ -354,36 +376,78 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
               <TabsContent value="family">
                 <Card className="p-4 sm:p-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                    <FormField
-                      id="spouse_name"
-                      label="Spouse Name"
-                      name="spouse_name"
-                      defaultValue={parentData?.details.spouse_name}
-                      onChange={handleInputChange}
-                    />
-                    <FormField
-                      id="spouse_phone"
-                      label="Spouse Phone"
-                      name="spouse_phone"
-                      defaultValue={parentData?.details.spouse_phone}
-                      onChange={handleInputChange}
-                    />
-                    <FormField
-                      id="spouse_occupation"
-                      label="Spouse Occupation"
-                      name="spouse_occupation"
-                      defaultValue={parentData?.details.spouse_occupation}
-                      onChange={handleInputChange}
-                    />
-                    <FormField
-                      id="no_of_children"
-                      label="Number of Children"
-                      name="no_of_children"
-                      defaultValue={parentData?.details.no_of_children}
-                      onChange={handleInputChange}
-                      type="number"
-                      min="0"
-                    />
+                    <div>
+                      <div className="space-y-2">
+                        <Label
+                          className="text-sm sm:text-base"
+                          htmlFor="spouse_name"
+                        >
+                          Spouse Name
+                        </Label>
+                        <Input
+                          id="spouse_name"
+                          name="spouse_name"
+                          defaultValue={parentData?.details.spouse_name}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="space-y-2">
+                        <Label
+                          className="text-sm sm:text-base"
+                          htmlFor="spouse_phone"
+                        >
+                          Spouse Phone
+                        </Label>
+                        <Input
+                          id="spouse_phone"
+                          name="spouse_phone"
+                          defaultValue={parentData?.details.spouse_phone}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="space-y-2">
+                        <Label
+                          className="text-sm sm:text-base"
+                          htmlFor="spouse_occupation"
+                        >
+                          Spouse Occupation
+                        </Label>
+                        <Input
+                          id="spouse_occupation"
+                          name="spouse_occupation"
+                          defaultValue={parentData?.details.spouse_occupation}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="space-y-2">
+                        <Label
+                          className="text-sm sm:text-base"
+                          htmlFor="no_of_children"
+                        >
+                          Number of Children
+                        </Label>
+                        <Input
+                          id="no_of_children"
+                          name="no_of_children"
+                          type="number"
+                          defaultValue={parentData?.details.no_of_children}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </Card>
               </TabsContent>
@@ -392,27 +456,59 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
               <TabsContent value="banking">
                 <Card className="p-4 sm:p-6">
                   <div className="grid grid-cols-1 gap-4 sm:gap-6">
-                    <FormField
-                      id="bank_name"
-                      label="Bank Name"
-                      name="bank_name"
-                      defaultValue={parentData?.details.bank_name}
-                      onChange={handleInputChange}
-                    />
-                    <FormField
-                      id="bank_account_name"
-                      label="Account Name"
-                      name="bank_account_name"
-                      defaultValue={parentData?.details.bank_account_name}
-                      onChange={handleInputChange}
-                    />
-                    <FormField
-                      id="bank_account_number"
-                      label="Account Number"
-                      name="bank_account_number"
-                      defaultValue={parentData?.details.bank_account_number}
-                      onChange={handleInputChange}
-                    />
+                    <div>
+                      <div className="space-y-2">
+                        <Label
+                          className="text-sm sm:text-base"
+                          htmlFor="bank_name"
+                        >
+                          Bank Name
+                        </Label>
+                        <Input
+                          id="bank_name"
+                          name="bank_name"
+                          defaultValue={parentData?.details.bank_name}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="space-y-2">
+                        <Label
+                          className="text-sm sm:text-base"
+                          htmlFor="bank_account_name"
+                        >
+                          Account Name
+                        </Label>
+                        <Input
+                          id="bank_account_name"
+                          name="bank_account_name"
+                          defaultValue={parentData?.details.bank_account_name}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="space-y-2">
+                        <Label
+                          className="text-sm sm:text-base"
+                          htmlFor="bank_account_number"
+                        >
+                          Account Number
+                        </Label>
+                        <Input
+                          id="bank_account_number"
+                          name="bank_account_number"
+                          defaultValue={parentData?.details.bank_account_number}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </Card>
               </TabsContent>
@@ -421,53 +517,126 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
               <TabsContent value="address">
                 <Card className="p-4 sm:p-6">
                   <div className="grid grid-cols-1 gap-4 sm:gap-6">
-                    <FormField
-                      id="address_line_1"
-                      label="Address Line 1"
-                      name="address_line_1"
-                      defaultValue={parentData?.address.address_line_1}
-                      onChange={handleInputChange}
-                      required
-                    />
-                    <FormField
-                      id="address_line_2"
-                      label="Address Line 2"
-                      name="address_line_2"
-                      defaultValue={parentData?.address.address_line_2}
-                      onChange={handleInputChange}
-                    />
-                    <FormField
-                      id="address_line_3"
-                      label="Address Line 3"
-                      name="address_line_3"
-                      defaultValue={parentData?.address.address_line_3}
-                      onChange={handleInputChange}
-                    />
+                    <div>
+                      <div className="space-y-2">
+                        <Label
+                          className="text-sm sm:text-base"
+                          htmlFor="address_line_1"
+                        >
+                          Address Line 1 <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                          id="address_line_1"
+                          name="address_line_1"
+                          defaultValue={parentData?.address.address_line_1}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <small className="text-red-500">
+                        {zoderror?.address_line_1?.[0]}
+                      </small>
+                    </div>
+
+                    <div>
+                      <div className="space-y-2">
+                        <Label
+                          className="text-sm sm:text-base"
+                          htmlFor="address_line_2"
+                        >
+                          Address Line 2
+                        </Label>
+                        <Input
+                          id="address_line_2"
+                          name="address_line_2"
+                          defaultValue={parentData?.address.address_line_2}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="space-y-2">
+                        <Label
+                          className="text-sm sm:text-base"
+                          htmlFor="address_line_3"
+                        >
+                          Address Line 3
+                        </Label>
+                        <Input
+                          id="address_line_3"
+                          name="address_line_3"
+                          defaultValue={parentData?.address.address_line_3}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-                      <FormField
-                        id="postcode"
-                        label="Postcode"
-                        name="postcode"
-                        defaultValue={parentData?.address.postcode}
-                        onChange={handleInputChange}
-                        required
-                      />
-                      <FormField
-                        id="city"
-                        label="City"
-                        name="city"
-                        defaultValue={parentData?.address.city}
-                        onChange={handleInputChange}
-                        required
-                      />
-                      <FormField
-                        id="state"
-                        label="State"
-                        name="state"
-                        defaultValue={parentData?.address.state}
-                        onChange={handleInputChange}
-                        required
-                      />
+                      <div>
+                        <div className="space-y-2">
+                          <Label
+                            className="text-sm sm:text-base"
+                            htmlFor="postcode"
+                          >
+                            Postcode <span className="text-red-500">*</span>
+                          </Label>
+                          <Input
+                            id="postcode"
+                            name="postcode"
+                            type="number"
+                            defaultValue={parentData?.address.postcode}
+                            className="text-sm sm:text-base"
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                        <small className="text-red-500">
+                          {zoderror?.postcode?.[0]}
+                        </small>
+                      </div>
+
+                      <div>
+                        <div className="space-y-2">
+                          <Label
+                            className="text-sm sm:text-base"
+                            htmlFor="city"
+                          >
+                            City <span className="text-red-500">*</span>
+                          </Label>
+                          <Input
+                            id="city"
+                            name="city"
+                            defaultValue={parentData?.address.city}
+                            className="text-sm sm:text-base"
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                        <small className="text-red-500">
+                          {zoderror?.city?.[0]}
+                        </small>
+                      </div>
+
+                      <div>
+                        <div className="space-y-2">
+                          <Label
+                            className="text-sm sm:text-base"
+                            htmlFor="state"
+                          >
+                            State <span className="text-red-500">*</span>
+                          </Label>
+                          <Input
+                            id="state"
+                            name="state"
+                            defaultValue={parentData?.address.state}
+                            className="text-sm sm:text-base"
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                        <small className="text-red-500">
+                          {zoderror?.state?.[0]}
+                        </small>
+                      </div>
                     </div>
                   </div>
                 </Card>
@@ -492,30 +661,63 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                             <h3 className="text-lg font-semibold">
                               Child Information
                             </h3>
-                            <EnrolmentStatus status={child.status} />
+                            <EnrolmentStatusBadge status={child.status} />
                           </div>
 
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                            <FormField
-                              id="fullname"
-                              label="Full Name"
-                              defaultValue={child.fullname}
-                              readOnly
-                            />
-                            <FormField
-                              id="deemcee_starting_grade"
-                              label="Starting Grade"
-                              defaultValue={child.deemcee_starting_grade.toString()}
-                              type="number"
-                              readOnly
-                            />
-                            <FormField
-                              id="enrolment_date"
-                              label="Enrolment Date"
-                              defaultValue={child.enrolment_date}
-                              type="date"
-                              readOnly
-                            />
+                            <div>
+                              <div className="space-y-2">
+                                <Label
+                                  className="text-sm sm:text-base"
+                                  htmlFor="fullname"
+                                >
+                                  Full Name
+                                </Label>
+                                <Input
+                                  id="fullname"
+                                  name="fullname"
+                                  defaultValue={child.fullname}
+                                  className="text-sm sm:text-base"
+                                  readOnly
+                                />
+                              </div>
+                            </div>
+
+                            <div>
+                              <div className="space-y-2">
+                                <Label
+                                  className="text-sm sm:text-base"
+                                  htmlFor="deemcee_starting_grade"
+                                >
+                                  Starting Grade
+                                </Label>
+                                <Input
+                                  id="deemcee_starting_grade"
+                                  name="deemcee_starting_grade"
+                                  defaultValue={child.deemcee_starting_grade.toString()}
+                                  className="text-sm sm:text-base"
+                                  readOnly
+                                />
+                              </div>
+                            </div>
+
+                            <div>
+                              <div className="space-y-2">
+                                <Label
+                                  className="text-sm sm:text-base"
+                                  htmlFor="enrolment_date"
+                                >
+                                  Enrolment Date
+                                </Label>
+                                <Input
+                                  id="enrolment_date"
+                                  name="enrolment_date"
+                                  defaultValue={child.enrolment_date}
+                                  className="text-sm sm:text-base"
+                                  readOnly
+                                />
+                              </div>
+                            </div>
                           </div>
                         </div>
 
@@ -539,34 +741,77 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                                 </Badge>
                               </div>
                               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                                <FormField
-                                  id="start_date"
-                                  label="Start Date"
-                                  defaultValue={enrolment.start_date}
-                                  type="date"
-                                  readOnly
-                                />
-                                <FormField
-                                  id="grade"
-                                  label="Current Grade"
-                                  defaultValue={enrolment.grade.toString()}
-                                  type="number"
-                                  readOnly
-                                />
-                                <FormField
-                                  id="remaining_lessons"
-                                  label="Remaining Lessons"
-                                  defaultValue={enrolment.remaining_lessons.toString()}
-                                  type="number"
-                                  readOnly
-                                />
-                                <FormField
-                                  id="freeze_lessons"
-                                  label="Freeze Lessons"
-                                  defaultValue={enrolment.freeze_lessons.toString()}
-                                  type="number"
-                                  readOnly
-                                />
+                                <div>
+                                  <div className="space-y-2">
+                                    <Label
+                                      className="text-sm sm:text-base"
+                                      htmlFor="start_date"
+                                    >
+                                      Start Date
+                                    </Label>
+                                    <Input
+                                      id="start_date"
+                                      name="start_date"
+                                      defaultValue={enrolment.start_date}
+                                      className="text-sm sm:text-base"
+                                      readOnly
+                                    />
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <div className="space-y-2">
+                                    <Label
+                                      className="text-sm sm:text-base"
+                                      htmlFor="grade"
+                                    >
+                                      Current Grade
+                                    </Label>
+                                    <Input
+                                      id="grade"
+                                      name="grade"
+                                      defaultValue={enrolment.grade.toString()}
+                                      className="text-sm sm:text-base"
+                                      readOnly
+                                    />
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <div className="space-y-2">
+                                    <Label
+                                      className="text-sm sm:text-base"
+                                      htmlFor="remaining_lessons"
+                                    >
+                                      Remaining Lessons
+                                    </Label>
+                                    <Input
+                                      id="remaining_lessons"
+                                      name="remaining_lessons"
+                                      defaultValue={enrolment.remaining_lessons.toString()}
+                                      className="text-sm sm:text-base"
+                                      readOnly
+                                    />
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <div className="space-y-2">
+                                    <Label
+                                      className="text-sm sm:text-base"
+                                      htmlFor="freeze_lessons"
+                                    >
+                                      Freeze Lessons
+                                    </Label>
+                                    <Input
+                                      id="freeze_lessons"
+                                      name="freeze_lessons"
+                                      defaultValue={enrolment.freeze_lessons.toString()}
+                                      className="text-sm sm:text-base"
+                                      readOnly
+                                    />
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           ))}

@@ -226,7 +226,7 @@ export const UpdateUserFullDetailsSchema = z.object({
   spouse_phone: z.string().optional(),
   spouse_occupation: z.string().optional(),
   no_of_children: z.string().optional(),
-  personal_email: z.string().optional(),
+  personal_email: z.string().email().optional(),
   bank_name: z.string().optional(),
   bank_account_name: z.string().optional(),
   bank_account_number: z.string().optional(),

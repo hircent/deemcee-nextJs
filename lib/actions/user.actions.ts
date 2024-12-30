@@ -465,9 +465,8 @@ export async function updateUserFullDetails(
 
     const data = Object.fromEntries(formData);
     const validated = UpdateUserFullDetailsSchema.safeParse(data);
-    // console.log({ hir: data.id });
+
     if (!validated.success) {
-      console.log(validated.error.flatten().fieldErrors);
       return {
         error: true,
         zodErr: validated.error.flatten()

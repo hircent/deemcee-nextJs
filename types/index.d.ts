@@ -480,7 +480,7 @@ export type UpdateUserFullDetailsError = {
   address_line_3?: string;
   city?: string;
   state?: string;
-  postcode?: number;
+  postcode?: string;
 
   gender?: string;
   dob?: string;
