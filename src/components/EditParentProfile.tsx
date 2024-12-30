@@ -303,7 +303,9 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     <div>
                       <div className="space-y-2">
-                        <Label className="text-sm sm:text-base">Gender</Label>
+                        <Label className="text-sm sm:text-base">
+                          Gender <span className="text-red-500">*</span>
+                        </Label>
                         <Select
                           defaultValue={parentData?.details.gender}
                           onValueChange={(value) => {
@@ -332,6 +334,9 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                           </SelectContent>
                         </Select>
                       </div>
+                      <small className="text-red-500">
+                        {zoderror?.gender?.[0]}
+                      </small>
                     </div>
 
                     <div>
