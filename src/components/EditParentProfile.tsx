@@ -212,6 +212,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                           defaultValue={parentData?.username}
                           className="text-sm sm:text-base"
                           onChange={handleInputChange}
+                          placeholder="Enter your Username"
                         />
                       </div>
                       <small className="text-red-500">
@@ -230,6 +231,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                           defaultValue={parentData?.email}
                           className="text-sm sm:text-base"
                           onChange={handleInputChange}
+                          placeholder="Enter your Email"
                         />
                       </div>
                       <small className="text-red-500">
@@ -250,6 +252,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                           defaultValue={parentData?.first_name}
                           className="text-sm sm:text-base"
                           onChange={handleInputChange}
+                          placeholder="Enter your First Name"
                         />
                       </div>
                     </div>
@@ -267,6 +270,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                           defaultValue={parentData?.last_name}
                           className="text-sm sm:text-base"
                           onChange={handleInputChange}
+                          placeholder="Enter your Last Name"
                         />
                       </div>
                     </div>
@@ -292,6 +296,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                           defaultValue={parentData?.details.gender}
                           className="text-sm sm:text-base"
                           onChange={handleInputChange}
+                          placeholder="Enter your Gender"
                         />
                       </div>
                     </div>
@@ -308,6 +313,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                           defaultValue={parentData?.created_at}
                           className="text-sm sm:text-base"
                           onChange={handleInputChange}
+                          placeholder="Enter your Date of Birth"
                         />
                       </div>
                     </div>
@@ -326,6 +332,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                           defaultValue={parentData?.details.ic_number}
                           className="text-sm sm:text-base"
                           onChange={handleInputChange}
+                          placeholder="Enter your IC Number"
                         />
                       </div>
                     </div>
@@ -344,6 +351,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                           defaultValue={parentData?.details.occupation}
                           className="text-sm sm:text-base"
                           onChange={handleInputChange}
+                          placeholder="Enter your Occupation"
                         />
                       </div>
                     </div>
@@ -362,6 +370,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                           defaultValue={parentData?.details.personal_email}
                           className="text-sm sm:text-base"
                           onChange={handleInputChange}
+                          placeholder="Enter your Personal Email"
                         />
                       </div>
                       <small className="text-red-500">
@@ -390,6 +399,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                           defaultValue={parentData?.details.spouse_name}
                           className="text-sm sm:text-base"
                           onChange={handleInputChange}
+                          placeholder="Enter your Spouse Name"
                         />
                       </div>
                     </div>
@@ -408,6 +418,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                           defaultValue={parentData?.details.spouse_phone}
                           className="text-sm sm:text-base"
                           onChange={handleInputChange}
+                          placeholder="Enter your Spouse Phone"
                         />
                       </div>
                     </div>
@@ -426,6 +437,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                           defaultValue={parentData?.details.spouse_occupation}
                           className="text-sm sm:text-base"
                           onChange={handleInputChange}
+                          placeholder="Enter your Spouse Occupation"
                         />
                       </div>
                     </div>
@@ -445,6 +457,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                           defaultValue={parentData?.details.no_of_children}
                           className="text-sm sm:text-base"
                           onChange={handleInputChange}
+                          placeholder="Enter your Number of Children"
                         />
                       </div>
                     </div>
@@ -470,6 +483,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                           defaultValue={parentData?.details.bank_name}
                           className="text-sm sm:text-base"
                           onChange={handleInputChange}
+                          placeholder="Enter your Bank Name"
                         />
                       </div>
                     </div>
@@ -488,6 +502,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                           defaultValue={parentData?.details.bank_account_name}
                           className="text-sm sm:text-base"
                           onChange={handleInputChange}
+                          placeholder="Enter your Account Name"
                         />
                       </div>
                     </div>
@@ -506,6 +521,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                           defaultValue={parentData?.details.bank_account_number}
                           className="text-sm sm:text-base"
                           onChange={handleInputChange}
+                          placeholder="Enter your Account Number"
                         />
                       </div>
                     </div>
@@ -531,6 +547,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                           defaultValue={parentData?.address.address_line_1}
                           className="text-sm sm:text-base"
                           onChange={handleInputChange}
+                          placeholder="Enter your Address Line 1"
                         />
                       </div>
                       <small className="text-red-500">
@@ -552,6 +569,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                           defaultValue={parentData?.address.address_line_2}
                           className="text-sm sm:text-base"
                           onChange={handleInputChange}
+                          placeholder="Enter your Address Line 2"
                         />
                       </div>
                     </div>
@@ -570,6 +588,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                           defaultValue={parentData?.address.address_line_3}
                           className="text-sm sm:text-base"
                           onChange={handleInputChange}
+                          placeholder="Enter your Address Line 3"
                         />
                       </div>
                     </div>
@@ -589,6 +608,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                             defaultValue={parentData?.address.postcode}
                             className="text-sm sm:text-base"
                             onChange={handleInputChange}
+                            placeholder="Enter your Postcode"
                           />
                         </div>
                         <small className="text-red-500">
@@ -610,6 +630,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                             defaultValue={parentData?.address.city}
                             className="text-sm sm:text-base"
                             onChange={handleInputChange}
+                            placeholder="Enter your City"
                           />
                         </div>
                         <small className="text-red-500">
@@ -631,6 +652,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                             defaultValue={parentData?.address.state}
                             className="text-sm sm:text-base"
                             onChange={handleInputChange}
+                            placeholder="Enter your State"
                           />
                         </div>
                         <small className="text-red-500">
