@@ -12,6 +12,13 @@ import {
   DialogTrigger,
   DialogOverlay,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useFormState } from "react-dom";
 import { SERVER_ACTION_STATE } from "@/constants/index";
 import SubmitButton from "./SubmitButton";
@@ -51,12 +58,23 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
   const { toast } = useToast();
   const [formData, setFormData] = useState<Record<string, any>>({});
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement> | string,
+    isSelect?: boolean
+  ) => {
+    if (isSelect) {
+      setFormData((prev) => ({
+        ...prev,
+        gender: e,
+      }));
+    } else {
+      // Cast e to HTMLInputElement to access name and value properties
+      const input = (e as React.ChangeEvent<HTMLInputElement>).target;
+      setFormData((prev) => ({
+        ...prev,
+        [input.name]: input.value,
+      }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -78,6 +96,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
       setFormData({
         // Basic Info
         id: parentData.id,
+        type: "parent",
         first_name: parentData.first_name,
         last_name: parentData.last_name,
         username: parentData.username,
@@ -284,20 +303,34 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     <div>
                       <div className="space-y-2">
-                        <Label
-                          className="text-sm sm:text-base"
-                          htmlFor="gender"
-                        >
-                          Gender
-                        </Label>
-                        <Input
-                          id="gender"
-                          name="gender"
+                        <Label className="text-sm sm:text-base">Gender</Label>
+                        <Select
                           defaultValue={parentData?.details.gender}
-                          className="text-sm sm:text-base"
-                          onChange={handleInputChange}
-                          placeholder="Enter your Gender"
-                        />
+                          onValueChange={(value) => {
+                            console.log(parentData?.details.gender);
+                            handleInputChange(value, true);
+                          }}
+                        >
+                          <SelectTrigger className="w-full text-sm sm:text-base col-span-2">
+                            <SelectValue placeholder="Select a gender" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-white">
+                            <SelectItem
+                              key="male"
+                              value="male"
+                              className="cursor-pointer hover:bg-yellow-9"
+                            >
+                              Male
+                            </SelectItem>
+                            <SelectItem
+                              key="female"
+                              value="female"
+                              className="cursor-pointer hover:bg-yellow-9"
+                            >
+                              Female
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                     </div>
 

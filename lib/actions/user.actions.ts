@@ -515,7 +515,7 @@ export async function updateUserFullDetails(
       },
       details: {
         gender,
-        dob,
+        dob: dob.toString().split("T")[0],
         ic_number,
         occupation,
         spouse_name,
@@ -530,7 +530,7 @@ export async function updateUserFullDetails(
     };
 
     const response = await fetch(
-      `${process.env.API_URL}/users/update/parent/${+data.id}`,
+      `${process.env.API_URL}/users/update/${data.type}/${+data.id}`,
       {
         method: "PUT",
         headers: {
