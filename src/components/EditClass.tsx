@@ -142,12 +142,12 @@ export function EditClass({ type, id }: EditProps) {
                     <SelectTrigger className="w-full text-sm sm:text-base col-span-2">
                       <SelectValue placeholder="Select class type" />
                     </SelectTrigger>
-                    <SelectContent className="bg-white">
+                    <SelectContent className="select-content">
                       {CLASS_TYPES.map((type) => (
                         <SelectItem
                           key={type.value}
                           value={type.value}
-                          className="cursor-pointer hover:bg-yellow-9"
+                          className="select-item"
                         >
                           {type.label}
                         </SelectItem>
@@ -177,12 +177,12 @@ export function EditClass({ type, id }: EditProps) {
                     <SelectTrigger className="w-full text-sm sm:text-base col-span-2">
                       <SelectValue placeholder="Select day" />
                     </SelectTrigger>
-                    <SelectContent className="bg-white">
+                    <SelectContent className="select-content">
                       {DAYS_OF_WEEK.map((day) => (
                         <SelectItem
                           key={day}
                           value={day}
-                          className="cursor-pointer hover:bg-yellow-9"
+                          className="select-item"
                         >
                           {day}
                         </SelectItem>

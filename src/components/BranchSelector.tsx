@@ -80,11 +80,7 @@ function BranchSelectorBase({ userRole }: BranchSelectorComponentProps) {
     if (!branchSelector?.length) return null;
 
     return branchSelector.map((v) => (
-      <SelectItem
-        key={v.id}
-        value={v.id.toString()}
-        className="cursor-pointer hover:bg-yellow-6"
-      >
+      <SelectItem key={v.id} value={v.id.toString()} className="select-item">
         <div className="text-left">{camelCase(v.name)}</div>
       </SelectItem>
     ));
@@ -103,7 +99,7 @@ function BranchSelectorBase({ userRole }: BranchSelectorComponentProps) {
       <SelectTrigger className="bg-yellow-2 border-yellow-11 w-[300px]">
         <SelectValue placeholder="Select a branch" />
       </SelectTrigger>
-      <SelectContent className="bg-white flex justify-start">
+      <SelectContent className="select-content flex justify-start">
         <SelectGroup>{branchSelectorItems}</SelectGroup>
       </SelectContent>
     </Select>

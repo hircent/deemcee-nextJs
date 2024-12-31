@@ -35,6 +35,16 @@ import { useFormState } from "react-dom";
 import { StudentFormErrors } from "@/types/student";
 import { createStudent } from "@/lib/actions/student.action";
 import MultiSelect from "./MultiSelect";
+import { start } from "repl";
+
+const GRADE = [
+  { id: 1, value: "Grade 1" },
+  { id: 2, value: "Grade 2" },
+  { id: 3, value: "Grade 3" },
+  { id: 4, value: "Grade 4" },
+  { id: 5, value: "Grade 5" },
+  { id: 6, value: "Grade 6" },
+];
 
 const StudentForm = () => {
   const [referralChannel, setReferralChannel] = useState<string>("");
@@ -51,6 +61,9 @@ const StudentForm = () => {
   const [state, formAction] = useFormState(createStudent, SERVER_ACTION_STATE);
   const [showParentFields, setShowParentFields] = useState(false);
   const [createParent, setCreateParent] = useState(false);
+  const [startingGrade, setStartingGrade] = useState<string | undefined>(
+    undefined
+  );
 
   const handleCreateNewParent = () => {
     setShowParentFields(true);
@@ -202,17 +215,11 @@ const StudentForm = () => {
                   <SelectTrigger>
                     <SelectValue placeholder="Select gender" />
                   </SelectTrigger>
-                  <SelectContent className="bg-white">
-                    <SelectItem
-                      value="male"
-                      className="cursor-pointer hover:bg-yellow-9"
-                    >
+                  <SelectContent className="select-content">
+                    <SelectItem value="male" className="select-item">
                       Male
                     </SelectItem>
-                    <SelectItem
-                      value="female"
-                      className="cursor-pointer hover:bg-yellow-9"
-                    >
+                    <SelectItem value="female" className="select-item">
                       Female
                     </SelectItem>
                   </SelectContent>
@@ -256,11 +263,26 @@ const StudentForm = () => {
                   </Label>
                   <Input
                     id="deemcee_starting_grade"
+                    value={startingGrade}
                     name="deemcee_starting_grade"
-                    type="number"
-                    min="1"
-                    max="6"
+                    type="hidden"
                   />
+                  <Select onValueChange={(value) => setStartingGrade(value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select starting grade" />
+                    </SelectTrigger>
+                    <SelectContent className="select-content">
+                      {GRADE.map((grade) => (
+                        <SelectItem
+                          key={grade.id}
+                          value={grade.value}
+                          className="select-item"
+                        >
+                          {grade.value}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 <small className="text-red-500">
                   {zoderror?.deemcee_starting_grade}
@@ -420,12 +442,12 @@ const StudentForm = () => {
                   <SelectTrigger>
                     <SelectValue placeholder="Select referral channel" />
                   </SelectTrigger>
-                  <SelectContent className="bg-white">
+                  <SelectContent className="select-content">
                     {ReferralChannels.map((channel) => (
                       <SelectItem
                         key={channel}
                         value={channel}
-                        className="cursor-pointer hover:bg-yellow-9"
+                        className="select-item"
                       >
                         {channel}
                       </SelectItem>

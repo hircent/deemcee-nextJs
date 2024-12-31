@@ -404,4 +404,12 @@
   .sidebar-label {
     @apply text-[14px] font-semibold text-black-2 max-xl:hidden;
   }
+
+  .select-content {
+    @apply bg-white;
+  }
+
+  .select-item {
+    @apply cursor-pointer hover:bg-yellow-9;
+  }
 }

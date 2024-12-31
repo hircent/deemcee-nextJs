@@ -145,12 +145,12 @@ const ThemeForm = ({ type }: { type: string }) => {
                   <SelectTrigger>
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
-                  <SelectContent className="bg-white">
+                  <SelectContent className="select-content">
                     {categorySelectionList.map((cat) => (
                       <SelectItem
                         key={cat.id}
                         value={cat.id.toString()}
-                        className="cursor-pointer hover:bg-yellow-9"
+                        className="select-item"
                       >
                         {cat.label}
                       </SelectItem>

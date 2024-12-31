@@ -104,11 +104,7 @@ export const CalendarThemeLessonFilterComponent = () => {
           </SelectTrigger>
           <SelectContent className="bg-yellow-2">
             {generateYearRange().map((year) => (
-              <SelectItem
-                key={year}
-                value={year}
-                className="cursor-pointer hover:bg-yellow-6"
-              >
+              <SelectItem key={year} value={year} className="select-item">
                 {year}
               </SelectItem>
             ))}
@@ -123,17 +119,14 @@ export const CalendarThemeLessonFilterComponent = () => {
             <SelectValue placeholder="Select Month" />
           </SelectTrigger>
           <SelectContent className="bg-yellow-2">
-            <SelectItem
-              value="none"
-              className="cursor-pointer hover:bg-yellow-6"
-            >
+            <SelectItem value="none" className="select-item">
               All
             </SelectItem>
             {MONTHS.map((month, index) => (
               <SelectItem
                 key={month}
                 value={(index + 1).toString()}
-                className="cursor-pointer hover:bg-yellow-6"
+                className="select-item"
               >
                 {month}
               </SelectItem>
@@ -149,18 +142,11 @@ export const CalendarThemeLessonFilterComponent = () => {
             <SelectValue placeholder="Select Day" />
           </SelectTrigger>
           <SelectContent className="bg-yellow-2">
-            <SelectItem
-              value="none"
-              className="cursor-pointer hover:bg-yellow-6"
-            >
+            <SelectItem value="none" className="select-item">
               All
             </SelectItem>
             {DAYS.map((day) => (
-              <SelectItem
-                key={day}
-                value={day}
-                className="cursor-pointer hover:bg-yellow-6"
-              >
+              <SelectItem key={day} value={day} className="select-item">
                 {day}
               </SelectItem>
             ))}

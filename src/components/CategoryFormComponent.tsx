@@ -111,23 +111,14 @@ const CategoryForm = ({ type }: { type: string }) => {
                   <SelectTrigger className="w-full text-sm sm:text-base col-span-2">
                     <SelectValue placeholder="KIDDOS" />
                   </SelectTrigger>
-                  <SelectContent className="bg-white">
-                    <SelectItem
-                      value="KIDDOS"
-                      className="cursor-pointer hover:bg-yellow-9"
-                    >
+                  <SelectContent className="select-content">
+                    <SelectItem value="KIDDOS" className="select-item">
                       KIDDOS
                     </SelectItem>
-                    <SelectItem
-                      value="KIDS"
-                      className="cursor-pointer hover:bg-yellow-9"
-                    >
+                    <SelectItem value="KIDS" className="select-item">
                       KIDS
                     </SelectItem>
-                    <SelectItem
-                      value="SUPERKIDS"
-                      className="cursor-pointer hover:bg-yellow-9"
-                    >
+                    <SelectItem value="SUPERKIDS" className="select-item">
                       SUPERKIDS
                     </SelectItem>
                   </SelectContent>

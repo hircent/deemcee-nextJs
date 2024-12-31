@@ -160,12 +160,12 @@ const EditTheme = ({
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="KIDDOS" />
                   </SelectTrigger>
-                  <SelectContent className="bg-white">
+                  <SelectContent className="select-content">
                     {categorySelectionList.map((cat) => (
                       <SelectItem
                         key={cat.id}
                         value={cat.id.toString()}
-                        className="cursor-pointer hover:bg-yellow-9"
+                        className="select-item"
                       >
                         {cat.label}
                       </SelectItem>
@@ -346,12 +346,12 @@ const ThemeSection = ({
             <SelectTrigger className="w-[180px] bg-yellow-2">
               <SelectValue placeholder="KIDDOS" />
             </SelectTrigger>
-            <SelectContent className="bg-yellow-2">
+            <SelectContent className="select-content">
               {categorySelectionList.map((cat) => (
                 <SelectItem
                   key={cat.id}
                   value={cat.label}
-                  className="cursor-pointer hover:bg-yellow-9"
+                  className="select-item"
                 >
                   {cat.label}
                 </SelectItem>
@@ -368,7 +368,7 @@ const ThemeSection = ({
                 <SelectItem
                   key={year}
                   value={year}
-                  className="cursor-pointer hover:bg-yellow-9"
+                  className="select-item"
                 >
                   {year}
                 </SelectItem>

@@ -20,11 +20,14 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
-import {  EditProps } from "@/types/index";
+import { EditProps } from "@/types/index";
 import { Pencil } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useToast } from "./ui/use-toast";
-import { editCalendar, getCalendarDetails } from "@/lib/actions/calendar.action";
+import {
+  editCalendar,
+  getCalendarDetails,
+} from "@/lib/actions/calendar.action";
 import { CalendarData, HolidayEventError } from "@/types/calendar";
 import { HolidayEntryType } from "@/constants/form";
 import { cn, extractDate } from "@/lib/utils";
@@ -36,7 +39,9 @@ export function EditCalendar({ type, id }: EditProps) {
   const [isLoading, setLoading] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false);
   const [zoderror, setZodError] = useState<HolidayEventError | null>(null);
-  const [calendarData,setCalendarData] = useState<CalendarData | undefined>(undefined)
+  const [calendarData, setCalendarData] = useState<CalendarData | undefined>(
+    undefined
+  );
   const [holidayEventType, setHolidayEventType] = useState<string>("");
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
@@ -52,10 +57,7 @@ export function EditCalendar({ type, id }: EditProps) {
       toast({
         title: "Success",
         description: state.msg,
-        className: cn(
-          `bottom-0 left-0`,
-          "bg-success-100"
-        ),
+        className: cn(`bottom-0 left-0`, "bg-success-100"),
         duration: 3000,
       });
     }
@@ -63,26 +65,22 @@ export function EditCalendar({ type, id }: EditProps) {
       toast({
         title: "Error",
         description: state.msg,
-        className: cn(
-          `bottom-0 left-0`,
-          "bg-error-100"
-        ),
+        className: cn(`bottom-0 left-0`, "bg-error-100"),
         duration: 3000,
       });
     }
-    
   }, [state, toast]);
 
-  const getCalendar = async ()=>{
+  const getCalendar = async () => {
     try {
-      const data = await getCalendarDetails(id)
-      setCalendarData(data)
-      setHolidayEventType(data.entry_type)
-      setLoading(false)
+      const data = await getCalendarDetails(id);
+      setCalendarData(data);
+      setHolidayEventType(data.entry_type);
+      setLoading(false);
     } catch (error) {
       console.error("Failed to fetch calendar details:", error);
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -90,7 +88,7 @@ export function EditCalendar({ type, id }: EditProps) {
         <Button
           onClick={() => {
             setOpen(true);
-            getCalendar()
+            getCalendar();
           }}
           className="group p-2 hover:bg-gray-100 rounded-full transition-colors"
         >
@@ -116,9 +114,13 @@ export function EditCalendar({ type, id }: EditProps) {
         </DialogHeader>
         {isLoading ? (
           <div>Loading...</div>
-        ):(
-          <form action={formAction} ref={formRef} className="space-y-4 sm:space-y-6">
-            <Input type="hidden" id="id" name="id" defaultValue={id}/>
+        ) : (
+          <form
+            action={formAction}
+            ref={formRef}
+            className="space-y-4 sm:space-y-6"
+          >
+            <Input type="hidden" id="id" name="id" defaultValue={id} />
             <div className="space-y-2">
               <Label htmlFor="title" className="text-sm sm:text-base">
                 Title <span className="text-red-500">*</span>
@@ -144,12 +146,17 @@ export function EditCalendar({ type, id }: EditProps) {
                 defaultValue={calendarData?.description}
                 className="w-full min-h-[100px] text-sm sm:text-base"
               />
-              <small className="text-red-500">{zoderror?.description?.[0]}</small>
+              <small className="text-red-500">
+                {zoderror?.description?.[0]}
+              </small>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="start_datetime" className="text-sm sm:text-base">
+                <Label
+                  htmlFor="start_datetime"
+                  className="text-sm sm:text-base"
+                >
                   Start Date <span className="text-red-500">*</span>
                 </Label>
                 <Input
@@ -185,7 +192,12 @@ export function EditCalendar({ type, id }: EditProps) {
               <Label htmlFor="entry_type" className="text-sm sm:text-base">
                 Event Type <span className="text-red-500">*</span>
               </Label>
-              <Input type="hidden" name="entry_type" defaultValue={holidayEventType} value={holidayEventType}/>
+              <Input
+                type="hidden"
+                name="entry_type"
+                defaultValue={holidayEventType}
+                value={holidayEventType}
+              />
               <Select
                 defaultValue={calendarData?.entry_type}
                 onValueChange={(value) => {
@@ -195,19 +207,25 @@ export function EditCalendar({ type, id }: EditProps) {
                 <SelectTrigger className="w-full text-sm sm:text-base">
                   <SelectValue placeholder="Select an Event" />
                 </SelectTrigger>
-                <SelectContent className="bg-white">
-                  {HolidayEntryType.map((v)=>(
-                    <SelectItem key={v.id} value={v.value} className="text-sm sm:text-base cursor-pointer hover:bg-yellow-6">
+                <SelectContent className="select-content">
+                  {HolidayEntryType.map((v) => (
+                    <SelectItem
+                      key={v.id}
+                      value={v.value}
+                      className="text-sm sm:text-base select-item"
+                    >
                       {v.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              <small className="text-red-500">{zoderror?.entry_type?.[0]}</small>
+              <small className="text-red-500">
+                {zoderror?.entry_type?.[0]}
+              </small>
             </div>
 
             <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
-              <SubmitButton label='Save' submitLabel="Saving"/>
+              <SubmitButton label="Save" submitLabel="Saving" />
             </DialogFooter>
           </form>
         )}

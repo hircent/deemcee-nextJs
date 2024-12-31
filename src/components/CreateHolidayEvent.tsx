@@ -50,10 +50,7 @@ const CreateHolidayEvent = () => {
       toast({
         title: "Success",
         description: state.msg,
-        className: cn(
-          `bottom-0 left-0`,
-          "bg-success-100"
-        ),
+        className: cn(`bottom-0 left-0`, "bg-success-100"),
         duration: 3000,
       });
     }
@@ -61,14 +58,10 @@ const CreateHolidayEvent = () => {
       toast({
         title: "Error",
         description: state.msg,
-        className: cn(
-          `bottom-0 left-0`,
-          "bg-error-100"
-        ),
+        className: cn(`bottom-0 left-0`, "bg-error-100"),
         duration: 3000,
       });
     }
-    
   }, [state, toast]);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -174,19 +167,23 @@ const CreateHolidayEvent = () => {
               <SelectTrigger className="w-full text-sm sm:text-base">
                 <SelectValue placeholder="Select an Event" />
               </SelectTrigger>
-              <SelectContent className="bg-white">
-                {HolidayEntryType.map((v)=>(
-                    <SelectItem key={v.id} value={v.value} className="text-sm sm:text-base cursor-pointer hover:bg-yellow-6">
-                      {v.label}
-                    </SelectItem>
-                  ))}
+              <SelectContent className="select-content">
+                {HolidayEntryType.map((v) => (
+                  <SelectItem
+                    key={v.id}
+                    value={v.value}
+                    className="text-sm sm:text-base select-item"
+                  >
+                    {v.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
             <small className="text-red-500">{zoderror?.entry_type?.[0]}</small>
           </div>
 
           <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
-            <SubmitButton label='Create' submitLabel="Creating"/>
+            <SubmitButton label="Create" submitLabel="Creating" />
           </DialogFooter>
         </form>
       </DialogContent>

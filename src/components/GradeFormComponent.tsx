@@ -12,14 +12,14 @@ import {
   DialogOverlay,
 } from "@/components/ui/dialog";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select";
-import { Label } from "./ui/label"
-import { Input } from "./ui/input"
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
 import { useEffect, useRef, useState } from "react";
 import { Plus } from "lucide-react";
 import { useToast } from "./ui/use-toast";
@@ -30,44 +30,37 @@ import { useFormState } from "react-dom";
 import { createGrade } from "@/lib/actions/structure.actions";
 import { GradeDataErrors } from "@/types/structure";
 
-const GradeForm = ({type}:{type:string}) => {
-    const [category,setCategory] = useState<string>("");
-    const [zoderror, setZodError] = useState<GradeDataErrors | null>(null);
-    const [open, setOpen] = useState<boolean>(false);
-    const formRef = useRef<HTMLFormElement>(null);
-    const { toast } = useToast();
-    const [state, formAction] = useFormState(createGrade, SERVER_ACTION_STATE);
+const GradeForm = ({ type }: { type: string }) => {
+  const [category, setCategory] = useState<string>("");
+  const [zoderror, setZodError] = useState<GradeDataErrors | null>(null);
+  const [open, setOpen] = useState<boolean>(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const { toast } = useToast();
+  const [state, formAction] = useFormState(createGrade, SERVER_ACTION_STATE);
 
-    useEffect(() => {
-        if (state.zodErr) {
-          setZodError(state.zodErr);
-        }
-        if (state.success) {
-          formRef.current?.reset();
-          setOpen(false);
-          toast({
-            title: "Success",
-            description: state.msg,
-            className: cn(
-              `bottom-0 left-0`,
-              "bg-success-100"
-            ),
-            duration: 3000,
-          });
-        }
-        if (state.error) {
-          toast({
-            title: "Error",
-            description: state.msg,
-            className: cn(
-              `bottom-0 left-0`,
-              "bg-error-100"
-            ),
-            duration: 3000,
-          });
-        }
-        
-      }, [state, toast]);
+  useEffect(() => {
+    if (state.zodErr) {
+      setZodError(state.zodErr);
+    }
+    if (state.success) {
+      formRef.current?.reset();
+      setOpen(false);
+      toast({
+        title: "Success",
+        description: state.msg,
+        className: cn(`bottom-0 left-0`, "bg-success-100"),
+        duration: 3000,
+      });
+    }
+    if (state.error) {
+      toast({
+        title: "Error",
+        description: state.msg,
+        className: cn(`bottom-0 left-0`, "bg-error-100"),
+        duration: 3000,
+      });
+    }
+  }, [state, toast]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -98,16 +91,16 @@ const GradeForm = ({type}:{type:string}) => {
         <form action={formAction} ref={formRef}>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="grade_level">Grade <span className="text-red-500">*</span></Label>
-              <Input
-                id="grade_level"
-                type="number"
-                name="grade_level"
-              />
+              <Label htmlFor="grade_level">
+                Grade <span className="text-red-500">*</span>
+              </Label>
+              <Input id="grade_level" type="number" name="grade_level" />
               <small className="text-red-500">{zoderror?.grade_level}</small>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="category">Category <span className="text-red-500">*</span></Label>
+              <Label htmlFor="category">
+                Category <span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="category"
                 type="hidden"
@@ -118,39 +111,28 @@ const GradeForm = ({type}:{type:string}) => {
                 value={category}
                 onValueChange={(value) => setCategory(value)}
               >
-              <SelectTrigger>
-                <SelectValue placeholder="Select a category" />
-              </SelectTrigger>
-              <SelectContent className="bg-white">
-                <SelectItem
-                  value="KIDDOS"
-                  className="cursor-pointer hover:bg-yellow-9"
-                >
-                  KIDDOS
-                </SelectItem>
-                <SelectItem
-                  value="KIDS"
-                  className="cursor-pointer hover:bg-yellow-9"
-                >
-                  KIDS
-                </SelectItem>
-                <SelectItem
-                  value="SUPERKIDS"
-                  className="cursor-pointer hover:bg-yellow-9"
-                >
-                  SUPERKIDS
-                </SelectItem>
-              </SelectContent>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a category" />
+                </SelectTrigger>
+                <SelectContent className="select-content">
+                  <SelectItem value="KIDDOS" className="select-item">
+                    KIDDOS
+                  </SelectItem>
+                  <SelectItem value="KIDS" className="select-item">
+                    KIDS
+                  </SelectItem>
+                  <SelectItem value="SUPERKIDS" className="select-item">
+                    SUPERKIDS
+                  </SelectItem>
+                </SelectContent>
               </Select>
-            <small className="text-red-500">{zoderror?.category?.[0]}</small>
+              <small className="text-red-500">{zoderror?.category?.[0]}</small>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="price">Price <span className="text-red-500">*</span></Label>
-              <Input
-                id="price"
-                type="number"
-                name="price"
-              />
+              <Label htmlFor="price">
+                Price <span className="text-red-500">*</span>
+              </Label>
+              <Input id="price" type="number" name="price" />
               <small className="text-red-500">{zoderror?.price}</small>
             </div>
           </div>

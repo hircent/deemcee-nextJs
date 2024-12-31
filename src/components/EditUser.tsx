@@ -309,18 +309,18 @@ export const EditUser = ({ type, id }: EditProps) => {
                           <SelectTrigger className="w-full text-sm sm:text-base col-span-2">
                             <SelectValue placeholder="Select a gender" />
                           </SelectTrigger>
-                          <SelectContent className="bg-white">
+                          <SelectContent className="select-content">
                             <SelectItem
                               key="male"
                               value="male"
-                              className="cursor-pointer hover:bg-yellow-9"
+                              className="select-item"
                             >
                               Male
                             </SelectItem>
                             <SelectItem
                               key="female"
                               value="female"
-                              className="cursor-pointer hover:bg-yellow-9"
+                              className="select-item"
                             >
                               Female
                             </SelectItem>
