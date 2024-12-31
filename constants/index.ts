@@ -161,3 +161,22 @@ export const CLASS_TYPES = [
   { value: "Kiddo", label: "Kiddo" },
   { value: "Superkids", label: "Superkids" },
 ];
+
+export const StarterKitItems = [
+  { label: "Book1", value: "Book1" },
+  { label: "Book2", value: "Book2" },
+  { label: "Shirt1", value: "Shirt1" },
+  { label: "Shirt2", value: "Shirt2" },
+  { label: "Bag1", value: "Bag1" },
+  { label: "Bag2", value: "Bag2" },
+];
+
+export const ReferralChannels = [
+  "Facebook",
+  "Google Form",
+  "Centre FB Page",
+  "DeEmcee Referral",
+  "External Referral",
+  "Call In",
+  "Others",
+];

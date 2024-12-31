@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import {
   Dialog,
   DialogContent,
@@ -21,17 +22,23 @@ import {
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { useEffect, useRef, useState } from "react";
-import { Plus, Search, Check } from "lucide-react";
+import { Plus, Search, Check, X } from "lucide-react";
 import { useToast } from "./ui/use-toast";
 import { cn } from "@/lib/utils";
 import SubmitButton from "./SubmitButton";
-import { SERVER_ACTION_STATE } from "@/constants/index";
+import {
+  ReferralChannels,
+  SERVER_ACTION_STATE,
+  StarterKitItems,
+} from "@/constants/index";
 import { useFormState } from "react-dom";
 import { StudentFormErrors } from "@/types/student";
 import { createStudent } from "@/lib/actions/student.action";
+import MultiSelect from "./MultiSelect";
 
 const StudentForm = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [referralChannel, setReferralChannel] = useState<string>("");
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [zoderror, setZodError] = useState<StudentFormErrors | null>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [parentSearchQuery, setParentSearchQuery] = useState<string>("");
@@ -107,7 +114,7 @@ const StudentForm = () => {
         className="bg-black/80"
         style={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}
       />
-      <DialogContent className="w-full max-h-[90vh] overflow-y-auto custom-scrollbar bg-white">
+      <DialogContent className="w-[80vw] max-w-[1000px] max-h-[90vh] overflow-y-auto custom-scrollbar bg-white">
         <DialogHeader>
           <DialogTitle className="text-xl sm:text-2xl font-semibold">
             Create Student
@@ -116,12 +123,9 @@ const StudentForm = () => {
             Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
-        {isLoading ? (
-          <div className="flex justify-center items-center h-48">
-            <p>Loading...</p>
-          </div>
-        ) : (
-          <form action={formAction} ref={formRef} className="space-y-4">
+        <form action={formAction} ref={formRef} className="space-y-4">
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium">Student Information</h3>
             {/* Personal Information */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -153,70 +157,77 @@ const StudentForm = () => {
               </div>
             </div>
 
-            <div>
-              <div className="space-y-2">
-                <Label htmlFor="fullname">
-                  Fullname <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="fullname"
-                  name="fullname"
-                  placeholder="Enter fullname name"
-                />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <div className="space-y-2">
+                  <Label htmlFor="fullname">
+                    Fullname <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="fullname"
+                    name="fullname"
+                    placeholder="Enter fullname name"
+                  />
+                </div>
+                <small className="text-red-500">{zoderror?.fullname}</small>
               </div>
-              <small className="text-red-500">{zoderror?.fullname}</small>
+
+              <div className="space-y-2">
+                <Label htmlFor="gender">
+                  Gender <span className="text-red-500">*</span>
+                </Label>
+                <Input type="hidden" name="gender" value={gender} />
+                <Select
+                  name="gender"
+                  onValueChange={(value) => setGender(value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select gender" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white">
+                    <SelectItem
+                      value="male"
+                      className="cursor-pointer hover:bg-yellow-9"
+                    >
+                      Male
+                    </SelectItem>
+                    <SelectItem
+                      value="female"
+                      className="cursor-pointer hover:bg-yellow-9"
+                    >
+                      Female
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <small className="text-red-500">{zoderror?.gender}</small>
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="gender">
-                Gender <span className="text-red-500">*</span>
-              </Label>
-              <Input type="hidden" name="gender" value={gender} />
-              <Select name="gender" onValueChange={(value) => setGender(value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select gender" />
-                </SelectTrigger>
-                <SelectContent className="bg-white">
-                  <SelectItem
-                    value="male"
-                    className="cursor-pointer hover:bg-yellow-9"
-                  >
-                    Male
-                  </SelectItem>
-                  <SelectItem
-                    value="female"
-                    className="cursor-pointer hover:bg-yellow-9"
-                  >
-                    Female
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              <small className="text-red-500">{zoderror?.gender}</small>
-            </div>
-
-            <div>
-              <div className="space-y-2">
-                <Label htmlFor="dob">
-                  Date of Birth <span className="text-red-500">*</span>
-                </Label>
-                <Input id="dob" name="dob" type="date" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <div className="space-y-2">
+                  <Label htmlFor="dob">
+                    Date of Birth <span className="text-red-500">*</span>
+                  </Label>
+                  <Input id="dob" name="dob" type="date" />
+                </div>
+                <small className="text-red-500">{zoderror?.dob}</small>
               </div>
-              <small className="text-red-500">{zoderror?.dob}</small>
-            </div>
 
-            {/* School Information */}
-            <div>
-              <div className="space-y-2">
-                <Label htmlFor="school">
-                  School <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="school"
-                  name="school"
-                  placeholder="Enter school name"
-                />
+              {/* School Information */}
+              <div>
+                <div className="space-y-2">
+                  <Label htmlFor="school">
+                    School <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="school"
+                    name="school"
+                    placeholder="Enter school name"
+                  />
+                </div>
+                <small className="text-red-500">{zoderror?.school}</small>
               </div>
-              <small className="text-red-500">{zoderror?.school}</small>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -254,8 +265,12 @@ const StudentForm = () => {
                 </small>
               </div>
             </div>
+            <Separator className="my-4 bg-gray-300" />
+          </div>
 
-            {/* Parent Search Section */}
+          {/* Parent Search Section */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium">Parent Information</h3>
             <div className="space-y-2">
               <Label htmlFor="parent_search">
                 Search Parent <span className="text-red-500">*</span>
@@ -306,12 +321,101 @@ const StudentForm = () => {
               </div>
               <small className="text-red-500">{zoderror?.parent}</small>
             </div>
+            <Separator className="my-4 bg-gray-300" />
+          </div>
 
-            <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
-              <SubmitButton label="Save" submitLabel="Saving" />
-            </DialogFooter>
-          </form>
-        )}
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium">Referral Information</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="referral_channel">Referral Channel</Label>
+                <Input
+                  type="hidden"
+                  name="referral_channel"
+                  value={referralChannel}
+                />
+                <Select
+                  name="referral_channel"
+                  onValueChange={(value) => setReferralChannel(value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select referral channel" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white">
+                    {ReferralChannels.map((channel) => (
+                      <SelectItem
+                        key={channel}
+                        value={channel}
+                        className="cursor-pointer hover:bg-yellow-9"
+                      >
+                        {channel}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {/* <small className="text-red-500">{zoderror?.referral_channel}</small> */}
+              </div>
+
+              <div>
+                <div className="space-y-2">
+                  <Label htmlFor="referral_name">Referral Name</Label>
+                  <Input
+                    id="referral_name"
+                    name="referral_name"
+                    placeholder="Enter referral name"
+                  />
+                </div>
+                {/* <small className="text-red-500">{zoderror?.referral_name}</small> */}
+              </div>
+            </div>
+            <Separator className="my-4 bg-gray-300" />
+          </div>
+
+          {/* Starter Kits Section */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium">Free Gift</h3>
+            <div className="space-y-2">
+              <Label htmlFor="starter_kits">
+                Starter Kits <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                type="hidden"
+                name="starter_kits"
+                value={selectedItems.join(",")}
+              />
+              <div className="flex flex-wrap gap-2 mb-2">
+                {selectedItems.map((kit) => (
+                  <div
+                    key={kit}
+                    className="bg-yellow-9 text-gray-800 px-3 py-1 rounded-full flex items-center gap-2"
+                  >
+                    <span className="text-xs">{kit}</span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setSelectedItems(selectedItems.filter((k) => k !== kit))
+                      }
+                      className="hover:text-red-500"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <MultiSelect
+                placeholder="Starter Kits"
+                options={StarterKitItems}
+                selectedOptions={selectedItems}
+                setSelectedOptions={setSelectedItems}
+              />
+              {/* <small className="text-red-500">{zoderror?.starter_kits}</small> */}
+            </div>
+          </div>
+
+          <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
+            <SubmitButton label="Save" submitLabel="Saving" />
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );
