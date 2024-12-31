@@ -1,6 +1,5 @@
 import * as z from "zod";
 import { Control, FieldPath } from "react-hook-form";
-import { title } from "process";
 
 export const HolidayEntryType = [
   {
@@ -180,6 +179,10 @@ export const StudentFormSchema = z.object({
   deemcee_starting_grade: z.string().min(1, "Starting grade is required"),
   enrolment_date: z.string().min(1, "Enrolment date is required"),
   parent: z.string().min(1, "Parent is required"),
+  timeslot: z.string().optional(),
+  // referral_channel: z.string().optional(),
+  // referral_name: z.string().optional(),
+  // starter_kits: z.array(z.string()).optional(),
 });
 
 export const DeleteStudentSchema = z.object({

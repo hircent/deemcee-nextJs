@@ -35,7 +35,6 @@ import { useFormState } from "react-dom";
 import { StudentFormErrors } from "@/types/student";
 import { createStudent } from "@/lib/actions/student.action";
 import MultiSelect from "./MultiSelect";
-import { start } from "repl";
 
 const GRADE = [
   { id: 1, value: "Grade 1" },
@@ -46,6 +45,11 @@ const GRADE = [
   { id: 6, value: "Grade 6" },
 ];
 
+type TimeslotData = {
+  id: number;
+  value: string;
+};
+
 const StudentForm = () => {
   const [referralChannel, setReferralChannel] = useState<string>("");
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
@@ -55,15 +59,17 @@ const StudentForm = () => {
   const [selectedParent, setSelectedParent] = useState<any>(null);
   const [gender, setGender] = useState<string | undefined>(undefined);
   const [isSearching, setIsSearching] = useState<boolean>(false);
-  const [parentSearchResults, setParentSearchResults] = useState<any[]>([]);
-  const formRef = useRef<HTMLFormElement>(null);
-  const { toast } = useToast();
-  const [state, formAction] = useFormState(createStudent, SERVER_ACTION_STATE);
   const [showParentFields, setShowParentFields] = useState(false);
   const [createParent, setCreateParent] = useState(false);
   const [startingGrade, setStartingGrade] = useState<string | undefined>(
     undefined
   );
+  const [timeslots, setTimeslots] = useState<TimeslotData[]>([]);
+  const [confirmTimeslot, setConfirmTimeslot] = useState<string>("");
+  const [parentSearchResults, setParentSearchResults] = useState<any[]>([]);
+  const formRef = useRef<HTMLFormElement>(null);
+  const { toast } = useToast();
+  const [state, formAction] = useFormState(createStudent, SERVER_ACTION_STATE);
 
   const handleCreateNewParent = () => {
     setShowParentFields(true);
@@ -85,7 +91,11 @@ const StudentForm = () => {
           // const data = await response.json();
           const data = [];
           if (data.length === 0) {
-            setCreateParent(true);
+            // setCreateParent(true);
+            setParentSearchResults([
+              { id: 1, name: "test" },
+              { id: 2, name: "test" },
+            ]);
           } else {
             setCreateParent(false);
             setParentSearchResults([
@@ -156,6 +166,122 @@ const StudentForm = () => {
         </DialogHeader>
         <form action={formAction} ref={formRef} className="space-y-4">
           <div className="space-y-4">
+            {/* Parent Search Section */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium">Parent Information</h3>
+              <div className="space-y-2">
+                <Label htmlFor="parent_search">
+                  Search Parent <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  type="hidden"
+                  name="parent"
+                  value={selectedParent?.id || ""}
+                />
+                <div className="relative">
+                  <Input
+                    id="parent_search"
+                    type="text"
+                    placeholder="Search parent by name"
+                    value={parentSearchQuery}
+                    onChange={(e) => {
+                      setParentSearchQuery(e.target.value);
+                      setSelectedParent(null);
+                    }}
+                    className="pr-10"
+                    disabled={showParentFields}
+                  />
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    {isSearching ? (
+                      <div className="animate-spin h-5 w-5 border-2 border-gray-500 rounded-full border-t-transparent" />
+                    ) : selectedParent ? (
+                      <Check className="h-5 w-5 text-green-500" />
+                    ) : (
+                      <Search className="h-5 w-5 text-gray-400" />
+                    )}
+                  </div>
+
+                  {/* Parent search results dropdown */}
+                  {parentSearchResults.length > 0 &&
+                    parentSearchQuery.length >= 2 &&
+                    !showParentFields && (
+                      <div className="absolute z-10 w-full bg-white border rounded-md shadow-lg mt-1">
+                        {parentSearchResults.map((parent) => (
+                          <div
+                            key={parent.id}
+                            className="p-2 hover:bg-gray-100 cursor-pointer"
+                            onClick={() => {
+                              setSelectedParent(parent);
+                              setParentSearchQuery(parent.name);
+                              setParentSearchResults([]);
+                              setShowParentFields(false);
+                            }}
+                          >
+                            {parent.name}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                </div>
+
+                {/* "Parent not found" message and button */}
+                {createParent && (
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-600">Parent not found.</p>
+                    <Button
+                      type="button"
+                      onClick={handleCreateNewParent}
+                      className="mt-2 bg-yellow-9 text-gray-800 hover:bg-yellow-8"
+                    >
+                      Create New Parent
+                    </Button>
+                  </div>
+                )}
+
+                {/* New Parent Registration Fields */}
+                {showParentFields && (
+                  <div className="mt-4 space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="parent_username">
+                          Username <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                          id="parent_username"
+                          name="parent_username"
+                          placeholder="Enter username"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="parent_email">
+                          Email <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                          id="parent_email"
+                          name="parent_email"
+                          type="email"
+                          placeholder="Enter email"
+                        />
+                      </div>
+                    </div>
+
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        setShowParentFields(false);
+                        setParentSearchQuery("");
+                      }}
+                      className="bg-gray-200 text-gray-800 hover:bg-gray-300"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                )}
+                <small className="text-red-500">{zoderror?.parent}</small>
+              </div>
+              <Separator className="my-4 bg-gray-300" />
+            </div>
             <h3 className="text-lg font-medium">Student Information</h3>
             {/* Personal Information */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -305,122 +431,37 @@ const StudentForm = () => {
                 </small>
               </div>
             </div>
-            <Separator className="my-4 bg-gray-300" />
-          </div>
 
-          {/* Parent Search Section */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">Parent Information</h3>
-            <div className="space-y-2">
-              <Label htmlFor="parent_search">
-                Search Parent <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                type="hidden"
-                name="parent"
-                value={selectedParent?.id || ""}
-              />
-              <div className="relative">
-                <Input
-                  id="parent_search"
-                  type="text"
-                  placeholder="Search parent by name"
-                  value={parentSearchQuery}
-                  onChange={(e) => {
-                    setParentSearchQuery(e.target.value);
-                    setSelectedParent(null);
-                  }}
-                  className="pr-10"
-                  disabled={showParentFields}
-                />
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  {isSearching ? (
-                    <div className="animate-spin h-5 w-5 border-2 border-gray-500 rounded-full border-t-transparent" />
-                  ) : selectedParent ? (
-                    <Check className="h-5 w-5 text-green-500" />
-                  ) : (
-                    <Search className="h-5 w-5 text-gray-400" />
-                  )}
-                </div>
-
-                {/* Parent search results dropdown */}
-                {parentSearchResults.length > 0 &&
-                  parentSearchQuery.length >= 2 &&
-                  !showParentFields && (
-                    <div className="absolute z-10 w-full bg-white border rounded-md shadow-lg mt-1">
-                      {parentSearchResults.map((parent) => (
-                        <div
-                          key={parent.id}
-                          className="p-2 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => {
-                            setSelectedParent(parent);
-                            setParentSearchQuery(parent.name);
-                            setParentSearchResults([]);
-                            setShowParentFields(false);
-                          }}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <div className="space-y-2">
+                  <Label htmlFor="timeslot">
+                    Time Slot <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="timeslot"
+                    name="timeslot"
+                    type="hidden"
+                    value={confirmTimeslot}
+                  />
+                  <Select onValueChange={(value) => setConfirmTimeslot(value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a time slot" />
+                    </SelectTrigger>
+                    <SelectContent className="select-content">
+                      {timeslots.map((ts) => (
+                        <SelectItem
+                          key={ts.id}
+                          value={ts.value}
+                          className="select-item"
                         >
-                          {parent.name}
-                        </div>
+                          {ts.value}
+                        </SelectItem>
                       ))}
-                    </div>
-                  )}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-
-              {/* "Parent not found" message and button */}
-              {createParent && (
-                <div className="mt-2">
-                  <p className="text-sm text-gray-600">Parent not found.</p>
-                  <Button
-                    type="button"
-                    onClick={handleCreateNewParent}
-                    className="mt-2 bg-yellow-9 text-gray-800 hover:bg-yellow-8"
-                  >
-                    Create New Parent
-                  </Button>
-                </div>
-              )}
-
-              {/* New Parent Registration Fields */}
-              {showParentFields && (
-                <div className="mt-4 space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="parent_username">
-                        Username <span className="text-red-500">*</span>
-                      </Label>
-                      <Input
-                        id="parent_username"
-                        name="parent_username"
-                        placeholder="Enter username"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="parent_email">
-                        Email <span className="text-red-500">*</span>
-                      </Label>
-                      <Input
-                        id="parent_email"
-                        name="parent_email"
-                        type="email"
-                        placeholder="Enter email"
-                      />
-                    </div>
-                  </div>
-
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      setShowParentFields(false);
-                      setParentSearchQuery("");
-                    }}
-                    className="bg-gray-200 text-gray-800 hover:bg-gray-300"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              )}
-              <small className="text-red-500">{zoderror?.parent}</small>
             </div>
             <Separator className="my-4 bg-gray-300" />
           </div>
@@ -479,11 +520,7 @@ const StudentForm = () => {
               <Label htmlFor="starter_kits">
                 Starter Kits <span className="text-red-500">*</span>
               </Label>
-              <Input
-                type="hidden"
-                name="starter_kits"
-                value={selectedItems.join(",")}
-              />
+              <Input type="hidden" name="starter_kits" value={selectedItems} />
               <div className="flex flex-wrap gap-2 mb-2">
                 {selectedItems.map((kit) => (
                   <div
