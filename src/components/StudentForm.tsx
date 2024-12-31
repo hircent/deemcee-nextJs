@@ -49,6 +49,15 @@ const StudentForm = () => {
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
   const [state, formAction] = useFormState(createStudent, SERVER_ACTION_STATE);
+  const [showParentFields, setShowParentFields] = useState(false);
+  const [createParent, setCreateParent] = useState(false);
+
+  const handleCreateNewParent = () => {
+    setShowParentFields(true);
+    setParentSearchQuery("");
+    setParentSearchResults([]);
+    setSelectedParent(null);
+  };
 
   // Debounced parent search
   useEffect(() => {
@@ -61,7 +70,16 @@ const StudentForm = () => {
           //   `/api/search-parents?q=${parentSearchQuery}`
           // );
           // const data = await response.json();
-          setParentSearchResults([{ id: 1, name: "test" }]);
+          const data = [];
+          if (data.length === 0) {
+            setCreateParent(true);
+          } else {
+            setCreateParent(false);
+            setParentSearchResults([
+              { id: 1, name: "test" },
+              { id: 2, name: "test" },
+            ]);
+          }
         } catch (error) {
           console.error("Error searching parents:", error);
           toast({
@@ -286,8 +304,12 @@ const StudentForm = () => {
                   type="text"
                   placeholder="Search parent by name"
                   value={parentSearchQuery}
-                  onChange={(e) => setParentSearchQuery(e.target.value)}
+                  onChange={(e) => {
+                    setParentSearchQuery(e.target.value);
+                    setSelectedParent(null);
+                  }}
                   className="pr-10"
+                  disabled={showParentFields}
                 />
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                   {isSearching ? (
@@ -301,7 +323,8 @@ const StudentForm = () => {
 
                 {/* Parent search results dropdown */}
                 {parentSearchResults.length > 0 &&
-                  parentSearchQuery.length >= 2 && (
+                  parentSearchQuery.length >= 2 &&
+                  !showParentFields && (
                     <div className="absolute z-10 w-full bg-white border rounded-md shadow-lg mt-1">
                       {parentSearchResults.map((parent) => (
                         <div
@@ -311,6 +334,7 @@ const StudentForm = () => {
                             setSelectedParent(parent);
                             setParentSearchQuery(parent.name);
                             setParentSearchResults([]);
+                            setShowParentFields(false);
                           }}
                         >
                           {parent.name}
@@ -319,6 +343,61 @@ const StudentForm = () => {
                     </div>
                   )}
               </div>
+
+              {/* "Parent not found" message and button */}
+              {createParent && (
+                <div className="mt-2">
+                  <p className="text-sm text-gray-600">Parent not found.</p>
+                  <Button
+                    type="button"
+                    onClick={handleCreateNewParent}
+                    className="mt-2 bg-yellow-9 text-gray-800 hover:bg-yellow-8"
+                  >
+                    Create New Parent
+                  </Button>
+                </div>
+              )}
+
+              {/* New Parent Registration Fields */}
+              {showParentFields && (
+                <div className="mt-4 space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="parent_username">
+                        Username <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="parent_username"
+                        name="parent_username"
+                        placeholder="Enter username"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="parent_email">
+                        Email <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="parent_email"
+                        name="parent_email"
+                        type="email"
+                        placeholder="Enter email"
+                      />
+                    </div>
+                  </div>
+
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      setShowParentFields(false);
+                      setParentSearchQuery("");
+                    }}
+                    className="bg-gray-200 text-gray-800 hover:bg-gray-300"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              )}
               <small className="text-red-500">{zoderror?.parent}</small>
             </div>
             <Separator className="my-4 bg-gray-300" />
