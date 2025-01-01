@@ -27,6 +27,7 @@ import { useToast } from "./ui/use-toast";
 import { cn } from "@/lib/utils";
 import SubmitButton from "./SubmitButton";
 import {
+  GRADE,
   ReferralChannels,
   SERVER_ACTION_STATE,
   StarterKitItems,
@@ -35,15 +36,6 @@ import { useFormState } from "react-dom";
 import { StudentFormErrors } from "@/types/student";
 import { createStudent } from "@/lib/actions/student.action";
 import MultiSelect from "./MultiSelect";
-
-const GRADE = [
-  { id: 1, value: "Grade 1" },
-  { id: 2, value: "Grade 2" },
-  { id: 3, value: "Grade 3" },
-  { id: 4, value: "Grade 4" },
-  { id: 5, value: "Grade 5" },
-  { id: 6, value: "Grade 6" },
-];
 
 type TimeslotData = {
   id: number;
@@ -404,7 +396,7 @@ const StudentForm = () => {
                           value={grade.value}
                           className="select-item"
                         >
-                          {grade.value}
+                          {grade.label}
                         </SelectItem>
                       ))}
                     </SelectContent>

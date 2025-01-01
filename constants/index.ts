@@ -162,6 +162,15 @@ export const CLASS_TYPES = [
   { value: "Superkids", label: "Superkids" },
 ];
 
+export const GRADE = [
+  { id: 1, value: "Kiddo", label: "Grade 1" },
+  { id: 2, value: "Kiddo", label: "Grade 2" },
+  { id: 3, value: "Kids", label: "Grade 3" },
+  { id: 4, value: "Kids", label: "Grade 4" },
+  { id: 5, value: "Superkids", label: "Grade 5" },
+  { id: 6, value: "Superkids", label: "Grade 6" },
+];
+
 export const StarterKitItems = [
   { label: "Book1", value: "Book1" },
   { label: "Book2", value: "Book2" },
