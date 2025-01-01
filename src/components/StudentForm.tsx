@@ -393,7 +393,7 @@ const StudentForm = () => {
                       {GRADE.map((grade) => (
                         <SelectItem
                           key={grade.id}
-                          value={grade.value}
+                          value={grade.label}
                           className="select-item"
                         >
                           {grade.label}
