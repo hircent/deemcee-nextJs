@@ -220,10 +220,10 @@ function getCategory(grade: number) {
   switch (grade) {
     case 1:
     case 2:
-      return "Kids";
+      return "Kiddo";
     case 3:
     case 4:
-      return "Kiddo";
+      return "Kids";
     case 5:
     case 6:
       return "Superkids";
