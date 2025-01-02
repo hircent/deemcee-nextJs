@@ -471,6 +471,7 @@ const StudentForm = () => {
                     <SelectContent className="select-content">
                       {timeslots.map((ts) => (
                         <SelectItem
+                          disabled={ts.student_in_class >= 6}
                           key={ts.id}
                           value={ts.id.toString()}
                           className="select-item"
