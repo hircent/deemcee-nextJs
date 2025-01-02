@@ -172,12 +172,16 @@ export const GRADE = [
 ];
 
 export const StarterKitItems = [
-  { label: "Book1", value: "Book1" },
-  { label: "Book2", value: "Book2" },
-  { label: "Shirt1", value: "Shirt1" },
-  { label: "Shirt2", value: "Shirt2" },
-  { label: "Bag1", value: "Bag1" },
-  { label: "Bag2", value: "Bag2" },
+  { label: "Student Booklet - G1", value: "14" },
+  { label: "Student Booklet - G2", value: "15" },
+  { label: "Student Booklet - G3", value: "16" },
+  { label: "Student Booklet - G4", value: "17" },
+  { label: "Student Booklet - G5", value: "18" },
+  { label: "Student Booklet - G6", value: "19" },
+  { label: "Student Uniform | Male - 36", value: "221" },
+  { label: "Student Uniform | Male - 38", value: "222" },
+  { label: "Student Uniform | Female - 36", value: "223" },
+  { label: "Student Uniform | Female - 38", value: "225" },
 ];
 
 export const ReferralChannels = [

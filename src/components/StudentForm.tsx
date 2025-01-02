@@ -41,9 +41,14 @@ import { SearchParentListProps, TimeslotData } from "@/types/index";
 import { getTimeslots } from "@/lib/actions/class.action";
 import { set } from "zod";
 
+type StarterKitItem = {
+  label: string;
+  value: string;
+};
+
 const StudentForm = () => {
   const [referralChannel, setReferralChannel] = useState<string>("");
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [selectedItems, setSelectedItems] = useState<StarterKitItem[]>([]);
   const [zoderror, setZodError] = useState<StudentFormErrors | null>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [parentSearchQuery, setParentSearchQuery] = useState<string>("");
@@ -122,6 +127,10 @@ const StudentForm = () => {
       formRef.current?.reset();
       setOpen(false);
       setZodError(null);
+      setParentSearchQuery("");
+      setParentSearchResults([]);
+      setSelectedParent(null);
+      setSelectedItems([]);
     }
     if (state.error) {
       toast({
@@ -203,6 +212,7 @@ const StudentForm = () => {
                       setParentSearchQuery(e.target.value);
                       setSelectedParent(null);
                       setIsSearchable(true);
+                      setCreateParent(false);
                     }}
                     className="pr-10"
                     disabled={showParentFields}
@@ -359,10 +369,10 @@ const StudentForm = () => {
                     <SelectValue placeholder="Select gender" />
                   </SelectTrigger>
                   <SelectContent className="select-content">
-                    <SelectItem value="male" className="select-item">
+                    <SelectItem value="Male" className="select-item">
                       Male
                     </SelectItem>
-                    <SelectItem value="female" className="select-item">
+                    <SelectItem value="Female" className="select-item">
                       Female
                     </SelectItem>
                   </SelectContent>
@@ -541,14 +551,18 @@ const StudentForm = () => {
               <Label htmlFor="starter_kits">
                 Starter Kits <span className="text-red-500">*</span>
               </Label>
-              <Input type="hidden" name="starter_kits" value={selectedItems} />
+              <Input
+                type="hidden"
+                name="starter_kits"
+                value={JSON.stringify(selectedItems)}
+              />
               <div className="flex flex-wrap gap-2 mb-2">
                 {selectedItems.map((kit) => (
                   <div
-                    key={kit}
+                    key={kit.value}
                     className="bg-yellow-9 text-gray-800 px-3 py-1 rounded-full flex items-center gap-2"
                   >
-                    <span className="text-xs">{kit}</span>
+                    <span className="text-xs">{kit.label}</span>
                     <button
                       type="button"
                       onClick={() =>

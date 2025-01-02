@@ -124,21 +124,20 @@ export async function createStudent(
       };
     }
 
-    console.log(data);
-    // const response = await fetch(`${process.env.API_URL}/student/create`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${token?.value}`,
-    //     BranchId: `${branchId?.toString()}`,
-    //   },
-    //   body: JSON.stringify(data),
-    // });
+    const response = await fetch(`${process.env.API_URL}/student/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+        BranchId: `${branchId?.toString()}`,
+      },
+      body: JSON.stringify(data),
+    });
 
-    // if (!response.ok) {
-    //   const res = await response.json();
-    //   return { error: true, msg: res.msg };
-    // }
+    if (!response.ok) {
+      const res = await response.json();
+      return { error: true, msg: res.msg };
+    }
 
     revalidatePath("/deusers/student");
     return { success: true, msg: "Student is created" };

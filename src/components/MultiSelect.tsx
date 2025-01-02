@@ -12,11 +12,16 @@ import { Dispatch, SetStateAction } from "react";
 
 type Option = { label: string; value: string };
 
+type StarterKitItem = {
+  label: string;
+  value: string;
+};
+
 interface ISelectProps {
   placeholder: string;
   options: Option[];
-  selectedOptions: string[];
-  setSelectedOptions: Dispatch<SetStateAction<string[]>>;
+  selectedOptions: StarterKitItem[];
+  setSelectedOptions: Dispatch<SetStateAction<StarterKitItem[]>>;
 }
 const MultiSelect = ({
   placeholder,
@@ -24,19 +29,18 @@ const MultiSelect = ({
   selectedOptions: selectedItems,
   setSelectedOptions: setSelectedItems,
 }: ISelectProps) => {
-  const handleSelectChange = (value: string) => {
-    if (!selectedItems.includes(value)) {
-      setSelectedItems((prev) => [...prev, value]);
+  const handleSelectChange = (value: string, label: string) => {
+    const starterKitItem: StarterKitItem = { value, label };
+
+    if (!selectedItems.some((item) => item.value === value)) {
+      setSelectedItems((prev) => [...prev, starterKitItem]);
     } else {
-      const referencedArray = [...selectedItems];
-      const indexOfItemToBeRemoved = referencedArray.indexOf(value);
-      referencedArray.splice(indexOfItemToBeRemoved, 1);
-      setSelectedItems(referencedArray);
+      setSelectedItems((prev) => prev.filter((item) => item.value !== value));
     }
   };
 
   const isOptionSelected = (value: string): boolean => {
-    return selectedItems.includes(value) ? true : false;
+    return selectedItems.some((item) => item.value === value);
   };
 
   return (
@@ -61,7 +65,9 @@ const MultiSelect = ({
                 onSelect={(e) => e.preventDefault()}
                 key={index}
                 checked={isOptionSelected(value.value)}
-                onCheckedChange={() => handleSelectChange(value.value)}
+                onCheckedChange={() =>
+                  handleSelectChange(value.value, value.label)
+                }
                 className="cursor-pointer hover:bg-yellow-9"
               >
                 {value.label}
