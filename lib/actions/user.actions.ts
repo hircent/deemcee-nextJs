@@ -20,6 +20,8 @@ import {
   ChangePasswordErrors,
   ParentFullDetailsData,
   UpdateUserFullDetailsError,
+  SearchParentListProps,
+  GetResponseProps,
 } from "@/types/index";
 import { jwtDecode } from "jwt-decode";
 import { redirect } from "next/navigation";
@@ -551,5 +553,35 @@ export async function updateUserFullDetails(
     return { success: true, msg: `${username} is updated` };
   } catch (error) {
     return { error: true, msg: (error as Error).message };
+  }
+}
+
+export async function getSearchParents(
+  searchQuery: string
+): Promise<SearchParentListProps[]> {
+  const token = await getToken();
+  const branchId = cookies().get("BranchId")?.value;
+  try {
+    const response = await fetch(
+      `${process.env.API_URL}/search/parent/list?q=${searchQuery}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error! Status: ${response.status}`);
+    }
+
+    const data: GetResponseProps<SearchParentListProps> = await response.json();
+
+    return data.data;
+  } catch (error) {
+    throw error;
   }
 }

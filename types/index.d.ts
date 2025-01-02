@@ -334,6 +334,11 @@ declare interface signInResponse {
   data: User | undefined;
 }
 
+export type GetResponseProps<T> = {
+  success: boolean;
+  data: T[];
+};
+
 export type BranchRole = {
   branch_id: number;
   branch_name: string;
@@ -461,6 +466,12 @@ export type ParentFullDetailsData = {
   address: UserAddress;
   user_branch_roles: BranchRole[];
   children: Child[];
+};
+
+export type SearchParentListProps = {
+  id: number;
+  first_name: string;
+  email: string;
 };
 
 export type ChangePasswordErrors = {
@@ -672,4 +683,9 @@ export type STATE<T> = {
 export type SectionNavLink = {
   href: string;
   label: string;
+};
+
+export type TimeslotData = {
+  id: number;
+  value: string;
 };

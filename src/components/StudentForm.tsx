@@ -36,11 +36,8 @@ import { useFormState } from "react-dom";
 import { StudentFormErrors } from "@/types/student";
 import { createStudent } from "@/lib/actions/student.action";
 import MultiSelect from "./MultiSelect";
-
-type TimeslotData = {
-  id: number;
-  value: string;
-};
+import { getSearchParents } from "@/lib/actions/user.actions";
+import { SearchParentListProps, TimeslotData } from "@/types/index";
 
 const StudentForm = () => {
   const [referralChannel, setReferralChannel] = useState<string>("");
@@ -51,6 +48,7 @@ const StudentForm = () => {
   const [selectedParent, setSelectedParent] = useState<any>(null);
   const [gender, setGender] = useState<string | undefined>(undefined);
   const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [isSearchable, setIsSearchable] = useState<boolean>(false);
   const [showParentFields, setShowParentFields] = useState(false);
   const [createParent, setCreateParent] = useState(false);
   const [startingGrade, setStartingGrade] = useState<string | undefined>(
@@ -58,7 +56,9 @@ const StudentForm = () => {
   );
   const [timeslots, setTimeslots] = useState<TimeslotData[]>([]);
   const [confirmTimeslot, setConfirmTimeslot] = useState<string>("");
-  const [parentSearchResults, setParentSearchResults] = useState<any[]>([]);
+  const [parentSearchResults, setParentSearchResults] = useState<
+    SearchParentListProps[]
+  >([]);
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
   const [state, formAction] = useFormState(createStudent, SERVER_ACTION_STATE);
@@ -73,27 +73,16 @@ const StudentForm = () => {
   // Debounced parent search
   useEffect(() => {
     const timer = setTimeout(async () => {
-      if (parentSearchQuery.length >= 2) {
+      if (parentSearchQuery.length >= 2 && isSearchable) {
         setIsSearching(true);
         try {
           // Replace with your actual API endpoint
-          // const response = await fetch(
-          //   `/api/search-parents?q=${parentSearchQuery}`
-          // );
-          // const data = await response.json();
-          const data = [];
+          const data = await getSearchParents(parentSearchQuery);
           if (data.length === 0) {
-            // setCreateParent(true);
-            setParentSearchResults([
-              { id: 1, name: "test" },
-              { id: 2, name: "test" },
-            ]);
+            setCreateParent(true);
           } else {
             setCreateParent(false);
-            setParentSearchResults([
-              { id: 1, name: "test" },
-              { id: 2, name: "test" },
-            ]);
+            setParentSearchResults(data);
           }
         } catch (error) {
           console.error("Error searching parents:", error);
@@ -108,7 +97,7 @@ const StudentForm = () => {
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [parentSearchQuery, toast]);
+  }, [parentSearchQuery, toast, isSearchable]);
 
   useEffect(() => {
     if (state.zodErr) {
@@ -179,6 +168,7 @@ const StudentForm = () => {
                     onChange={(e) => {
                       setParentSearchQuery(e.target.value);
                       setSelectedParent(null);
+                      setIsSearchable(true);
                     }}
                     className="pr-10"
                     disabled={showParentFields}
@@ -204,12 +194,13 @@ const StudentForm = () => {
                             className="p-2 hover:bg-gray-100 cursor-pointer"
                             onClick={() => {
                               setSelectedParent(parent);
-                              setParentSearchQuery(parent.name);
+                              setParentSearchQuery(parent.email);
                               setParentSearchResults([]);
                               setShowParentFields(false);
+                              setIsSearchable(false);
                             }}
                           >
-                            {parent.name}
+                            {parent.email}
                           </div>
                         ))}
                       </div>
