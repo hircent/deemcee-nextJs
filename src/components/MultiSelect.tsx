@@ -7,15 +7,11 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { StarterKitItem } from "@/types/index";
 import { ChevronDown } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
 
 type Option = { label: string; value: string };
-
-type StarterKitItem = {
-  label: string;
-  value: string;
-};
 
 interface ISelectProps {
   placeholder: string;

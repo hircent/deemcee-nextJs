@@ -691,3 +691,8 @@ export type TimeslotData = {
   day: string;
   student_in_class: number;
 };
+
+export type StarterKitItem = {
+  label: string;
+  value: string;
+};

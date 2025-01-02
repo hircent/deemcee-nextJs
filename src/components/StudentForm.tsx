@@ -37,14 +37,12 @@ import { StudentFormErrors } from "@/types/student";
 import { createStudent } from "@/lib/actions/student.action";
 import MultiSelect from "./MultiSelect";
 import { getSearchParents } from "@/lib/actions/user.actions";
-import { SearchParentListProps, TimeslotData } from "@/types/index";
+import {
+  SearchParentListProps,
+  StarterKitItem,
+  TimeslotData,
+} from "@/types/index";
 import { getTimeslots } from "@/lib/actions/class.action";
-import { set } from "zod";
-
-type StarterKitItem = {
-  label: string;
-  value: string;
-};
 
 const StudentForm = () => {
   const [referralChannel, setReferralChannel] = useState<string>("");
@@ -548,9 +546,7 @@ const StudentForm = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-medium">Free Gift</h3>
             <div className="space-y-2">
-              <Label htmlFor="starter_kits">
-                Starter Kits <span className="text-red-500">*</span>
-              </Label>
+              <Label htmlFor="starter_kits">Starter Kits</Label>
               <Input
                 type="hidden"
                 name="starter_kits"
