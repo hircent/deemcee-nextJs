@@ -687,5 +687,7 @@ export type SectionNavLink = {
 
 export type TimeslotData = {
   id: number;
-  value: string;
+  label: string;
+  day: string;
+  student_in_class: number;
 };

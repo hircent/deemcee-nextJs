@@ -38,6 +38,8 @@ import { createStudent } from "@/lib/actions/student.action";
 import MultiSelect from "./MultiSelect";
 import { getSearchParents } from "@/lib/actions/user.actions";
 import { SearchParentListProps, TimeslotData } from "@/types/index";
+import { getTimeslots } from "@/lib/actions/class.action";
+import { set } from "zod";
 
 const StudentForm = () => {
   const [referralChannel, setReferralChannel] = useState<string>("");
@@ -54,11 +56,17 @@ const StudentForm = () => {
   const [startingGrade, setStartingGrade] = useState<string | undefined>(
     undefined
   );
+  const [enrolmentDate, setEnrolmentDate] = useState<string | undefined>(
+    undefined
+  );
   const [timeslots, setTimeslots] = useState<TimeslotData[]>([]);
   const [confirmTimeslot, setConfirmTimeslot] = useState<string>("");
   const [parentSearchResults, setParentSearchResults] = useState<
     SearchParentListProps[]
   >([]);
+  const [placeholder, setPlaceholder] = useState<string>(
+    "Select Grade and Enrolement Date"
+  );
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
   const [state, formAction] = useFormState(createStudent, SERVER_ACTION_STATE);
@@ -99,6 +107,7 @@ const StudentForm = () => {
     return () => clearTimeout(timer);
   }, [parentSearchQuery, toast, isSearchable]);
 
+  // ZodErrors
   useEffect(() => {
     if (state.zodErr) {
       setZodError(state.zodErr);
@@ -124,6 +133,31 @@ const StudentForm = () => {
     }
   }, [state, toast]);
 
+  // Get Timeslots
+  useEffect(() => {
+    const fetchTimeslots = async () => {
+      if (enrolmentDate && startingGrade) {
+        setTimeslots([]);
+        try {
+          const timeslots = await getTimeslots({
+            date: enrolmentDate,
+            grade: +startingGrade,
+          });
+
+          if (timeslots.length === 0) {
+            setPlaceholder("No available time slots");
+          } else {
+            setPlaceholder("Select a time slot");
+            setTimeslots(timeslots);
+          }
+        } catch (error) {
+          console.error("Error fetching timeslots:", error);
+        }
+      }
+    };
+
+    fetchTimeslots();
+  }, [enrolmentDate, startingGrade]);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -384,7 +418,7 @@ const StudentForm = () => {
                       {GRADE.map((grade) => (
                         <SelectItem
                           key={grade.id}
-                          value={grade.label}
+                          value={grade.id.toString()}
                           className="select-item"
                         >
                           {grade.label}
@@ -407,6 +441,9 @@ const StudentForm = () => {
                     id="enrolment_date"
                     name="enrolment_date"
                     type="date"
+                    onChange={(e) => {
+                      setEnrolmentDate(e.target.value);
+                    }}
                   />
                 </div>
                 <small className="text-red-500">
@@ -429,16 +466,16 @@ const StudentForm = () => {
                   />
                   <Select onValueChange={(value) => setConfirmTimeslot(value)}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a time slot" />
+                      <SelectValue placeholder={placeholder} />
                     </SelectTrigger>
                     <SelectContent className="select-content">
                       {timeslots.map((ts) => (
                         <SelectItem
                           key={ts.id}
-                          value={ts.value}
+                          value={ts.id.toString()}
                           className="select-item"
                         >
-                          {ts.value}
+                          {ts.label + " - " + "(" + ts.student_in_class + "/6)"}
                         </SelectItem>
                       ))}
                     </SelectContent>

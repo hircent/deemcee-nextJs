@@ -1,10 +1,21 @@
 "use server";
-import { ClassFormErrors, ClassListData } from "@/types/class";
+import {
+  ClassFormErrors,
+  ClassListData,
+  GetTimeslotProps,
+} from "@/types/class";
 import { getToken } from "./user.actions";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { ListProps, SearchParamsFilterProps, STATE } from "@/types/index";
+import {
+  GetResponseProps,
+  ListProps,
+  SearchParamsFilterProps,
+  STATE,
+  TimeslotData,
+} from "@/types/index";
 import { ClassFormSchema, DeleteClassSchema } from "@/constants/form";
+import { formatDateTime } from "../utils";
 
 export async function getClassList(
   params: SearchParamsFilterProps
@@ -199,6 +210,55 @@ export async function getClassDetails(id: number): Promise<ClassListData> {
     }
 
     const data = await response.json();
+    return data.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+function getCategory(grade: number) {
+  switch (grade) {
+    case 1:
+    case 2:
+      return "Kids";
+    case 3:
+    case 4:
+      return "Kiddo";
+    case 5:
+    case 6:
+      return "Superkids";
+  }
+}
+
+export async function getTimeslots({
+  date,
+  grade,
+}: GetTimeslotProps): Promise<TimeslotData[]> {
+  const token = await getToken();
+  const branchId = cookies().get("BranchId")?.value;
+
+  const category = getCategory(grade);
+
+  console.log(category);
+  try {
+    const response = await fetch(
+      `${process.env.API_URL}/timeslot/list?date=${date}&category=${category}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+        cache: "no-cache",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch calendar data " + response.statusText);
+    }
+
+    const data: GetResponseProps<TimeslotData> = await response.json();
     return data.data;
   } catch (error) {
     throw error;

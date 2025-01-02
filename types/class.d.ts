@@ -17,3 +17,8 @@ export type ClassFormErrors = {
   end_time?: string;
   day?: string;
 };
+
+export type GetTimeslotProps = {
+  date: string;
+  grade: number;
+};

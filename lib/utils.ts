@@ -41,6 +41,10 @@ export const formatDateTime = (dateString: Date) => {
     day: "2-digit", // numeric day of the month (e.g., '25')
   };
 
+  const dayLongOptions: Intl.DateTimeFormatOptions = {
+    weekday: "long",
+  };
+
   const dateOptions: Intl.DateTimeFormatOptions = {
     month: "long", // abbreviated month name (e.g., 'Oct')
     year: "numeric", // numeric year (e.g., '2023')
@@ -63,6 +67,11 @@ export const formatDateTime = (dateString: Date) => {
     dateDayOptions
   );
 
+  const formattedDateDayLong: string = new Date(dateString).toLocaleString(
+    "en-US",
+    dayLongOptions
+  );
+
   const formattedDate: string = new Date(dateString).toLocaleString(
     "en-US",
     dateOptions
@@ -76,6 +85,7 @@ export const formatDateTime = (dateString: Date) => {
   return {
     dateTime: formattedDateTime,
     dateDay: formattedDateDay,
+    dateDayLong: formattedDateDayLong,
     dateOnly: formattedDate,
     timeOnly: formattedTime,
   };
