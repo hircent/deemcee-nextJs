@@ -26,7 +26,7 @@ export default async function ProfilePage({
 
   return (
     <div className="home-content">
-      <div className="h-max bg-yellow-2 rounded-md p-8 ">
+      <div className="h-max bg-yellow-2 rounded-md p-8">
         <div className="mx-auto space-y-6">
           {/* Header Section */}
           <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between">
