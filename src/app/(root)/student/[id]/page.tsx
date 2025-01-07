@@ -1,8 +1,8 @@
 import { StudentCard } from "@/components/StudentCard";
 import React from "react";
-const studentData = {
-  success: true,
-  data: {
+
+const StudentProfile = ({ params }: { params: { id: number } }) => {
+  const student = {
     id: 2976,
     first_name: "Romeo Nicholas Christopher",
     last_name: null,
@@ -41,14 +41,12 @@ const studentData = {
         outstanding: 700,
       },
     ],
-  },
-};
+  };
 
-const StudentProfile = ({ params }: { params: { id: number } }) => {
   return (
     <div className="home-content">
       <div className="h-max bg-yellow-2 rounded-md p-8">
-        <StudentCard data={studentData.data} />
+        <StudentCard student={student} />
       </div>
     </div>
   );
