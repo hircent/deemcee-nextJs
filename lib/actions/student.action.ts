@@ -1,9 +1,10 @@
 "use server";
 
-import { ListProps, STATE } from "@/types/index";
+import { GetResponseProps, ListProps, STATE } from "@/types/index";
 import { getToken } from "./user.actions";
 import { cookies } from "next/headers";
 import {
+  StudentData,
   StudentFormErrors,
   StudentListFilterProps,
   StudentProps,
@@ -143,5 +144,32 @@ export async function createStudent(
     return { success: true, msg: "Student is created" };
   } catch (error) {
     return { error: true, msg: (error as Error).message };
+  }
+}
+
+export async function getStudentById(id: number): Promise<StudentData> {
+  const token = await getToken();
+  const branchId = cookies().get("BranchId")?.value;
+
+  try {
+    const response = await fetch(
+      `${process.env.API_URL}/student/details/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    throw error;
   }
 }

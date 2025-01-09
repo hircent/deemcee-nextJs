@@ -3,6 +3,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { extractDate } from "@/lib/utils";
 import { StudentProps } from "@/types/student";
 import { DeleteStudent } from "@/components/DeleteStudent";
+import Link from "next/link";
+import { EyeIcon } from "lucide-react";
 
 export const StudentListColumns: ColumnDef<StudentProps>[] = [
   {
@@ -39,28 +41,16 @@ export const StudentListColumns: ColumnDef<StudentProps>[] = [
       const student = row.original;
 
       return (
-        // <DropdownMenu>
-        //   <DropdownMenuTrigger asChild>
-        //     <Button variant="ghost" className="h-8 w-8 p-0">
-        //       <span className="sr-only">Open menu</span>
-        //       <MoreHorizontal className="h-4 w-4" />
-        //     </Button>
-        //   </DropdownMenuTrigger>
-        //   <DropdownMenuContent align="end" className="bg-white">
-        //     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        //     <DropdownMenuSeparator />
-        //     <DropdownMenuItem className="hover:bg-slate-400 cursor-pointer">
-        //       <EditBranch type={"branch"} id={branch.id} />
-        //       Edit
-        //     </DropdownMenuItem>
-        //     <DropdownMenuItem className="hover:bg-slate-400 cursor-pointer">
-        //       <DeleteBranch type={"branch"} name={branch.name} id={branch.id} />
-        //       Delete
-        //     </DropdownMenuItem>
-        //   </DropdownMenuContent>
-        // </DropdownMenu>
         <div className="flex gap-4 text-black-2">
-          <div>Edit</div>
+          <Link
+            className="group p-2 hover:bg-gray-100 rounded-full transition-colors"
+            href={`/student/${student.id}`}
+          >
+            <EyeIcon
+              size={18}
+              className="text-gray-500 group-hover:text-blue-500 transition-colors"
+            />
+          </Link>
           <DeleteStudent
             type="student"
             name={student.fullname}

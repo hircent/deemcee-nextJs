@@ -11,53 +11,7 @@ import {
 } from "@/components/ui/table";
 import { Book, CreditCard } from "lucide-react";
 import { formatDateTime } from "@/lib/utils";
-
-interface Parent {
-  id: number;
-  username: string;
-  email: string;
-  is_active: boolean;
-}
-
-interface Enrolment {
-  id: number;
-  start_date: string;
-  status: string;
-  remaining_lessons: number;
-  is_active: boolean;
-  freeze_lessons: number;
-  grade: number;
-}
-
-interface Payment {
-  id: number;
-  grade: number;
-  status: string;
-  term_fees: number;
-  paid: number;
-  outstanding: number;
-}
-
-interface StudentData {
-  id: number;
-  first_name: string;
-  last_name: string | null;
-  fullname: string;
-  gender: string;
-  dob: string;
-  school: string;
-  deemcee_starting_grade: number;
-  status: string;
-  enrolment_date: string;
-  branch: number;
-  parent: Parent;
-  enrolments: Enrolment[];
-  payment: Payment[];
-}
-
-interface StudentCardProps {
-  student: StudentData;
-}
+import { StudentCardProps } from "@/types/student";
 
 export function StudentCard({ student }: StudentCardProps) {
   return (
@@ -113,25 +67,27 @@ export function StudentCard({ student }: StudentCardProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-white/50 backdrop-blur-sm border-neutral-200">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg text-neutral-800">
-              Parent Contact
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <p className="text-sm text-neutral-600">Email</p>
-              <p className="font-medium text-neutral-800">
-                {student.parent.email}
-              </p>
-              <p className="text-sm text-neutral-600 mt-2">Username</p>
-              <p className="font-medium text-neutral-800">
-                {student.parent.username}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+        {student.parent && (
+          <Card className="bg-white/50 backdrop-blur-sm border-neutral-200">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg text-neutral-800">
+                Parent Contact
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <p className="text-sm text-neutral-600">Email</p>
+                <p className="font-medium text-neutral-800">
+                  {student.parent.email}
+                </p>
+                <p className="text-sm text-neutral-600 mt-2">Username</p>
+                <p className="font-medium text-neutral-800">
+                  {student.parent.username}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       {/* Tabs Section */}
@@ -176,7 +132,7 @@ export function StudentCard({ student }: StudentCardProps) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {student.enrolments.map((enrollment) => (
+                  {student.enrolments?.map((enrollment) => (
                     <TableRow
                       key={enrollment.id}
                       className="hover:bg-neutral-50"
@@ -241,7 +197,7 @@ export function StudentCard({ student }: StudentCardProps) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {student.payment.map((payment) => (
+                  {student.payment?.map((payment) => (
                     <TableRow key={payment.id} className="hover:bg-neutral-50">
                       <TableCell className="text-neutral-800">
                         {payment.id}
