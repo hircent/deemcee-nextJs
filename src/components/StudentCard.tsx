@@ -37,6 +37,8 @@ export function StudentCard({ student }: StudentCardProps) {
                   "bg-emerald-100 text-emerald-700":
                     student.status === "IN_PROGRESS",
                   "bg-red-100 text-red-700": student.status === "DROPPED_OUT",
+                  "bg-yellow-100 text-yellow-700":
+                    student.status === "GRADUATED",
                 })}
               >
                 {student.status}

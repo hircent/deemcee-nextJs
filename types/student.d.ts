@@ -26,6 +26,7 @@ export type StudentFormErrors = {
   deemcee_starting_grade?: string;
   enrolment_date?: string;
   parent?: string;
+  status?: string;
 };
 
 export interface Parent {
@@ -54,6 +55,11 @@ export interface Payment {
   outstanding: number;
 }
 
+interface StarterKitItem {
+  value: string;
+  label: string;
+}
+
 export interface StudentData {
   id: number;
   first_name: string;
@@ -69,6 +75,9 @@ export interface StudentData {
   parent?: Parent;
   enrolments?: Enrolment[];
   payment?: Payment[];
+  referral_channel: string | null;
+  referral: string | null;
+  starter_kits: StarterKitItem[];
 }
 
 export interface StudentCardProps {

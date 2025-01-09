@@ -19,26 +19,33 @@ import {
 } from "@/components/ui/select";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { Pencil } from "lucide-react";
+import { Pencil, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useToast } from "./ui/use-toast";
 import { cn } from "@/lib/utils";
 import { useFormState } from "react-dom";
-import { GRADE, SERVER_ACTION_STATE } from "@/constants/index";
+import {
+  GRADE,
+  ReferralChannels,
+  SERVER_ACTION_STATE,
+} from "@/constants/index";
 import SubmitButton from "./SubmitButton";
-import { ClassFormErrors } from "@/types/class";
-import { editClass } from "@/lib/actions/class.action";
-import { StudentCardProps } from "@/types/student";
+import { StudentCardProps, StudentFormErrors } from "@/types/student";
+import { editStudent } from "@/lib/actions/student.action";
 
 const STATUS = ["IN_PROGRESS", "DROPPED_OUT", "GRADUATED"];
 
 export function EditStudent({ student }: StudentCardProps) {
-  const [isLoading, setLoading] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false);
-  const [zoderror, setZodError] = useState<ClassFormErrors | null>(null);
+  const [zoderror, setZodError] = useState<StudentFormErrors | null>(null);
+  const [status, setStatus] = useState<string>(student.status);
+  const [gender, setGender] = useState<string>(student.gender);
+  const [referralChannel, setReferralChannel] = useState<string | null>(
+    student.referral_channel
+  );
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
-  const [state, formAction] = useFormState(editClass, SERVER_ACTION_STATE);
+  const [state, formAction] = useFormState(editStudent, SERVER_ACTION_STATE);
 
   useEffect(() => {
     if (state.zodErr) {
@@ -101,6 +108,7 @@ export function EditStudent({ student }: StudentCardProps) {
         >
           <div className="flex flex-col space-y-6">
             <h3 className="text-lg font-medium">Student Information</h3>
+            <Input type="hidden" id="id" name="id" defaultValue={student.id} />
             {/* Personal Information */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -143,14 +151,19 @@ export function EditStudent({ student }: StudentCardProps) {
                     defaultValue={student.fullname}
                   />
                 </div>
+                <small className="text-red-500">{zoderror?.fullname}</small>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="gender">
                   Gender <span className="text-red-500">*</span>
                 </Label>
-                <Input type="hidden" name="gender" value={student.gender} />
-                <Select name="gender" value={student.gender}>
+                <Input type="hidden" name="gender" value={gender} />
+                <Select
+                  name="gender"
+                  value={gender}
+                  onValueChange={(value) => setGender(value)}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select gender" />
                   </SelectTrigger>
@@ -164,6 +177,7 @@ export function EditStudent({ student }: StudentCardProps) {
                   </SelectContent>
                 </Select>
               </div>
+              <small className="text-red-500">{zoderror?.gender}</small>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -179,6 +193,7 @@ export function EditStudent({ student }: StudentCardProps) {
                     defaultValue={student.dob}
                   />
                 </div>
+                <small className="text-red-500">{zoderror?.dob}</small>
               </div>
 
               {/* School Information */}
@@ -195,22 +210,20 @@ export function EditStudent({ student }: StudentCardProps) {
                   />
                 </div>
               </div>
+              <small className="text-red-500">{zoderror?.school}</small>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <div className="space-y-2">
-                  <Label htmlFor="deemcee_starting_grade">
-                    Starting Grade <span className="text-red-500">*</span>
-                  </Label>
+                  <Label htmlFor="deemcee_starting_grade">Starting Grade</Label>
                   <Input
-                    id="deemcee_starting_grade"
-                    name="deemcee_starting_grade"
                     type="hidden"
-                    defaultValue={student.deemcee_starting_grade}
+                    name="deemcee_starting_grade"
+                    value={student.deemcee_starting_grade}
                   />
                   <Select value={student.deemcee_starting_grade.toString()}>
-                    <SelectTrigger>
+                    <SelectTrigger disabled>
                       <SelectValue placeholder="Select starting grade" />
                     </SelectTrigger>
                     <SelectContent className="select-content">
@@ -253,9 +266,12 @@ export function EditStudent({ student }: StudentCardProps) {
                     id="status"
                     name="status"
                     type="hidden"
-                    defaultValue={student.status}
+                    defaultValue={status}
                   />
-                  <Select value={student.status.toString()}>
+                  <Select
+                    value={status}
+                    onValueChange={(value) => setStatus(value)}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select a status" />
                     </SelectTrigger>
@@ -273,8 +289,58 @@ export function EditStudent({ student }: StudentCardProps) {
                   </Select>
                 </div>
               </div>
+              <small className="text-red-500">{zoderror?.status}</small>
             </div>
           </div>
+
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium">Referral Information</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="referral_channel">Referral Channel</Label>
+                <Input
+                  type="hidden"
+                  name="referral_channel"
+                  defaultValue={referralChannel?.toString()}
+                />
+                <Select
+                  name="referral_channel"
+                  value={referralChannel?.toString()}
+                  onValueChange={(value) => setReferralChannel(value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select referral channel" />
+                  </SelectTrigger>
+                  <SelectContent className="select-content">
+                    {ReferralChannels.map((channel) => (
+                      <SelectItem
+                        key={channel}
+                        value={channel}
+                        className="select-item"
+                      >
+                        {channel}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {/* <small className="text-red-500">{zoderror?.referral_channel}</small> */}
+              </div>
+
+              <div>
+                <div className="space-y-2">
+                  <Label htmlFor="referral">Referral Name</Label>
+                  <Input
+                    id="referral"
+                    name="referral"
+                    placeholder="Enter referral name"
+                    defaultValue={student.referral?.toString()}
+                  />
+                </div>
+                {/* <small className="text-red-500">{zoderror?.referral_name}</small> */}
+              </div>
+            </div>
+          </div>
+
           <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
             <SubmitButton label="Save" submitLabel="Saving" />
           </DialogFooter>
