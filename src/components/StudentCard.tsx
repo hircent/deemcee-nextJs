@@ -9,8 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Book, CreditCard } from "lucide-react";
-import { formatDateTime } from "@/lib/utils";
+import { Book, CreditCard, Check, X } from "lucide-react";
+import { cn, formatDateTime } from "@/lib/utils";
 import { StudentCardProps } from "@/types/student";
 
 export function StudentCard({ student }: StudentCardProps) {
@@ -33,7 +33,11 @@ export function StudentCard({ student }: StudentCardProps) {
                 variant={
                   student.status === "IN_PROGRESS" ? "default" : "secondary"
                 }
-                className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                className={cn({
+                  "bg-emerald-100 text-emerald-700":
+                    student.status === "IN_PROGRESS",
+                  "bg-red-100 text-red-700": student.status === "DROPPED_OUT",
+                })}
               >
                 {student.status}
               </Badge>
@@ -53,9 +57,7 @@ export function StudentCard({ student }: StudentCardProps) {
               </div>
               <div>
                 <p className="text-sm text-neutral-600">Branch</p>
-                <p className="font-medium text-neutral-800">
-                  Branch {student.branch}
-                </p>
+                <p className="font-medium text-neutral-800">{student.branch}</p>
               </div>
               <div>
                 <p className="text-sm text-neutral-600">Starting Grade</p>
@@ -126,7 +128,7 @@ export function StudentCard({ student }: StudentCardProps) {
                       Remaining Lessons
                     </TableHead>
                     <TableHead className="text-neutral-700">
-                      Freeze Lessons
+                      Is Active
                     </TableHead>
                     <TableHead className="text-neutral-700">Action</TableHead>
                   </TableRow>
@@ -160,7 +162,15 @@ export function StudentCard({ student }: StudentCardProps) {
                         {enrollment.remaining_lessons}
                       </TableCell>
                       <TableCell className="text-neutral-800">
-                        {enrollment.freeze_lessons}
+                        {enrollment.is_active ? (
+                          <div className="rounded-full bg-green-100 p-1 w-fit">
+                            <Check className="h-4 w-4 text-green-600" />
+                          </div>
+                        ) : (
+                          <div className="rounded-full bg-red-100 p-1 w-fit">
+                            <X className="h-4 w-4 text-red-600" />
+                          </div>
+                        )}
                       </TableCell>
                       <TableCell className="w-[200px]">View</TableCell>
                     </TableRow>

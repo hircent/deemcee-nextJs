@@ -65,7 +65,7 @@ export interface StudentData {
   deemcee_starting_grade: number;
   status: string;
   enrolment_date: string;
-  branch: number;
+  branch: string;
   parent?: Parent;
   enrolments?: Enrolment[];
   payment?: Payment[];

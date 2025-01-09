@@ -12,9 +12,9 @@ const BackButton = () => {
       <Button
         variant="ghost"
         onClick={() => router.back()}
-        className="flex items-center gap-2"
+        className="group flex items-center gap-2"
       >
-        <ArrowLeft className="h-4 w-4" />
+        <ArrowLeft className="h-4 w-4 group-hover:text-red-600" />
         Back
       </Button>
     </div>
