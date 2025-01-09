@@ -115,7 +115,7 @@ export function StudentCard({ student }: StudentCardProps) {
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-neutral-50 hover:bg-neutral-100">
+                  <TableRow className="bg-neutral-100">
                     <TableHead className="text-neutral-700">ID</TableHead>
                     <TableHead className="text-neutral-700">
                       Start Date
@@ -133,10 +133,7 @@ export function StudentCard({ student }: StudentCardProps) {
                 </TableHeader>
                 <TableBody>
                   {student.enrolments?.map((enrollment) => (
-                    <TableRow
-                      key={enrollment.id}
-                      className="hover:bg-neutral-50"
-                    >
+                    <TableRow key={enrollment.id}>
                       <TableCell className="text-neutral-800">
                         {enrollment.id}
                       </TableCell>
@@ -180,7 +177,7 @@ export function StudentCard({ student }: StudentCardProps) {
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-neutral-50 hover:bg-neutral-100">
+                  <TableRow className="bg-neutral-50">
                     <TableHead className="text-neutral-700">ID</TableHead>
                     <TableHead className="text-neutral-700">Grade</TableHead>
                     <TableHead className="text-neutral-700">
