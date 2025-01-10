@@ -408,6 +408,25 @@ export const EditUser = ({ type, id }: EditProps) => {
                         {zoderror?.personal_email?.[0]}
                       </small>
                     </div>
+
+                    <div>
+                      <div className="space-y-2">
+                        <Label className="text-sm sm:text-base" htmlFor="phone">
+                          Phone
+                        </Label>
+                        <Input
+                          id="phone"
+                          name="phone"
+                          defaultValue={userData?.details.phone}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                          placeholder="Enter your phone"
+                        />
+                      </div>
+                      <small className="text-red-500">
+                        {zoderror?.phone?.[0]}
+                      </small>
+                    </div>
                   </div>
                 </Card>
               </TabsContent>

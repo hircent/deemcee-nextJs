@@ -8,6 +8,7 @@ import {
   UserIcon,
   Users2Icon,
   CreditCardIcon,
+  PhoneIcon,
 } from "lucide-react";
 import { camelCase, cn, formatDateTime } from "@/lib/utils";
 import { getUserFullDetails } from "@/lib/actions/user.actions";
@@ -93,6 +94,10 @@ export default async function ProfilePage({
                   <div className="flex items-center space-x-2 text-slate-600">
                     <CalendarIcon className="w-4 h-4" />
                     <span>Joined {dateOnly}</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-slate-600">
+                    <PhoneIcon className="w-4 h-4" />
+                    <span>{profile.details.phone || "Not specified"}</span>
                   </div>
                 </div>
               </div>

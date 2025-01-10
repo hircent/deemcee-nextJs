@@ -85,6 +85,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                     <Input
                       defaultValue={data.first_name}
                       className="text-sm sm:text-base"
+                      placeholder="Enter your first name"
                     />
                   </div>
                   <div className="space-y-2">
@@ -92,6 +93,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                     <Input
                       defaultValue={data.last_name}
                       className="text-sm sm:text-base"
+                      placeholder="Enter your last name"
                     />
                   </div>
                   <div className="space-y-2">
@@ -100,6 +102,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                       defaultValue={data.username}
                       disabled
                       className="text-sm sm:text-base"
+                      placeholder="Enter your username"
                     />
                   </div>
                   <div className="space-y-2">
@@ -108,6 +111,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                       defaultValue={data.email}
                       type="email"
                       className="text-sm sm:text-base"
+                      placeholder="Enter your email"
                     />
                   </div>
                 </div>
@@ -123,6 +127,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                     <Input
                       defaultValue={data.details.gender}
                       className="text-sm sm:text-base"
+                      placeholder="Enter your gender"
                     />
                   </div>
                   <div className="space-y-2">
@@ -133,6 +138,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                       defaultValue={data.created_at}
                       type="date"
                       className="text-sm sm:text-base"
+                      placeholder="Enter your date of birth"
                     />
                   </div>
                   <div className="space-y-2">
@@ -140,6 +146,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                     <Input
                       defaultValue={data.details.ic_number}
                       className="text-sm sm:text-base"
+                      placeholder="Enter your IC Number"
                     />
                   </div>
                   <div className="space-y-2">
@@ -147,6 +154,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                     <Input
                       defaultValue={data.details.occupation}
                       className="text-sm sm:text-base"
+                      placeholder="Enter your occupation"
                     />
                   </div>
                   <div className="space-y-2">
@@ -157,6 +165,16 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                       defaultValue={data.details.personal_email}
                       type="email"
                       className="text-sm sm:text-base"
+                      placeholder="Enter your personal email"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm sm:text-base">Phone</Label>
+                    <Input
+                      defaultValue={data.details.phone}
+                      type="phone"
+                      className="text-sm sm:text-base"
+                      placeholder="Enter your phone"
                     />
                   </div>
                 </div>
@@ -172,6 +190,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                     <Input
                       defaultValue={data.details.spouse_name}
                       className="text-sm sm:text-base"
+                      placeholder="Enter your spouse name"
                     />
                   </div>
                   <div className="space-y-2">
@@ -179,6 +198,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                     <Input
                       defaultValue={data.details.spouse_phone}
                       className="text-sm sm:text-base"
+                      placeholder="Enter your spouse phone"
                     />
                   </div>
                   <div className="space-y-2">
@@ -188,6 +208,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                     <Input
                       defaultValue={data.details.spouse_occupation}
                       className="text-sm sm:text-base"
+                      placeholder="Enter your spouse occupation"
                     />
                   </div>
                   <div className="space-y-2">
@@ -199,6 +220,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                       type="number"
                       min="0"
                       className="text-sm sm:text-base"
+                      placeholder="Enter your number of children"
                     />
                   </div>
                 </div>
@@ -214,6 +236,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                     <Input
                       defaultValue={data.details.bank_name}
                       className="text-sm sm:text-base"
+                      placeholder="Enter your bank name"
                     />
                   </div>
                   <div className="space-y-2">
@@ -221,6 +244,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                     <Input
                       defaultValue={data.details.bank_account_name}
                       className="text-sm sm:text-base"
+                      placeholder="Enter your account name"
                     />
                   </div>
                   <div className="space-y-2">
@@ -230,6 +254,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                     <Input
                       defaultValue={data.details.bank_account_number}
                       className="text-sm sm:text-base"
+                      placeholder="Enter your account number"
                     />
                   </div>
                 </div>
@@ -247,6 +272,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                     <Input
                       defaultValue={data.address.address_line_1}
                       className="text-sm sm:text-base"
+                      placeholder="Enter your address line 1"
                     />
                   </div>
                   <div className="space-y-2">
@@ -256,6 +282,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                     <Input
                       defaultValue={data.address.address_line_2}
                       className="text-sm sm:text-base"
+                      placeholder="Enter your address line 2"
                     />
                   </div>
                   <div className="space-y-2">
@@ -265,6 +292,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                     <Input
                       defaultValue={data.address.address_line_3}
                       className="text-sm sm:text-base"
+                      placeholder="Enter your address line 3"
                     />
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
@@ -273,6 +301,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                       <Input
                         defaultValue={data.address.postcode}
                         className="text-sm sm:text-base"
+                        placeholder="Enter your postcode"
                       />
                     </div>
                     <div className="space-y-2">
@@ -280,6 +309,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                       <Input
                         defaultValue={data.address.city}
                         className="text-sm sm:text-base"
+                        placeholder="Enter your city"
                       />
                     </div>
                     <div className="space-y-2">
@@ -287,6 +317,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
                       <Input
                         defaultValue={data.address.state}
                         className="text-sm sm:text-base"
+                        placeholder="Enter your state"
                       />
                     </div>
                   </div>

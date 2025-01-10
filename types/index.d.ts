@@ -410,6 +410,7 @@ export type UserDetails = {
   dob: string;
   ic_number: string;
   occupation: string;
+  phone: string;
   spouse_name: string;
   spouse_phone: string;
   spouse_occupation: string;
@@ -497,6 +498,7 @@ export type UpdateUserFullDetailsError = {
   dob?: string;
   ic_number?: string;
   occupation?: string;
+  phone?: string;
   spouse_name?: string;
   spouse_phone?: string;
   spouse_occupation?: string;
