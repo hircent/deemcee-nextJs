@@ -91,7 +91,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
       setFormData({
         // Basic Info
         id: userData.id,
-        type: data.user_branch_roles[0].role_name,
+        type: data.user_branch_roles[0].branch_role,
         first_name: userData.first_name,
         last_name: userData.last_name,
         username: userData.username,
