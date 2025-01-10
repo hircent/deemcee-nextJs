@@ -342,7 +342,7 @@ export type GetResponseProps<T> = {
 export type BranchRole = {
   branch_id: number;
   branch_name: string;
-  branch_role: string;
+  role_name: string;
 };
 
 export type User = {

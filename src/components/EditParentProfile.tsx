@@ -40,6 +40,7 @@ import {
 } from "@/lib/actions/user.actions";
 import EnrolmentStatusBadge from "./EnrolmentStatusBadge";
 import { Badge } from "./ui/badge";
+import { usePathname } from "next/navigation";
 
 export const EditParentProfile = ({ type, id }: EditProps) => {
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -57,6 +58,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
   );
   const { toast } = useToast();
   const [formData, setFormData] = useState<Record<string, any>>({});
+  const pathname = usePathname();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement> | string,
@@ -104,7 +106,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
 
         // Personal Details
         gender: parentData.details.gender,
-        dob: parentData.created_at,
+        dob: parentData.details.dob,
         ic_number: parentData.details.ic_number,
         occupation: parentData.details.occupation,
         personal_email: parentData.details.personal_email,
@@ -117,10 +119,11 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
         postcode: parentData.address.postcode,
         state: parentData.address.state,
 
+        url: pathname,
         // ... add other fields as needed
       });
     }
-  }, [parentData]);
+  }, [parentData, pathname]);
 
   useEffect(() => {
     if (state.zodErr) {
@@ -309,7 +312,6 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                         <Select
                           defaultValue={parentData?.details.gender}
                           onValueChange={(value) => {
-                            console.log(parentData?.details.gender);
                             handleInputChange(value, true);
                           }}
                         >
@@ -348,7 +350,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                           id="dob"
                           name="dob"
                           type="date"
-                          defaultValue={parentData?.created_at}
+                          defaultValue={parentData?.details.dob}
                           className="text-sm sm:text-base"
                           onChange={handleInputChange}
                           placeholder="Enter your Date of Birth"

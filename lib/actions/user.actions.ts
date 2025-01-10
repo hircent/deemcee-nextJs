@@ -517,7 +517,7 @@ export async function updateUserFullDetails(
       },
       details: {
         gender,
-        dob: dob.toString().split("T")[0],
+        dob: dob ? dob.toString().split("T")[0] : null,
         ic_number,
         occupation,
         spouse_name,
@@ -549,7 +549,7 @@ export async function updateUserFullDetails(
       return { error: true, msg: res.msg };
     }
 
-    revalidatePath(`/deusers/parent`);
+    revalidatePath(`${data.url}`);
     return { success: true, msg: `${username} is updated` };
   } catch (error) {
     return { error: true, msg: (error as Error).message };

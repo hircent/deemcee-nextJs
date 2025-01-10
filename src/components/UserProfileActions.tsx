@@ -12,6 +12,13 @@ import {
   DialogTrigger,
   DialogOverlay,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useFormState } from "react-dom";
 import { SERVER_ACTION_STATE } from "@/constants/index";
 import SubmitButton from "./SubmitButton";
@@ -21,15 +28,118 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Card } from "./ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ChangePasswordErrors, UserFullDetailsData } from "@/types/index";
-import { changePw } from "@/lib/actions/user.actions";
+import {
+  ChangePasswordErrors,
+  UpdateUserFullDetailsError,
+  UserFullDetailsData,
+} from "@/types/index";
+import { changePw, updateUserFullDetails } from "@/lib/actions/user.actions";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
 const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
-  const [isLoading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
+  const [userData, setUserData] = useState<UserFullDetailsData | undefined>(
+    data
+  );
+  const [zoderror, setZodError] = useState<UpdateUserFullDetailsError | null>(
+    null
+  );
   const formRef = useRef<HTMLFormElement>(null);
+  const [state, action] = useFormState(
+    updateUserFullDetails,
+    SERVER_ACTION_STATE
+  );
+  const [formData, setFormData] = useState<Record<string, any>>({});
   const { toast } = useToast();
+  const pathname = usePathname();
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement> | string,
+    isSelect?: boolean
+  ) => {
+    if (isSelect) {
+      setFormData((prev) => ({
+        ...prev,
+        gender: e,
+      }));
+    } else {
+      // Cast e to HTMLInputElement to access name and value properties
+      const input = (e as React.ChangeEvent<HTMLInputElement>).target;
+      setFormData((prev) => ({
+        ...prev,
+        [input.name]: input.value,
+      }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formDataObj = new FormData();
+    // Append all form data to FormData object
+    Object.entries(formData).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        formDataObj.append(key, value.toString());
+      }
+    });
+    // Call your server action with the FormData object
+    await action(formDataObj);
+  };
+
+  useEffect(() => {
+    if (userData) {
+      setFormData({
+        // Basic Info
+        id: userData.id,
+        type: data.user_branch_roles[0].role_name,
+        first_name: userData.first_name,
+        last_name: userData.last_name,
+        username: userData.username,
+        email: userData.email,
+
+        // Personal Details
+        gender: userData.details.gender,
+        dob: userData.details.dob,
+        ic_number: userData.details.ic_number,
+        occupation: userData.details.occupation,
+        personal_email: userData.details.personal_email,
+
+        // Address
+        address_line_1: userData.address.address_line_1,
+        address_line_2: userData.address.address_line_2,
+        address_line_3: userData.address.address_line_3,
+        city: userData.address.city,
+        postcode: userData.address.postcode,
+        state: userData.address.state,
+        url: pathname,
+        // ... add other fields as needed
+      });
+    }
+  }, [userData, data, pathname]);
+
+  useEffect(() => {
+    if (state.zodErr) {
+      setZodError(state.zodErr);
+    }
+    if (state.success) {
+      setOpen(false);
+      toast({
+        title: "Success",
+        description: state.msg,
+        className: cn(`bottom-0 left-0`, "bg-success-100"),
+        duration: 3000,
+      });
+    }
+    if (state.error) {
+      toast({
+        title: "Error",
+        description: state.msg,
+        className: cn(`bottom-0 left-0`, "bg-error-100"),
+        duration: 3000,
+      });
+    }
+  }, [state, toast]);
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -54,7 +164,7 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
             Make changes to your details here. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
-        <form action="" className="mt-4">
+        <form onSubmit={handleSubmit} className="mt-4" ref={formRef}>
           <Tabs defaultValue="basic" className="space-y-6">
             <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
               <TabsList className="bg-white border w-full sm:w-auto flex whitespace-nowrap">
@@ -80,39 +190,81 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
             <TabsContent value="basic">
               <Card className="p-4 sm:p-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                  <div className="space-y-2">
-                    <Label className="text-sm sm:text-base">First Name</Label>
-                    <Input
-                      defaultValue={data.first_name}
-                      className="text-sm sm:text-base"
-                      placeholder="Enter your first name"
-                    />
+                  <div>
+                    <div className="space-y-2">
+                      <Label
+                        className="text-sm sm:text-base"
+                        htmlFor="username"
+                      >
+                        Username <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="username"
+                        name="username"
+                        defaultValue={userData?.username}
+                        className="text-sm sm:text-base"
+                        onChange={handleInputChange}
+                        placeholder="Enter your Username"
+                      />
+                    </div>
+                    <small className="text-red-500">
+                      {zoderror?.username?.[0]}
+                    </small>
                   </div>
-                  <div className="space-y-2">
-                    <Label className="text-sm sm:text-base">Last Name</Label>
-                    <Input
-                      defaultValue={data.last_name}
-                      className="text-sm sm:text-base"
-                      placeholder="Enter your last name"
-                    />
+
+                  <div>
+                    <div className="space-y-2">
+                      <Label className="text-sm sm:text-base" htmlFor="email">
+                        Email <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        defaultValue={userData?.email}
+                        className="text-sm sm:text-base"
+                        onChange={handleInputChange}
+                        placeholder="Enter your Email"
+                      />
+                    </div>
+                    <small className="text-red-500">
+                      {zoderror?.email?.[0]}
+                    </small>
                   </div>
-                  <div className="space-y-2">
-                    <Label className="text-sm sm:text-base">Username</Label>
-                    <Input
-                      defaultValue={data.username}
-                      disabled
-                      className="text-sm sm:text-base"
-                      placeholder="Enter your username"
-                    />
+                  <div>
+                    <div className="space-y-2">
+                      <Label
+                        className="text-sm sm:text-base"
+                        htmlFor="first_name"
+                      >
+                        First Name
+                      </Label>
+                      <Input
+                        id="first_name"
+                        name="first_name"
+                        defaultValue={userData?.first_name}
+                        className="text-sm sm:text-base"
+                        onChange={handleInputChange}
+                        placeholder="Enter your First Name"
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label className="text-sm sm:text-base">Email</Label>
-                    <Input
-                      defaultValue={data.email}
-                      type="email"
-                      className="text-sm sm:text-base"
-                      placeholder="Enter your email"
-                    />
+                  <div>
+                    <div className="space-y-2">
+                      <Label
+                        className="text-sm sm:text-base"
+                        htmlFor="last_name"
+                      >
+                        Last Name
+                      </Label>
+                      <Input
+                        id="last_name"
+                        name="last_name"
+                        defaultValue={userData?.last_name}
+                        className="text-sm sm:text-base"
+                        onChange={handleInputChange}
+                        placeholder="Enter your Last Name"
+                      />
+                    </div>
                   </div>
                 </div>
               </Card>
@@ -122,60 +274,137 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
             <TabsContent value="personal">
               <Card className="p-4 sm:p-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                  <div className="space-y-2">
-                    <Label className="text-sm sm:text-base">Gender</Label>
-                    <Input
-                      defaultValue={data.details.gender}
-                      className="text-sm sm:text-base"
-                      placeholder="Enter your gender"
-                    />
+                  <div>
+                    <div className="space-y-2">
+                      <Label className="text-sm sm:text-base">
+                        Gender <span className="text-red-500">*</span>
+                      </Label>
+                      <Select
+                        defaultValue={userData?.details.gender}
+                        onValueChange={(value) => {
+                          handleInputChange(value, true);
+                        }}
+                      >
+                        <SelectTrigger className="w-full text-sm sm:text-base col-span-2">
+                          <SelectValue placeholder="Select a gender" />
+                        </SelectTrigger>
+                        <SelectContent className="select-content">
+                          <SelectItem
+                            key="male"
+                            value="male"
+                            className="select-item"
+                          >
+                            Male
+                          </SelectItem>
+                          <SelectItem
+                            key="female"
+                            value="female"
+                            className="select-item"
+                          >
+                            Female
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <small className="text-red-500">
+                      {zoderror?.gender?.[0]}
+                    </small>
                   </div>
-                  <div className="space-y-2">
-                    <Label className="text-sm sm:text-base">
-                      Date of Birth
-                    </Label>
-                    <Input
-                      defaultValue={data.created_at}
-                      type="date"
-                      className="text-sm sm:text-base"
-                      placeholder="Enter your date of birth"
-                    />
+
+                  <div>
+                    <div className="space-y-2">
+                      <Label className="text-sm sm:text-base" htmlFor="dob">
+                        Date of Birth
+                      </Label>
+                      <Input
+                        id="dob"
+                        name="dob"
+                        type="date"
+                        defaultValue={userData?.details.dob}
+                        className="text-sm sm:text-base"
+                        onChange={handleInputChange}
+                        placeholder="Enter your Date of Birth"
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label className="text-sm sm:text-base">IC Number</Label>
-                    <Input
-                      defaultValue={data.details.ic_number}
-                      className="text-sm sm:text-base"
-                      placeholder="Enter your IC Number"
-                    />
+
+                  <div>
+                    <div className="space-y-2">
+                      <Label
+                        className="text-sm sm:text-base"
+                        htmlFor="ic_number"
+                      >
+                        IC Number
+                      </Label>
+                      <Input
+                        id="ic_number"
+                        name="ic_number"
+                        defaultValue={userData?.details.ic_number}
+                        className="text-sm sm:text-base"
+                        onChange={handleInputChange}
+                        placeholder="Enter your IC Number"
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label className="text-sm sm:text-base">Occupation</Label>
-                    <Input
-                      defaultValue={data.details.occupation}
-                      className="text-sm sm:text-base"
-                      placeholder="Enter your occupation"
-                    />
+
+                  <div>
+                    <div className="space-y-2">
+                      <Label
+                        className="text-sm sm:text-base"
+                        htmlFor="occupation"
+                      >
+                        Occupation
+                      </Label>
+                      <Input
+                        id="occupation"
+                        name="occupation"
+                        defaultValue={userData?.details.occupation}
+                        className="text-sm sm:text-base"
+                        onChange={handleInputChange}
+                        placeholder="Enter your Occupation"
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label className="text-sm sm:text-base">
-                      Personal Email
-                    </Label>
-                    <Input
-                      defaultValue={data.details.personal_email}
-                      type="email"
-                      className="text-sm sm:text-base"
-                      placeholder="Enter your personal email"
-                    />
+
+                  <div>
+                    <div className="space-y-2">
+                      <Label
+                        className="text-sm sm:text-base"
+                        htmlFor="personal_email"
+                      >
+                        Personal Email
+                      </Label>
+                      <Input
+                        id="personal_email"
+                        name="personal_email"
+                        defaultValue={userData?.details.personal_email}
+                        className="text-sm sm:text-base"
+                        onChange={handleInputChange}
+                        placeholder="Enter your Personal Email"
+                      />
+                    </div>
+                    <small className="text-red-500">
+                      {zoderror?.personal_email?.[0]}
+                    </small>
                   </div>
-                  <div className="space-y-2">
-                    <Label className="text-sm sm:text-base">Phone</Label>
-                    <Input
-                      defaultValue={data.details.phone}
-                      type="phone"
-                      className="text-sm sm:text-base"
-                      placeholder="Enter your phone"
-                    />
+
+                  <div>
+                    <div className="space-y-2">
+                      <Label className="text-sm sm:text-base" htmlFor="phone">
+                        Phone
+                      </Label>
+                      <Input
+                        id="phone"
+                        name="phone"
+                        defaultValue={userData?.details.phone}
+                        className="text-sm sm:text-base"
+                        onChange={handleInputChange}
+                        placeholder="Enter your phone"
+                      />
+                    </div>
+                    <small className="text-red-500">
+                      {zoderror?.phone?.[0]}
+                    </small>
                   </div>
                 </div>
               </Card>
@@ -185,43 +414,81 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
             <TabsContent value="family">
               <Card className="p-4 sm:p-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                  <div className="space-y-2">
-                    <Label className="text-sm sm:text-base">Spouse Name</Label>
-                    <Input
-                      defaultValue={data.details.spouse_name}
-                      className="text-sm sm:text-base"
-                      placeholder="Enter your spouse name"
-                    />
+                  <div>
+                    <div className="space-y-2">
+                      <Label
+                        className="text-sm sm:text-base"
+                        htmlFor="spouse_name"
+                      >
+                        Spouse Name
+                      </Label>
+                      <Input
+                        id="spouse_name"
+                        name="spouse_name"
+                        defaultValue={userData?.details.spouse_name}
+                        className="text-sm sm:text-base"
+                        onChange={handleInputChange}
+                        placeholder="Enter your Spouse Name"
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label className="text-sm sm:text-base">Spouse Phone</Label>
-                    <Input
-                      defaultValue={data.details.spouse_phone}
-                      className="text-sm sm:text-base"
-                      placeholder="Enter your spouse phone"
-                    />
+
+                  <div>
+                    <div className="space-y-2">
+                      <Label
+                        className="text-sm sm:text-base"
+                        htmlFor="spouse_phone"
+                      >
+                        Spouse Phone
+                      </Label>
+                      <Input
+                        id="spouse_phone"
+                        name="spouse_phone"
+                        defaultValue={userData?.details.spouse_phone}
+                        className="text-sm sm:text-base"
+                        onChange={handleInputChange}
+                        placeholder="Enter your Spouse Phone"
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label className="text-sm sm:text-base">
-                      Spouse Occupation
-                    </Label>
-                    <Input
-                      defaultValue={data.details.spouse_occupation}
-                      className="text-sm sm:text-base"
-                      placeholder="Enter your spouse occupation"
-                    />
+
+                  <div>
+                    <div className="space-y-2">
+                      <Label
+                        className="text-sm sm:text-base"
+                        htmlFor="spouse_occupation"
+                      >
+                        Spouse Occupation
+                      </Label>
+                      <Input
+                        id="spouse_occupation"
+                        name="spouse_occupation"
+                        defaultValue={userData?.details.spouse_occupation}
+                        className="text-sm sm:text-base"
+                        onChange={handleInputChange}
+                        placeholder="Enter your Spouse Occupation"
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label className="text-sm sm:text-base">
-                      Number of Children
-                    </Label>
-                    <Input
-                      defaultValue={data.details.no_of_children}
-                      type="number"
-                      min="0"
-                      className="text-sm sm:text-base"
-                      placeholder="Enter your number of children"
-                    />
+
+                  <div>
+                    <div className="space-y-2">
+                      <Label
+                        className="text-sm sm:text-base"
+                        htmlFor="no_of_children"
+                      >
+                        Number of Children
+                      </Label>
+                      <Input
+                        id="no_of_children"
+                        name="no_of_children"
+                        type="number"
+                        defaultValue={userData?.details.no_of_children}
+                        className="text-sm sm:text-base"
+                        onChange={handleInputChange}
+                        placeholder="Enter your Number of Children"
+                      />
+                    </div>
                   </div>
                 </div>
               </Card>
@@ -231,31 +498,61 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
             <TabsContent value="banking">
               <Card className="p-4 sm:p-6">
                 <div className="grid grid-cols-1 gap-4 sm:gap-6">
-                  <div className="space-y-2">
-                    <Label className="text-sm sm:text-base">Bank Name</Label>
-                    <Input
-                      defaultValue={data.details.bank_name}
-                      className="text-sm sm:text-base"
-                      placeholder="Enter your bank name"
-                    />
+                  <div>
+                    <div className="space-y-2">
+                      <Label
+                        className="text-sm sm:text-base"
+                        htmlFor="bank_name"
+                      >
+                        Bank Name
+                      </Label>
+                      <Input
+                        id="bank_name"
+                        name="bank_name"
+                        defaultValue={userData?.details.bank_name}
+                        className="text-sm sm:text-base"
+                        onChange={handleInputChange}
+                        placeholder="Enter your Bank Name"
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label className="text-sm sm:text-base">Account Name</Label>
-                    <Input
-                      defaultValue={data.details.bank_account_name}
-                      className="text-sm sm:text-base"
-                      placeholder="Enter your account name"
-                    />
+
+                  <div>
+                    <div className="space-y-2">
+                      <Label
+                        className="text-sm sm:text-base"
+                        htmlFor="bank_account_name"
+                      >
+                        Account Name
+                      </Label>
+                      <Input
+                        id="bank_account_name"
+                        name="bank_account_name"
+                        defaultValue={userData?.details.bank_account_name}
+                        className="text-sm sm:text-base"
+                        onChange={handleInputChange}
+                        placeholder="Enter your Account Name"
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label className="text-sm sm:text-base">
-                      Account Number
-                    </Label>
-                    <Input
-                      defaultValue={data.details.bank_account_number}
-                      className="text-sm sm:text-base"
-                      placeholder="Enter your account number"
-                    />
+
+                  <div>
+                    <div className="space-y-2">
+                      <Label
+                        className="text-sm sm:text-base"
+                        htmlFor="bank_account_number"
+                      >
+                        Account Number
+                      </Label>
+                      <Input
+                        id="bank_account_number"
+                        name="bank_account_number"
+                        defaultValue={userData?.details.bank_account_number}
+                        className="text-sm sm:text-base"
+                        onChange={handleInputChange}
+                        placeholder="Enter your Account Number"
+                      />
+                    </div>
                   </div>
                 </div>
               </Card>
@@ -265,60 +562,125 @@ const EditProfile = ({ data }: { data: UserFullDetailsData }) => {
             <TabsContent value="address">
               <Card className="p-4 sm:p-6">
                 <div className="grid grid-cols-1 gap-4 sm:gap-6">
-                  <div className="space-y-2">
-                    <Label className="text-sm sm:text-base">
-                      Address Line 1
-                    </Label>
-                    <Input
-                      defaultValue={data.address.address_line_1}
-                      className="text-sm sm:text-base"
-                      placeholder="Enter your address line 1"
-                    />
+                  <div>
+                    <div className="space-y-2">
+                      <Label
+                        className="text-sm sm:text-base"
+                        htmlFor="address_line_1"
+                      >
+                        Address Line 1 <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="address_line_1"
+                        name="address_line_1"
+                        defaultValue={userData?.address.address_line_1}
+                        className="text-sm sm:text-base"
+                        onChange={handleInputChange}
+                        placeholder="Enter your Address Line 1"
+                      />
+                    </div>
+                    <small className="text-red-500">
+                      {zoderror?.address_line_1?.[0]}
+                    </small>
                   </div>
-                  <div className="space-y-2">
-                    <Label className="text-sm sm:text-base">
-                      Address Line 2
-                    </Label>
-                    <Input
-                      defaultValue={data.address.address_line_2}
-                      className="text-sm sm:text-base"
-                      placeholder="Enter your address line 2"
-                    />
+
+                  <div>
+                    <div className="space-y-2">
+                      <Label
+                        className="text-sm sm:text-base"
+                        htmlFor="address_line_2"
+                      >
+                        Address Line 2
+                      </Label>
+                      <Input
+                        id="address_line_2"
+                        name="address_line_2"
+                        defaultValue={userData?.address.address_line_2}
+                        className="text-sm sm:text-base"
+                        onChange={handleInputChange}
+                        placeholder="Enter your Address Line 2"
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label className="text-sm sm:text-base">
-                      Address Line 3
-                    </Label>
-                    <Input
-                      defaultValue={data.address.address_line_3}
-                      className="text-sm sm:text-base"
-                      placeholder="Enter your address line 3"
-                    />
+
+                  <div>
+                    <div className="space-y-2">
+                      <Label
+                        className="text-sm sm:text-base"
+                        htmlFor="address_line_3"
+                      >
+                        Address Line 3
+                      </Label>
+                      <Input
+                        id="address_line_3"
+                        name="address_line_3"
+                        defaultValue={userData?.address.address_line_3}
+                        className="text-sm sm:text-base"
+                        onChange={handleInputChange}
+                        placeholder="Enter your Address Line 3"
+                      />
+                    </div>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-                    <div className="space-y-2">
-                      <Label className="text-sm sm:text-base">Postcode</Label>
-                      <Input
-                        defaultValue={data.address.postcode}
-                        className="text-sm sm:text-base"
-                        placeholder="Enter your postcode"
-                      />
+                    <div>
+                      <div className="space-y-2">
+                        <Label
+                          className="text-sm sm:text-base"
+                          htmlFor="postcode"
+                        >
+                          Postcode <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                          id="postcode"
+                          name="postcode"
+                          type="number"
+                          defaultValue={userData?.address.postcode}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                          placeholder="Enter your Postcode"
+                        />
+                      </div>
+                      <small className="text-red-500">
+                        {zoderror?.postcode?.[0]}
+                      </small>
                     </div>
-                    <div className="space-y-2">
-                      <Label className="text-sm sm:text-base">City</Label>
-                      <Input
-                        defaultValue={data.address.city}
-                        className="text-sm sm:text-base"
-                        placeholder="Enter your city"
-                      />
+
+                    <div>
+                      <div className="space-y-2">
+                        <Label className="text-sm sm:text-base" htmlFor="city">
+                          City <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                          id="city"
+                          name="city"
+                          defaultValue={userData?.address.city}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                          placeholder="Enter your City"
+                        />
+                      </div>
+                      <small className="text-red-500">
+                        {zoderror?.city?.[0]}
+                      </small>
                     </div>
-                    <div className="space-y-2">
-                      <Label className="text-sm sm:text-base">State</Label>
-                      <Input
-                        defaultValue={data.address.state}
-                        className="text-sm sm:text-base"
-                        placeholder="Enter your state"
-                      />
+
+                    <div>
+                      <div className="space-y-2">
+                        <Label className="text-sm sm:text-base" htmlFor="state">
+                          State <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                          id="state"
+                          name="state"
+                          defaultValue={userData?.address.state}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                          placeholder="Enter your State"
+                        />
+                      </div>
+                      <small className="text-red-500">
+                        {zoderror?.state?.[0]}
+                      </small>
                     </div>
                   </div>
                 </div>

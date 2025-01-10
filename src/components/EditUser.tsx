@@ -38,6 +38,7 @@ import {
   getUserFullDetails,
   updateUserFullDetails,
 } from "@/lib/actions/user.actions";
+import { usePathname } from "next/navigation";
 
 export const EditUser = ({ type, id }: EditProps) => {
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -55,6 +56,7 @@ export const EditUser = ({ type, id }: EditProps) => {
   );
   const { toast } = useToast();
   const [formData, setFormData] = useState<Record<string, any>>({});
+  const pathname = usePathname();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement> | string,
@@ -101,7 +103,7 @@ export const EditUser = ({ type, id }: EditProps) => {
 
         // Personal Details
         gender: userData.details.gender,
-        dob: userData.created_at,
+        dob: userData.details.dob,
         ic_number: userData.details.ic_number,
         occupation: userData.details.occupation,
         personal_email: userData.details.personal_email,
@@ -114,10 +116,11 @@ export const EditUser = ({ type, id }: EditProps) => {
         postcode: userData.address.postcode,
         state: userData.address.state,
 
+        url: pathname,
         // ... add other fields as needed
       });
     }
-  }, [userData, type]);
+  }, [userData, type, pathname]);
 
   useEffect(() => {
     if (state.zodErr) {
@@ -341,7 +344,7 @@ export const EditUser = ({ type, id }: EditProps) => {
                           id="dob"
                           name="dob"
                           type="date"
-                          defaultValue={userData?.created_at}
+                          defaultValue={userData?.details.dob}
                           className="text-sm sm:text-base"
                           onChange={handleInputChange}
                           placeholder="Enter your Date of Birth"
