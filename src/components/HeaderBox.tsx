@@ -31,7 +31,9 @@ const HeaderBox = ({ type, title, user, subtext }: HeaderBoxProps) => {
         <h1 className="header-box-title">
           {title}
           {type === "greeting" && (
-            <span className="text-blue-600">&nbsp;{camelCase(user?.username)}</span>
+            <span className="text-blue-600">
+              &nbsp;{camelCase(user?.username)}
+            </span>
           )}
         </h1>
         {/* <p className="header-box-subtext">{subtext}</p> */}
@@ -54,7 +56,7 @@ const HeaderBox = ({ type, title, user, subtext }: HeaderBoxProps) => {
           >
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="flex items-center gap-2 hover:bg-slate-300">
+            <DropdownMenuItem className="dropdown-menu-item">
               <Link
                 href={`/profile/${user.user_id}`}
                 className="flex items-center gap-2"
@@ -65,7 +67,7 @@ const HeaderBox = ({ type, title, user, subtext }: HeaderBoxProps) => {
                 <User size={16} /> Profile
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem className="hover:bg-slate-300">
+            <DropdownMenuItem className="dropdown-menu-item">
               <Button
                 onClick={userSignOut}
                 className="flex items-center gap-2 px-0"

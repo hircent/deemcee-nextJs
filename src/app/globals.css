@@ -412,4 +412,8 @@
   .select-item {
     @apply cursor-pointer hover:bg-yellow-9;
   }
+
+  .dropdown-menu-item {
+    @apply flex items-center gap-2 cursor-pointer hover:bg-slate-300;
+  }
 }

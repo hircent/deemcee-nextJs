@@ -12,6 +12,7 @@ import {
 import { Book, CreditCard, Check, X } from "lucide-react";
 import { cn, formatDateTime } from "@/lib/utils";
 import { StudentCardProps } from "@/types/student";
+import StudentEnrolmentActions from "./StudentEnrolmentActions";
 
 export function StudentCard({ student }: StudentCardProps) {
   return (
@@ -174,7 +175,9 @@ export function StudentCard({ student }: StudentCardProps) {
                           </div>
                         )}
                       </TableCell>
-                      <TableCell className="w-[200px]">View</TableCell>
+                      <TableCell className="w-[200px]">
+                        <StudentEnrolmentActions />
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
