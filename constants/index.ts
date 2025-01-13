@@ -193,3 +193,9 @@ export const ReferralChannels = [
   "Call In",
   "Others",
 ];
+
+export const STUDENT_FILTERTING_STATUSES = [
+  { value: "IN_PROGRESS", label: "IN PROGRESS" },
+  { value: "DROPPED_OUT", label: "DROPPED_OUT" },
+  { value: "GRADUATED", label: "GRADUATED" },
+];

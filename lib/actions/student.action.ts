@@ -19,18 +19,30 @@ import {
 export async function getStudentList(
   params: StudentListFilterProps
 ): Promise<ListProps<StudentProps>> {
-  const { page, searchQuery } = params;
+  const { page, searchQuery, filter } = params;
   const token = await getToken();
   const id = cookies().get("BranchId")?.value;
 
   let url = `${process.env.API_URL}/student/list`;
 
+  // Prepare query parameters
+  const queryParams: string[] = [];
+
   if (searchQuery) {
-    url = `${url}?q=${searchQuery}`;
+    queryParams.push(`q=${encodeURIComponent(searchQuery)}`);
   }
 
   if (page && page > 1) {
-    url = `${url}?page=${page}`;
+    queryParams.push(`page=${page}`);
+  }
+
+  if (filter) {
+    queryParams.push(`filter=${encodeURIComponent(filter)}`);
+  }
+
+  // If there are any query parameters, append them to the URL
+  if (queryParams.length > 0) {
+    url += `?${queryParams.join("&")}`;
   }
 
   try {

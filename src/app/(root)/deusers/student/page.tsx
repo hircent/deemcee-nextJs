@@ -11,6 +11,7 @@ const Student = async ({ searchParams }: SearchParamProps) => {
     const result = await getStudentList({
       page: searchParams.page ? +searchParams.page : 1,
       searchQuery: searchParams.q ? searchParams.q.toString() : undefined,
+      filter: searchParams.status ? searchParams.status.toString() : undefined,
     });
     return (
       <div className="p-4">

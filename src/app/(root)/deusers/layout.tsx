@@ -2,6 +2,7 @@ import CreateDeUsers from "@/components/CreateDeUsers";
 import { ExportStudents } from "@/components/ExportStudentCSV";
 import SearchBar from "@/components/SearchBar";
 import SectionNav from "@/components/SectionNav";
+import StudentFilter from "@/components/StudentFilter";
 import { DeUsersLinks, IsManagerOrHigher } from "@/constants/index";
 import { authUser } from "@/lib/actions/user.actions";
 import { getUserRole } from "@/lib/utils";
@@ -17,6 +18,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
       <div className="home-content">
         <div className="flex justify-between">
           <SearchBar />
+          <StudentFilter />
           <ExportStudents
             id={branchId!.toString()}
             name={user!.branch_role[0].branch_name}
