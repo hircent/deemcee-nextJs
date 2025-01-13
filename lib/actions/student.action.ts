@@ -4,6 +4,7 @@ import { GetResponseProps, ListProps, STATE } from "@/types/index";
 import { getToken } from "./user.actions";
 import { cookies } from "next/headers";
 import {
+  DeleteFormErrors,
   StudentData,
   StudentFormErrors,
   StudentListFilterProps,
@@ -11,6 +12,7 @@ import {
 } from "@/types/student";
 import { revalidatePath } from "next/cache";
 import {
+  DeleteEnrolmentSchema,
   DeleteStudentSchema,
   StudentFormSchema,
   UpdateStudentFormSchema,
@@ -231,5 +233,58 @@ export async function getStudentById(id: number): Promise<StudentData> {
     return data.data;
   } catch (error) {
     throw error;
+  }
+}
+
+export async function deleteEnrolment(
+  _prevState: STATE<DeleteFormErrors>,
+  formData: FormData
+): Promise<STATE<DeleteFormErrors>> {
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
+
+    const obj = Object.fromEntries(formData);
+    const data = {
+      ...obj,
+      id: Number(formData.get("id")), // Convert id to number
+    };
+
+    if (obj.name !== obj.confirmName) {
+      return {
+        error: true,
+        msg: "Name must be excatly the same.",
+      };
+    }
+
+    const validated = DeleteEnrolmentSchema.safeParse(data);
+    if (!validated.success) {
+      return {
+        error: true,
+        zodErr: validated.error.flatten().fieldErrors as DeleteFormErrors,
+        msg: "Validation Failed",
+      };
+    }
+
+    const response = await fetch(
+      `${process.env.API_URL}/student/enrolment/delete/${data.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      return { success: false, msg: response.statusText };
+    }
+
+    revalidatePath(`/student/${obj.studentId}`);
+    return { success: true, msg: `Enrolment ${obj.name} is deleted` };
+  } catch (error) {
+    return { error: true, msg: (error as Error).message };
   }
 }

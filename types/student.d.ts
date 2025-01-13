@@ -29,6 +29,13 @@ export type StudentFormErrors = {
   status?: string;
 };
 
+export type DeleteFormErrors = {
+  studentId?: string;
+  id?: string;
+  name?: string;
+  confirmName?: string;
+};
+
 export interface Parent {
   id: number;
   username: string;
@@ -83,3 +90,11 @@ export interface StudentData {
 export interface StudentCardProps {
   student: StudentData;
 }
+
+export type DeleteEnrolmentProps = {
+  name: string;
+  confirmName?: string;
+  type: string;
+  id: number;
+  studentId: number;
+};

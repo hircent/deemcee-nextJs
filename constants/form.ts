@@ -203,6 +203,13 @@ export const DeleteStudentSchema = z.object({
   confirmName: z.string().min(1, "Confirm name is required"),
 });
 
+export const DeleteEnrolmentSchema = z.object({
+  studentId: z.number().min(1, "Id is required"),
+  id: z.number().min(1, "Id is required"),
+  name: z.string().min(1, "Name is required"),
+  confirmName: z.string().min(1, "Confirm name is required"),
+});
+
 export const ChangePasswordSchema = z
   .object({
     old_password: z.string().min(1, "Old password is required"),

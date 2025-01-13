@@ -176,7 +176,11 @@ export function StudentCard({ student }: StudentCardProps) {
                         )}
                       </TableCell>
                       <TableCell className="w-[200px]">
-                        <StudentEnrolmentActions />
+                        <StudentEnrolmentActions
+                          enrolment_id={enrollment.id}
+                          student_id={student.id}
+                          grade={enrollment.grade}
+                        />
                       </TableCell>
                     </TableRow>
                   ))}
