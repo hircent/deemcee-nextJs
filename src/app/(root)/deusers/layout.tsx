@@ -16,13 +16,10 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <section className="home">
       <div className="home-content">
-        <div className="flex justify-between">
+        <div className="flex flex-wrap justify-between gap-2">
           <SearchBar />
           <StudentFilter />
-          <ExportStudents
-            id={branchId!.toString()}
-            name={user!.branch_role[0].branch_name}
-          />
+          <ExportStudents id={branchId!.toString()} />
           {IsManagerOrHigher.includes(userRole[0]) && <CreateDeUsers />}
         </div>
         <div className="rounded-md border bg-yellow-2 text-gray-500 p-2 px-4">
