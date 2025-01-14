@@ -67,7 +67,7 @@ export function DeleteEnrolment({
         duration: 3000,
       });
     }
-  }, [state, toast, onOpenChange]);
+  }, [state, toast, onOpenChange, router]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -106,7 +106,7 @@ export function DeleteEnrolment({
               </div>
             </div>
             <small className="text-slate-400">
-              {`Please key in the ${type} to confirm delete.`}
+              {`Please key in the Grade X to confirm delete.`}
             </small>
             <DialogFooter>
               <Button type="submit" className="bg-red-500 text-white">
