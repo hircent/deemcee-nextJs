@@ -37,11 +37,12 @@ export const ViewEnrolmentLesson = ({
 
       try {
         const data = await getEnrolmentLesson(id);
-        console.log(data);
-        setLessonData(data);
-        setDay(data[0].day);
-        setStartTime(data[0].start_time);
-        setEndTime(data[0].end_time);
+        if (data.length > 0) {
+          setLessonData(data);
+          setDay(data[0].day);
+          setStartTime(data[0].start_time);
+          setEndTime(data[0].end_time);
+        }
       } catch (err) {
         console.error("Error fetching lesson data:", err);
       } finally {
