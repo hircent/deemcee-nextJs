@@ -253,3 +253,8 @@ export const UpdateUserFullDetailsSchema = z.object({
   bank_account_name: z.string().optional(),
   bank_account_number: z.string().optional(),
 });
+
+export const ExtendEnrolmentSchema = z.object({
+  confirm: z.string().min(1, "Confirm name is required"),
+  id: z.string().min(1, "Id is required"),
+});

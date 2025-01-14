@@ -120,3 +120,8 @@ export type EnrolmentLessonProps = {
   has_attended: boolean;
   status: "ABSENT" | "PRESENT"; // Add other possible status values if they exist
 };
+
+export type EnrolmentExtensionError = {
+  id?: string;
+  confirm?: string;
+};

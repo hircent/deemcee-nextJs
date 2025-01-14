@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,9 +9,16 @@ import {
   DialogPortal,
   DialogOverlay,
 } from "@/components/ui/dialog";
-import { Loader2 } from "lucide-react";
-import { getStatusColor } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import SubmitButton from "./SubmitButton";
+import { SERVER_ACTION_STATE } from "@/constants/index";
+import { useFormState } from "react-dom";
+import { extendEnrolment } from "@/lib/actions/student.action";
+import { EnrolmentExtensionError } from "@/types/student";
+import { useRouter } from "next/navigation";
+import { useToast } from "./ui/use-toast";
+import { cn } from "@/lib/utils";
 
 export const ExtendEnrolment = ({
   id,
@@ -22,11 +29,41 @@ export const ExtendEnrolment = ({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [zoderror, setZodError] = useState<EnrolmentExtensionError | null>(
+    null
+  );
+  const formRef = useRef<HTMLFormElement>(null);
+  const { toast } = useToast();
+  const router = useRouter();
+  const [state, formAction] = useFormState(
+    extendEnrolment,
+    SERVER_ACTION_STATE
+  );
 
   useEffect(() => {
-    setIsLoading(true);
-  }, []);
+    if (state.zodErr) {
+      setZodError(state.zodErr);
+    }
+    if (state.success) {
+      toast({
+        title: "Success",
+        description: state.msg,
+        className: cn(`bottom-0 left-0`, "bg-success-100"),
+        duration: 3000,
+      });
+      formRef.current?.reset();
+      onOpenChange(false);
+      router.refresh();
+    }
+    if (state.error) {
+      toast({
+        title: "Error",
+        description: state.msg,
+        className: cn(`bottom-0 left-0`, "bg-error-100"),
+        duration: 3000,
+      });
+    }
+  }, [state, toast, onOpenChange, router]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -35,25 +72,32 @@ export const ExtendEnrolment = ({
           className="bg-black/80"
           style={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}
         />
-        <DialogContent className="w-[calc(100%-2rem)] sm:w-full max-w-[600px] h-max max-h-[90vh] overflow-y-auto custom-scrollbar bg-white p-4 sm:p-6">
+        <DialogContent className="w-[400px] sm:max-w-[425px] bg-white rounded-md">
           <DialogHeader>
-            <DialogTitle>Lesson Details</DialogTitle>
+            <DialogTitle>Extend Enrolment</DialogTitle>
             <DialogDescription>
-              Viewing lesson details for enrolment
+              Are you sure to extend enrolment?
             </DialogDescription>
           </DialogHeader>
 
-          <div className="py-4">
-            {isLoading && (
-              <div className="flex items-center justify-center py-8">
-                <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+          <form action={formAction} ref={formRef}>
+            <Input id="id" type="hidden" name="id" value={id} />
+            <div className="grid gap-4 py-4 border-b-2">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="confirm" className="text-left">
+                  Confirm: <span className="text-red-500">*</span>
+                </Label>
+                <Input id="confirm" name="confirm" className="col-span-3" />
               </div>
-            )}
-          </div>
+            </div>
+            <small className="text-slate-400">
+              Please key in the Yes to confirm extend.
+            </small>
 
-          <DialogFooter>
-            <SubmitButton label="Reschedule" submitLabel="Rescheduling" />
-          </DialogFooter>
+            <DialogFooter>
+              <SubmitButton label="Extend" submitLabel="Extending" />
+            </DialogFooter>
+          </form>
         </DialogContent>
       </DialogPortal>
     </Dialog>

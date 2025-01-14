@@ -5,6 +5,7 @@ import { getToken } from "./user.actions";
 import { cookies } from "next/headers";
 import {
   DeleteFormErrors,
+  EnrolmentExtensionError,
   EnrolmentLessonProps,
   StudentData,
   StudentFormErrors,
@@ -15,6 +16,7 @@ import { revalidatePath } from "next/cache";
 import {
   DeleteEnrolmentSchema,
   DeleteStudentSchema,
+  ExtendEnrolmentSchema,
   StudentFormSchema,
   UpdateStudentFormSchema,
 } from "@/constants/form";
@@ -318,5 +320,54 @@ export async function getEnrolmentLesson(
     return data.data;
   } catch (error) {
     throw error;
+  }
+}
+
+export async function extendEnrolment(
+  _prevState: STATE<EnrolmentExtensionError>,
+  formData: FormData
+): Promise<STATE<EnrolmentExtensionError>> {
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
+
+    const data = Object.fromEntries(formData);
+    const validated = ExtendEnrolmentSchema.safeParse(data);
+
+    if (!validated.success) {
+      return {
+        error: true,
+        zodErr: validated.error.flatten()
+          .fieldErrors as EnrolmentExtensionError,
+        msg: "Validation Failed",
+      };
+    }
+
+    if (data.confirm.toString().toLowerCase() !== "yes") {
+      return {
+        error: true,
+        msg: "Kindly key in Yes to confirm extend",
+      };
+    }
+
+    const response = await fetch(
+      `${process.env.API_URL}/student/enrolment/${data.id}/extend`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      return { success: false, msg: response.statusText };
+    }
+
+    return { success: true, msg: `Enrolment has been extended` };
+  } catch (error) {
+    return { error: true, msg: (error as Error).message };
   }
 }
