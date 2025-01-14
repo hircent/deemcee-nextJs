@@ -17,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DeleteEnrolment } from "./DeleteEnrolment";
+import { ViewEnrolmentLesson } from "./ViewEnrolmentLesson";
 
 const StudentEnrolmentActions = ({
   enrolment_id,
@@ -29,10 +30,11 @@ const StudentEnrolmentActions = ({
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
+  const [lessonViewOpen, setLessonViewOpen] = useState<boolean>(false);
 
-  const handleDeleteClick = () => {
+  const handleDeleteClick = (setDialog: (open: boolean) => void) => {
     setDropdownOpen(false); // Close dropdown when opening dialog
-    setDeleteDialogOpen(true);
+    setDialog(true);
   };
 
   return (
@@ -49,7 +51,10 @@ const StudentEnrolmentActions = ({
           alignOffset={-15}
           sideOffset={5}
         >
-          <DropdownMenuItem className="dropdown-menu-item">
+          <DropdownMenuItem
+            className="dropdown-menu-item"
+            onClick={() => handleDeleteClick(setLessonViewOpen)}
+          >
             <BookOpen className="h-4 w-4" />
             <span>Lesson View</span>
           </DropdownMenuItem>
@@ -76,7 +81,7 @@ const StudentEnrolmentActions = ({
 
           <DropdownMenuItem
             className="dropdown-menu-item text-red-600"
-            onClick={handleDeleteClick}
+            onClick={() => handleDeleteClick(setDeleteDialogOpen)}
           >
             <Trash className="h-4 w-4" />
             <span>Delete</span>
@@ -92,6 +97,12 @@ const StudentEnrolmentActions = ({
         studentId={student_id}
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
+      />
+
+      <ViewEnrolmentLesson
+        id={enrolment_id}
+        open={lessonViewOpen}
+        onOpenChange={setLessonViewOpen}
       />
     </>
   );

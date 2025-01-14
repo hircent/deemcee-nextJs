@@ -428,12 +428,16 @@ export function getUserRoleAndUserType(pathname: string): {
 
 export const getStatusColor = (status: string) => {
   switch (status) {
+    case "ATTENDED":
     case "IN_PROGRESS":
       return "bg-green-100 text-green-800";
     case "GRADUATED":
       return "bg-blue-100 text-blue-800";
     case "DROPPED_OUT":
-      return "bg-red-100 text-yellow-800";
+    case "ABSENT":
+      return "bg-red-100 text-red-800";
+    case "FREEZED":
+      return "bg-orange-100 text-orange-800";
     default:
       return "bg-gray-100 text-gray-800";
   }

@@ -98,3 +98,25 @@ export type DeleteEnrolmentProps = {
   id: number;
   studentId: number;
 };
+
+export type ThemeLesson = {
+  id: number;
+  name: string;
+  theme: string;
+};
+
+export type ClassLesson = {
+  id: number;
+  theme_lesson: ThemeLesson;
+};
+
+export type EnrolmentLessonProps = {
+  id: number;
+  class_lesson: ClassLesson;
+  date: string;
+  day: string;
+  start_time: string;
+  end_time: string;
+  has_attended: boolean;
+  status: "ABSENT" | "PRESENT"; // Add other possible status values if they exist
+};
