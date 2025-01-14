@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useToast } from "./ui/use-toast";
 import { SERVER_ACTION_STATE } from "@/constants/index";
 import { useFormState } from "react-dom";
@@ -37,6 +38,7 @@ export function DeleteEnrolment({
   const [zoderror, setZodError] = useState<DeleteFormErrors | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
+  const router = useRouter();
   const [state, formAction] = useFormState(
     deleteEnrolment,
     SERVER_ACTION_STATE
@@ -47,14 +49,15 @@ export function DeleteEnrolment({
       setZodError(state.zodErr);
     }
     if (state.success) {
-      formRef.current?.reset();
-      onOpenChange(false);
       toast({
         title: "Success",
         description: state.msg,
         className: cn(`bottom-0 left-0`, "bg-success-100"),
         duration: 3000,
       });
+      formRef.current?.reset();
+      onOpenChange(false);
+      router.refresh();
     }
     if (state.error) {
       toast({

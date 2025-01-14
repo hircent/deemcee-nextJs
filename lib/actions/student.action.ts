@@ -282,7 +282,6 @@ export async function deleteEnrolment(
       return { success: false, msg: response.statusText };
     }
 
-    revalidatePath(`/student/${obj.studentId}`);
     return { success: true, msg: `Enrolment ${obj.name} is deleted` };
   } catch (error) {
     return { error: true, msg: (error as Error).message };

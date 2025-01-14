@@ -204,7 +204,7 @@ export const DeleteStudentSchema = z.object({
 });
 
 export const DeleteEnrolmentSchema = z.object({
-  studentId: z.number().min(1, "Id is required"),
+  studentId: z.string().min(1, "Id is required"),
   id: z.number().min(1, "Id is required"),
   name: z.string().min(1, "Name is required"),
   confirmName: z.string().min(1, "Confirm name is required"),
