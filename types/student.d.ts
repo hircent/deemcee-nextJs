@@ -50,6 +50,15 @@ export interface VideoAssignment {
   submit_due_date: string;
 }
 
+export interface VideoAssignmentDetails {
+  id: number;
+  theme: string;
+  video_number: number;
+  video_url: string | null;
+  submission_date: string | null;
+  submit_due_date: string;
+}
+
 export interface Enrolment {
   id: number;
   start_date: string;

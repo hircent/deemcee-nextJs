@@ -10,10 +10,10 @@ import {
   DialogPortal,
   DialogOverlay,
 } from "@/components/ui/dialog";
-import { Loader2 } from "lucide-react";
 import { getEnrolmentLesson } from "@/lib/actions/student.action";
 import { EnrolmentLessonProps } from "@/types/student";
 import { getStatusColor } from "@/lib/utils";
+import Loader from "./Loader";
 
 export const ViewEnrolmentLesson = ({
   id,
@@ -69,11 +69,7 @@ export const ViewEnrolmentLesson = ({
           </DialogHeader>
 
           <div className="py-4">
-            {isLoading && (
-              <div className="flex items-center justify-center py-8">
-                <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
-              </div>
-            )}
+            {isLoading && <Loader />}
 
             {!isLoading && lessonData.length === 0 && (
               <div className="text-center py-8 text-gray-500">

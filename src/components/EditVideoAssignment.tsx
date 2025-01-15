@@ -17,9 +17,12 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { useState } from "react";
 import { VideoAssignment } from "@/types/student";
+import Loader from "./Loader";
+import SubmitButton from "./SubmitButton";
 
 const EditVideoAssignment = ({ video }: { video: VideoAssignment }) => {
   const [open, setOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -55,7 +58,10 @@ const EditVideoAssignment = ({ video }: { video: VideoAssignment }) => {
               done.
             </DialogDescription>
           </DialogHeader>
-          asd
+          <div className="py-4">{isLoading && <Loader />}</div>
+          <DialogFooter>
+            <SubmitButton label="Save" submitLabel="Saving" />
+          </DialogFooter>
         </DialogContent>
       </DialogPortal>
     </Dialog>
