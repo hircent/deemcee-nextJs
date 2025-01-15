@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import { Book, CreditCard, Check, X } from "lucide-react";
 import { cn, formatDateTime } from "@/lib/utils";
+3;
 import { StudentCardProps } from "@/types/student";
 import StudentEnrolmentActions from "./StudentEnrolmentActions";
 
@@ -121,11 +122,11 @@ export function StudentCard({ student }: StudentCardProps) {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-neutral-100">
-                    <TableHead className="text-neutral-700">ID</TableHead>
+                    <TableHead className="text-neutral-700">Grade</TableHead>
                     <TableHead className="text-neutral-700">
                       Start Date
                     </TableHead>
-                    <TableHead className="text-neutral-700">Grade</TableHead>
+                    <TableHead className="text-neutral-700">End Date</TableHead>
                     <TableHead className="text-neutral-700">Status</TableHead>
                     <TableHead className="text-neutral-700">
                       Remaining Lessons
@@ -140,7 +141,7 @@ export function StudentCard({ student }: StudentCardProps) {
                   {student.enrolments?.map((enrollment) => (
                     <TableRow key={enrollment.id}>
                       <TableCell className="text-neutral-800">
-                        {enrollment.id}
+                        Grade {enrollment.grade}
                       </TableCell>
                       <TableCell className="text-neutral-800">
                         {
@@ -149,7 +150,7 @@ export function StudentCard({ student }: StudentCardProps) {
                         }
                       </TableCell>
                       <TableCell className="text-neutral-800">
-                        Grade {enrollment.grade}
+                        {formatDateTime(new Date(enrollment.end_date)).dateOnly}
                       </TableCell>
                       <TableCell>
                         <Badge

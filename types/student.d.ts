@@ -46,6 +46,7 @@ export interface Parent {
 export interface Enrolment {
   id: number;
   start_date: string;
+  end_date: string;
   status: string;
   remaining_lessons: number;
   is_active: boolean;
