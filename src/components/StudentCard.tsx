@@ -14,6 +14,7 @@ import { cn, formatDateTime } from "@/lib/utils";
 3;
 import { StudentCardProps } from "@/types/student";
 import StudentEnrolmentActions from "./StudentEnrolmentActions";
+import EditVideoAssignment from "./EditVideoAssignment";
 
 export function StudentCard({ student }: StudentCardProps) {
   return (
@@ -128,6 +129,7 @@ export function StudentCard({ student }: StudentCardProps) {
                     </TableHead>
                     <TableHead className="text-neutral-700">End Date</TableHead>
                     <TableHead className="text-neutral-700">Status</TableHead>
+                    <TableHead className="text-neutral-700">Videos</TableHead>
                     <TableHead className="text-neutral-700">
                       Remaining Lessons
                     </TableHead>
@@ -162,10 +164,18 @@ export function StudentCard({ student }: StudentCardProps) {
                           {enrollment.status}
                         </Badge>
                       </TableCell>
+                      <TableCell className="text-neutral-800 flex flex-col items-start">
+                        {enrollment.video_assignments.map((video) => (
+                          <EditVideoAssignment
+                            key={video.video_number}
+                            video={video}
+                          />
+                        ))}
+                      </TableCell>
                       <TableCell className="text-neutral-800">
                         {enrollment.remaining_lessons}
                       </TableCell>
-                      <TableCell className="text-neutral-800">
+                      <TableCell className="text-neutral-800 justify-center">
                         {enrollment.is_active ? (
                           <div className="rounded-full bg-green-100 p-1 w-fit">
                             <Check className="h-4 w-4 text-green-600" />

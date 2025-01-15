@@ -43,6 +43,13 @@ export interface Parent {
   is_active: boolean;
 }
 
+export interface VideoAssignment {
+  id: number;
+  video_number: number;
+  submission_date: string | null;
+  submit_due_date: string;
+}
+
 export interface Enrolment {
   id: number;
   start_date: string;
@@ -52,6 +59,7 @@ export interface Enrolment {
   is_active: boolean;
   freeze_lessons: number;
   grade: number;
+  video_assignments: VideoAssignment[];
 }
 
 export interface Payment {
