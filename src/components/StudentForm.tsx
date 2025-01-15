@@ -68,7 +68,7 @@ const StudentForm = () => {
     SearchParentListProps[]
   >([]);
   const [placeholder, setPlaceholder] = useState<string>(
-    "Select Grade and Enrolement Date"
+    "Select Grade and Commencement Date"
   );
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
@@ -443,7 +443,7 @@ const StudentForm = () => {
               <div>
                 <div className="space-y-2">
                   <Label htmlFor="enrolment_date">
-                    Enrollment Date <span className="text-red-500">*</span>
+                    Commencement Date <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="enrolment_date"
