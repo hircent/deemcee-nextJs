@@ -59,9 +59,7 @@ const StudentForm = () => {
   const [startingGrade, setStartingGrade] = useState<string | undefined>(
     undefined
   );
-  const [enrolmentDate, setEnrolmentDate] = useState<string | undefined>(
-    undefined
-  );
+  const [startDate, setStartDate] = useState<string | undefined>(undefined);
   const [timeslots, setTimeslots] = useState<TimeslotData[]>([]);
   const [confirmTimeslot, setConfirmTimeslot] = useState<string>("");
   const [parentSearchResults, setParentSearchResults] = useState<
@@ -143,11 +141,11 @@ const StudentForm = () => {
   // Get Timeslots
   useEffect(() => {
     const fetchTimeslots = async () => {
-      if (enrolmentDate && startingGrade) {
+      if (startDate && startingGrade) {
         setTimeslots([]);
         try {
           const timeslots = await getTimeslots({
-            date: enrolmentDate,
+            date: startDate,
             grade: +startingGrade,
           });
 
@@ -164,7 +162,7 @@ const StudentForm = () => {
     };
 
     fetchTimeslots();
-  }, [enrolmentDate, startingGrade]);
+  }, [startDate, startingGrade]);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -442,21 +440,19 @@ const StudentForm = () => {
 
               <div>
                 <div className="space-y-2">
-                  <Label htmlFor="enrolment_date">
+                  <Label htmlFor="start_date">
                     Commencement Date <span className="text-red-500">*</span>
                   </Label>
                   <Input
-                    id="enrolment_date"
-                    name="enrolment_date"
+                    id="start_date"
+                    name="start_date"
                     type="date"
                     onChange={(e) => {
-                      setEnrolmentDate(e.target.value);
+                      setStartDate(e.target.value);
                     }}
                   />
                 </div>
-                <small className="text-red-500">
-                  {zoderror?.enrolment_date}
-                </small>
+                <small className="text-red-500">{zoderror?.start_date}</small>
               </div>
             </div>
 

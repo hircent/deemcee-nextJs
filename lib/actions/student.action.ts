@@ -139,6 +139,7 @@ export async function createStudent(
     const validated = StudentFormSchema.safeParse(data);
 
     if (!validated.success) {
+      console.log(validated.error.flatten().fieldErrors);
       return {
         error: true,
         zodErr: validated.error.flatten().fieldErrors as StudentFormErrors,

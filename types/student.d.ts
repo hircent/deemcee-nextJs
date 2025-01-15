@@ -13,7 +13,7 @@ export type StudentProps = {
   school: string;
   deemcee_starting_grade: string;
   status: string;
-  enrolment_date: string;
+  start_date: string;
 };
 
 export type StudentFormErrors = {
@@ -24,7 +24,7 @@ export type StudentFormErrors = {
   dob?: string;
   school?: string;
   deemcee_starting_grade?: string;
-  enrolment_date?: string;
+  start_date?: string;
   parent?: string;
   status?: string;
 };

@@ -177,7 +177,7 @@ export const StudentFormSchema = z.object({
   dob: z.string().min(1, "Date of birth is required"),
   school: z.string().min(1, "School is required"),
   deemcee_starting_grade: z.string().min(1, "Starting grade is required"),
-  enrolment_date: z.string().min(1, "Enrolment date is required"),
+  start_date: z.string().min(1, "Enrolment date is required"),
   parent: z.string().min(1, "Parent is required"),
   timeslot: z.string().optional(),
   // referral_channel: z.string().optional(),
