@@ -59,6 +59,13 @@ export interface VideoAssignmentDetails {
   submit_due_date: string;
 }
 
+export type VideoAssignmentFormErrors = {
+  student_id?: string;
+  theme?: string;
+  video_url?: string;
+  submission_date?: string;
+};
+
 export interface Enrolment {
   id: number;
   start_date: string;

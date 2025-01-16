@@ -169,6 +169,7 @@ export function StudentCard({ student }: StudentCardProps) {
                           <EditVideoAssignment
                             key={video.video_number}
                             video={video}
+                            student_id={student.id}
                           />
                         ))}
                       </TableCell>

@@ -310,12 +310,18 @@ export async function deleteGrade(
 }
 
 export async function getThemeList(
-  year: string | null = null
+  year: string | null = null,
+  category: string | null = null
 ): Promise<ThemeData[]> {
   const token = await getToken();
 
+  let url = `${process.env.API_URL}/theme/list`;
+
+  if (year && category) {
+    url = url + `?year=${year}&category=${category}`;
+  }
   try {
-    const response = await fetch(`${process.env.API_URL}/theme/list`, {
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

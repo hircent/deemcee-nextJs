@@ -164,7 +164,7 @@ export async function editClass(
         msg: "Validation Failed",
       };
     }
-    console.log(data);
+
     const response = await fetch(
       `${process.env.API_URL}/class/update/${data.id}`,
       {
@@ -239,7 +239,6 @@ export async function getTimeslots({
 
   const category = getCategory(grade);
 
-  console.log(category);
   try {
     const response = await fetch(
       `${process.env.API_URL}/timeslot/list?date=${date}&category=${category}`,

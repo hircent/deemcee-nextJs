@@ -258,3 +258,10 @@ export const ExtendEnrolmentSchema = z.object({
   confirm: z.string().min(1, "Confirm name is required"),
   id: z.string().min(1, "Id is required"),
 });
+
+export const VideoAssignmentFormSchema = z.object({
+  student_id: z.string().min(1, "Student ID is required"),
+  theme: z.string().min(1, "Theme is required"),
+  video_url: z.string().min(1, "Video URL is required"),
+  submission_date: z.string().min(1, "Submission date is required"),
+});

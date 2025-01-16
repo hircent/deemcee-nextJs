@@ -442,3 +442,38 @@ export const getStatusColor = (status: string) => {
       return "bg-gray-100 text-gray-800";
   }
 };
+
+export const getEmbedUrl = (url: string | null): string | undefined => {
+  if (!url) return undefined;
+
+  try {
+    // Handle YouTube URLs
+    if (url.includes("youtu.be") || url.includes("youtube.com")) {
+      let videoId = "";
+      if (url.includes("youtu.be")) {
+        videoId = url.split("youtu.be/")[1];
+      } else if (url.includes("youtube.com/watch")) {
+        const urlParams = new URLSearchParams(new URL(url).search);
+        videoId = urlParams.get("v") || "";
+      }
+      if (videoId) {
+        // Remove any additional parameters
+        videoId = videoId.split("?")[0];
+        videoId = videoId.split("&")[0];
+        return `https://www.youtube.com/embed/${videoId}`;
+      }
+    }
+
+    // Handle Facebook URLs
+    if (url.includes("facebook.com")) {
+      return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(
+        url
+      )}&show_text=false`;
+    }
+
+    return url;
+  } catch (error) {
+    console.error("Error processing video URL:", error);
+    return undefined; // Changed from null to undefined
+  }
+};

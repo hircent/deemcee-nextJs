@@ -1,6 +1,5 @@
 "use client";
-
-import { Button } from "@/components/ui/button";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Dialog,
   DialogContent,
@@ -12,24 +11,110 @@ import {
   DialogOverlay,
   DialogPortal,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { VideoIcon } from "lucide-react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { useState } from "react";
-import { VideoAssignment } from "@/types/student";
 import Loader from "./Loader";
 import SubmitButton from "./SubmitButton";
+import {
+  VideoAssignment,
+  VideoAssignmentDetails,
+  VideoAssignmentFormErrors,
+} from "@/types/student";
+import { getEmbedUrl } from "@/lib/utils";
+import {
+  editVideoAssignment,
+  getVideoAssignmentDetails,
+} from "@/lib/actions/video.action";
+import { useToast } from "./ui/use-toast";
+import { cn } from "@/lib/utils";
+import { useFormState } from "react-dom";
+import { SERVER_ACTION_STATE } from "@/constants/index";
+import { getThemeList } from "@/lib/actions/structure.actions";
+import { ThemeData } from "@/types/structure";
+import { set } from "zod";
 
-const EditVideoAssignment = ({ video }: { video: VideoAssignment }) => {
-  const [open, setOpen] = useState<boolean>(false);
+const EditVideoAssignment = ({
+  video,
+  student_id,
+}: {
+  video: VideoAssignment;
+  student_id: number;
+}) => {
+  const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState<VideoAssignmentDetails | undefined>(
+    undefined
+  );
+  const [zoderror, setZodError] = useState<VideoAssignmentFormErrors | null>(
+    null
+  );
+  const [themeList, setThemeList] = useState<ThemeData[]>([]);
+  const [theme, setTheme] = useState<string | undefined>(undefined);
+  const formRef = useRef<HTMLFormElement>(null);
+  const { toast } = useToast();
+  const [state, formAction] = useFormState(
+    editVideoAssignment,
+    SERVER_ACTION_STATE
+  );
+
+  useEffect(() => {
+    if (state.zodErr) {
+      setZodError(state.zodErr);
+    }
+    if (state.success) {
+      formRef.current?.reset();
+      setOpen(false);
+      toast({
+        title: "Success",
+        description: state.msg,
+        className: cn(`bottom-0 left-0`, "bg-success-100"),
+        duration: 3000,
+      });
+    }
+    if (state.error) {
+      toast({
+        title: "Error",
+        description: state.msg,
+        className: cn(`bottom-0 left-0`, "bg-error-100"),
+        duration: 3000,
+      });
+    }
+  }, [state, toast]);
+
+  useEffect(() => {
+    const fetchThemeAndVideoDetails = async () => {
+      if (!open) return;
+      setIsLoading(true);
+      try {
+        const [videoDetails, themes] = await Promise.all([
+          getVideoAssignmentDetails({ videoId: video.id }),
+          getThemeList("2023", "Kiddo"),
+        ]);
+
+        setFormData(videoDetails);
+        setTheme(videoDetails.theme || undefined);
+        setThemeList(themes);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching video details and theme list:", error);
+      }
+    };
+    fetchThemeAndVideoDetails();
+  }, [video, open]);
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <div
-          onClick={() => {
-            setOpen(true);
-          }}
+          onClick={() => setOpen(true)}
           className="group p-2 hover:bg-gray-100 rounded-full transition-colors flex gap-2 hover:cursor-pointer"
         >
           <VideoIcon
@@ -58,10 +143,133 @@ const EditVideoAssignment = ({ video }: { video: VideoAssignment }) => {
               done.
             </DialogDescription>
           </DialogHeader>
-          <div className="py-4">{isLoading && <Loader />}</div>
-          <DialogFooter>
-            <SubmitButton label="Save" submitLabel="Saving" />
-          </DialogFooter>
+
+          {isLoading && (
+            <div className="py-4">
+              <Loader />
+            </div>
+          )}
+
+          {!isLoading && !formData && (
+            <div className="text-center py-8 text-gray-500">
+              No lessons found
+            </div>
+          )}
+
+          {!isLoading && formData && (
+            <form action={formAction} ref={formRef}>
+              <Input
+                type="hidden"
+                id="id"
+                name="student_id"
+                value={student_id}
+              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
+                {/* Left side - Edit Form */}
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="video_url">Video URL</Label>
+                    <Input
+                      id="video_url"
+                      name="video_url"
+                      defaultValue={formData.video_url || ""}
+                      placeholder="Enter YouTube or Facebook video URL"
+                      className="w-full"
+                    />
+                    <p className="text-xs text-gray-500">
+                      Supports YouTube (youtu.be or youtube.com) and Facebook
+                      video URLs
+                    </p>
+                    <small className="text-red-500">
+                      {zoderror?.video_url?.[0]}
+                    </small>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="theme">Theme</Label>
+                    <Input
+                      id="theme"
+                      name="theme"
+                      type="hidden"
+                      defaultValue={theme}
+                    />
+                    <Select
+                      value={theme}
+                      onValueChange={(value) => setTheme(value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select theme" />
+                      </SelectTrigger>
+                      <SelectContent className="select-content">
+                        {themeList.map((theme) => (
+                          <SelectItem
+                            key={theme.id}
+                            value={theme.id.toString()}
+                            className="select-item"
+                          >
+                            {theme.name} {theme.year}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="submission_date">Submission Date</Label>
+                      <Input
+                        id="submission_date"
+                        name="submission_date"
+                        type="date"
+                        defaultValue={
+                          formData.submission_date ||
+                          new Date().toISOString().split("T")[0]
+                        }
+                        className="w-full"
+                      />
+                      <small className="text-red-500">
+                        {zoderror?.submission_date?.[0]}
+                      </small>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="submit_due_date">Due Date</Label>
+                      <Input
+                        id="submit_due_date"
+                        type="date"
+                        value={formData.submit_due_date}
+                        className="w-full"
+                        readOnly
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right side - Video Preview */}
+                <div className="h-full flex flex-col">
+                  <Label className="mb-2">Video Preview</Label>
+                  <div className="flex-1 bg-gray-100 rounded-lg overflow-hidden">
+                    {formData.video_url ? (
+                      <iframe
+                        src={getEmbedUrl(formData.video_url)}
+                        className="w-full h-full min-h-[300px]"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    ) : (
+                      <div className="w-full h-full min-h-[300px] flex items-center justify-center text-gray-500">
+                        No video URL provided
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <DialogFooter>
+                <SubmitButton label="Save" submitLabel="Saving" />
+              </DialogFooter>
+            </form>
+          )}
         </DialogContent>
       </DialogPortal>
     </Dialog>
