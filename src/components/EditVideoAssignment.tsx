@@ -39,7 +39,6 @@ import { useFormState } from "react-dom";
 import { SERVER_ACTION_STATE } from "@/constants/index";
 import { getThemeList } from "@/lib/actions/structure.actions";
 import { ThemeData } from "@/types/structure";
-import { set } from "zod";
 
 const EditVideoAssignment = ({
   video,
@@ -74,6 +73,7 @@ const EditVideoAssignment = ({
     if (state.success) {
       formRef.current?.reset();
       setOpen(false);
+      setZodError(null);
       toast({
         title: "Success",
         description: state.msg,
@@ -218,6 +218,9 @@ const EditVideoAssignment = ({
                         ))}
                       </SelectContent>
                     </Select>
+                    <small className="text-red-500">
+                      {zoderror?.theme?.[0]}
+                    </small>
                   </div>
 
                   <div className="space-y-2">
