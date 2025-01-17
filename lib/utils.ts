@@ -477,3 +477,19 @@ export const getEmbedUrl = (url: string | null): string | undefined => {
     return undefined; // Changed from null to undefined
   }
 };
+
+export function getCategoryByGrade(grade: number): string {
+  switch (grade) {
+    case 1:
+    case 2:
+      return "Kiddo";
+    case 3:
+    case 4:
+      return "Kids";
+    case 5:
+    case 6:
+      return "Superkids";
+    default:
+      return "Kiddo";
+  }
+}

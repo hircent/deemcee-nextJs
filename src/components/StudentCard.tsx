@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Book, CreditCard, Check, X } from "lucide-react";
-import { cn, formatDateTime } from "@/lib/utils";
+import { cn, formatDateTime, getCategoryByGrade } from "@/lib/utils";
 3;
 import { StudentCardProps } from "@/types/student";
 import StudentEnrolmentActions from "./StudentEnrolmentActions";
@@ -170,6 +170,7 @@ export function StudentCard({ student }: StudentCardProps) {
                             key={video.video_number}
                             video={video}
                             student_id={student.id}
+                            category={getCategoryByGrade(enrollment.grade)}
                           />
                         ))}
                       </TableCell>

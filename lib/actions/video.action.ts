@@ -54,7 +54,6 @@ export async function editVideoAssignment(
     const validated = VideoAssignmentFormSchema.safeParse(data);
 
     if (!validated.success) {
-      console.log(validated.error.flatten().fieldErrors);
       return {
         error: true,
         zodErr: validated.error.flatten()
@@ -62,24 +61,24 @@ export async function editVideoAssignment(
         msg: "Validation Failed",
       };
     }
-    console.log(data);
-    // const response = await fetch(
-    //   `${process.env.API_URL}/student/enrolment/video/update/${data.id}`,
-    //   {
-    //     method: "PUT",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       Authorization: `Bearer ${token?.value}`,
-    //       BranchId: `${branchId?.toString()}`,
-    //     },
-    //     body: JSON.stringify(data),
-    //   }
-    // );
 
-    // if (!response.ok) {
-    //   const res = await response.json();
-    //   return { error: true, msg: res.msg };
-    // }
+    const response = await fetch(
+      `${process.env.API_URL}/student/enrolment/video/update/${data.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      const res = await response.json();
+      return { error: true, msg: res.msg };
+    }
 
     revalidatePath(`student/${data.student_id}`);
     return { success: true, msg: `Video Assignment has been updated` };

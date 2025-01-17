@@ -44,9 +44,11 @@ import { set } from "zod";
 const EditVideoAssignment = ({
   video,
   student_id,
+  category,
 }: {
   video: VideoAssignment;
   student_id: number;
+  category: string;
 }) => {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -96,7 +98,10 @@ const EditVideoAssignment = ({
       try {
         const [videoDetails, themes] = await Promise.all([
           getVideoAssignmentDetails({ videoId: video.id }),
-          getThemeList("2023", "Kiddo"),
+          getThemeList(
+            new Date(video.submit_due_date).getFullYear().toString(),
+            category
+          ),
         ]);
 
         setFormData(videoDetails);
@@ -108,7 +113,7 @@ const EditVideoAssignment = ({
       }
     };
     fetchThemeAndVideoDetails();
-  }, [video, open]);
+  }, [video, open, category]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -139,8 +144,8 @@ const EditVideoAssignment = ({
               Edit Video
             </DialogTitle>
             <DialogDescription className="text-sm sm:text-base">
-              Make changes to your video details here. Click save when you're
-              done.
+              Make changes to your video details here. Click save when
+              you&apos;re done.
             </DialogDescription>
           </DialogHeader>
 
@@ -160,10 +165,11 @@ const EditVideoAssignment = ({
             <form action={formAction} ref={formRef}>
               <Input
                 type="hidden"
-                id="id"
+                id="student_id"
                 name="student_id"
                 value={student_id}
               />
+              <Input type="hidden" id="id" name="id" value={video.id} />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
                 {/* Left side - Edit Form */}
                 <div className="space-y-4">
@@ -194,7 +200,7 @@ const EditVideoAssignment = ({
                       defaultValue={theme}
                     />
                     <Select
-                      value={theme}
+                      value={theme?.toString()}
                       onValueChange={(value) => setTheme(value)}
                     >
                       <SelectTrigger>

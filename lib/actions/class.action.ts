@@ -70,7 +70,7 @@ export async function createClass(
         msg: "Validation Failed",
       };
     }
-    console.log(data);
+
     const response = await fetch(`${process.env.API_URL}/class/create`, {
       method: "POST",
       headers: {
