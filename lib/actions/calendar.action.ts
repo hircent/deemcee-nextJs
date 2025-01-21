@@ -9,7 +9,7 @@ import { getToken } from "./user.actions";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { HolidayEventSchema, DeleteHolidayEventSchema } from "@/constants/form";
-import { STATE } from "@/types/index";
+import { GetResponseProps, STATE } from "@/types/index";
 import { processLessonData } from "../utils";
 
 export async function getCalendarData(
@@ -260,5 +260,37 @@ export async function editCalendar(
     return { ...prevState, success: true, msg: `Calendar is updated` };
   } catch (error) {
     return { ...prevState, error: true, msg: (error as Error).message };
+  }
+}
+
+export async function getCalendarThemeLessonByDate(
+  date: string
+): Promise<CalendarThemeLesson[]> {
+  const token = await getToken();
+  const branchId = cookies().get("BranchId")?.value;
+
+  try {
+    const response = await fetch(
+      `${process.env.API_URL}/calendars/theme-lesson/list?date=${date}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        "Failed to fetch calendar theme lesson data " + response.statusText
+      );
+    }
+    const data: GetResponseProps<CalendarThemeLesson> = await response.json();
+
+    return data.data;
+  } catch (error) {
+    throw error;
   }
 }

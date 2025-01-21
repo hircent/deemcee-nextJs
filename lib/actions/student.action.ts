@@ -20,6 +20,7 @@ import {
   StudentFormSchema,
   UpdateStudentFormSchema,
 } from "@/constants/form";
+import { ClassLessonTodayStudentList } from "@/types/class";
 
 export async function getStudentList(
   params: StudentListFilterProps
@@ -369,5 +370,38 @@ export async function extendEnrolment(
     return { success: true, msg: `Enrolment has been extended` };
   } catch (error) {
     return { error: true, msg: (error as Error).message };
+  }
+}
+
+export async function getShouldAttendStudentList(
+  today: string
+): Promise<ClassLessonTodayStudentList[]> {
+  const token = await getToken();
+  const id = cookies().get("BranchId")?.value;
+
+  let url = `${process.env.API_URL}/class/attendance/list?date=${today}`;
+
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+        BranchId: `${id?.toString()}`,
+      },
+      // next:{
+      //     revalidate:3300
+      // },
+      cache: "no-cache",
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+
+    return data.data;
+  } catch (error) {
+    throw error;
   }
 }

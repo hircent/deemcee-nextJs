@@ -20,11 +20,11 @@ type ThemeLesson = {
 
 export type CalendarThemeLesson = {
   id: number;
-  theme_lesson: ThemeLesson[];
+  theme_lesson: ThemeLesson;
   theme: {
     id: number;
     name: string;
-  }[];
+  };
   category: string;
   branch: number;
   lesson_date: string;

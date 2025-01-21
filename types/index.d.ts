@@ -698,3 +698,9 @@ export type StarterKitItem = {
   label: string;
   value: string;
 };
+
+export type TeachingUserList = {
+  id: number;
+  first_name: string;
+  username: string;
+};
