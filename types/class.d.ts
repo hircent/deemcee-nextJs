@@ -51,7 +51,7 @@ export type UnmarkedClassEnrolment = {
 
 export type MarkedClassEnrolment = {
   id: number;
-  enrolment: Enrolment;
+  enrollment: Enrolment;
   status: string;
 };
 

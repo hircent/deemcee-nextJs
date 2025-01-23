@@ -199,3 +199,36 @@ export const STUDENT_FILTERTING_STATUSES = [
   { value: "DROPPED_OUT", label: "DROPPED_OUT" },
   { value: "GRADUATED", label: "GRADUATED" },
 ];
+
+export const AttendanceStatus = [
+  {
+    value: "ATTENDED",
+    label: "Attended",
+    className: "bg-gray-300 text-white hover:bg-green-600",
+    isActive: "bg-green-600",
+  },
+  {
+    value: "ABSENT",
+    label: "Absent",
+    className: "bg-gray-300 text-white hover:bg-red-600",
+    isActive: "bg-red-600",
+  },
+  {
+    value: "FREEZE",
+    label: "Freeze",
+    className: "bg-gray-300 text-white hover:bg-blue-600",
+    isActive: "bg-blue-600",
+  },
+  {
+    value: "SFREEZE",
+    label: "S-Freeze",
+    className: "bg-gray-300 text-white hover:bg-orange-600",
+    isActive: "bg-orange-600",
+  },
+  {
+    value: "REPLACEMENT",
+    label: "Replacement",
+    className: "bg-gray-300 text-white hover:bg-purple-600",
+    isActive: "bg-purple-600",
+  },
+];
