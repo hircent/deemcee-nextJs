@@ -112,6 +112,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
 
       const formData = new FormData();
       formData.append("classId", classData.id.toString());
+      formData.append("status", classData.status);
       formData.append("teacherId", selectedTeacher);
 
       if (selectedCoTeacher) {
