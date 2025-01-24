@@ -172,9 +172,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
 
   return (
     <>
-      <TableRow
-        className={cn("bg-slate-100", { "bg-yellow-2": classIndex % 2 == 0 })}
-      >
+      <TableRow>
         <TableCell
           className="align-middle border-r-2"
           rowSpan={allStudents.length + 1}
@@ -238,10 +236,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
       </TableRow>
 
       {allStudents.map((student, index) => (
-        <TableRow
-          key={student.id}
-          className={cn("bg-slate-100", { "bg-yellow-2": classIndex % 2 == 0 })}
-        >
+        <TableRow key={student.id}>
           <TableCell className="border-r-2">
             {student.type === "unmarked"
               ? student.student.fullname
@@ -279,7 +274,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
           </TableCell>
         </TableRow>
       ))}
-      <TableRow className="bg-slate-200">
+      <TableRow className="bg-slate-100">
         <TableCell className="align-middle" colSpan={5}>
           <div className="flex justify-end">
             <Button
