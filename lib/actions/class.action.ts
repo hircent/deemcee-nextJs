@@ -263,3 +263,30 @@ export async function getTimeslots({
     throw error;
   }
 }
+
+export async function markAttendances(
+  _prevState: STATE<ClassFormErrors>,
+  formData: FormData
+): Promise<STATE<ClassFormErrors>> {
+  const token = await getToken();
+  const branchId = cookies().get("BranchId")?.value;
+
+  const data = Object.fromEntries(formData);
+
+  console.log(data);
+
+  // const response = await fetch(
+  //   `${process.env.API_URL}/class/mark-attendance/${data.id}`,
+  //   {
+  //     method: "PUT",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${token?.value}`,
+  //       BranchId: `${branchId?.toString()}`,
+  //     },
+  //     body: JSON.stringify(data),
+  //   }
+  // );
+
+  return { success: true, msg: "Attendance has been marked" };
+}

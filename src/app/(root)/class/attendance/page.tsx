@@ -12,7 +12,7 @@ const AttendanceTable = async () => {
       getCalendarThemeLessonByDate(today),
       getShouldAttendStudentList(today),
     ]);
-  console.log(todayStudentList);
+
   return (
     <div className="overflow-y-auto custom-scrollbar">
       <AttendanceForms

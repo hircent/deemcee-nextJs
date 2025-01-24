@@ -12,16 +12,17 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { TeachingUserList } from "@/types/index";
-import { ClassLessonTodayStudentList } from "@/types/class";
-import { AttendanceStatus } from "@/constants/index";
+import {
+  ClassAttendanceFormProps,
+  ClassData,
+  ClassLessonTodayStudentList,
+} from "@/types/class";
+import { AttendanceStatus, SERVER_ACTION_STATE } from "@/constants/index";
 import { CalendarThemeLesson } from "@/types/calendar";
-
-interface ClassAttendanceFormProps {
-  classData: ClassLessonTodayStudentList;
-  teacherList: TeachingUserList[];
-  classIndex: number;
-  calendarThemeLessonList: CalendarThemeLesson[];
-}
+import { useFormState } from "react-dom";
+import { useToast } from "./ui/use-toast";
+import { markAttendances } from "@/lib/actions/class.action";
+import { Input } from "./ui/input";
 
 const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
   classData,
@@ -35,6 +36,11 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
   const [selectedCoTeacher, setSelectedCoTeacher] = useState<string | null>(
     null
   );
+  const [replacementDate, setReplacementDate] = useState<{
+    [key: number]: string;
+  }>("");
+  const { toast } = useToast();
+  const [state, action] = useFormState(markAttendances, SERVER_ACTION_STATE);
 
   // Combine unmarked and attended students
   const allStudents = [
@@ -64,23 +70,100 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
       ...prev,
       [studentId]: status,
     }));
+
+    if (status !== "REPLACEMENT") {
+      setReplacementDate((prev) => ({
+        ...prev,
+        [studentId]: "",
+      }));
+    }
   };
 
-  const handleSubmit = () => {
-    // Only proceed if teacher is selected and all students have a status
-    if (
-      selectedTeacher &&
-      allStudents.every((student) => studentStatuses[student.id])
-    ) {
-      const submissionData = {
-        classId: classData.id,
-        teacherId: selectedTeacher,
-        coTeacherId: selectedCoTeacher,
-        studentStatuses: studentStatuses,
-      };
-      console.log({ submissionData });
-      // Add your actual submission logic here
+  const handleReplacementDateChange = (
+    studentId: number,
+    replacementDate: string
+  ) => {
+    setReplacementDate((prev) => ({
+      ...prev,
+      [studentId]: replacementDate,
+    }));
+  };
+
+  const handleSubmit = async () => {
+    // Validate that all students have a status
+    const isStatusComplete = allStudents.every(
+      (student) => studentStatuses[student.id]
+    );
+
+    // Additional validation for REPLACEMENT status
+    const isReplacementValid = allStudents.every(
+      (student) =>
+        studentStatuses[student.id] !== "REPLACEMENT" ||
+        (studentStatuses[student.id] === "REPLACEMENT" &&
+          replacementDate[student.id])
+    );
+
+    if (selectedTeacher && isStatusComplete && isReplacementValid) {
+      const studentStatusArray = allStudents.map((student) => ({
+        id: student.id,
+        status: studentStatuses[student.id],
+        replacement_date: replacementDate[student.id],
+      }));
+
+      const formData = new FormData();
+      formData.append("classId", classData.id.toString());
+      formData.append("teacherId", selectedTeacher);
+
+      if (selectedCoTeacher) {
+        formData.append("coTeacherId", selectedCoTeacher);
+      }
+
+      formData.append("student_enrolments", JSON.stringify(studentStatusArray));
+
+      formData.append(
+        "theme_lesson",
+        getThemeLesson(
+          calendarThemeLessonList,
+          classData.class_instance
+        ).id.toString()
+      );
+
+      await action(formData);
+    } else {
+      // Show error toast if validation fails
+      if (!isStatusComplete) {
+        toast({
+          title: "Attendance Error",
+          description: "Please set attendance status for all students.",
+          className: cn(`bottom-0 left-0`, "bg-error-100"),
+          duration: 3000,
+        });
+      } else if (!isReplacementValid) {
+        toast({
+          title: "Replacement Date Error",
+          description:
+            "Please select a replacement date for students with REPLACEMENT status.",
+          className: cn(`bottom-0 left-0`, "bg-error-100"),
+          duration: 3000,
+        });
+      }
     }
+  };
+
+  const getThemeLesson = (
+    calendarThemeLessonList: CalendarThemeLesson[],
+    classData: ClassData
+  ) => {
+    const themeLesson = calendarThemeLessonList.map((theme) => ({
+      id: theme.id,
+      category: theme.category,
+      theme: theme.theme.name,
+      themeLesson: theme.theme_lesson.name,
+    }));
+    const lesson = themeLesson.filter(
+      (lesson) => lesson.category === classData.name
+    );
+    return lesson[0];
   };
 
   const isSubmitEnabled =
@@ -182,6 +265,17 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
                 </Button>
               ))}
             </div>
+            {studentStatuses[student.id] === "REPLACEMENT" && (
+              <Input
+                className="mt-4"
+                type="date"
+                value={replacementDate[student.id]}
+                onChange={(e) =>
+                  handleReplacementDateChange(student.id, e.target.value)
+                }
+                required
+              />
+            )}
           </TableCell>
         </TableRow>
       ))}

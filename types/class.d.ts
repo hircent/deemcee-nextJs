@@ -1,3 +1,5 @@
+import { CalendarThemeLesson } from "@/types/calendar";
+
 export type ClassListData = {
   id: number;
   branch: number;
@@ -67,3 +69,10 @@ export type ClassLessonTodayStudentList = {
   student_attendances: MarkedClassEnrolment[];
   unmarked_students: UnmarkedClassEnrolment[];
 };
+
+export interface ClassAttendanceFormProps {
+  classData: ClassLessonTodayStudentList;
+  teacherList: TeachingUserList[];
+  classIndex: number;
+  calendarThemeLessonList: CalendarThemeLesson[];
+}
