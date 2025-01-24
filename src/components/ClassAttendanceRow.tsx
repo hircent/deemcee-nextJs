@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { TableRow, TableCell } from "@/components/ui/table";
 import {
   Select,
@@ -41,6 +41,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
   }>("");
   const { toast } = useToast();
   const [state, action] = useFormState(markAttendances, SERVER_ACTION_STATE);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Combine unmarked and attended students
   const allStudents = [
@@ -90,64 +91,78 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
   };
 
   const handleSubmit = async () => {
-    // Validate that all students have a status
-    const isStatusComplete = allStudents.every(
-      (student) => studentStatuses[student.id]
-    );
+    try {
+      setIsSubmitting(true);
 
-    // Additional validation for REPLACEMENT status
-    const isReplacementValid = allStudents.every(
-      (student) =>
-        studentStatuses[student.id] !== "REPLACEMENT" ||
-        (studentStatuses[student.id] === "REPLACEMENT" &&
-          replacementDate[student.id])
-    );
-
-    if (selectedTeacher && isStatusComplete && isReplacementValid) {
-      const studentStatusArray = allStudents.map((student) => ({
-        id: student.id,
-        status: studentStatuses[student.id],
-        replacement_date: replacementDate[student.id],
-      }));
-
-      const formData = new FormData();
-      formData.append("classId", classData.id.toString());
-      formData.append("status", classData.status);
-      formData.append("teacherId", selectedTeacher);
-
-      if (selectedCoTeacher) {
-        formData.append("coTeacherId", selectedCoTeacher);
-      }
-
-      formData.append("student_enrolments", JSON.stringify(studentStatusArray));
-
-      formData.append(
-        "theme_lesson",
-        getThemeLesson(
-          calendarThemeLessonList,
-          classData.class_instance
-        ).id.toString()
+      const isStatusComplete = allStudents.every(
+        (student) => studentStatuses[student.id]
       );
 
-      await action(formData);
-    } else {
-      // Show error toast if validation fails
-      if (!isStatusComplete) {
-        toast({
-          title: "Attendance Error",
-          description: "Please set attendance status for all students.",
-          className: cn(`bottom-0 left-0`, "bg-error-100"),
-          duration: 3000,
-        });
-      } else if (!isReplacementValid) {
-        toast({
-          title: "Replacement Date Error",
-          description:
-            "Please select a replacement date for students with REPLACEMENT status.",
-          className: cn(`bottom-0 left-0`, "bg-error-100"),
-          duration: 3000,
-        });
+      // Additional validation for REPLACEMENT status
+      const isReplacementValid = allStudents.every(
+        (student) =>
+          studentStatuses[student.id] !== "REPLACEMENT" ||
+          (studentStatuses[student.id] === "REPLACEMENT" &&
+            replacementDate[student.id])
+      );
+
+      if (selectedTeacher && isStatusComplete && isReplacementValid) {
+        const studentStatusArray = allStudents.map((student) => ({
+          id: student.id,
+          status: studentStatuses[student.id],
+          replacement_date: replacementDate[student.id],
+        }));
+
+        const formData = new FormData();
+        formData.append("classId", classData.id.toString());
+        formData.append("status", classData.status);
+        formData.append("teacherId", selectedTeacher);
+
+        if (selectedCoTeacher) {
+          formData.append("coTeacherId", selectedCoTeacher);
+        }
+
+        formData.append(
+          "student_enrolments",
+          JSON.stringify(studentStatusArray)
+        );
+
+        formData.append(
+          "theme_lesson",
+          getThemeLesson(
+            calendarThemeLessonList,
+            classData.class_instance
+          ).id.toString()
+        );
+
+        await action(formData);
+      } else {
+        // Show error toast if validation fails
+        if (!isStatusComplete) {
+          toast({
+            title: "Attendance Error",
+            description: "Please set attendance status for all students.",
+            className: cn(`bottom-0 left-0`, "bg-error-100"),
+            duration: 3000,
+          });
+        } else if (!isReplacementValid) {
+          toast({
+            title: "Replacement Date Error",
+            description:
+              "Please select a replacement date for students with REPLACEMENT status.",
+            className: cn(`bottom-0 left-0`, "bg-error-100"),
+            duration: 3000,
+          });
+        }
+        // Validate that all students have a status
       }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to submit attendance data",
+        className: cn(`bottom-0 left-0`, "bg-error-100"),
+        duration: 3000,
+      });
     }
   };
 
@@ -170,6 +185,29 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
   const isSubmitEnabled =
     selectedTeacher &&
     allStudents.every((student) => studentStatuses[student.id]);
+
+  useEffect(() => {
+    if (state.success) {
+      toast({
+        title: "Success",
+        description: state.msg,
+        className: cn(`bottom-0 left-0`, "bg-success-100"),
+        duration: 3000,
+      });
+
+      setIsSubmitting(false);
+    }
+    if (state.error) {
+      toast({
+        title: "Error",
+        description: state.msg,
+        className: cn(`bottom-0 left-0`, "bg-error-100"),
+        duration: 3000,
+      });
+
+      setIsSubmitting(false);
+    }
+  }, [state, toast]);
 
   return (
     <>
@@ -281,9 +319,9 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
             <Button
               className="bg-blue-900 text-white hover:bg-blue-700"
               onClick={handleSubmit}
-              disabled={!isSubmitEnabled}
+              disabled={!isSubmitEnabled || isSubmitting}
             >
-              Submit
+              {isSubmitting ? "Submitting..." : "Submit"}
             </Button>
           </div>
         </TableCell>
