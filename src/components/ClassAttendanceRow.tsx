@@ -33,9 +33,9 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
   const [selectedTeacher, setSelectedTeacher] = useState<string | undefined>(
     classData.teacher?.toString()
   );
-  const [selectedCoTeacher, setSelectedCoTeacher] = useState<string | null>(
-    null
-  );
+  const [selectedCoTeacher, setSelectedCoTeacher] = useState<
+    string | undefined
+  >(classData.co_teacher?.toString());
   const [replacementDate, setReplacementDate] = useState<{
     [key: number]: string;
   }>("");
@@ -196,21 +196,19 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
         title: "Success",
         description: state.msg,
         className: cn(`bottom-0 left-0`, "bg-success-100"),
-        duration: 3000,
+        duration: 2000,
       });
-
-      setIsSubmitting(false);
     }
-    if (state.error) {
+    if (!state.success && state.success != null) {
       toast({
         title: "Error",
         description: state.msg,
         className: cn(`bottom-0 left-0`, "bg-error-100"),
         duration: 3000,
       });
-
-      setIsSubmitting(false);
     }
+
+    setIsSubmitting(false);
   }, [state, toast]);
 
   return (
