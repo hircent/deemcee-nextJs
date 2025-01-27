@@ -154,9 +154,11 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
             duration: 3000,
           });
         }
+        setIsSubmitting(false);
         // Validate that all students have a status
       }
     } catch (error) {
+      setIsSubmitting(false);
       toast({
         title: "Error",
         description: "Failed to submit attendance data",
@@ -171,7 +173,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
     classData: ClassData
   ) => {
     const themeLesson = calendarThemeLessonList.map((theme) => ({
-      id: theme.id,
+      id: theme.theme_lesson.id,
       category: theme.category,
       theme: theme.theme.name,
       themeLesson: theme.theme_lesson.name,
@@ -179,6 +181,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
     const lesson = themeLesson.filter(
       (lesson) => lesson.category === classData.name
     );
+    console.log({ calendarThemeLessonList, classData, lesson });
     return lesson[0];
   };
 
@@ -187,6 +190,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
     allStudents.every((student) => studentStatuses[student.id]);
 
   useEffect(() => {
+    console.log({ state });
     if (state.success) {
       toast({
         title: "Success",

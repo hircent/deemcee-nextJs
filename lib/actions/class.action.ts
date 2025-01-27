@@ -268,25 +268,31 @@ export async function markAttendances(
   _prevState: STATE<ClassFormErrors>,
   formData: FormData
 ): Promise<STATE<ClassFormErrors>> {
-  const token = await getToken();
-  const branchId = cookies().get("BranchId")?.value;
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
 
-  const data = Object.fromEntries(formData);
+    const data = Object.fromEntries(formData);
 
-  console.log(data);
+    const response = await fetch(
+      `${process.env.API_URL}/class/mark-attendance?date=${"2025-01-2025"}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+        body: JSON.stringify(data),
+      }
+    );
 
-  // const response = await fetch(
-  //   `${process.env.API_URL}/class/mark-attendance/${data.id}`,
-  //   {
-  //     method: "PUT",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${token?.value}`,
-  //       BranchId: `${branchId?.toString()}`,
-  //     },
-  //     body: JSON.stringify(data),
-  //   }
-  // );
+    if (!response.ok) {
+      return { success: false, msg: response.statusText };
+    }
 
-  return { success: true, msg: "Attendance has been marked" };
+    return { success: true, msg: "Attendance has been marked" };
+  } catch (error) {
+    return { error: true, msg: (error as Error).message };
+  }
 }
