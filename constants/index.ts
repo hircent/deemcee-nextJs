@@ -214,13 +214,13 @@ export const AttendanceStatus = [
     isActive: "bg-red-600",
   },
   {
-    value: "FREEZE",
+    value: "FREEZED",
     label: "Freeze",
     className: "bg-gray-300 text-white hover:bg-blue-600",
     isActive: "bg-blue-600",
   },
   {
-    value: "SFREEZE",
+    value: "SFREEZED",
     label: "S-Freeze",
     className: "bg-gray-300 text-white hover:bg-orange-600",
     isActive: "bg-orange-600",
