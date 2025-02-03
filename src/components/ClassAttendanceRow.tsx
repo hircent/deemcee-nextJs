@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TableRow, TableCell } from "@/components/ui/table";
 import {
   Select,
@@ -11,12 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import { TeachingUserList } from "@/types/index";
-import {
-  ClassAttendanceFormProps,
-  ClassData,
-  ClassLessonTodayStudentList,
-} from "@/types/class";
+import { ClassAttendanceFormProps, ClassData } from "@/types/class";
 import { AttendanceStatus, SERVER_ACTION_STATE } from "@/constants/index";
 import { CalendarThemeLesson } from "@/types/calendar";
 import { useFormState } from "react-dom";
@@ -42,6 +37,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
   const { toast } = useToast();
   const [state, action] = useFormState(markAttendances, SERVER_ACTION_STATE);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [ableSelectSlot, setAbleSelectSlot] = useState(false);
 
   // Combine unmarked and attended students
   const allStudents = [
@@ -302,15 +298,26 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
               ))}
             </div>
             {studentStatuses[student.id] === "REPLACEMENT" && (
-              <Input
-                className="mt-4"
-                type="date"
-                value={replacementDate[student.id]}
-                onChange={(e) =>
-                  handleReplacementDateChange(student.id, e.target.value)
-                }
-                required
-              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+                <Input
+                  type="date"
+                  value={replacementDate[student.id]}
+                  onChange={(e) =>
+                    handleReplacementDateChange(student.id, e.target.value)
+                  }
+                  required
+                />
+                <Select>
+                  <SelectTrigger disabled={!ableSelectSlot}>
+                    <SelectValue placeholder="Kindly select date" />
+                  </SelectTrigger>
+                  <SelectContent className="select-content">
+                    <SelectItem value="one" className="select-item">
+                      one
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             )}
           </TableCell>
         </TableRow>
