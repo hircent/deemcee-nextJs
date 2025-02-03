@@ -29,11 +29,9 @@ export type ClassFormErrors = {
   day?: string;
 };
 
-export type GetTimeslotProps = {
-  date: string;
-  grade?: number;
-  categoryName?: string;
-};
+export type GetTimeslotProps =
+  | { date: string; grade: number; categoryName?: never }
+  | { date: string; categoryName: string; grade?: never };
 
 export type EnrolmentStudent = {
   id: number;
