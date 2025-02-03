@@ -16,8 +16,9 @@ import { AttendanceStatus, SERVER_ACTION_STATE } from "@/constants/index";
 import { CalendarThemeLesson } from "@/types/calendar";
 import { useFormState } from "react-dom";
 import { useToast } from "./ui/use-toast";
-import { markAttendances } from "@/lib/actions/class.action";
+import { getTimeslots, markAttendances } from "@/lib/actions/class.action";
 import { Input } from "./ui/input";
+import { TimeslotData } from "@/types/index";
 
 const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
   classData,
@@ -38,6 +39,8 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
   const [state, action] = useFormState(markAttendances, SERVER_ACTION_STATE);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [ableSelectSlot, setAbleSelectSlot] = useState(false);
+  const [selectPlaceHolder, setPlaceholder] = useState("Kindly select date");
+  const [timeslots, setTimeslots] = useState<TimeslotData[]>([]);
 
   // Combine unmarked and attended students
   const allStudents = [
@@ -166,6 +169,23 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
     }
   };
 
+  const getSelectTimeslot = async (date: string, categoryName: string) => {
+    setTimeslots([]);
+    setAbleSelectSlot(false);
+    const timeslots = await getTimeslots({
+      date: date,
+      categoryName: categoryName,
+    });
+
+    if (timeslots.length === 0) {
+      setPlaceholder("No available time slots");
+    } else {
+      setAbleSelectSlot(true);
+      setTimeslots(timeslots);
+      setPlaceholder("Select a time slot");
+    }
+  };
+
   const getThemeLesson = (
     calendarThemeLessonList: CalendarThemeLesson[],
     classData: ClassData
@@ -179,7 +199,6 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
     const lesson = themeLesson.filter(
       (lesson) => lesson.category === classData.name
     );
-    console.log({ calendarThemeLessonList, classData, lesson });
     return lesson[0];
   };
 
@@ -188,7 +207,6 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
     allStudents.every((student) => studentStatuses[student.id]);
 
   useEffect(() => {
-    console.log({ state });
     if (state.success) {
       toast({
         title: "Success",
@@ -300,24 +318,35 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
               ))}
             </div>
             {studentStatuses[student.id] === "REPLACEMENT" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
                 <Input
+                  className="col-span-1"
                   type="date"
                   value={replacementDate[student.id]}
                   onChange={(e) => {
                     handleReplacementDateChange(student.id, e.target.value);
-                    console.log(student.category);
+                    getSelectTimeslot(e.target.value, student.category);
                   }}
                   required
                 />
                 <Select>
-                  <SelectTrigger disabled={!ableSelectSlot}>
-                    <SelectValue placeholder="Kindly select date" />
+                  <SelectTrigger
+                    disabled={!ableSelectSlot}
+                    className="col-span-2"
+                  >
+                    <SelectValue placeholder={selectPlaceHolder} />
                   </SelectTrigger>
-                  <SelectContent className="select-content">
-                    <SelectItem value="one" className="select-item">
-                      one
-                    </SelectItem>
+                  <SelectContent className="select-content w-full">
+                    {timeslots.map((ts) => (
+                      <SelectItem
+                        disabled={ts.student_in_class >= 6}
+                        key={ts.id}
+                        value={ts.id.toString()}
+                        className="select-item"
+                      >
+                        {ts.label + " - " + "(" + ts.student_in_class + "/6)"}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
