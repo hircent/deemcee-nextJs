@@ -43,10 +43,12 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
   const allStudents = [
     ...classData.unmarked_students.map((student) => ({
       ...student,
+      category: classData.class_instance.name,
       type: "unmarked" as const,
     })),
     ...classData.student_attendances.map((attendance) => ({
       ...attendance,
+      category: classData.class_instance.name,
       type: "attended" as const,
     })),
   ];
@@ -302,9 +304,10 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
                 <Input
                   type="date"
                   value={replacementDate[student.id]}
-                  onChange={(e) =>
-                    handleReplacementDateChange(student.id, e.target.value)
-                  }
+                  onChange={(e) => {
+                    handleReplacementDateChange(student.id, e.target.value);
+                    console.log(student.category);
+                  }}
                   required
                 />
                 <Select>

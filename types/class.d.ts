@@ -31,7 +31,8 @@ export type ClassFormErrors = {
 
 export type GetTimeslotProps = {
   date: string;
-  grade: number;
+  grade?: number;
+  categoryName?: string;
 };
 
 export type EnrolmentStudent = {

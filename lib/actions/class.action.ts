@@ -233,11 +233,15 @@ function getCategory(grade: number) {
 export async function getTimeslots({
   date,
   grade,
+  categoryName,
 }: GetTimeslotProps): Promise<TimeslotData[]> {
   const token = await getToken();
   const branchId = cookies().get("BranchId")?.value;
 
-  const category = getCategory(grade);
+  let category = categoryName;
+  if (!categoryName) {
+    category = getCategory(grade!);
+  }
 
   try {
     const response = await fetch(
