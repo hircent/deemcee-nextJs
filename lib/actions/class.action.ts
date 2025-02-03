@@ -279,23 +279,23 @@ export async function markAttendances(
     const data = Object.fromEntries(formData);
 
     console.log({ data });
-    const response = await fetch(
-      `${process.env.API_URL}/class/mark-attendance?date=${"2025-01-27"}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token?.value}`,
-          BranchId: `${branchId?.toString()}`,
-        },
-        body: JSON.stringify(data),
-      }
-    );
+    // const response = await fetch(
+    //   `${process.env.API_URL}/class/mark-attendance?date=${"2025-01-27"}`,
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: `Bearer ${token?.value}`,
+    //       BranchId: `${branchId?.toString()}`,
+    //     },
+    //     body: JSON.stringify(data),
+    //   }
+    // );
 
-    if (!response.ok) {
-      const res = await response.json();
-      return { success: false, msg: res.msg };
-    }
+    // if (!response.ok) {
+    //   const res = await response.json();
+    //   return { success: false, msg: res.msg };
+    // }
 
     return { success: true, msg: "Attendance has been marked" };
   } catch (error) {

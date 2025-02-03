@@ -38,10 +38,18 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
   const { toast } = useToast();
   const [state, action] = useFormState(markAttendances, SERVER_ACTION_STATE);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [ableSelectSlot, setAbleSelectSlot] = useState(false);
-  const [selectPlaceHolder, setPlaceholder] = useState("Kindly select date");
-  const [timeslots, setTimeslots] = useState<TimeslotData[]>([]);
-
+  const [timeslotsPerStudent, setTimeslotsPerStudent] = useState<{
+    [key: number]: TimeslotData[];
+  }>({});
+  const [placeholderPerStudent, setPlaceholderPerStudent] = useState<{
+    [key: number]: string;
+  }>({});
+  const [ableSelectSlotPerStudent, setAbleSelectSlotPerStudent] = useState<{
+    [key: number]: boolean;
+  }>({});
+  const [selectedTimeslots, setSelectedTimeslots] = useState<{
+    [key: number]: string;
+  }>({});
   // Combine unmarked and attended students
   const allStudents = [
     ...classData.unmarked_students.map((student) => ({
@@ -74,10 +82,34 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
     }));
 
     if (status !== "REPLACEMENT") {
-      setReplacementDate((prev) => ({
-        ...prev,
-        [studentId]: "",
-      }));
+      setReplacementDate((prev) => {
+        const newState = { ...prev };
+        delete newState[studentId];
+        return newState;
+      });
+
+      setSelectedTimeslots((prev) => {
+        const newState = { ...prev };
+        delete newState[studentId];
+        return newState;
+      });
+
+      // Reset the timeslot selection state for this student
+      setTimeslotsPerStudent((prev) => {
+        const newState = { ...prev };
+        delete newState[studentId];
+        return newState;
+      });
+      setAbleSelectSlotPerStudent((prev) => {
+        const newState = { ...prev };
+        delete newState[studentId];
+        return newState;
+      });
+      setPlaceholderPerStudent((prev) => {
+        const newState = { ...prev };
+        delete newState[studentId];
+        return newState;
+      });
     }
   };
 
@@ -88,6 +120,13 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
     setReplacementDate((prev) => ({
       ...prev,
       [studentId]: replacementDate,
+    }));
+  };
+
+  const handleTimeslotChange = (studentId: number, timeslotId: string) => {
+    setSelectedTimeslots((prev) => ({
+      ...prev,
+      [studentId]: timeslotId,
     }));
   };
 
@@ -104,7 +143,8 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
         (student) =>
           studentStatuses[student.id] !== "REPLACEMENT" ||
           (studentStatuses[student.id] === "REPLACEMENT" &&
-            replacementDate[student.id])
+            replacementDate[student.id] &&
+            selectedTimeslots[student.id])
       );
 
       if (selectedTeacher && isStatusComplete && isReplacementValid) {
@@ -112,6 +152,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
           id: student.id,
           status: studentStatuses[student.id],
           replacement_date: replacementDate[student.id],
+          replacement_timeslot: selectedTimeslots[student.id],
         }));
 
         const formData = new FormData();
@@ -148,9 +189,9 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
           });
         } else if (!isReplacementValid) {
           toast({
-            title: "Replacement Date Error",
+            title: "Replacement Information Error",
             description:
-              "Please select a replacement date for students with REPLACEMENT status.",
+              "Please select both a replacement date and timeslot for students with REPLACEMENT status.",
             className: cn(`bottom-0 left-0`, "bg-error-100"),
             duration: 3000,
           });
@@ -169,20 +210,54 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
     }
   };
 
-  const getSelectTimeslot = async (date: string, categoryName: string) => {
-    setTimeslots([]);
-    setAbleSelectSlot(false);
+  const getSelectTimeslot = async (
+    studentId: number,
+    date: string,
+    categoryName: string
+  ) => {
+    // Reset states for this specific student
+    setTimeslotsPerStudent((prev) => ({
+      ...prev,
+      [studentId]: [],
+    }));
+    setAbleSelectSlotPerStudent((prev) => ({
+      ...prev,
+      [studentId]: false,
+    }));
+    setPlaceholderPerStudent((prev) => ({
+      ...prev,
+      [studentId]: "Loading...",
+    }));
+
+    // Clear the selected timeslot when date changes
+    setSelectedTimeslots((prev) => ({
+      ...prev,
+      [studentId]: "",
+    }));
+
     const timeslots = await getTimeslots({
       date: date,
       categoryName: categoryName,
     });
 
     if (timeslots.length === 0) {
-      setPlaceholder("No available time slots");
+      setPlaceholderPerStudent((prev) => ({
+        ...prev,
+        [studentId]: "No available time slots",
+      }));
     } else {
-      setAbleSelectSlot(true);
-      setTimeslots(timeslots);
-      setPlaceholder("Select a time slot");
+      setAbleSelectSlotPerStudent((prev) => ({
+        ...prev,
+        [studentId]: true,
+      }));
+      setTimeslotsPerStudent((prev) => ({
+        ...prev,
+        [studentId]: timeslots,
+      }));
+      setPlaceholderPerStudent((prev) => ({
+        ...prev,
+        [studentId]: "Select a time slot",
+      }));
     }
   };
 
@@ -325,19 +400,34 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
                   value={replacementDate[student.id]}
                   onChange={(e) => {
                     handleReplacementDateChange(student.id, e.target.value);
-                    getSelectTimeslot(e.target.value, student.category);
+                    getSelectTimeslot(
+                      student.id,
+                      e.target.value,
+                      student.category
+                    );
                   }}
                   required
                 />
-                <Select>
+                <Select
+                  key={`${student.id}-${replacementDate[student.id]}`}
+                  onValueChange={(value) =>
+                    handleTimeslotChange(student.id, value)
+                  }
+                  value={selectedTimeslots[student.id]}
+                >
                   <SelectTrigger
-                    disabled={!ableSelectSlot}
+                    disabled={!ableSelectSlotPerStudent[student.id]}
                     className="col-span-2"
                   >
-                    <SelectValue placeholder={selectPlaceHolder} />
+                    <SelectValue
+                      placeholder={
+                        placeholderPerStudent[student.id] ||
+                        "Kindly select date"
+                      }
+                    />
                   </SelectTrigger>
                   <SelectContent className="select-content w-full">
-                    {timeslots.map((ts) => (
+                    {timeslotsPerStudent[student.id]?.map((ts) => (
                       <SelectItem
                         disabled={ts.student_in_class >= 6}
                         key={ts.id}
