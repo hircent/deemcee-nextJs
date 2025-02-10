@@ -1,4 +1,5 @@
 import CreateClasses from "@/components/CreateClasses";
+import DateInputFilter from "@/components/DateInputFilter";
 import SectionNav from "@/components/SectionNav";
 import { ClassLinks, IsSuperadmin } from "@/constants/index";
 import { authUser } from "@/lib/actions/user.actions";
@@ -11,7 +12,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="home-content">
       <div className="flex justify-between">
-        {/* <SearchBar /> */}
+        <DateInputFilter />
         <div></div>
         {IsSuperadmin.includes(userRole[0]) && <CreateClasses />}
       </div>

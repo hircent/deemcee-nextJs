@@ -24,7 +24,7 @@ const AttendanceForms = ({
   if (todayStudentList.length === 0) {
     return <div className="text-center p-4">No Class today</div>;
   }
-
+  console.log({ todayStudentList });
   return (
     <Table className="w-full border-2 border-gray-200 border-t-0">
       <TableHeader className="bg-yellow-10 text-yellow-12">
