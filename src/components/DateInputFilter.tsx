@@ -10,10 +10,12 @@ const DateInputFilter = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const query = searchParams?.get("date");
-
+  const isAttendancePage = pathname === "/class/attendance";
   const [date, setDate] = useState<string | undefined>(query || undefined);
 
   useEffect(() => {
+    if (!isAttendancePage) return;
+
     if (date) {
       const newUrl = formUrlQuery({
         params: searchParams!.toString(),
@@ -29,13 +31,12 @@ const DateInputFilter = () => {
       });
       router.push(newUrl, { scroll: false });
     }
-  }, [searchParams, router, pathname, query, date]);
+  }, [searchParams, router, pathname, query, date, isAttendancePage]);
+
+  if (!isAttendancePage) return null;
 
   return (
     <div className="relative flex flex-shrink-0 w-64">
-      {/* <label htmlFor="search" className="sr-only">
-        Search
-      </label> */}
       <Input
         className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500 bg-yellow-2"
         type="date"

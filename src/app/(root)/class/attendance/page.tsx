@@ -24,6 +24,11 @@ const AttendanceTable = async ({ searchParams }: SearchParamProps) => {
         teacherList={teachingUserList}
         calendarThemeLessonList={calendarThemeLessonList}
         todayStudentList={todayStudentList}
+        isFutureDate={
+          searchParams.date
+            ? new Date(searchParams.date.toString()) > new Date()
+            : false
+        }
       />
     </div>
   );

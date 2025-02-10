@@ -23,7 +23,7 @@ import { TimeslotData } from "@/types/index";
 const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
   classData,
   teacherList,
-  classIndex,
+  isFutureDate,
   calendarThemeLessonList,
 }) => {
   const [selectedTeacher, setSelectedTeacher] = useState<string | undefined>(
@@ -52,16 +52,16 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
   }>({});
   // Combine unmarked and attended students
   const allStudents = [
-    ...classData.unmarked_students.map((student) => ({
+    ...(classData.unmarked_enrolments?.map((student) => ({
       ...student,
       category: classData.class_instance.name,
       type: "unmarked" as const,
-    })),
-    ...classData.student_attendances.map((attendance) => ({
+    })) ?? []),
+    ...(classData.student_attendances?.map((attendance) => ({
       ...attendance,
       category: classData.class_instance.name,
       type: "attended" as const,
-    })),
+    })) ?? []),
   ];
 
   const [studentStatuses, setStudentStatuses] = useState<{
@@ -446,15 +446,23 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
       ))}
       <TableRow className="bg-slate-100">
         <TableCell className="align-middle" colSpan={5}>
-          <div className="flex justify-end">
-            <Button
-              className="bg-blue-900 text-white hover:bg-blue-700"
-              onClick={handleSubmit}
-              disabled={!isSubmitEnabled || isSubmitting}
-            >
-              {isSubmitting ? "Submitting..." : "Submit"}
-            </Button>
-          </div>
+          {isFutureDate ? (
+            <div className="flex justify-end">
+              <div className="bg-red-300 p-3 px-4 rounded-lg">Not Today</div>
+            </div>
+          ) : (
+            <div className="flex justify-end">
+              <Button
+                className="bg-blue-900 text-white hover:bg-blue-700"
+                onClick={handleSubmit}
+                disabled={
+                  !isSubmitEnabled || isSubmitting || allStudents.length === 0
+                }
+              >
+                {isSubmitting ? "Marking..." : "Mark"}
+              </Button>
+            </div>
+          )}
         </TableCell>
       </TableRow>
     </>

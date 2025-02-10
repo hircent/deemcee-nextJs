@@ -65,13 +65,13 @@ export type ClassLessonTodayStudentList = {
   theme_lesson: number | null;
   date: string;
   status: "Pending" | "Completed";
-  student_attendances: MarkedClassEnrolment[];
-  unmarked_students: UnmarkedClassEnrolment[];
+  student_attendances?: MarkedClassEnrolment[];
+  unmarked_enrolments?: UnmarkedClassEnrolment[];
 };
 
 export interface ClassAttendanceFormProps {
   classData: ClassLessonTodayStudentList;
   teacherList: TeachingUserList[];
-  classIndex: number;
+  isFutureDate: boolean;
   calendarThemeLessonList: CalendarThemeLesson[];
 }
