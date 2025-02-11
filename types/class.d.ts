@@ -50,11 +50,39 @@ export type UnmarkedClassEnrolment = {
   remaining_lessons: number;
 };
 
-export type MarkedClassEnrolment = {
+type ReplamentClassInfo = {
+  id: number;
+  label: string;
+  date: string;
+};
+
+type MarkedClassEnrolmentBase = {
   id: number;
   enrollment: Enrolment;
-  status: string;
 };
+
+type AttendedEnrolment = MarkedClassEnrolmentBase & {
+  status: "ATTENDED";
+};
+
+type AbsentEnrolment = MarkedClassEnrolmentBase & {
+  status: "ABSENT";
+};
+
+type FreezeEnrolment = MarkedClassEnrolmentBase & {
+  status: "FREEZE";
+};
+
+type ReplacementEnrolment = MarkedClassEnrolmentBase & {
+  status: "REPLACEMENT";
+  replacement_class_info: ReplamentClassInfo;
+};
+
+export type MarkedClassEnrolment =
+  | AttendedEnrolment
+  | AbsentEnrolment
+  | FreezeEnrolment
+  | ReplacementEnrolment;
 
 export type ClassLessonTodayStudentList = {
   id: number;

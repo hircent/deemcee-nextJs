@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { TableRow, TableCell } from "@/components/ui/table";
 import {
   Select,
@@ -29,51 +29,96 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
   const [selectedTeacher, setSelectedTeacher] = useState<string | undefined>(
     classData.teacher?.toString()
   );
+
   const [selectedCoTeacher, setSelectedCoTeacher] = useState<
     string | undefined
   >(classData.co_teacher?.toString());
+
   const [replacementDate, setReplacementDate] = useState<{
     [key: number]: string;
   }>("");
+
   const { toast } = useToast();
   const [state, action] = useFormState(markAttendances, SERVER_ACTION_STATE);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [timeslotsPerStudent, setTimeslotsPerStudent] = useState<{
     [key: number]: TimeslotData[];
   }>({});
+
   const [placeholderPerStudent, setPlaceholderPerStudent] = useState<{
     [key: number]: string;
   }>({});
+
   const [ableSelectSlotPerStudent, setAbleSelectSlotPerStudent] = useState<{
     [key: number]: boolean;
   }>({});
+
   const [selectedTimeslots, setSelectedTimeslots] = useState<{
     [key: number]: string;
   }>({});
   // Combine unmarked and attended students
-  const allStudents = [
-    ...(classData.unmarked_enrolments?.map((student) => ({
-      ...student,
-      category: classData.class_instance.name,
-      type: "unmarked" as const,
-    })) ?? []),
-    ...(classData.student_attendances?.map((attendance) => ({
-      ...attendance,
-      category: classData.class_instance.name,
-      type: "attended" as const,
-    })) ?? []),
-  ];
-
-  const [studentStatuses, setStudentStatuses] = useState<{
-    [key: number]: string;
-  }>(
-    Object.fromEntries(
-      allStudents.map((student) => [
-        student.id,
-        student.type === "attended" ? student.status : "",
-      ])
-    )
+  const allStudents = useMemo(
+    () => [
+      ...(classData.unmarked_enrolments?.map((student) => ({
+        ...student,
+        category: classData.class_instance.name,
+        type: "unmarked" as const,
+      })) ?? []),
+      ...(classData.student_attendances?.map((attendance) => ({
+        ...attendance,
+        category: classData.class_instance.name,
+        type: "attended" as const,
+      })) ?? []),
+    ],
+    [
+      classData.unmarked_enrolments,
+      classData.student_attendances,
+      classData.class_instance.name,
+    ]
   );
+
+  // Initialize student statuses with memoized allStudents
+  const initialStudentStatuses = useMemo(
+    () =>
+      Object.fromEntries(
+        allStudents.map((student) => [
+          student.id,
+          student.type === "attended" ? student.status : "",
+        ])
+      ),
+    [allStudents]
+  );
+
+  const [studentStatuses, setStudentStatuses] = useState(
+    initialStudentStatuses
+  );
+
+  useEffect(() => {
+    const newReplacementDates: { [key: number]: string } = {};
+    const newSelectedTimeslots: { [key: number]: string } = {};
+
+    allStudents.forEach((student) => {
+      if (
+        student.type === "attended" &&
+        student.status === "REPLACEMENT" &&
+        student.replacement_class_info
+      ) {
+        newReplacementDates[student.id] = student.replacement_class_info.date;
+        newSelectedTimeslots[student.id] =
+          student.replacement_class_info.id.toString();
+
+        // Fetch timeslots for the existing replacement date
+        getSelectTimeslot(
+          student.id,
+          student.replacement_class_info.date,
+          student.category
+        );
+      }
+    });
+
+    setReplacementDate(newReplacementDates);
+    setSelectedTimeslots(newSelectedTimeslots);
+  }, [allStudents]);
 
   const handleStatusChange = (studentId: number, status: string) => {
     setStudentStatuses((prev) => ({
@@ -81,36 +126,36 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
       [studentId]: status,
     }));
 
-    if (status !== "REPLACEMENT") {
-      setReplacementDate((prev) => {
-        const newState = { ...prev };
-        delete newState[studentId];
-        return newState;
-      });
+    // if (status !== "REPLACEMENT") {
+    //   setReplacementDate((prev) => {
+    //     const newState = { ...prev };
+    //     delete newState[studentId];
+    //     return newState;
+    //   });
 
-      setSelectedTimeslots((prev) => {
-        const newState = { ...prev };
-        delete newState[studentId];
-        return newState;
-      });
+    //   setSelectedTimeslots((prev) => {
+    //     const newState = { ...prev };
+    //     delete newState[studentId];
+    //     return newState;
+    //   });
 
-      // Reset the timeslot selection state for this student
-      setTimeslotsPerStudent((prev) => {
-        const newState = { ...prev };
-        delete newState[studentId];
-        return newState;
-      });
-      setAbleSelectSlotPerStudent((prev) => {
-        const newState = { ...prev };
-        delete newState[studentId];
-        return newState;
-      });
-      setPlaceholderPerStudent((prev) => {
-        const newState = { ...prev };
-        delete newState[studentId];
-        return newState;
-      });
-    }
+    //   // Reset the timeslot selection state for this student
+    //   setTimeslotsPerStudent((prev) => {
+    //     const newState = { ...prev };
+    //     delete newState[studentId];
+    //     return newState;
+    //   });
+    //   setAbleSelectSlotPerStudent((prev) => {
+    //     const newState = { ...prev };
+    //     delete newState[studentId];
+    //     return newState;
+    //   });
+    //   setPlaceholderPerStudent((prev) => {
+    //     const newState = { ...prev };
+    //     delete newState[studentId];
+    //     return newState;
+    //   });
+    // }
   };
 
   const handleReplacementDateChange = (
@@ -152,7 +197,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
           id: student.id,
           status: studentStatuses[student.id],
           replacement_date: replacementDate[student.id],
-          replacement_timeslot: selectedTimeslots[student.id],
+          replacement_timeslot_class_id: selectedTimeslots[student.id],
         }));
 
         const formData = new FormData();
@@ -177,7 +222,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
           ).id.toString()
         );
 
-        await action(formData);
+        action(formData);
       } else {
         // Show error toast if validation fails
         if (!isStatusComplete) {
@@ -397,7 +442,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
                 <Input
                   className="col-span-1"
                   type="date"
-                  value={replacementDate[student.id]}
+                  value={replacementDate[student.id] || ""}
                   onChange={(e) => {
                     handleReplacementDateChange(student.id, e.target.value);
                     getSelectTimeslot(
@@ -413,7 +458,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
                   onValueChange={(value) =>
                     handleTimeslotChange(student.id, value)
                   }
-                  value={selectedTimeslots[student.id]}
+                  value={selectedTimeslots[student.id] || ""}
                 >
                   <SelectTrigger
                     disabled={!ableSelectSlotPerStudent[student.id]}
@@ -429,12 +474,14 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
                   <SelectContent className="select-content w-full">
                     {timeslotsPerStudent[student.id]?.map((ts) => (
                       <SelectItem
-                        disabled={ts.student_in_class >= 6}
+                        disabled={ts.student_in_class! >= 6}
                         key={ts.id}
                         value={ts.id.toString()}
                         className="select-item"
                       >
-                        {ts.label + " - " + "(" + ts.student_in_class + "/6)"}
+                        {ts.student_in_class
+                          ? ts.label + " - " + "(" + ts.student_in_class + "/6)"
+                          : ts.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
