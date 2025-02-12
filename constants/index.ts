@@ -232,3 +232,27 @@ export const AttendanceStatus = [
     isActive: "bg-purple-600",
   },
 ];
+
+export const ReplacementAttendanceStatus = [
+  {
+    value: "ATTENDED",
+    label: "Attended",
+    className: "bg-gray-300 text-white hover:bg-green-600",
+    isActive: "bg-green-600",
+    isDisabled: false,
+  },
+  {
+    value: "ABSENT",
+    label: "Absent",
+    className: "bg-gray-300 text-white hover:bg-red-600",
+    isActive: "bg-red-600",
+    isDisabled: false,
+  },
+  {
+    value: "PENDING",
+    label: "Pending",
+    className: "bg-gray-300 text-white hover:bg-yellow-600",
+    isActive: "bg-yellow-600",
+    isDisabled: true,
+  },
+];

@@ -12,7 +12,11 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { ClassAttendanceFormProps, ClassData } from "@/types/class";
-import { AttendanceStatus, SERVER_ACTION_STATE } from "@/constants/index";
+import {
+  AttendanceStatus,
+  ReplacementAttendanceStatus,
+  SERVER_ACTION_STATE,
+} from "@/constants/index";
 import { CalendarThemeLesson } from "@/types/calendar";
 import { useFormState } from "react-dom";
 import { useToast } from "./ui/use-toast";
@@ -69,6 +73,11 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
         category: classData.class_instance.name,
         type: "attended" as const,
       })) ?? []),
+      ...(classData.replacement_students?.map((attendance) => ({
+        ...attendance,
+        category: classData.class_instance.name,
+        type: "replacement" as const,
+      })) ?? []),
     ],
     [
       classData.unmarked_enrolments,
@@ -77,13 +86,15 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
     ]
   );
 
+  console.log({ classData });
+
   // Initialize student statuses with memoized allStudents
   const initialStudentStatuses = useMemo(
     () =>
       Object.fromEntries(
         allStudents.map((student) => [
           student.id,
-          student.type === "attended" ? student.status : "",
+          student.type === "unmarked" ? "" : student.status,
         ])
       ),
     [allStudents]
@@ -115,7 +126,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
         );
       }
     });
-
+    console.log({ studentStatuses });
     setReplacementDate(newReplacementDates);
     setSelectedTimeslots(newSelectedTimeslots);
   }, [allStudents]);
@@ -415,27 +426,54 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
       {allStudents.map((student, index) => (
         <TableRow key={student.id}>
           <TableCell className="border-r-2">
-            {student.type === "unmarked"
-              ? student.student.fullname
-              : student.enrollment.student.fullname}
+            {student.type === "attended"
+              ? student.enrollment.student.fullname
+              : student.student.fullname}
           </TableCell>
           <TableCell className="border-r-2">
             <div className="flex gap-2">
-              {AttendanceStatus.map((status) => (
-                <Button
-                  key={status.value}
-                  size="sm"
-                  onClick={() => handleStatusChange(student.id, status.value)}
-                  className={cn(
-                    `px-3 py-1 text-sm ${status.className}`,
-                    studentStatuses[student.id] === status.value
-                      ? status.isActive
-                      : ""
-                  )}
-                >
-                  {status.label}
-                </Button>
-              ))}
+              {student.type === "replacement" ? (
+                <>
+                  {ReplacementAttendanceStatus.map((status) => (
+                    <Button
+                      disabled={status.isDisabled}
+                      key={status.value}
+                      size="sm"
+                      onClick={() =>
+                        handleStatusChange(student.id, status.value)
+                      }
+                      className={cn(
+                        `px-3 py-1 text-sm ${status.className}`,
+                        studentStatuses[student.id] === status.value
+                          ? status.isActive
+                          : ""
+                      )}
+                    >
+                      {status.label}
+                    </Button>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {AttendanceStatus.map((status) => (
+                    <Button
+                      key={status.value}
+                      size="sm"
+                      onClick={() =>
+                        handleStatusChange(student.id, status.value)
+                      }
+                      className={cn(
+                        `px-3 py-1 text-sm ${status.className}`,
+                        studentStatuses[student.id] === status.value
+                          ? status.isActive
+                          : ""
+                      )}
+                    >
+                      {status.label}
+                    </Button>
+                  ))}
+                </>
+              )}
             </div>
             {studentStatuses[student.id] === "REPLACEMENT" && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
@@ -495,7 +533,9 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
         <TableCell className="align-middle" colSpan={5}>
           {isFutureDate ? (
             <div className="flex justify-end">
-              <div className="bg-red-300 p-3 px-4 rounded-lg">Not Today</div>
+              <div className="bg-red-300 p-3 px-4 rounded-lg text-white font-semibold">
+                Not Today
+              </div>
             </div>
           ) : (
             <div className="flex justify-end">

@@ -84,6 +84,12 @@ export type MarkedClassEnrolment =
   | FreezeEnrolment
   | ReplacementEnrolment;
 
+type ReplacementStudentLesson = Enrolment & {
+  is_active: boolean;
+  status: "PENDING" | "ATTENDED" | "ABSENT";
+  remaining_lessons: number;
+};
+
 export type ClassLessonTodayStudentList = {
   id: number;
   branch: number;
@@ -95,6 +101,7 @@ export type ClassLessonTodayStudentList = {
   status: "Pending" | "Completed";
   student_attendances?: MarkedClassEnrolment[];
   unmarked_enrolments?: UnmarkedClassEnrolment[];
+  replacement_students?: ReplacementStudentLesson[];
 };
 
 export interface ClassAttendanceFormProps {
