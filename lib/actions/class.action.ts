@@ -278,9 +278,11 @@ export async function markAttendances(
 
     const data = Object.fromEntries(formData);
 
+    const today = new Date().toISOString().split("T")[0];
+
     console.log({ data });
     // const response = await fetch(
-    //   `${process.env.API_URL}/class/mark-attendance?date=${"2025-01-27"}`,
+    //   `${process.env.API_URL}/class/mark-attendance?date=${today}`,
     //   {
     //     method: "POST",
     //     headers: {
@@ -297,6 +299,7 @@ export async function markAttendances(
     //   return { success: false, msg: res.msg };
     // }
 
+    // revalidatePath("/class/attendance");
     return { success: true, msg: "Attendance has been marked" };
   } catch (error) {
     return { error: true, msg: (error as Error).message };

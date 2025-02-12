@@ -389,10 +389,10 @@ export async function getShouldAttendStudentList(
         Authorization: `Bearer ${token?.value}`,
         BranchId: `${id?.toString()}`,
       },
-      // next:{
-      //     revalidate:3300
-      // },
-      cache: "no-cache",
+      next: {
+        revalidate: 0, // This forces Next.js to revalidate the data on every request
+        tags: ["calendar-theme-lesson-list-by-date"], // You can use this tag to manually revalidate
+      },
     });
 
     if (!response.ok) {

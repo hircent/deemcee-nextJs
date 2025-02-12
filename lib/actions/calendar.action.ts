@@ -279,6 +279,7 @@ export async function getCalendarThemeLessonByDate(
           Authorization: `Bearer ${token?.value}`,
           BranchId: `${branchId?.toString()}`,
         },
+        cache: "no-cache",
       }
     );
 
