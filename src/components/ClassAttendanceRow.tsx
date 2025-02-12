@@ -87,8 +87,6 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
     ]
   );
 
-  console.log({ classData });
-
   // Initialize student statuses with memoized allStudents
   const initialStudentStatuses = useMemo(
     () =>
@@ -127,7 +125,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
         );
       }
     });
-    console.log({ studentStatuses });
+
     setReplacementDate(newReplacementDates);
     setSelectedTimeslots(newSelectedTimeslots);
   }, [allStudents]);
@@ -144,30 +142,6 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
     //     delete newState[studentId];
     //     return newState;
     //   });
-
-    //   setSelectedTimeslots((prev) => {
-    //     const newState = { ...prev };
-    //     delete newState[studentId];
-    //     return newState;
-    //   });
-
-    //   // Reset the timeslot selection state for this student
-    //   setTimeslotsPerStudent((prev) => {
-    //     const newState = { ...prev };
-    //     delete newState[studentId];
-    //     return newState;
-    //   });
-    //   setAbleSelectSlotPerStudent((prev) => {
-    //     const newState = { ...prev };
-    //     delete newState[studentId];
-    //     return newState;
-    //   });
-    //   setPlaceholderPerStudent((prev) => {
-    //     const newState = { ...prev };
-    //     delete newState[studentId];
-    //     return newState;
-    //   });
-    // }
   };
 
   const handleReplacementDateChange = (
@@ -191,9 +165,12 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
     try {
       setIsSubmitting(true);
 
-      const isStatusComplete = allStudents.every(
-        (student) => studentStatuses[student.id]
-      );
+      const isStatusComplete = allStudents.every((student) => {
+        return (
+          studentStatuses[student.id] &&
+          studentStatuses[student.id] !== "PENDING"
+        );
+      });
 
       // Additional validation for REPLACEMENT status
       const isReplacementValid = allStudents.every(
@@ -208,6 +185,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
         const studentStatusArray = allStudents.map((student) => ({
           id: student.id,
           status: studentStatuses[student.id],
+          is_replacement: student.type === "replacement" ? true : false,
           replacement_date: replacementDate[student.id],
           replacement_timeslot_class_id: selectedTimeslots[student.id],
         }));
@@ -336,7 +314,10 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
 
   const isSubmitEnabled =
     selectedTeacher &&
-    allStudents.every((student) => studentStatuses[student.id]);
+    allStudents.every(
+      (student) =>
+        studentStatuses[student.id] && studentStatuses[student.id] !== "PENDING"
+    );
 
   useEffect(() => {
     if (state.success) {
