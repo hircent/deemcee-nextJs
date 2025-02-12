@@ -82,6 +82,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
     [
       classData.unmarked_enrolments,
       classData.student_attendances,
+      classData.replacement_students,
       classData.class_instance.name,
     ]
   );
