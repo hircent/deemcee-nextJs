@@ -185,7 +185,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
         const studentStatusArray = allStudents.map((student) => ({
           id: student.id,
           status: studentStatuses[student.id],
-          is_replacement: student.type === "replacement" ? true : false,
+          is_replacement_lesson: student.type === "replacement" ? true : false,
           replacement_date: replacementDate[student.id],
           replacement_timeslot_class_id: selectedTimeslots[student.id],
         }));
@@ -274,6 +274,8 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
       date: date,
       categoryName: categoryName,
     });
+
+    console.log({ timeslots });
 
     if (timeslots.length === 0) {
       setPlaceholderPerStudent((prev) => ({

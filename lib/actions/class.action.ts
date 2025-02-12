@@ -281,25 +281,25 @@ export async function markAttendances(
     const today = new Date().toISOString().split("T")[0];
 
     console.log({ data });
-    // const response = await fetch(
-    //   `${process.env.API_URL}/class/mark-attendance?date=${today}`,
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       Authorization: `Bearer ${token?.value}`,
-    //       BranchId: `${branchId?.toString()}`,
-    //     },
-    //     body: JSON.stringify(data),
-    //   }
-    // );
+    const response = await fetch(
+      `${process.env.API_URL}/class/mark-attendance?date=${today}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+        body: JSON.stringify(data),
+      }
+    );
 
-    // if (!response.ok) {
-    //   const res = await response.json();
-    //   return { success: false, msg: res.msg };
-    // }
+    if (!response.ok) {
+      const res = await response.json();
+      return { success: false, msg: res.msg };
+    }
 
-    // revalidatePath("/class/attendance");
+    revalidatePath("/class/attendance");
     return { success: true, msg: "Attendance has been marked" };
   } catch (error) {
     return { error: true, msg: (error as Error).message };
