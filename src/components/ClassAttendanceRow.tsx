@@ -23,6 +23,7 @@ import { useToast } from "./ui/use-toast";
 import { getTimeslots, markAttendances } from "@/lib/actions/class.action";
 import { Input } from "./ui/input";
 import { TimeslotData } from "@/types/index";
+import { Separator } from "@radix-ui/react-dropdown-menu";
 
 const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
   classData,
@@ -354,7 +355,9 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
               {classData.class_instance.start_time.slice(0, 5)} {" - "}{" "}
               {classData.class_instance.end_time.slice(0, 5)}
             </div>
-            {classData.class_instance.name}
+            <div>{classData.class_instance.name}</div>
+            <Separator className="h-px bg-slate-200 my-2" />
+            {classData.class_instance.label}
           </div>
         </TableCell>
         <TableCell
@@ -514,26 +517,38 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
         </TableRow>
       ))}
       <TableRow className="bg-slate-100">
-        <TableCell className="align-middle" colSpan={5}>
-          {isFutureDate ? (
-            <div className="flex justify-end">
-              <div className="bg-red-300 p-3 px-4 rounded-lg text-white font-semibold">
-                Not Today
+        <TableCell className="align-middle" colSpan={6}>
+          <div className="flex justify-between">
+            <div className="flex items-center">
+              Class Lesson :{" "}
+              {(() => {
+                const themeLesson = getThemeLesson(
+                  calendarThemeLessonList,
+                  classData.class_instance
+                );
+                return `${themeLesson.theme} - ${themeLesson.themeLesson}`;
+              })()}
+            </div>
+            {isFutureDate ? (
+              <div>
+                <div className="bg-red-300 p-3 px-4 rounded-lg text-white font-semibold">
+                  Not Today
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className="flex justify-end">
-              <Button
-                className="bg-blue-900 text-white hover:bg-blue-700"
-                onClick={handleSubmit}
-                disabled={
-                  !isSubmitEnabled || isSubmitting || allStudents.length === 0
-                }
-              >
-                {isSubmitting ? "Marking..." : "Mark"}
-              </Button>
-            </div>
-          )}
+            ) : (
+              <div>
+                <Button
+                  className="bg-blue-900 text-white hover:bg-blue-700"
+                  onClick={handleSubmit}
+                  disabled={
+                    !isSubmitEnabled || isSubmitting || allStudents.length === 0
+                  }
+                >
+                  {isSubmitting ? "Marking..." : "Mark"}
+                </Button>
+              </div>
+            )}
+          </div>
         </TableCell>
       </TableRow>
     </>
