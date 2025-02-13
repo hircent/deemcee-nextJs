@@ -54,6 +54,7 @@ type ReplamentClassInfo = {
   id: number;
   label: string;
   date: string;
+  status: "PENDING" | "ATTENDED" | "ABSENT";
 };
 
 type MarkedClassEnrolmentBase = {

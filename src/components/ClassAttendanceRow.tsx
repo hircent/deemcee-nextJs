@@ -24,6 +24,8 @@ import { getTimeslots, markAttendances } from "@/lib/actions/class.action";
 import { Input } from "./ui/input";
 import { TimeslotData } from "@/types/index";
 import { Separator } from "@radix-ui/react-dropdown-menu";
+import { Badge } from "./ui/badge";
+import { set } from "zod";
 
 const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
   classData,
@@ -59,6 +61,10 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
   }>({});
 
   const [selectedTimeslots, setSelectedTimeslots] = useState<{
+    [key: number]: string;
+  }>({});
+
+  const [replacedLessonStatus, setReplacedLessonStatus] = useState<{
     [key: number]: string;
   }>({});
   // Combine unmarked and attended students
@@ -107,6 +113,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
   useEffect(() => {
     const newReplacementDates: { [key: number]: string } = {};
     const newSelectedTimeslots: { [key: number]: string } = {};
+    const newReplacedLessonStatus: { [key: number]: string } = {};
 
     allStudents.forEach((student) => {
       if (
@@ -117,6 +124,8 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
         newReplacementDates[student.id] = student.replacement_class_info.date;
         newSelectedTimeslots[student.id] =
           student.replacement_class_info.id.toString();
+        newReplacedLessonStatus[student.id] =
+          student.replacement_class_info.status;
 
         // Fetch timeslots for the existing replacement date
         getSelectTimeslot(
@@ -129,6 +138,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
 
     setReplacementDate(newReplacementDates);
     setSelectedTimeslots(newSelectedTimeslots);
+    setReplacedLessonStatus(newReplacedLessonStatus);
   }, [allStudents]);
 
   const handleStatusChange = (studentId: number, status: string) => {
@@ -463,54 +473,78 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
               )}
             </div>
             {studentStatuses[student.id] === "REPLACEMENT" && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
-                <Input
-                  className="col-span-1"
-                  type="date"
-                  value={replacementDate[student.id] || ""}
-                  onChange={(e) => {
-                    handleReplacementDateChange(student.id, e.target.value);
-                    getSelectTimeslot(
-                      student.id,
-                      e.target.value,
-                      student.category
-                    );
-                  }}
-                  required
-                />
-                <Select
-                  key={`${student.id}-${replacementDate[student.id]}`}
-                  onValueChange={(value) =>
-                    handleTimeslotChange(student.id, value)
-                  }
-                  value={selectedTimeslots[student.id] || ""}
-                >
-                  <SelectTrigger
-                    disabled={!ableSelectSlotPerStudent[student.id]}
-                    className="col-span-2"
+              <div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+                  <Input
+                    className="col-span-1"
+                    type="date"
+                    value={replacementDate[student.id] || ""}
+                    onChange={(e) => {
+                      handleReplacementDateChange(student.id, e.target.value);
+                      getSelectTimeslot(
+                        student.id,
+                        e.target.value,
+                        student.category
+                      );
+                    }}
+                    required
+                    disabled={replacedLessonStatus[student.id] !== "PENDING"}
+                  />
+                  <Select
+                    key={`${student.id}-${replacementDate[student.id]}`}
+                    onValueChange={(value) =>
+                      handleTimeslotChange(student.id, value)
+                    }
+                    value={selectedTimeslots[student.id] || ""}
+                    disabled={replacedLessonStatus[student.id] !== "PENDING"}
                   >
-                    <SelectValue
-                      placeholder={
-                        placeholderPerStudent[student.id] ||
-                        "Kindly select date"
-                      }
-                    />
-                  </SelectTrigger>
-                  <SelectContent className="select-content w-full">
-                    {timeslotsPerStudent[student.id]?.map((ts) => (
-                      <SelectItem
-                        disabled={ts.student_in_class! >= 6}
-                        key={ts.id}
-                        value={ts.id.toString()}
-                        className="select-item"
-                      >
-                        {ts.student_in_class
-                          ? ts.label + " - " + "(" + ts.student_in_class + "/6)"
-                          : ts.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                    <SelectTrigger
+                      disabled={!ableSelectSlotPerStudent[student.id]}
+                      className="col-span-2"
+                    >
+                      <SelectValue
+                        placeholder={
+                          placeholderPerStudent[student.id] ||
+                          "Kindly select date"
+                        }
+                      />
+                    </SelectTrigger>
+                    <SelectContent className="select-content w-full">
+                      {timeslotsPerStudent[student.id]?.map((ts) => (
+                        <SelectItem
+                          disabled={ts.student_in_class! >= 6}
+                          key={ts.id}
+                          value={ts.id.toString()}
+                          className="select-item"
+                        >
+                          {ts.student_in_class
+                            ? ts.label +
+                              " - " +
+                              "(" +
+                              ts.student_in_class +
+                              "/6)"
+                            : ts.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Separator className="h-px bg-slate-200 my-3" />
+                <small>
+                  status :
+                  <Badge
+                    className={cn("text-xs ml-2", {
+                      "bg-success-100 text-success-600":
+                        replacedLessonStatus[student.id] === "ATTENDED",
+                      "bg-orange-100 text-orange-600":
+                        replacedLessonStatus[student.id] === "PENDING",
+                      "bg-error-100 text-error-600":
+                        replacedLessonStatus[student.id] === "ABSENT",
+                    })}
+                  >
+                    {replacedLessonStatus[student.id] || "Not yet marked"}
+                  </Badge>
+                </small>
               </div>
             )}
           </TableCell>
