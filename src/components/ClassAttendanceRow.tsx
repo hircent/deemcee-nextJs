@@ -488,7 +488,10 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
                       );
                     }}
                     required
-                    disabled={replacedLessonStatus[student.id] !== "PENDING"}
+                    disabled={
+                      replacedLessonStatus[student.id] === "ABSENT" ||
+                      replacedLessonStatus[student.id] === "ATTENDED"
+                    }
                   />
                   <Select
                     key={`${student.id}-${replacementDate[student.id]}`}
@@ -496,7 +499,10 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
                       handleTimeslotChange(student.id, value)
                     }
                     value={selectedTimeslots[student.id] || ""}
-                    disabled={replacedLessonStatus[student.id] !== "PENDING"}
+                    disabled={
+                      replacedLessonStatus[student.id] === "ABSENT" ||
+                      replacedLessonStatus[student.id] === "ATTENDED"
+                    }
                   >
                     <SelectTrigger
                       disabled={!ableSelectSlotPerStudent[student.id]}
