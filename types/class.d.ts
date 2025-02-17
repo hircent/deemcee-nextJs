@@ -55,6 +55,7 @@ type ReplamentClassInfo = {
   label: string;
   date: string;
   status: "PENDING" | "ATTENDED" | "ABSENT";
+  replacement_for_lesson: string;
 };
 
 type MarkedClassEnrolmentBase = {
@@ -89,6 +90,7 @@ type ReplacementStudentLesson = Enrolment & {
   is_active: boolean;
   status: "PENDING" | "ATTENDED" | "ABSENT";
   remaining_lessons: number;
+  replacement_for_lesson: string;
 };
 
 export type ClassLessonTodayStudentList = {

@@ -431,24 +431,35 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
             <div className="flex gap-2">
               {student.type === "replacement" ? (
                 <>
-                  {ReplacementAttendanceStatus.map((status) => (
-                    <Button
-                      disabled={status.isDisabled}
-                      key={status.value}
-                      size="sm"
-                      onClick={() =>
-                        handleStatusChange(student.id, status.value)
-                      }
-                      className={cn(
-                        `px-3 py-1 text-sm ${status.className}`,
-                        studentStatuses[student.id] === status.value
-                          ? status.isActive
-                          : ""
-                      )}
-                    >
-                      {status.label}
-                    </Button>
-                  ))}
+                  <div className="flex gap-2 flex-col">
+                    <div className="flex gap-2">
+                      {ReplacementAttendanceStatus.map((status) => (
+                        <Button
+                          disabled={status.isDisabled}
+                          key={status.value}
+                          size="sm"
+                          onClick={() =>
+                            handleStatusChange(student.id, status.value)
+                          }
+                          className={cn(
+                            `px-3 py-1 text-sm ${status.className}`,
+                            studentStatuses[student.id] === status.value
+                              ? status.isActive
+                              : ""
+                          )}
+                        >
+                          {status.label}
+                        </Button>
+                      ))}
+                    </div>
+                    <Separator className="h-px bg-slate-200 my-1" />
+                    <small>
+                      Replacement for :{" "}
+                      <Badge className="text-xs bg-orange-100 text-orange-600 ml-2">
+                        {student.replacement_for_lesson}
+                      </Badge>
+                    </small>
+                  </div>
                 </>
               ) : (
                 <>
