@@ -25,7 +25,7 @@ const CreateDeUsers = () => {
     );
   }
 
-  if (name == "parent") return <Create type={name} />;
+  // if (name == "parent") return <Create type={name} />;
 
   if (name == "student") return <StudentForm />;
 };
