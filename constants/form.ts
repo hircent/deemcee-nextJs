@@ -169,21 +169,45 @@ export const DeleteClassSchema = z.object({
   confirmName: z.string().min(1, "Confirm name is required"),
 });
 
-export const StudentFormSchema = z.object({
-  first_name: z.string().min(1, "First name is required"),
-  last_name: z.string().min(1, "First name is required"),
-  fullname: z.string().min(1, "Full name is required"),
-  gender: z.string().min(1, "Gender is required"),
-  dob: z.string().min(1, "Date of birth is required"),
-  school: z.string().min(1, "School is required"),
-  deemcee_starting_grade: z.string().min(1, "Starting grade is required"),
-  start_date: z.string().min(1, "Enrolment date is required"),
-  parent: z.string().min(1, "Parent is required"),
-  timeslot: z.string().optional(),
-  // referral_channel: z.string().optional(),
-  // referral_name: z.string().optional(),
-  // starter_kits: z.array(z.string()).optional(),
-});
+export const StudentFormSchema = z
+  .object({
+    first_name: z.string().min(1, "First name is required"),
+    last_name: z.string().min(1, "First name is required"),
+    fullname: z.string().min(1, "Full name is required"),
+    gender: z.string().min(1, "Gender is required"),
+    dob: z.string().min(1, "Date of birth is required"),
+    school: z.string().min(1, "School is required"),
+    deemcee_starting_grade: z.string().min(1, "Starting grade is required"),
+    start_date: z.string().min(1, "Enrolment date is required"),
+    parent: z.string().optional(),
+    parent_username: z.string().optional(),
+    parent_email: z.string().optional(),
+    timeslot: z.string().optional(),
+    // referral_channel: z.string().optional(),
+    // referral_name: z.string().optional(),
+    // starter_kits: z.array(z.string()).optional(),
+  })
+  .superRefine((data, ctx) => {
+    // If parent doesn't exist or is empty
+    if (!data.parent) {
+      // Check parent_username
+      if (!data.parent_username) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Parent username is required",
+          path: ["parent_username"],
+        });
+      }
+      // Check parent_email
+      if (!data.parent_email) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Parent email is required",
+          path: ["parent_email"],
+        });
+      }
+    }
+  });
 
 export const UpdateStudentFormSchema = z.object({
   first_name: z.string().min(1, "First name is required"),

@@ -136,8 +136,9 @@ export async function createStudent(
     const token = await getToken();
     const branchId = cookies().get("BranchId")?.value;
 
-    const data = Object.fromEntries(formData);
-    const validated = StudentFormSchema.safeParse(data);
+    const fdata = Object.fromEntries(formData);
+
+    const validated = StudentFormSchema.safeParse(fdata);
 
     if (!validated.success) {
       return {
@@ -146,6 +147,18 @@ export async function createStudent(
         msg: "Validation Failed",
       };
     }
+
+    const { parent_username, parent_email, ...rest } = fdata;
+
+    const data = {
+      ...rest,
+      parent_details: {
+        username: parent_username,
+        email: parent_email,
+      },
+    };
+
+    console.log({ data });
 
     const response = await fetch(`${process.env.API_URL}/student/create`, {
       method: "POST",

@@ -131,6 +131,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
     }
     if (state.success) {
       setOpen(false);
+      setZodError(null);
       toast({
         title: "Success",
         description: state.msg,

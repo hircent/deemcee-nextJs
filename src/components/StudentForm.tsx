@@ -43,6 +43,7 @@ import {
   TimeslotData,
 } from "@/types/index";
 import { getTimeslots } from "@/lib/actions/class.action";
+import { set } from "zod";
 
 const StudentForm = () => {
   const [referralChannel, setReferralChannel] = useState<string>("");
@@ -55,7 +56,9 @@ const StudentForm = () => {
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [isSearchable, setIsSearchable] = useState<boolean>(false);
   const [showParentFields, setShowParentFields] = useState(false);
-  const [createParent, setCreateParent] = useState(false);
+  const [parentResultMsg, setParentResultMsg] = useState<string | undefined>(
+    undefined
+  );
   const [startingGrade, setStartingGrade] = useState<string | undefined>(
     undefined
   );
@@ -77,6 +80,7 @@ const StudentForm = () => {
     setParentSearchQuery("");
     setParentSearchResults([]);
     setSelectedParent(null);
+    setParentResultMsg(undefined);
   };
 
   // Debounced parent search
@@ -88,13 +92,11 @@ const StudentForm = () => {
           // Replace with your actual API endpoint
           const data = await getSearchParents(parentSearchQuery);
           if (data.length === 0) {
-            setCreateParent(true);
+            setParentResultMsg("Parent not found");
           } else {
-            setCreateParent(false);
             setParentSearchResults(data);
           }
         } catch (error) {
-          console.error("Error searching parents:", error);
           toast({
             title: "Error",
             description: "Failed to search parents",
@@ -208,7 +210,6 @@ const StudentForm = () => {
                       setParentSearchQuery(e.target.value);
                       setSelectedParent(null);
                       setIsSearchable(true);
-                      setCreateParent(false);
                     }}
                     className="pr-10"
                     disabled={showParentFields}
@@ -247,19 +248,21 @@ const StudentForm = () => {
                     )}
                 </div>
 
-                {/* "Parent not found" message and button */}
-                {createParent && (
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-600">Parent not found.</p>
-                    <Button
-                      type="button"
-                      onClick={handleCreateNewParent}
-                      className="mt-2 bg-yellow-9 text-gray-800 hover:bg-yellow-8"
-                    >
-                      Create New Parent
-                    </Button>
-                  </div>
+                {parentResultMsg && (
+                  <small className="text-red-500 text-xs">
+                    {parentResultMsg}
+                  </small>
                 )}
+
+                <div className="mt-2">
+                  <Button
+                    type="button"
+                    onClick={handleCreateNewParent}
+                    className="mt-2 bg-yellow-9 text-gray-800 hover:bg-yellow-8"
+                  >
+                    Create New Parent
+                  </Button>
+                </div>
 
                 {/* New Parent Registration Fields */}
                 {showParentFields && (
@@ -274,6 +277,9 @@ const StudentForm = () => {
                           name="parent_username"
                           placeholder="Enter username"
                         />
+                        <small className="text-red-500">
+                          {zoderror?.parent_username}
+                        </small>
                       </div>
 
                       <div className="space-y-2">
@@ -286,6 +292,9 @@ const StudentForm = () => {
                           type="email"
                           placeholder="Enter email"
                         />
+                        <small className="text-red-500">
+                          {zoderror?.parent_email}
+                        </small>
                       </div>
                     </div>
 
@@ -475,12 +484,16 @@ const StudentForm = () => {
                     <SelectContent className="select-content">
                       {timeslots.map((ts) => (
                         <SelectItem
-                          disabled={ts.student_in_class >= 6}
+                          disabled={ts.student_in_class! >= 6}
                           key={ts.id}
                           value={ts.id.toString()}
                           className="select-item"
                         >
-                          {ts.label + " - " + "(" + ts.student_in_class + "/6)"}
+                          {ts.label +
+                            " - " +
+                            "(" +
+                            ts.student_in_class! +
+                            "/6)"}
                         </SelectItem>
                       ))}
                     </SelectContent>
