@@ -33,6 +33,11 @@ export type GetTimeslotProps =
   | { date: string; grade: number; categoryName?: never }
   | { date: string; categoryName: string; grade?: never };
 
+export type GetClassSlotProps = {
+  date: string;
+  category: string;
+};
+
 export type EnrolmentStudent = {
   id: number;
   fullname: string;
