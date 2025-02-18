@@ -305,8 +305,6 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
       categoryName: categoryName,
     });
 
-    console.log({ timeslots });
-
     if (timeslots.length === 0) {
       setPlaceholderPerStudent((prev) => ({
         ...prev,
