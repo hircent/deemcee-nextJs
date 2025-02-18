@@ -157,12 +157,31 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
 
   const handleReplacementDateChange = (
     studentId: number,
-    replacementDate: string
+    replacementDate: string,
+    category: string
   ) => {
     setReplacementDate((prev) => ({
       ...prev,
       [studentId]: replacementDate,
     }));
+
+    if (replacementDate === "") return;
+
+    // Check if replacement date is not today or in the future
+    if (new Date(replacementDate).getTime() < new Date().getTime()) {
+      setPlaceholderPerStudent((prev) => ({
+        ...prev,
+        [studentId]: "No available time slots.",
+      }));
+      toast({
+        title: "Replacement Date Error",
+        description: "Replacement date cannot be in the PAST or TODAY.",
+        className: cn(`bottom-0 left-0`, "bg-error-100"),
+        duration: 3000,
+      });
+      return;
+    }
+    getSelectTimeslot(studentId, replacementDate, category);
   };
 
   const handleTimeslotChange = (studentId: number, timeslotId: string) => {
@@ -491,8 +510,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
                     type="date"
                     value={replacementDate[student.id] || ""}
                     onChange={(e) => {
-                      handleReplacementDateChange(student.id, e.target.value);
-                      getSelectTimeslot(
+                      handleReplacementDateChange(
                         student.id,
                         e.target.value,
                         student.category
