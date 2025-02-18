@@ -9,9 +9,8 @@ import {
   DialogPortal,
   DialogOverlay,
 } from "@/components/ui/dialog";
-import { Loader2 } from "lucide-react";
-import { getStatusColor } from "@/lib/utils";
 import SubmitButton from "./SubmitButton";
+import Loader from "./Loader";
 
 export const EditEnrolment = ({
   id,
@@ -43,13 +42,7 @@ export const EditEnrolment = ({
             </DialogDescription>
           </DialogHeader>
 
-          <div className="py-4">
-            {isLoading && (
-              <div className="flex items-center justify-center py-8">
-                <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
-              </div>
-            )}
-          </div>
+          <div className="py-4">{isLoading && <Loader />}</div>
 
           <DialogFooter>
             <SubmitButton label="Reschedule" submitLabel="Rescheduling" />
