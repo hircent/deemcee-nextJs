@@ -175,7 +175,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
       }));
       toast({
         title: "Replacement Date Error",
-        description: "Replacement date cannot be in the PAST or TODAY.",
+        description: "Replacement date cannot be in the PAST.",
         className: cn(`bottom-0 left-0`, "bg-error-100"),
         duration: 3000,
       });
