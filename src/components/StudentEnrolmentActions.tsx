@@ -126,6 +126,7 @@ const StudentEnrolmentActions = ({
 
       <EnrolmentReschedule
         id={enrolment_id}
+        studentId={student_id}
         grade={grade}
         open={rescheduleViewOpen}
         onOpenChange={setRescheduleViewOpen}

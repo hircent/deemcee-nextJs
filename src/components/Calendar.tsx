@@ -17,10 +17,6 @@ const CalendarTable = ({ data }: { data: CalendarData[] }) => {
       const newYear = arg.view.currentStart.getFullYear();
       if (newYear !== currentYear) {
         setCurrentYear(newYear);
-        // Trigger your action here
-        console.log(`Year changed to ${newYear}`);
-        // You can call any function or dispatch any action here
-        // For example: fetchEventsForYear(newYear);
       }
     },
     [currentYear]

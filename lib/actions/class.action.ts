@@ -4,6 +4,7 @@ import {
   ClassListData,
   GetClassSlotProps,
   GetTimeslotProps,
+  RescheduleFormErrors,
 } from "@/types/class";
 import { getToken } from "./user.actions";
 import { revalidatePath } from "next/cache";
@@ -16,7 +17,11 @@ import {
   STATE,
   TimeslotData,
 } from "@/types/index";
-import { ClassFormSchema, DeleteClassSchema } from "@/constants/form";
+import {
+  ClassFormSchema,
+  DeleteClassSchema,
+  RescheduleClassSchema,
+} from "@/constants/form";
 import { formatDateTime } from "../utils";
 
 export async function getClassList(
@@ -273,7 +278,7 @@ export async function getTimeslots({
 export async function getClasslots({
   date,
   category,
-}: GetClassSlotProps): Promise<ClassSlotData[]> {
+}: GetClassSlotProps): Promise<TimeslotData[]> {
   const token = await getToken();
   const branchId = cookies().get("BranchId")?.value;
 
@@ -335,6 +340,50 @@ export async function markAttendances(
 
     revalidatePath("/class/attendance");
     return { success: true, msg: "Attendance has been marked" };
+  } catch (error) {
+    return { error: true, msg: (error as Error).message };
+  }
+}
+
+export async function rescheduleEnrolmentClass(
+  _prevState: STATE<RescheduleFormErrors>,
+  formData: FormData
+): Promise<STATE<RescheduleFormErrors>> {
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
+
+    const data = Object.fromEntries(formData);
+    const validated = RescheduleClassSchema.safeParse(data);
+
+    if (!validated.success) {
+      return {
+        error: true,
+        zodErr: validated.error.flatten().fieldErrors as RescheduleFormErrors,
+        msg: "Validation Failed",
+      };
+    }
+
+    const response = await fetch(
+      `${process.env.API_URL}/student/enrolment/${data.enrolment_id}/reschedule-class`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      const res = await response.json();
+      return { error: true, msg: res.msg };
+    }
+
+    revalidatePath(`/student/${data.student_id}`);
+    return { success: true, msg: "Class has been rescheduled" };
   } catch (error) {
     return { error: true, msg: (error as Error).message };
   }

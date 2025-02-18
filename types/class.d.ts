@@ -29,6 +29,10 @@ export type ClassFormErrors = {
   day?: string;
 };
 
+export type RescheduleFormErrors = {
+  classroom?: string;
+};
+
 export type GetTimeslotProps =
   | { date: string; grade: number; categoryName?: never }
   | { date: string; categoryName: string; grade?: never };

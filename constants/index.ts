@@ -171,6 +171,16 @@ export const GRADE = [
   { id: 6, label: "Grade 6" },
 ];
 
+export const DAYS = [
+  { id: 1, label: "Monday", value: "Monday" },
+  { id: 2, label: "Tuesday", value: "Tuesday" },
+  { id: 3, label: "Wednesday", value: "Wednesday" },
+  { id: 4, label: "Thursday", value: "Thursday" },
+  { id: 5, label: "Friday", value: "Friday" },
+  { id: 6, label: "Saturday", value: "Saturday" },
+  { id: 7, label: "Sunday", value: "Sunday" },
+];
+
 export const StarterKitItems = [
   { label: "Student Booklet - G1", value: "14" },
   { label: "Student Booklet - G2", value: "15" },

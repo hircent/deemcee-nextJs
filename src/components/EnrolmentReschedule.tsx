@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -19,28 +19,40 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import SubmitButton from "./SubmitButton";
-import Loader from "./Loader";
-import { cn, dateIsBeforeToday, getCategoryByGrade } from "@/lib/utils";
+import { cn, getCategoryByGrade } from "@/lib/utils";
 import { useToast } from "./ui/use-toast";
-import { getClasslots } from "@/lib/actions/class.action";
-import { ClassSlotData } from "@/types/index";
+import {
+  getClasslots,
+  rescheduleEnrolmentClass,
+} from "@/lib/actions/class.action";
+import { TimeslotData } from "@/types/index";
+import { useFormState } from "react-dom";
+import { SERVER_ACTION_STATE } from "@/constants/index";
+import { RescheduleFormErrors } from "@/types/class";
 
 export const EnrolmentReschedule = ({
   id,
+  studentId,
   grade,
   open,
   onOpenChange,
 }: {
   id: number;
+  studentId: number;
   grade: number;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) => {
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
   const [category, setCategory] = useState<string>("");
-  const [selectedDate, setSelectedDate] = useState("");
-  const [classSlots, setClassSlots] = useState<ClassSlotData[]>([]);
+  const [selectedDay, setSelectedDay] = useState("");
+  const [zoderror, setZodError] = useState<RescheduleFormErrors | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [state, formAction] = useFormState(
+    rescheduleEnrolmentClass,
+    SERVER_ACTION_STATE
+  );
+  const [classSlots, setClassSlots] = useState<TimeslotData[]>([]);
   const [selectedclassSlot, setSelectedclassSlot] = useState("");
   const [selectPlaceholder, setSelectPlaceholder] = useState(
     "Please select a date"
@@ -48,26 +60,14 @@ export const EnrolmentReschedule = ({
 
   const [isSelectorDisabled, setIsSelectorDisabled] = useState<boolean>(true);
 
-  useEffect(() => {
-    const categoryName = getCategoryByGrade(grade);
-    setCategory(categoryName);
-  }, [grade]);
-
-  const handleDateChange = async (
+  const handleDayChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const date = event.target.value;
-    setSelectedDate(date);
-    if (dateIsBeforeToday(date)) {
-      toast({
-        title: "Reschedule Date Error",
-        description: "Reschedule date cannot be in the PAST.",
-        className: cn(`bottom-0 left-0`, "bg-error-100"),
-        duration: 3000,
-      });
-      return;
-    }
-
+    setSelectedDay(date);
+    setClassSlots([]);
+    setSelectPlaceholder("Loading...");
+    setSelectedclassSlot("");
     const classSlots = await getClasslots({
       date,
       category,
@@ -75,11 +75,41 @@ export const EnrolmentReschedule = ({
 
     if (classSlots.length === 0) {
       setSelectPlaceholder("No available class slots");
+      setIsSelectorDisabled(true);
     } else {
       setSelectPlaceholder("Select a class slot");
+      setClassSlots(classSlots);
+      setIsSelectorDisabled(false);
     }
   };
-  console.log({ category });
+
+  useEffect(() => {
+    const categoryName = getCategoryByGrade(grade);
+    setCategory(categoryName);
+  }, [grade]);
+
+  useEffect(() => {
+    if (state.zodErr) {
+      setZodError(state.zodErr);
+    }
+    if (state.success) {
+      formRef.current?.reset();
+      toast({
+        title: "Success",
+        description: state.msg,
+        className: cn(`bottom-0 left-0`, "bg-success-100"),
+        duration: 3000,
+      });
+    }
+    if (state.error) {
+      toast({
+        title: "Error",
+        description: state.msg,
+        className: cn(`bottom-0 left-0`, "bg-error-100"),
+        duration: 3000,
+      });
+    }
+  }, [state, toast]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -100,13 +130,13 @@ export const EnrolmentReschedule = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col space-y-2">
                 <Label htmlFor="date" className="font-medium">
-                  Select Day
+                  Select Date
                 </Label>
                 <Input
                   id="date"
                   type="date"
-                  value={selectedDate}
-                  onChange={handleDateChange}
+                  value={selectedDay}
+                  onChange={handleDayChange}
                   min={new Date().toISOString().split("T")[0]}
                   className="w-full h-10"
                 />
@@ -128,41 +158,45 @@ export const EnrolmentReschedule = ({
             </div>
 
             <div className="w-full">
-              {isLoading ? (
-                <div className="flex justify-center">
-                  <Loader />
+              <form action={formAction} ref={formRef}>
+                <Input type="hidden" name="enrolment_id" value={id} />
+                <Input type="hidden" name="student_id" value={studentId} />
+                <div className="flex flex-col space-y-2">
+                  <Input
+                    type="hidden"
+                    name="classroom"
+                    value={selectedclassSlot}
+                  />
+                  <Label htmlFor="classSlot" className="font-medium">
+                    Select Class Slot
+                  </Label>
+                  <Select
+                    value={selectedclassSlot}
+                    onValueChange={setSelectedclassSlot}
+                    disabled={isSelectorDisabled}
+                  >
+                    <SelectTrigger className="w-full h-10">
+                      <SelectValue placeholder={selectPlaceholder} />
+                    </SelectTrigger>
+                    <SelectContent className="select-content">
+                      {classSlots.map((slot) => (
+                        <SelectItem
+                          key={slot.id}
+                          value={slot.id.toString()}
+                          className="select-item"
+                          disabled={slot.student_in_class! >= 6}
+                        >
+                          {slot.label} - {"(" + slot.student_in_class + "/6)"}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-              ) : (
-                <form action="">
-                  <div className="flex flex-col space-y-2">
-                    <Label htmlFor="classSlot" className="font-medium">
-                      Select Class Slot
-                    </Label>
-                    <Select
-                      value={selectedclassSlot}
-                      onValueChange={setSelectedclassSlot}
-                      disabled={isSelectorDisabled}
-                    >
-                      <SelectTrigger id="classSlot" className="w-full h-10">
-                        <SelectValue placeholder={selectPlaceholder} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {classSlots.map((slot) => (
-                          <SelectItem key={slot.id} value={slot.id.toString()}>
-                            {slot.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <DialogFooter>
-                    <SubmitButton
-                      label="Reschedule"
-                      submitLabel="Rescheduling"
-                    />
-                  </DialogFooter>
-                </form>
-              )}
+                <small className="text-red-500">{zoderror?.classroom}</small>
+                <DialogFooter>
+                  <SubmitButton label="Reschedule" submitLabel="Rescheduling" />
+                </DialogFooter>
+              </form>
             </div>
           </div>
         </DialogContent>

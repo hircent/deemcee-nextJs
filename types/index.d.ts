@@ -697,7 +697,6 @@ export type TimeslotData = {
 export type ClassSlotData = {
   id: number;
   label: string;
-  day: string;
 };
 
 export type StarterKitItem = {

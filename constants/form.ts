@@ -289,3 +289,7 @@ export const VideoAssignmentFormSchema = z.object({
   video_url: z.string().min(1, "Video URL is required"),
   submission_date: z.string().min(1, "Submission date is required"),
 });
+
+export const RescheduleClassSchema = z.object({
+  classroom: z.string().min(1, "Classroom is required"),
+});

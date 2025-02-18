@@ -128,6 +128,7 @@ export function StudentCard({ student }: StudentCardProps) {
                       Start Date
                     </TableHead>
                     <TableHead className="text-neutral-700">End Date</TableHead>
+                    <TableHead className="text-neutral-700">Day</TableHead>
                     <TableHead className="text-neutral-700">Status</TableHead>
                     <TableHead className="text-neutral-700">Videos</TableHead>
                     <TableHead className="text-neutral-700">
@@ -153,6 +154,9 @@ export function StudentCard({ student }: StudentCardProps) {
                       </TableCell>
                       <TableCell className="text-neutral-800">
                         {formatDateTime(new Date(enrollment.end_date)).dateOnly}
+                      </TableCell>
+                      <TableCell className="text-neutral-800">
+                        {enrollment.day}
                       </TableCell>
                       <TableCell>
                         <Badge

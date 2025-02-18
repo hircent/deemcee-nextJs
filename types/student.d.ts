@@ -72,6 +72,7 @@ export interface Enrolment {
   id: number;
   start_date: string;
   end_date: string;
+  day: string;
   status: string;
   remaining_lessons: number;
   is_active: boolean;
