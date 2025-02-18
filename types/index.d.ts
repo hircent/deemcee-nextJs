@@ -694,6 +694,12 @@ export type TimeslotData = {
   student_in_class?: number;
 };
 
+export type ClassSlotData = {
+  id: number;
+  label: string;
+  day: string;
+};
+
 export type StarterKitItem = {
   label: string;
   value: string;
