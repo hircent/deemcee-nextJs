@@ -168,7 +168,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
     if (replacementDate === "") return;
 
     // Check if replacement date is not today or in the future
-    if (new Date(replacementDate).toDateString() < new Date().toDateString()) {
+    if (new Date(replacementDate).getTime() < new Date().setHours(0, 0, 0, 0)) {
       setPlaceholderPerStudent((prev) => ({
         ...prev,
         [studentId]: "No available time slots.",

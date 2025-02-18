@@ -299,7 +299,7 @@ export async function markAttendances(
       return { success: false, msg: res.msg };
     }
 
-    // revalidatePath("/class/attendance");
+    revalidatePath("/class/attendance");
     return { success: true, msg: "Attendance has been marked" };
   } catch (error) {
     return { error: true, msg: (error as Error).message };
