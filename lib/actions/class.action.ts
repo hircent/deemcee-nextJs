@@ -2,12 +2,14 @@
 import {
   ClassFormErrors,
   ClassListData,
+  GetClassSlotProps,
   GetTimeslotProps,
 } from "@/types/class";
 import { getToken } from "./user.actions";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import {
+  ClassSlotData,
   GetResponseProps,
   ListProps,
   SearchParamsFilterProps,
@@ -242,6 +244,38 @@ export async function getTimeslots({
   if (!categoryName) {
     category = getCategory(grade!);
   }
+
+  try {
+    const response = await fetch(
+      `${process.env.API_URL}/timeslot/list?date=${date}&category=${category}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+        cache: "no-cache",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch calendar data " + response.statusText);
+    }
+
+    const data: GetResponseProps<TimeslotData> = await response.json();
+    return data.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getClasslots({
+  date,
+  category,
+}: GetClassSlotProps): Promise<ClassSlotData[]> {
+  const token = await getToken();
+  const branchId = cookies().get("BranchId")?.value;
 
   try {
     const response = await fetch(
