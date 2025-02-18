@@ -97,8 +97,8 @@ export function EditStudent({ student }: StudentCardProps) {
             Edit Student
           </DialogTitle>
           <DialogDescription className="text-sm sm:text-base">
-            Make changes to your student details here. Click save when you're
-            done.
+            Make changes to your student details here. Click save when
+            you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <form
