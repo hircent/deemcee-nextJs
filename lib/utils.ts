@@ -493,3 +493,7 @@ export function getCategoryByGrade(grade: number): string {
       return "Kiddo";
   }
 }
+
+export function dateIsBeforeToday(date: string): boolean {
+  return new Date(date).getTime() < new Date().setHours(0, 0, 0, 0);
+}
