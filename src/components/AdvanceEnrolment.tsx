@@ -150,8 +150,8 @@ export const AdvanceEnrolment = ({
           </DialogHeader>
 
           <form className="space-y-6" action={formAction}>
-            <Input type="hidden" name="enrolment_id" value={id} />
-            <Input type="hidden" name="new_grade" value={grade + 1} />
+            <Input type="hidden" name="id" value={id} />
+            <Input type="hidden" name="grade" value={grade + 1} />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 space-y-4">
               <div className="flex items-center col-span-full gap-4">
                 <Input
@@ -194,7 +194,6 @@ export const AdvanceEnrolment = ({
                 </Label>
                 <Input
                   id="new_category"
-                  name="new_category"
                   value={getCategoryByGrade(grade + 1)}
                   className="w-full h-10"
                   readOnly
@@ -213,7 +212,9 @@ export const AdvanceEnrolment = ({
                   onChange={handleDateChange}
                   min={new Date().toISOString().split("T")[0]}
                 />
-                <small className="text-red-500">{zoderror?.date?.[0]}</small>
+                <small className="text-red-500">
+                  {zoderror?.start_date?.[0]}
+                </small>
               </div>
 
               <div className="flex flex-col space-y-2 col-span-full">

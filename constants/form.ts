@@ -295,8 +295,9 @@ export const RescheduleClassSchema = z.object({
 });
 
 export const AdvanceEnrolmentSchema = z.object({
-  enrolment_id: z.string().min(1, "Enrolement ID is required"),
+  id: z.string().min(1, "Enrolement ID is required"),
+  grade: z.string().min(1, "Grade is required"),
   is_early_advance: z.boolean().optional(),
-  date: z.string().min(1, "Date is required"),
+  start_date: z.string().min(1, "Date is required"),
   classroom: z.string().min(1, "Classroom is required"),
 });

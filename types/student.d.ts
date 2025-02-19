@@ -69,9 +69,10 @@ export type VideoAssignmentFormErrors = {
 };
 
 export type AdvanceEnrolmentError = {
-  enrolment_id?: string;
+  id?: string;
+  grade?: string;
   is_early_advance?: boolean;
-  date?: string;
+  start_date?: string;
   classroom?: string;
 };
 
