@@ -490,7 +490,7 @@ export function getCategoryByGrade(grade: number): string {
     case 6:
       return "Superkids";
     default:
-      return "Kiddo";
+      return "Superkids";
   }
 }
 
