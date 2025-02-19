@@ -197,6 +197,11 @@ export function StudentCard({ student }: StudentCardProps) {
                           enrolment_id={enrollment.id}
                           student_id={student.id}
                           grade={enrollment.grade}
+                          end_date={
+                            formatDateTime(new Date(enrollment.end_date))
+                              .dateOnly
+                          }
+                          remaining_lessons={enrollment.remaining_lessons}
                         />
                       </TableCell>
                     </TableRow>
