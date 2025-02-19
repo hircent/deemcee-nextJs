@@ -60,7 +60,7 @@ export const EnrolmentReschedule = ({
 
   const [isSelectorDisabled, setIsSelectorDisabled] = useState<boolean>(true);
 
-  const handleDayChange = async (
+  const handleDateChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const date = event.target.value;
@@ -136,7 +136,7 @@ export const EnrolmentReschedule = ({
                   id="date"
                   type="date"
                   value={selectedDay}
-                  onChange={handleDayChange}
+                  onChange={handleDateChange}
                   min={new Date().toISOString().split("T")[0]}
                   className="w-full h-10"
                 />
