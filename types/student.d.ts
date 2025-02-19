@@ -68,6 +68,13 @@ export type VideoAssignmentFormErrors = {
   submission_date?: string;
 };
 
+export type AdvanceEnrolmentError = {
+  enrolment_id?: string;
+  is_early_advance?: boolean;
+  date?: string;
+  classroom?: string;
+};
+
 export interface Enrolment {
   id: number;
   start_date: string;
