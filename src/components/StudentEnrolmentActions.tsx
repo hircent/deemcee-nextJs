@@ -27,10 +27,14 @@ const StudentEnrolmentActions = ({
   enrolment_id,
   student_id,
   grade,
+  end_date,
+  remaining_lessons,
 }: {
   enrolment_id: number;
   student_id: number;
   grade: number;
+  end_date: string;
+  remaining_lessons: number;
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
@@ -140,6 +144,9 @@ const StudentEnrolmentActions = ({
 
       <AdvanceEnrolment
         id={enrolment_id}
+        end_date={end_date}
+        remaining_lessons={remaining_lessons}
+        grade={grade}
         open={advanceEnrolmentViewOpen}
         onOpenChange={setAdvanceEnrolmentViewOpen}
       />
