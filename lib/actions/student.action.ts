@@ -4,6 +4,7 @@ import { GetResponseProps, ListProps, STATE } from "@/types/index";
 import { getToken } from "./user.actions";
 import { cookies } from "next/headers";
 import {
+  AdvanceEnrolmentError,
   DeleteFormErrors,
   EnrolmentExtensionError,
   EnrolmentLessonProps,
@@ -14,6 +15,7 @@ import {
 } from "@/types/student";
 import { revalidatePath } from "next/cache";
 import {
+  AdvanceEnrolmentSchema,
   DeleteEnrolmentSchema,
   DeleteStudentSchema,
   ExtendEnrolmentSchema,
@@ -157,8 +159,6 @@ export async function createStudent(
         email: parent_email,
       },
     };
-
-    console.log({ data });
 
     const response = await fetch(`${process.env.API_URL}/student/create`, {
       method: "POST",
@@ -416,5 +416,48 @@ export async function getShouldAttendStudentList(
     return data.data;
   } catch (error) {
     throw error;
+  }
+}
+
+export async function advanceEnrolment(
+  _prevState: STATE<AdvanceEnrolmentError>,
+  formData: FormData
+): Promise<STATE<AdvanceEnrolmentError>> {
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
+
+    const data = Object.fromEntries(formData);
+    const validated = AdvanceEnrolmentSchema.safeParse(data);
+
+    console.log({ data });
+    // if (!validated.success) {
+    //   return {
+    //     error: true,
+    //     zodErr: validated.error.flatten().fieldErrors as AdvanceEnrolmentError,
+    //     msg: "Validation Failed",
+    //   };
+    // }
+
+    // const response = await fetch(
+    //   `${process.env.API_URL}/student/enrolment/${data.id}/advance`,
+    //   {
+    //     method: "PUT",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: `Bearer ${token?.value}`,
+    //       BranchId: `${branchId?.toString()}`,
+    //     },
+    //   }
+    // );
+
+    // if (!response.ok) {
+    //   const res = await response.json();
+    //   return { error: true, msg: res.msg };
+    // }
+
+    return { success: true, msg: "Advance Enrolment is successful" };
+  } catch (error) {
+    return { error: true, msg: (error as Error).message };
   }
 }
