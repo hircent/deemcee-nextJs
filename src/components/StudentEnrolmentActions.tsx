@@ -22,19 +22,15 @@ import { EnrolmentReschedule } from "./EnrolmentReschedule";
 import { EditEnrolment } from "./EditEnrolment";
 import { ExtendEnrolment } from "./ExtendEnrolment";
 import { AdvanceEnrolment } from "./AdvanceEnrolment";
+import { Enrolment } from "@/types/student";
+import { formatDateTime } from "@/lib/utils";
 
 const StudentEnrolmentActions = ({
-  enrolment_id,
-  student_id,
-  grade,
-  end_date,
-  remaining_lessons,
+  enrolment,
+  studentId,
 }: {
-  enrolment_id: number;
-  student_id: number;
-  grade: number;
-  end_date: string;
-  remaining_lessons: number;
+  enrolment: Enrolment;
+  studentId: number;
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
@@ -74,13 +70,13 @@ const StudentEnrolmentActions = ({
             <span>Lesson View</span>
           </DropdownMenuItem>
 
-          <DropdownMenuItem
+          {/* <DropdownMenuItem
             className="dropdown-menu-item"
             onClick={() => handleDeleteClick(setEditEnrolmentViewOpen)}
           >
             <Edit className="h-4 w-4" />
             <span>Edit Enrolment</span>
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
 
           <DropdownMenuItem
             className="dropdown-menu-item"
@@ -117,36 +113,37 @@ const StudentEnrolmentActions = ({
       </DropdownMenu>
 
       <ViewEnrolmentLesson
-        id={enrolment_id}
+        id={enrolment.id}
         open={lessonViewOpen}
         onOpenChange={setLessonViewOpen}
       />
 
       <EditEnrolment
-        id={enrolment_id}
+        id={enrolment.id}
+        status={enrolment.status}
         open={editEnrolmentViewOpen}
         onOpenChange={setEditEnrolmentViewOpen}
       />
 
       <EnrolmentReschedule
-        id={enrolment_id}
-        studentId={student_id}
-        grade={grade}
+        id={enrolment.id}
+        studentId={studentId}
+        grade={enrolment.grade}
         open={rescheduleViewOpen}
         onOpenChange={setRescheduleViewOpen}
       />
 
       <ExtendEnrolment
-        id={enrolment_id}
+        id={enrolment.id}
         open={extendEnrolmentViewOpen}
         onOpenChange={setExtendEnrolmentViewOpen}
       />
 
       <AdvanceEnrolment
-        id={enrolment_id}
-        end_date={end_date}
-        remaining_lessons={remaining_lessons}
-        grade={grade}
+        id={enrolment.id}
+        end_date={formatDateTime(new Date(enrolment.end_date)).dateOnly}
+        remaining_lessons={enrolment.remaining_lessons}
+        grade={enrolment.grade}
         open={advanceEnrolmentViewOpen}
         onOpenChange={setAdvanceEnrolmentViewOpen}
       />
@@ -154,9 +151,9 @@ const StudentEnrolmentActions = ({
       {/* Delete Dialog at root level */}
       <DeleteEnrolment
         type="enrolment"
-        name={`Grade ${grade}`}
-        id={enrolment_id}
-        studentId={student_id}
+        name={`Grade ${enrolment.grade}`}
+        id={enrolment.id}
+        studentId={studentId}
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
       />
