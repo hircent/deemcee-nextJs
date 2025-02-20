@@ -194,14 +194,8 @@ export function StudentCard({ student }: StudentCardProps) {
                       </TableCell>
                       <TableCell className="w-[200px]">
                         <StudentEnrolmentActions
-                          enrolment_id={enrollment.id}
-                          student_id={student.id}
-                          grade={enrollment.grade}
-                          end_date={
-                            formatDateTime(new Date(enrollment.end_date))
-                              .dateOnly
-                          }
-                          remaining_lessons={enrollment.remaining_lessons}
+                          enrolment={enrollment}
+                          studentId={student.id}
                         />
                       </TableCell>
                     </TableRow>
