@@ -428,16 +428,23 @@ export async function advanceEnrolment(
     const branchId = cookies().get("BranchId")?.value;
 
     const data = Object.fromEntries(formData);
-    const validated = AdvanceEnrolmentSchema.safeParse(data);
 
+    const modifiedData = {
+      ...data,
+      is_early_advance: data.is_early_advance === "true",
+    };
+
+    const validated = AdvanceEnrolmentSchema.safeParse(modifiedData);
+
+    if (!validated.success) {
+      console.log(validated.error.flatten().fieldErrors);
+      return {
+        error: true,
+        zodErr: validated.error.flatten().fieldErrors as AdvanceEnrolmentError,
+        msg: "Validation Failed",
+      };
+    }
     console.log({ data });
-    // if (!validated.success) {
-    //   return {
-    //     error: true,
-    //     zodErr: validated.error.flatten().fieldErrors as AdvanceEnrolmentError,
-    //     msg: "Validation Failed",
-    //   };
-    // }
 
     // const response = await fetch(
     //   `${process.env.API_URL}/student/enrolment/${data.id}/advance`,
