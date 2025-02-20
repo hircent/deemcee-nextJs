@@ -105,6 +105,7 @@ export const AdvanceEnrolment = ({
     }
     if (state.success) {
       formRef.current?.reset();
+      onOpenChange(false);
       toast({
         title: "Success",
         description: state.msg,
@@ -149,7 +150,7 @@ export const AdvanceEnrolment = ({
             </DialogDescription>
           </DialogHeader>
 
-          <form className="space-y-4" action={formAction}>
+          <form className="space-y-4" action={formAction} ref={formRef}>
             <Input type="hidden" name="id" value={id} />
             <Input type="hidden" name="grade" value={grade + 1} />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 space-y-2">
