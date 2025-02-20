@@ -83,6 +83,7 @@ export const StructureLinks = [
 export const DeUsersLinks = [
   { href: "/deusers/parent", label: "Parents" },
   { href: "/deusers/student", label: "Students" },
+  { href: "/deusers/enrolment", label: "Enrolments" },
 ];
 
 export const ClassLinks = [
@@ -132,6 +133,7 @@ export const branchSelectorPermission = [
   "/deusers",
   "/deusers/parent",
   "/deusers/student",
+  "/deusers/enrolment",
   "/principal",
   "/manager",
   "/teacher",
