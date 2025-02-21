@@ -107,11 +107,11 @@ const EditGrade = ({ grade }: { grade: GradeData }) => {
                 onValueChange={(value) => setCategory(value)}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="KIDDOS" />
+                  <SelectValue placeholder="KIDDO" />
                 </SelectTrigger>
                 <SelectContent className="select-content">
-                  <SelectItem value="KIDDOS" className="select-item">
-                    KIDDOS
+                  <SelectItem value="KIDDO" className="select-item">
+                    KIDDO
                   </SelectItem>
                   <SelectItem value="KIDS" className="select-item">
                     KIDS
