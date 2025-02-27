@@ -89,6 +89,23 @@ export interface Enrolment {
   video_assignments: VideoAssignment[];
 }
 
+type PaymentStatus = {
+  id: number;
+  status: "PAID" | "UNPAID" | "PARTIALLY_PAID" | "REFUNDED" | "VOIDED";
+};
+
+export interface EnrolmentData {
+  id: number;
+  student: {
+    id: number;
+    fullname: string;
+  };
+  grade: number;
+  remaining_lessons: number;
+  video_assignments: VideoAssignment[];
+  payments: PaymentStatus[];
+}
+
 export interface Payment {
   id: number;
   grade: number;

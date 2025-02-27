@@ -544,6 +544,12 @@ export type UserListFilterProps = {
   filter?: string;
 };
 
+export type EnrolmentDataProps = {
+  is_active: boolean;
+  status: string;
+  name?: string;
+};
+
 export type SUPERADMIN = "superadmin";
 export type BRANCH = "branch";
 export type PRINCIPAL = "principal";
