@@ -33,7 +33,7 @@ const SearchBar = () => {
       } else {
         const newUrl = removeKeysFromQuery({
           params: searchParams!.toString(),
-          keysToRemove: ["q"],
+          keysToRemove: ["q", "page"],
         });
         router.push(newUrl, { scroll: false });
       }
