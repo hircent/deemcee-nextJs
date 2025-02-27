@@ -1,11 +1,17 @@
 "use server";
 
-import { GetResponseProps, ListProps, STATE } from "@/types/index";
+import {
+  EnrolmentDataProps,
+  GetResponseProps,
+  ListProps,
+  STATE,
+} from "@/types/index";
 import { getToken } from "./user.actions";
 import { cookies } from "next/headers";
 import {
   AdvanceEnrolmentError,
   DeleteFormErrors,
+  EnrolmentData,
   EnrolmentExtensionError,
   EnrolmentLessonProps,
   StudentData,
@@ -468,5 +474,38 @@ export async function advanceEnrolment(
     return { success: true, msg: "Advance Enrolment is successful" };
   } catch (error) {
     return { error: true, msg: (error as Error).message };
+  }
+}
+
+export async function getEnrolmentList(params: EnrolmentDataProps) {
+  const { is_active, status, name } = params;
+  const token = await getToken();
+  const id = cookies().get("BranchId")?.value;
+
+  let url = `${process.env.API_URL}/student/enrolment/list?is_active=${is_active}&status=${status}`;
+
+  if (name) {
+    url = `${url}&name=${name}`;
+  }
+
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+        BranchId: `${id?.toString()}`,
+      },
+      cache: "no-cache",
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    return [];
   }
 }
