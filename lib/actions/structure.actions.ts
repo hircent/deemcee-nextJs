@@ -10,8 +10,9 @@ import {
   ThemeData,
   ThemeDetails,
   ThemeDetailsError,
+  TierListData,
 } from "@/types/structure";
-import { STATE } from "@/types/index";
+import { GetResponseProps, STATE } from "@/types/index";
 import {
   CategoryFormSchema,
   GenerateThemeLessonSchema,
@@ -20,6 +21,7 @@ import {
 } from "@/constants/form";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { CountryListData } from "@/types/country";
 
 export async function getCategoryList(
   year: string | null = null
@@ -158,19 +160,20 @@ export async function editCategory(
   }
 }
 
-export async function getGradeList(
-  year: string | null = null
-): Promise<GradeData[]> {
+export async function getGradeList(tier: string): Promise<GradeData[]> {
   const token = await getToken();
 
   try {
-    const response = await fetch(`${process.env.API_URL}/grade/list`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token?.value}`,
-      },
-    });
+    const response = await fetch(
+      `${process.env.API_URL}/grade/list?tier=${tier}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to fetch grade data " + response.statusText);
@@ -554,5 +557,54 @@ export async function generateCalendarThemeLesson(
     return { success: true, msg: "Generate Theme Lesson is successful" };
   } catch (error) {
     return { error: true, msg: (error as Error).message };
+  }
+}
+
+export async function getTierList(country: string): Promise<TierListData[]> {
+  const token = await getToken();
+
+  try {
+    const response = await fetch(
+      `${process.env.API_URL}/tier/list?country=${country}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch grade data " + response.statusText);
+    }
+
+    const data: GetResponseProps<TierListData> = await response.json();
+    return data.data;
+  } catch (error) {
+    return [];
+  }
+}
+
+export async function getCountryList(): Promise<CountryListData[]> {
+  const token = await getToken();
+
+  try {
+    const response = await fetch(`${process.env.API_URL}/country/list`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch grade data " + response.statusText);
+    }
+
+    const data: GetResponseProps<CountryListData> = await response.json();
+    return data.data;
+  } catch (error) {
+    return [];
   }
 }
