@@ -11,6 +11,7 @@ export type GradeData = {
   grade_level: number;
   category: string;
   price: number;
+  currency: string;
 };
 
 export type GradeDataErrors = {
@@ -64,4 +65,10 @@ export type CategoryFormErrors = {
 
 export type GenerateCalendarThemeLessonError = {
   year?: string;
+};
+
+export type TierListData = {
+  id: number;
+  name: string;
+  year: number;
 };
