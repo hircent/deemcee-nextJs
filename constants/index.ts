@@ -76,8 +76,8 @@ export const sidebarLinks = [
 export const StructureLinks = [
   { href: "/structure", label: "Main" },
   { href: "/structure/category", label: "Category" },
-  { href: "/structure/grade", label: "Grade" },
   { href: "/structure/theme", label: "Theme" },
+  { href: "/structure/grade", label: "Grade" },
 ];
 
 export const DeUsersLinks = [
