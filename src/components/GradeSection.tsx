@@ -239,7 +239,13 @@ const DeleteGrade = ({
   );
 };
 
-const GradeSection = ({ data }: { data: GradeData[] }) => {
+const GradeSection = ({
+  data,
+  currency,
+}: {
+  data: GradeData[];
+  currency: string;
+}) => {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {data.map((grade) => (
@@ -266,7 +272,7 @@ const GradeSection = ({ data }: { data: GradeData[] }) => {
                 Category: {grade.category}
               </div>
               <span className="text-sm font-medium text-gray-900">
-                Rm {grade.price.toLocaleString()}
+                {currency} {grade.price.toLocaleString()}
               </span>
             </div>
           </div>

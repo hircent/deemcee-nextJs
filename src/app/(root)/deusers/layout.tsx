@@ -14,20 +14,18 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
   const userRole = getUserRole(user);
   const branchId = cookies().get("BranchId")?.value;
   return (
-    <section className="home">
-      <div className="home-content">
-        <div className="flex flex-wrap justify-between gap-2">
-          <SearchBar />
-          <StudentFilter />
-          <ExportStudents id={branchId!.toString()} />
-          {IsManagerOrHigher.includes(userRole[0]) && <CreateDeUsers />}
-        </div>
-        <div className="rounded-md border bg-yellow-2 text-gray-500 p-2 px-4">
-          <SectionNav links={DeUsersLinks} />
-          {children}
-        </div>
+    <div className="home-content">
+      <div className="flex flex-wrap justify-between gap-2">
+        <SearchBar />
+        <StudentFilter />
+        <ExportStudents id={branchId!.toString()} />
+        {IsManagerOrHigher.includes(userRole[0]) && <CreateDeUsers />}
       </div>
-    </section>
+      <div className="rounded-md border bg-yellow-2 text-gray-500 p-2 px-4">
+        <SectionNav links={DeUsersLinks} />
+        {children}
+      </div>
+    </div>
   );
 };
 

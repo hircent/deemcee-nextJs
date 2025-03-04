@@ -1,28 +1,33 @@
-import CreateCategory from '@/components/CreateCategory'
-import SectionNav from '@/components/SectionNav'
-import { IsSuperadmin, StructureLinks } from '@/constants/index'
-import { authUser } from '@/lib/actions/user.actions'
-import { getUserRole } from '@/lib/utils'
-import React from 'react'
+import CreateCategory from "@/components/CreateCategory";
+import SectionNav from "@/components/SectionNav";
+import StructureFilterBar from "@/components/StructureFilterBar";
+import { IsSuperadmin, StructureLinks } from "@/constants/index";
+import { getCountryList, getTierList } from "@/lib/actions/structure.actions";
+import { authUser } from "@/lib/actions/user.actions";
+import { getUserRole } from "@/lib/utils";
+import React from "react";
 
-const Layout = async({children}:{children:React.ReactNode}) => {
+const Layout = async ({ children }: { children: React.ReactNode }) => {
   const user = await authUser();
-  const userRole = getUserRole(user)
-  return (
-    <section className="home">
-        <div className="home-content">
-            <div className="flex justify-between">
-              {/* <SearchBar /> */}
-              <div></div>
-              {IsSuperadmin.includes(userRole[0]) && <CreateCategory/>}
-            </div>
-            <div className='rounded-md border bg-yellow-2 text-gray-500 p-2 px-4'>
-                <SectionNav links={StructureLinks}/>
-                {children}
-            </div>
-        </div>
-    </section>
-  )
-}
+  const userRole = getUserRole(user);
 
-export default Layout
+  const countryList = await getCountryList();
+  const tierList = await getTierList("Malaysia");
+
+  return (
+    <div className="home-content">
+      <div className="flex justify-between">
+        {/* <SearchBar /> */}
+        <StructureFilterBar countryList={countryList} tierList={tierList} />
+        <div></div>
+        {IsSuperadmin.includes(userRole[0]) && <CreateCategory />}
+      </div>
+      <div className="rounded-md border bg-yellow-2 text-gray-500 p-2 px-4">
+        <SectionNav links={StructureLinks} />
+        {children}
+      </div>
+    </div>
+  );
+};
+
+export default Layout;
