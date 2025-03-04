@@ -1,19 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Document,
   Page,
   Text,
   View,
   StyleSheet,
-  PDFViewer,
   Image,
 } from "@react-pdf/renderer";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 
 // Styles for the PDF document
 const styles = StyleSheet.create({
@@ -157,6 +150,7 @@ const EnrolmentInvoicePDF = ({ invoice }: { invoice: any }) => (
           <Text style={styles.companyWebsite}>{invoice.company.website}</Text>
           <Text style={styles.companySSM}>SSM: {invoice.company.ssm}</Text>
         </View>
+        {/* eslint-disable-next-line jsx-a11y/alt-text */}
         <Image src="/logo.png" style={styles.logo} />
       </View>
 
