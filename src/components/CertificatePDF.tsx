@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   signatureImage: { width: "100%", height: "auto" },
 });
 
-const CertificatePDF = () => {
+const CertificatePDF = () => (
   <Document>
     <Page size="A4" style={styles.body}>
       <View>
@@ -73,7 +73,7 @@ const CertificatePDF = () => {
         </View>
       </View>
     </Page>
-  </Document>;
-};
+  </Document>
+);
 
 export default CertificatePDF;
