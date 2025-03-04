@@ -60,24 +60,24 @@ export const EnrolmentListColumns: ColumnDef<EnrolmentData>[] = [
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
-      const student = row.original;
+      const original = row.original;
 
       return (
         <div className="flex gap-4 text-black-2">
           <Link
             className="group p-2 hover:bg-gray-100 rounded-full transition-colors"
-            href={`/student/${student.id}`}
+            href={`/student/${original.student.id}`}
           >
             <EyeIcon
               size={18}
               className="text-gray-500 group-hover:text-blue-500 transition-colors"
             />
           </Link>
-          <DeleteStudent
+          {/* <DeleteStudent
             type="student"
-            name={student.student.fullname}
-            id={student.student.id}
-          />
+            name={original.student.fullname}
+            id={original.student.id}
+          /> */}
         </div>
       );
     },
