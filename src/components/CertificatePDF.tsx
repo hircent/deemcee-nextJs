@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     fontWeight: "normal",
     marginLeft: "24.5%",
     marginRight: "5%",
-    color: "rgb(69, 160, 231)",
+    color: "#45A0E7",
   },
   certificateSubtitle: {
     fontSize: 22,
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
     marginTop: "34%",
     paddingHorizontal: 30,
-    color: "rgb(69, 160, 231)",
+    color: "#45A0E7",
   },
   attendanceText: {
     textAlign: "center",
@@ -56,10 +56,8 @@ const CertificatePDF = () => {
   <Document>
     <Page size="A4" style={styles.body}>
       <View>
-        <Text style={styles.certificateTitle}>
-          CERTIFICATE{" "}
-          <Text style={{ color: "rgb(69, 160, 231)" }}>OF INVOLVEMENT</Text>
-        </Text>
+        <Text style={styles.certificateTitle}>CERTIFICATE </Text>
+        <Text style={styles.certificat2ndTitle}>OF INVOLVEMENT</Text>
         <Text style={styles.certificateSubtitle}>in Kiddo Emcee Program</Text>
         <Text style={styles.certificateMainText}>Hircent Ong</Text>
         <Text style={styles.attendanceText}>
@@ -69,7 +67,7 @@ const CertificatePDF = () => {
         <View style={styles.signatureContainer}>
           {/* eslint-disable-next-line jsx-a11y/alt-text */}
           <Image
-            src="images/certificate-signature.png"
+            src="/certificate-signature.png"
             style={styles.signatureImage}
           />
         </View>
