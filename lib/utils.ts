@@ -3,7 +3,7 @@ import { type ClassValue, clsx } from "clsx";
 import qs from "query-string";
 import { twMerge } from "tailwind-merge";
 import { z } from "zod";
-import { User } from "../types";
+import { BranchRole, User } from "../types";
 import { CalendarData, GroupedLesson, LessonData } from "@/types/calendar";
 import { EventInput } from "@fullcalendar/core/index.js";
 import {
@@ -274,6 +274,12 @@ export const getUserRole = (user: User | undefined): string[] => {
   return user.branch_role.map((branch) => branch.branch_role);
 };
 
+export const getBranchCountry = (
+  id: number,
+  branchRole: BranchRole[]
+): string => {
+  return branchRole.find((br) => br.branch_id === id)!.country;
+};
 export const camelCase = (word: string) => {
   const firstLetterUppercase = word.charAt(0).toUpperCase() + word.slice(1);
   return firstLetterUppercase;
