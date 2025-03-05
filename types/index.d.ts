@@ -343,6 +343,7 @@ export type BranchRole = {
   branch_id: number;
   branch_name: string;
   branch_role: string;
+  country: string;
 };
 
 export type User = {
