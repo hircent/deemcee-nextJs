@@ -43,9 +43,10 @@ import {
   TimeslotData,
 } from "@/types/index";
 import { getTimeslots } from "@/lib/actions/class.action";
-import { set } from "zod";
+import { getGradeList, getTierList } from "@/lib/actions/structure.actions";
+import { GradeData, TierListData } from "@/types/structure";
 
-const StudentForm = () => {
+const StudentForm = ({ country }: { country: string }) => {
   const [referralChannel, setReferralChannel] = useState<string>("");
   const [selectedItems, setSelectedItems] = useState<StarterKitItem[]>([]);
   const [zoderror, setZodError] = useState<StudentFormErrors | null>(null);
@@ -55,7 +56,14 @@ const StudentForm = () => {
   const [gender, setGender] = useState<string | undefined>(undefined);
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [isSearchable, setIsSearchable] = useState<boolean>(false);
+  const [isTierSelected, setIsTierSelected] = useState<boolean>(true);
+  const [selectedTier, setSelectedTier] = useState<string | undefined>(
+    undefined
+  );
+  const [grades, setGrades] = useState<GradeData[]>([]);
   const [showParentFields, setShowParentFields] = useState(false);
+  const [ableSelectTimeslot, setAbleSelectTimeslot] = useState(false);
+  const [ableSelectDate, setAbleSelectDate] = useState(false);
   const [parentResultMsg, setParentResultMsg] = useState<string | undefined>(
     undefined
   );
@@ -71,6 +79,9 @@ const StudentForm = () => {
   const [placeholder, setPlaceholder] = useState<string>(
     "Select Grade and Commencement Date"
   );
+
+  const [tiers, setTiers] = useState<TierListData[]>([]);
+
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
   const [state, formAction] = useFormState(createStudent, SERVER_ACTION_STATE);
@@ -165,6 +176,26 @@ const StudentForm = () => {
 
     fetchTimeslots();
   }, [startDate, startingGrade]);
+
+  useEffect(() => {
+    const getTiers = async () => {
+      const tierList = await getTierList(country);
+      setTiers(tierList);
+    };
+    getTiers();
+  }, []);
+
+  useEffect(() => {
+    if (selectedTier === undefined) return;
+
+    const getGrades = async () => {
+      const gradeList = await getGradeList(selectedTier);
+      setGrades(gradeList);
+    };
+
+    getGrades();
+  }, [selectedTier]);
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -416,27 +447,32 @@ const StudentForm = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <div className="space-y-2">
-                  <Label htmlFor="deemcee_starting_grade">
-                    Starting Grade <span className="text-red-500">*</span>
+                  <Label htmlFor="tier">
+                    Tier <span className="text-red-500">*</span>
                   </Label>
                   <Input
-                    id="deemcee_starting_grade"
-                    value={startingGrade}
-                    name="deemcee_starting_grade"
+                    id="tier"
+                    value={selectedTier}
+                    name="tier"
                     type="hidden"
                   />
-                  <Select onValueChange={(value) => setStartingGrade(value)}>
+                  <Select
+                    onValueChange={(value) => {
+                      setSelectedTier(value);
+                      setIsTierSelected(false);
+                    }}
+                  >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select starting grade" />
+                      <SelectValue placeholder="Select a Tier" />
                     </SelectTrigger>
                     <SelectContent className="select-content">
-                      {GRADE.map((grade) => (
+                      {tiers.map((tier) => (
                         <SelectItem
-                          key={grade.id}
-                          value={grade.id.toString()}
+                          key={tier.id}
+                          value={tier.id.toString()}
                           className="select-item"
                         >
-                          {grade.label}
+                          {tier.name + " (" + tier.year + ")"}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -449,6 +485,51 @@ const StudentForm = () => {
 
               <div>
                 <div className="space-y-2">
+                  <Label htmlFor="deemcee_starting_grade">
+                    Starting Grade <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="deemcee_starting_grade"
+                    value={startingGrade}
+                    name="deemcee_starting_grade"
+                    type="hidden"
+                  />
+                  <Select
+                    onValueChange={(value) => {
+                      setStartingGrade(value);
+                      setAbleSelectDate(true);
+                    }}
+                  >
+                    <SelectTrigger disabled={isTierSelected}>
+                      <SelectValue placeholder="Select starting grade" />
+                    </SelectTrigger>
+                    <SelectContent className="select-content">
+                      {grades.map((grade) => (
+                        <SelectItem
+                          key={grade.id}
+                          value={grade.grade_level.toString()}
+                          className="select-item"
+                        >
+                          {"Grade " +
+                            grade.grade_level +
+                            " - " +
+                            grade.currency +
+                            " " +
+                            grade.price}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <small className="text-red-500">
+                  {zoderror?.deemcee_starting_grade}
+                </small>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <div className="space-y-2">
                   <Label htmlFor="start_date">
                     Commencement Date <span className="text-red-500">*</span>
                   </Label>
@@ -458,14 +539,14 @@ const StudentForm = () => {
                     type="date"
                     onChange={(e) => {
                       setStartDate(e.target.value);
+                      setAbleSelectTimeslot(true);
                     }}
+                    disabled={!ableSelectDate}
                   />
                 </div>
                 <small className="text-red-500">{zoderror?.start_date}</small>
               </div>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <div className="space-y-2">
                   <Label htmlFor="timeslot">
@@ -478,7 +559,7 @@ const StudentForm = () => {
                     value={confirmTimeslot}
                   />
                   <Select onValueChange={(value) => setConfirmTimeslot(value)}>
-                    <SelectTrigger>
+                    <SelectTrigger disabled={!ableSelectTimeslot}>
                       <SelectValue placeholder={placeholder} />
                     </SelectTrigger>
                     <SelectContent className="select-content">
