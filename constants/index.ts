@@ -49,20 +49,6 @@ export const sidebarLinks = [
     icon: LucideIcons.Calendar,
     visible: ["superadmin", "principal", "manager", "teacher"],
   },
-  // {
-  //   imgURL: "/icons/users.svg",
-  //   route: "/parent",
-  //   label: "Parent",
-  //   icon: LucideIcons.User2,
-  //   visible: ["superadmin", "principal", "manager", "teacher"],
-  // },
-  // {
-  //   imgURL: "/icons/users.svg",
-  //   route: "/student",
-  //   label: "Student",
-  //   icon: LucideIcons.User2,
-  //   visible: ["superadmin", "principal", "manager", "teacher"],
-  // },
   {
     imgURL: "/icons/users.svg",
     baseRoute: "/deusers",
@@ -70,6 +56,22 @@ export const sidebarLinks = [
     label: "DeUsers",
     icon: LucideIcons.User2,
     visible: ["superadmin", "principal", "manager", "teacher"],
+  },
+  {
+    imgURL: "/icons/users.svg",
+    baseRoute: "/promocode",
+    route: "/promocode",
+    label: "Promo Code",
+    icon: LucideIcons.Ticket,
+    visible: ["superadmin"],
+  },
+  {
+    imgURL: "/icons/users.svg",
+    baseRoute: "/certificate",
+    route: "/certificate",
+    label: "Certificate",
+    icon: LucideIcons.Trophy,
+    visible: ["superadmin"],
   },
 ];
 
