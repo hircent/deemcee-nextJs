@@ -11,7 +11,7 @@ const PromoCode = async () => {
   const user = await authUser();
   const userRole = getUserRole(user);
   const result = await getPromoCodeList();
-  console.log({ result: result.data });
+
   return (
     <div className="home-content">
       <div className="flex justify-between">

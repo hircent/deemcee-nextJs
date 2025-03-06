@@ -10,3 +10,13 @@ export type PromoCodeData = {
   expired_at: string;
   branch: null | number;
 };
+
+export type DeletePromoCodeProps = {
+  name: string;
+  confirmName?: string;
+  id: number;
+};
+
+export type PromoCodeFormErrors = {
+  confirmName?: string;
+};

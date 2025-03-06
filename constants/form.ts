@@ -169,6 +169,12 @@ export const DeleteClassSchema = z.object({
   confirmName: z.string().min(1, "Confirm name is required"),
 });
 
+export const DeleteSchema = z.object({
+  id: z.string().min(1, "Id is required"),
+  name: z.string().min(1, "Name is required"),
+  confirmName: z.string().min(1, "Confirm name is required"),
+});
+
 export const StudentFormSchema = z
   .object({
     first_name: z.string().min(1, "First name is required"),
