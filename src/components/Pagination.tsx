@@ -43,40 +43,42 @@ const Pagination = ({ next, previous, baseUrl }: PaginationProps) => {
   const activeButtonStyle = `${buttonBaseStyle} bg-green-600 hover:bg-green-700 text-white border-none`;
 
   return (
-    <div className="flex gap-3 mt-4 justify-end">
-      {previous && (
-        <Button className={activeButtonStyle}>
-          <Link href={getPageUrl("previous")} className="w-full text-center">
+    <div className="flex mt-4 justify-end">
+      <div className="flex w-max bg-yellow-2 rounded-md p-2 gap-3">
+        {previous && (
+          <Button className={activeButtonStyle}>
+            <Link href={getPageUrl("previous")} className="w-full text-center">
+              Previous
+            </Link>
+          </Button>
+        )}
+
+        {!previous && (
+          <Button
+            className={`${buttonBaseStyle} bg-green-400 text-white cursor-not-allowed`}
+            disabled
+          >
             Previous
-          </Link>
-        </Button>
-      )}
+          </Button>
+        )}
 
-      {!previous && (
-        <Button
-          className={`${buttonBaseStyle} bg-green-400 text-white cursor-not-allowed`}
-          disabled
-        >
-          Previous
-        </Button>
-      )}
+        {next && (
+          <Button className={activeButtonStyle}>
+            <Link href={getPageUrl("next")} className="w-full text-center">
+              Next
+            </Link>
+          </Button>
+        )}
 
-      {next && (
-        <Button className={activeButtonStyle}>
-          <Link href={getPageUrl("next")} className="w-full text-center">
+        {!next && (
+          <Button
+            className={`${buttonBaseStyle} bg-green-400 text-white cursor-not-allowed`}
+            disabled
+          >
             Next
-          </Link>
-        </Button>
-      )}
-
-      {!next && (
-        <Button
-          className={`${buttonBaseStyle} bg-green-400 text-white cursor-not-allowed`}
-          disabled
-        >
-          Next
-        </Button>
-      )}
+          </Button>
+        )}
+      </div>
     </div>
   );
 };
