@@ -6,6 +6,7 @@ import { PageListTable } from "@/components/PageList";
 import { PromoCodeListColumns } from "@/columns/promocode.list.column";
 import Pagination from "@/components/Pagination";
 import { getPromoCodeList } from "@/lib/actions/promocode.action";
+import CreatePromoCode from "@/components/CreatePromoCode";
 
 const PromoCode = async () => {
   const user = await authUser();
@@ -16,7 +17,7 @@ const PromoCode = async () => {
     <div className="home-content">
       <div className="flex justify-between">
         <SearchBar />
-        add
+        <CreatePromoCode />
       </div>
       <PageListTable columns={PromoCodeListColumns} data={result.data} />
 
