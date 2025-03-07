@@ -671,6 +671,7 @@ export type BranchGrade = {
 export type BranchSelectorProps = {
   id: number;
   name: string;
+  display_name: string;
 };
 
 export type PrincipalsAndBranchGrade = {
