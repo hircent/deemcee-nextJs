@@ -307,3 +307,29 @@ export const AdvanceEnrolmentSchema = z.object({
   start_date: z.string().min(1, "Date is required"),
   classroom: z.string().min(1, "Classroom is required"),
 });
+
+export const PromoCodeSchema = z
+  .object({
+    code: z.string().min(1, "Code is required"),
+    amount: z.string().min(1, "Amount is required"),
+    min_purchase_amount: z.string().min(1, "Min purchase amount is required"),
+    quantity: z.string().min(1, "Quantity is required"),
+    for_all_branches: z.enum(["true", "false"]),
+    promo_type: z.string().min(1, "Promo type is required"),
+    expired_at: z.string().min(1, "Expired at is required"),
+    branch: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      // If for_all_branches is false, branch should be required
+      if (data.for_all_branches === "false") {
+        return !!data.branch && data.branch.length > 0;
+      }
+      // If for_all_branches is true, branch is optional
+      return true;
+    },
+    {
+      message: "Branch is required when not applying to all branches",
+      path: ["branch"],
+    }
+  );
