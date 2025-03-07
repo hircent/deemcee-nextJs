@@ -276,3 +276,9 @@ export const ReplacementAttendanceStatus = [
     isDisabled: true,
   },
 ];
+
+export const PROMO_TYPE = [
+  { id: 1, value: "ENROLMENT", label: "Enrolment" },
+  { id: 2, value: "MERCHANDISE", label: "Merchandise" },
+  { id: 3, value: "OTHER", label: "Other" },
+];
