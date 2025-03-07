@@ -41,6 +41,7 @@ import {
 import EnrolmentStatusBadge from "./EnrolmentStatusBadge";
 import { Badge } from "./ui/badge";
 import { usePathname } from "next/navigation";
+import Loader from "./Loader";
 
 export const EditParentProfile = ({ type, id }: EditProps) => {
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -187,7 +188,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
           </DialogDescription>
         </DialogHeader>
         {isLoading ? (
-          <div>Loading...</div>
+          <Loader />
         ) : (
           <form onSubmit={handleSubmit} className="mt-4" ref={formRef}>
             <Tabs defaultValue="basic" className="space-y-6">
