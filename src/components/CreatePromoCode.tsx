@@ -54,7 +54,6 @@ const CreatePromoCode = () => {
   );
 
   useEffect(() => {
-    setZodError(null);
     const fetchBranchData = async () => {
       const branchData = await getBranchSelector();
       setBranches(branchData);
@@ -69,6 +68,7 @@ const CreatePromoCode = () => {
     if (state.success) {
       formRef.current?.reset();
       setOpen(false);
+      setZodError(null);
       toast({
         title: "Success",
         description: state.msg,
