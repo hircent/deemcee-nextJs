@@ -1,10 +1,14 @@
 "use server";
 
 import { ListProps, STATE } from "@/types/index";
-import { PromoCodeData, PromoCodeFormErrors } from "@/types/promocode";
+import {
+  CreateUpdatePromoCodeFormErrors,
+  PromoCodeData,
+  PromoCodeFormErrors,
+} from "@/types/promocode";
 import { cookies } from "next/headers";
 import { getToken } from "./user.actions";
-import { DeleteSchema } from "@/constants/form";
+import { DeleteSchema, PromoCodeSchema } from "@/constants/form";
 import { revalidatePath } from "next/cache";
 
 export const getPromoCodeList = async (): Promise<ListProps<PromoCodeData>> => {
@@ -69,3 +73,45 @@ export const deletePromoCode = async (
     return { error: true, msg: (error as Error).message };
   }
 };
+
+export async function createPromoCode(
+  _prevState: STATE<CreateUpdatePromoCodeFormErrors>,
+  formData: FormData
+): Promise<STATE<CreateUpdatePromoCodeFormErrors>> {
+  const token = await getToken();
+  const branchId = cookies().get("BranchId")?.value;
+
+  try {
+    const data = Object.fromEntries(formData);
+    const validated = PromoCodeSchema.safeParse(data);
+    console.log({ data });
+    if (!validated.success) {
+      console.log(validated.error.flatten());
+      return {
+        error: true,
+        zodErr: validated.error.flatten()
+          .fieldErrors as CreateUpdatePromoCodeFormErrors,
+        msg: "Validation Failed",
+      };
+    }
+
+    const response = await fetch(`${process.env.API_URL}/promo-code/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+        BranchId: `${branchId?.toString()}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      return { success: false, msg: response.statusText };
+    }
+
+    revalidatePath("/promocode");
+    return { success: true, msg: "Promo code created successfully" };
+  } catch (error) {
+    return { error: true, msg: (error as Error).message };
+  }
+}
