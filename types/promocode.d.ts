@@ -20,3 +20,14 @@ export type DeletePromoCodeProps = {
 export type PromoCodeFormErrors = {
   confirmName?: string;
 };
+
+export type CreateUpdatePromoCodeFormErrors = {
+  code?: string;
+  amount?: string;
+  min_purchase_amount?: string;
+  quantity?: string;
+  branch?: string;
+  for_all_branches?: boolean;
+  promo_type?: string;
+  expired_at?: string;
+};
