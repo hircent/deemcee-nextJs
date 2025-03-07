@@ -84,9 +84,7 @@ export async function createPromoCode(
   try {
     const data = Object.fromEntries(formData);
     const validated = PromoCodeSchema.safeParse(data);
-    console.log({ data });
     if (!validated.success) {
-      console.log(validated.error.flatten());
       return {
         error: true,
         zodErr: validated.error.flatten()
