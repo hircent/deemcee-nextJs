@@ -113,3 +113,77 @@ export async function createPromoCode(
     return { error: true, msg: (error as Error).message };
   }
 }
+
+export async function getPromoCodeDetails(id: number): Promise<PromoCodeData> {
+  const token = await getToken();
+  const branchId = cookies().get("BranchId")?.value;
+
+  try {
+    const response = await fetch(
+      `${process.env.API_URL}/promo-code/details/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch promo code data " + response.statusText);
+    }
+
+    const data = await response.json();
+
+    return data.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function editPromoCode(
+  _prevState: STATE<CreateUpdatePromoCodeFormErrors>,
+  formData: FormData
+): Promise<STATE<CreateUpdatePromoCodeFormErrors>> {
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
+
+    const data = Object.fromEntries(formData);
+    const validated = PromoCodeSchema.safeParse(data);
+
+    if (!validated.success) {
+      return {
+        error: true,
+        zodErr: validated.error.flatten()
+          .fieldErrors as CreateUpdatePromoCodeFormErrors,
+        msg: "Validation Failed",
+      };
+    }
+
+    const response = await fetch(
+      `${process.env.API_URL}/promo-code/update/${data.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      const res = await response.json();
+      return { error: true, msg: res.msg };
+    }
+
+    revalidatePath("/promocode");
+    return { success: true, msg: "Promo code is updated" };
+  } catch (error) {
+    return { error: true, msg: (error as Error).message };
+  }
+}
