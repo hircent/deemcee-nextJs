@@ -34,6 +34,7 @@ const useBranchData = (userRole: BranchRole[]) => {
           {
             id: userRole[0].branch_id,
             name: userRole[0].branch_name || "",
+            display_name: userRole[0].branch_name || "",
           },
         ]);
       }
@@ -81,7 +82,7 @@ function BranchSelectorBase({ userRole }: BranchSelectorComponentProps) {
 
     return branchSelector.map((v) => (
       <SelectItem key={v.id} value={v.id.toString()} className="select-item">
-        <div className="text-left">{camelCase(v.name)}</div>
+        <div className="text-left">{camelCase(v.display_name)}</div>
       </SelectItem>
     ));
   }, [branchSelector]);
