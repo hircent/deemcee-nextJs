@@ -3,6 +3,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { PromoCodeData } from "@/types/promocode";
 import { extractDate } from "@/lib/utils";
 import { DeletePromoCode } from "@/components/DeletePromoCode";
+import EditPromoCode from "@/components/EditPromoCode";
 
 export const PromoCodeListColumns: ColumnDef<PromoCodeData>[] = [
   {
@@ -49,7 +50,7 @@ export const PromoCodeListColumns: ColumnDef<PromoCodeData>[] = [
 
       return (
         <div className="flex gap-4">
-          <div>Edit</div>
+          <EditPromoCode id={promo.id} />
           <DeletePromoCode name={promo.code} id={promo.id} />
         </div>
       );
