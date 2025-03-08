@@ -7,6 +7,9 @@ import {
   StyleSheet,
   Image,
 } from "@react-pdf/renderer";
+import { Certificate } from "crypto";
+import { CertificateData } from "@/types/certificate";
+import { capitalizeFirstLetter, getCategoryByGrade } from "@/lib/utils";
 
 const styles = StyleSheet.create({
   html: {
@@ -52,22 +55,29 @@ const styles = StyleSheet.create({
   signatureImage: { width: "100%", height: "auto" },
 });
 
-const CertificatePDF = () => (
+const CertificatePDF = ({ cert }: { cert: CertificateData }) => (
   <Document>
     <Page size="A4" style={styles.body}>
       <View>
         <Text style={styles.certificateTitle}>CERTIFICATE </Text>
         <Text style={styles.certificat2ndTitle}>OF INVOLVEMENT</Text>
-        <Text style={styles.certificateSubtitle}>in Kiddo Emcee Program</Text>
-        <Text style={styles.certificateMainText}>Hircent Ong</Text>
+        <Text style={styles.certificateSubtitle}>
+          in {getCategoryByGrade(cert.grade)} Emcee Program
+        </Text>
+        <Text style={styles.certificateMainText}>
+          {capitalizeFirstLetter(cert.student.fullname)}
+        </Text>
         <Text style={styles.attendanceText}>
-          attended Grade 1 Creative Based Speaking Program {"\n"} in Year{" "}
-          <Text style={{ fontWeight: "bold" }}>2025</Text>
+          attended Grade {cert.grade} Creative Based Speaking Program {"\n"} in
+          Year{" "}
+          <Text style={{ fontWeight: "bold" }}>
+            {cert.end_date.slice(0, 4)}
+          </Text>
         </Text>
         <View style={styles.signatureContainer}>
           {/* eslint-disable-next-line jsx-a11y/alt-text */}
           <Image
-            src="/certificate-signature.png"
+            src="/images/certificate-signature.png"
             style={styles.signatureImage}
           />
         </View>
