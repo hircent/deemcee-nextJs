@@ -144,6 +144,7 @@ const EditPromoCode = ({ id }: { id: number }) => {
             className="space-y-4 sm:space-y-6 mt-4"
             ref={formRef}
           >
+            <Input type="hidden" name="id" defaultValue={id.toString()} />
             <div className="grid grid-cols-3 gap-4 items-center">
               <Input
                 type="hidden"
@@ -178,14 +179,14 @@ const EditPromoCode = ({ id }: { id: number }) => {
                   defaultValue={selectedBranch}
                   id="branch"
                 />
-                <Label htmlFor="promo_type">
+                <Label htmlFor="branch">
                   Or Apply to : <span className="text-red-500">*</span>
                 </Label>
                 <Select
                   onValueChange={(value) => setSelectedBranch(value)}
                   value={selectedBranch}
                 >
-                  <SelectTrigger id="promo_type">
+                  <SelectTrigger id="branch">
                     <SelectValue placeholder="Select a branch" />
                   </SelectTrigger>
                   <SelectContent className="select-content">
@@ -276,7 +277,10 @@ const EditPromoCode = ({ id }: { id: number }) => {
                 <Label htmlFor="promo_type">
                   Promo Type <span className="text-red-500">*</span>
                 </Label>
-                <Select onValueChange={setSelectedPromoType}>
+                <Select
+                  onValueChange={setSelectedPromoType}
+                  value={selectedPromoType}
+                >
                   <SelectTrigger id="promo_type">
                     <SelectValue placeholder="Select promo type" />
                   </SelectTrigger>
@@ -313,7 +317,7 @@ const EditPromoCode = ({ id }: { id: number }) => {
               </div>
             </div>
             <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
-              <SubmitButton label="Create" submitLabel="Creating" />
+              <SubmitButton label="Update" submitLabel="Updating" />
             </DialogFooter>
           </form>
         )}

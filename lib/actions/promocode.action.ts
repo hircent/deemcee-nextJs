@@ -9,7 +9,7 @@ import {
 import { cookies } from "next/headers";
 import { getToken } from "./user.actions";
 import { DeleteSchema, PromoCodeSchema } from "@/constants/form";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export const getPromoCodeList = async (): Promise<ListProps<PromoCodeData>> => {
   try {
@@ -128,6 +128,10 @@ export async function getPromoCodeDetails(id: number): Promise<PromoCodeData> {
           Authorization: `Bearer ${token?.value}`,
           BranchId: `${branchId?.toString()}`,
         },
+        next: {
+          revalidate: 0,
+          tags: [`promocode-${id}`],
+        },
       }
     );
 
@@ -153,7 +157,7 @@ export async function editPromoCode(
 
     const data = Object.fromEntries(formData);
     const validated = PromoCodeSchema.safeParse(data);
-
+    console.log({ data });
     if (!validated.success) {
       return {
         error: true,
@@ -182,6 +186,7 @@ export async function editPromoCode(
     }
 
     revalidatePath("/promocode");
+    revalidateTag(`promo-code-${data.id}`);
     return { success: true, msg: "Promo code is updated" };
   } catch (error) {
     return { error: true, msg: (error as Error).message };
