@@ -1,56 +1,37 @@
 "use client";
-import { BranchProps } from "@/types/index";
 import { ColumnDef } from "@tanstack/react-table";
-import { EditBranch } from "@/components/EditBranch";
-import { DeleteBranch } from "@/components/DeleteBranch";
+import { CertificateData } from "@/types/certificate";
+import CertViewer from "@/components/CertViewer";
 
-export const BranchListColumns: ColumnDef<BranchProps>[] = [
+export const CertificateListColumns: ColumnDef<CertificateData>[] = [
   {
     accessorKey: "id",
-    header: "ID",
+    header: "No",
+    cell: ({ row }) => {
+      return <div className="text-gray-500">{row.index + 1}</div>;
+    },
   },
   {
-    accessorKey: "name",
+    accessorKey: "student.first_name",
     header: "Name",
   },
   {
-    accessorKey: "business_reg_no",
-    header: "Business_reg_no",
+    accessorKey: "grade",
+    header: "Grade",
   },
   {
-    accessorKey: "operation_date",
-    header: "Operation Date",
+    accessorKey: "end_date",
+    header: "End Date",
   },
   {
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
-      const branch = row.original;
+      const cert = row.original;
 
       return (
-        // <DropdownMenu>
-        //   <DropdownMenuTrigger asChild>
-        //     <Button variant="ghost" className="h-8 w-8 p-0">
-        //       <span className="sr-only">Open menu</span>
-        //       <MoreHorizontal className="h-4 w-4" />
-        //     </Button>
-        //   </DropdownMenuTrigger>
-        //   <DropdownMenuContent align="end" className="bg-white">
-        //     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        //     <DropdownMenuSeparator />
-        //     <DropdownMenuItem className="hover:bg-slate-400 cursor-pointer">
-        //       <EditBranch type={"branch"} id={branch.id} />
-        //       Edit
-        //     </DropdownMenuItem>
-        //     <DropdownMenuItem className="hover:bg-slate-400 cursor-pointer">
-        //       <DeleteBranch type={"branch"} name={branch.name} id={branch.id} />
-        //       Delete
-        //     </DropdownMenuItem>
-        //   </DropdownMenuContent>
-        // </DropdownMenu>
         <div className="flex gap-4">
-          <EditBranch type={"branch"} id={branch.id} />
-          <DeleteBranch type={"branch"} name={branch.name} id={branch.id} />
+          <CertViewer cert={cert} />
         </div>
       );
     },
