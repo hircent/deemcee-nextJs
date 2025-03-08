@@ -146,6 +146,8 @@ export const branchSelectorPermission = [
   "/teacher",
   "/student",
   "/parent",
+  "/certificate/ready",
+  "/certificate/printed",
 ];
 
 export const SERVER_ACTION_STATE = {
