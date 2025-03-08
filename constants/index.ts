@@ -60,7 +60,7 @@ export const sidebarLinks = [
   {
     imgURL: "/icons/users.svg",
     baseRoute: "/promocode",
-    route: "/promocode",
+    route: "/promocode/active",
     label: "Promo Code",
     icon: LucideIcons.Ticket,
     visible: ["superadmin"],
@@ -97,6 +97,11 @@ export const ClassLinks = [
 export const CertificateLinks = [
   { href: "/certificate/ready", label: "Ready to Print" },
   { href: "/certificate/printed", label: "Printed" },
+];
+
+export const PromocodeLinks = [
+  { href: "/promocode/active", label: "Active Code" },
+  { href: "/promocode/inactive", label: "Inactive Code" },
 ];
 
 export const UserManagementLinks = [
