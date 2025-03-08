@@ -68,7 +68,7 @@ export const sidebarLinks = [
   {
     imgURL: "/icons/users.svg",
     baseRoute: "/certificate",
-    route: "/certificate",
+    route: "/certificate/ready",
     label: "Certificate",
     icon: LucideIcons.Trophy,
     visible: ["superadmin"],
@@ -92,6 +92,11 @@ export const ClassLinks = [
   { href: "/class", label: "Timetable" },
   { href: "/class/attendance", label: "Attendance" },
   { href: "/class/manage", label: "Manage Classes" },
+];
+
+export const CertificateLinks = [
+  { href: "/certificate/ready", label: "Ready to Print" },
+  { href: "/certificate/printed", label: "Printed" },
 ];
 
 export const UserManagementLinks = [
