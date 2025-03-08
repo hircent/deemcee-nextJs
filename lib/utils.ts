@@ -500,6 +500,11 @@ export function getCategoryByGrade(grade: number): string {
   }
 }
 
+export function capitalizeFirstLetter(str: string): string {
+  if (!str) return "";
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
 export function dateIsBeforeToday(date: string): boolean {
   return new Date(date).getTime() < new Date().setHours(0, 0, 0, 0);
 }
