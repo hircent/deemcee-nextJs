@@ -13,3 +13,9 @@ export type CertificateData = {
   is_printed: boolean;
   branch: number;
 };
+
+export type CertificateParams = {
+  isPrinted?: boolean;
+  page?: number;
+  q?: string;
+};
