@@ -86,7 +86,7 @@ export const AdvanceEnrolment = ({
   };
 
   const handleEarlyAdvance = () => {
-    if (remaining_lessons > 40) {
+    if (remaining_lessons > 12) {
       toast({
         title: "Error",
         description: "You cannot advance more than 12 lessons",
@@ -123,16 +123,16 @@ export const AdvanceEnrolment = ({
     }
   }, [state, toast]);
 
-  // if (grade > 5 || remaining_lessons > 12) {
-  //   return (
-  //     <RejectAdvancement
-  //       grade={grade}
-  //       open={open}
-  //       moreThan12Lessons={remaining_lessons > 12}
-  //       onOpenChange={onOpenChange}
-  //     />
-  //   );
-  // }
+  if (grade > 5 || remaining_lessons > 12) {
+    return (
+      <RejectAdvancement
+        grade={grade}
+        open={open}
+        moreThan12Lessons={remaining_lessons > 12}
+        onOpenChange={onOpenChange}
+      />
+    );
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
