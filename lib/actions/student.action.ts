@@ -443,14 +443,12 @@ export async function advanceEnrolment(
     const validated = AdvanceEnrolmentSchema.safeParse(modifiedData);
 
     if (!validated.success) {
-      console.log(validated.error.flatten().fieldErrors);
       return {
         error: true,
         zodErr: validated.error.flatten().fieldErrors as AdvanceEnrolmentError,
         msg: "Validation Failed",
       };
     }
-    console.log({ data });
 
     const response = await fetch(
       `${process.env.API_URL}/student/enrolment/${data.id}/advance`,
