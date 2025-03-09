@@ -13,16 +13,17 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
   const user = await authUser();
   const userRole = getUserRole(user);
   const branchId = cookies().get("BranchId")?.value;
-  const country = getBranchCountry(+branchId!, user!.branch_role);
-
+  // const country = getBranchCountry(+branchId!, user!.branch_role);
+  console.log({ country: user!.branch_role[0].country });
   return (
     <div className="home-content">
       <div className="flex flex-wrap justify-between gap-2">
         <SearchBar />
         <StudentFilter />
         <ExportStudents id={branchId!.toString()} />
+        {/* Back here fix again */}
         {IsManagerOrHigher.includes(userRole[0]) && (
-          <CreateDeUsers country={country} />
+          <CreateDeUsers country={user!.branch_role[0].country} />
         )}
       </div>
       <div className="rounded-md border bg-yellow-2 text-gray-500 p-2 px-4">
