@@ -196,6 +196,7 @@ export function StudentCard({ student }: StudentCardProps) {
                         <StudentEnrolmentActions
                           enrolment={enrollment}
                           studentId={student.id}
+                          extensions={enrollment.extensions}
                         />
                       </TableCell>
                     </TableRow>
@@ -229,7 +230,7 @@ export function StudentCard({ student }: StudentCardProps) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {student.payment?.map((payment) => (
+                  {student.payments?.map((payment) => (
                     <TableRow key={payment.id} className="hover:bg-neutral-50">
                       <TableCell className="text-neutral-800">
                         {payment.id}
