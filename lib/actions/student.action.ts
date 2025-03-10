@@ -387,7 +387,59 @@ export async function extendEnrolment(
       return { error: true, msg: res.msg };
     }
 
+    revalidatePath(`/student`);
     return { success: true, msg: `Enrolment has been extended` };
+  } catch (error) {
+    return { error: true, msg: (error as Error).message };
+  }
+}
+
+export async function revertExtendedEnrolment(
+  _prevState: STATE<EnrolmentExtensionError>,
+  formData: FormData
+): Promise<STATE<EnrolmentExtensionError>> {
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
+
+    const data = Object.fromEntries(formData);
+    const validated = ExtendEnrolmentSchema.safeParse(data);
+
+    if (!validated.success) {
+      return {
+        error: true,
+        zodErr: validated.error.flatten()
+          .fieldErrors as EnrolmentExtensionError,
+        msg: "Validation Failed",
+      };
+    }
+
+    if (data.confirm.toString().toLowerCase() !== "yes") {
+      return {
+        error: true,
+        msg: "Kindly key in Yes to confirm revert",
+      };
+    }
+
+    const response = await fetch(
+      `${process.env.API_URL}/student/enrolment/${data.id}/revert`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const res = await response.json();
+      return { error: true, msg: res.msg };
+    }
+
+    revalidatePath(`/student`);
+    return { success: true, msg: `Extended enrolment has been reverted` };
   } catch (error) {
     return { error: true, msg: (error as Error).message };
   }
