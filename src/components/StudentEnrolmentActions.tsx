@@ -7,6 +7,7 @@ import {
   Clock,
   Trash,
   ArrowRight,
+  CornerDownLeft,
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/button";
@@ -24,19 +25,24 @@ import { ExtendEnrolment } from "./ExtendEnrolment";
 import { AdvanceEnrolment } from "./AdvanceEnrolment";
 import { Enrolment } from "@/types/student";
 import { formatDateTime } from "@/lib/utils";
+import { RevertExtension } from "./RevertExtension";
 
 const StudentEnrolmentActions = ({
   enrolment,
   studentId,
+  extensions,
 }: {
   enrolment: Enrolment;
   studentId: number;
+  extensions: number;
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [lessonViewOpen, setLessonViewOpen] = useState<boolean>(false);
   const [rescheduleViewOpen, setRescheduleViewOpen] = useState<boolean>(false);
   const [extendEnrolmentViewOpen, setExtendEnrolmentViewOpen] =
+    useState<boolean>(false);
+  const [revertEnrolmentViewOpen, setRevertEnrolmentViewOpen] =
     useState<boolean>(false);
   const [advanceEnrolmentViewOpen, setAdvanceEnrolmentViewOpen] =
     useState<boolean>(false);
@@ -47,6 +53,8 @@ const StudentEnrolmentActions = ({
     setDropdownOpen(false); // Close dropdown when opening dialog
     setDialog(true);
   };
+
+  console.log({ extensions });
 
   return (
     <>
@@ -94,6 +102,16 @@ const StudentEnrolmentActions = ({
             <span>Extend Enrolment</span>
           </DropdownMenuItem>
 
+          {extensions > 0 && (
+            <DropdownMenuItem
+              className="dropdown-menu-item"
+              onClick={() => handleDeleteClick(setRevertEnrolmentViewOpen)}
+            >
+              <CornerDownLeft className="h-4 w-4" />
+              <span>Revert Extension</span>
+            </DropdownMenuItem>
+          )}
+
           <DropdownMenuItem
             className="dropdown-menu-item"
             onClick={() => handleDeleteClick(setAdvanceEnrolmentViewOpen)}
@@ -137,6 +155,12 @@ const StudentEnrolmentActions = ({
         id={enrolment.id}
         open={extendEnrolmentViewOpen}
         onOpenChange={setExtendEnrolmentViewOpen}
+      />
+
+      <RevertExtension
+        id={enrolment.id}
+        open={revertEnrolmentViewOpen}
+        onOpenChange={setRevertEnrolmentViewOpen}
       />
 
       <AdvanceEnrolment
