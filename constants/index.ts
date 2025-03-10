@@ -73,6 +73,14 @@ export const sidebarLinks = [
     icon: LucideIcons.Trophy,
     visible: ["superadmin"],
   },
+  {
+    imgURL: "/icons/users.svg",
+    baseRoute: "/report",
+    route: "/report",
+    label: "Report",
+    icon: LucideIcons.ChartBar,
+    visible: ["superadmin", "principal"],
+  },
 ];
 
 export const StructureLinks = [
