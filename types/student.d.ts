@@ -87,6 +87,7 @@ export interface Enrolment {
   freeze_lessons: number;
   grade: number;
   video_assignments: VideoAssignment[];
+  extensions: number;
 }
 
 type PaymentStatus = {
@@ -134,7 +135,7 @@ export interface StudentData {
   branch: string;
   parent?: Parent;
   enrolments?: Enrolment[];
-  payment?: Payment[];
+  payments?: Payment[];
   referral_channel: string | null;
   referral: string | null;
   starter_kits: StarterKitItem[];
