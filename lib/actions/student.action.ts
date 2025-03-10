@@ -383,7 +383,8 @@ export async function extendEnrolment(
     );
 
     if (!response.ok) {
-      return { success: false, msg: response.statusText };
+      const res = await response.json();
+      return { error: true, msg: res.msg };
     }
 
     return { success: true, msg: `Enrolment has been extended` };
