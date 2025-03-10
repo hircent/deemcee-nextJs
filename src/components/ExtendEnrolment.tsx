@@ -91,7 +91,8 @@ export const ExtendEnrolment = ({
               </div>
             </div>
             <small className="text-slate-400">
-              Please key in the Yes to confirm extend.
+              Please key in the <span className="font-bold">YES</span> to
+              confirm extend.
             </small>
 
             <DialogFooter>
