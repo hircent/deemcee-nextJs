@@ -97,7 +97,7 @@ export const DeUsersLinks = [
 ];
 
 export const ClassLinks = [
-  { href: "/class", label: "Timetable" },
+  { href: "/class", label: "Lesson Sequence" },
   { href: "/class/attendance", label: "Attendance" },
   { href: "/class/manage", label: "Manage Classes" },
 ];
