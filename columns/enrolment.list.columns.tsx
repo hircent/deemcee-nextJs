@@ -3,9 +3,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import { EnrolmentData } from "@/types/student";
 import { DeleteStudent } from "@/components/DeleteStudent";
 import Link from "next/link";
-import { EyeIcon } from "lucide-react";
+import { CheckCircle, Clock, EyeIcon } from "lucide-react";
 import EditVideoAssignment from "@/components/EditVideoAssignment";
 import { getCategoryByGrade } from "@/lib/utils";
+import MakePayment from "@/components/MakePayment";
 
 export const EnrolmentListColumns: ColumnDef<EnrolmentData>[] = [
   {
@@ -53,7 +54,24 @@ export const EnrolmentListColumns: ColumnDef<EnrolmentData>[] = [
     accessorKey: "payments",
     header: "Payments",
     cell: ({ row }) => {
-      return "Payments";
+      const payment = row.original.payments;
+      return (
+        <div className="flex flex-col gap-2">
+          {payment.status === "PAID" && (
+            <div className="flex gap-2 text-green-500">
+              <CheckCircle size={18} />
+              <span>Paid</span>
+            </div>
+          )}
+          {payment.status === "PENDING" && (
+            // <div className="flex gap-2 text-yellow-500">
+            //   <Clock size={18} />
+            //   <span>Pending</span>
+            // </div>
+            <MakePayment id={payment.id} />
+          )}
+        </div>
+      );
     },
   },
   {
