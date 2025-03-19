@@ -7,7 +7,7 @@ import GradeForm from "./GradeFormComponent";
 import Create from "./Create";
 import StudentForm from "./StudentForm";
 
-const CreateDeUsers = ({ country }: { country: string }) => {
+const CreateDeUsers = () => {
   const pathname = usePathname();
   const name = pathname?.split("/")[2];
 
@@ -27,7 +27,7 @@ const CreateDeUsers = ({ country }: { country: string }) => {
 
   // if (name == "parent") return <Create type={name} />;
 
-  if (name == "student") return <StudentForm country={country} />;
+  if (name == "student") return <StudentForm />;
 };
 
 export default CreateDeUsers;

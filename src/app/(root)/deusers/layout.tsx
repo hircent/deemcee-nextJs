@@ -13,8 +13,6 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
   const user = await authUser();
   const userRole = getUserRole(user);
   const branchId = cookies().get("BranchId")?.value;
-  // const country = getBranchCountry(+branchId!, user!.branch_role);
-  console.log({ country: user!.branch_role[0].country });
   return (
     <div className="home-content">
       <div className="flex flex-wrap justify-between gap-2">
@@ -22,9 +20,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
         <StudentFilter />
         <ExportStudents id={branchId!.toString()} />
         {/* Back here fix again */}
-        {IsManagerOrHigher.includes(userRole[0]) && (
-          <CreateDeUsers country={user!.branch_role[0].country} />
-        )}
+        {IsManagerOrHigher.includes(userRole[0]) && <CreateDeUsers />}
       </div>
       <div className="rounded-md border bg-yellow-2 text-gray-500 p-2 px-4">
         <SectionNav links={DeUsersLinks} />

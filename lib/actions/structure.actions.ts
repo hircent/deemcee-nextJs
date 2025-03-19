@@ -560,20 +560,19 @@ export async function generateCalendarThemeLesson(
   }
 }
 
-export async function getTierList(country: string): Promise<TierListData[]> {
+export async function getTierList(): Promise<TierListData[]> {
   const token = await getToken();
+  const branchId = cookies().get("BranchId")?.value;
 
   try {
-    const response = await fetch(
-      `${process.env.API_URL}/tier/list?country=${country}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token?.value}`,
-        },
-      }
-    );
+    const response = await fetch(`${process.env.API_URL}/tier/list`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+        BranchId: `${branchId?.toString()}`,
+      },
+    });
 
     if (!response.ok) {
       throw new Error("Failed to fetch grade data " + response.statusText);
