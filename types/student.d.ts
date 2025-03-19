@@ -92,7 +92,7 @@ export interface Enrolment {
 
 type PaymentStatus = {
   id: number;
-  status: "PAID" | "UNPAID" | "PARTIALLY_PAID" | "REFUNDED" | "VOIDED";
+  status: "PAID" | "PENDING" | "PARTIALLY_PAID" | "REFUNDED" | "VOIDED";
 };
 
 export interface EnrolmentData {
@@ -104,7 +104,7 @@ export interface EnrolmentData {
   grade: number;
   remaining_lessons: number;
   video_assignments: VideoAssignment[];
-  payments: PaymentStatus[];
+  payments: PaymentStatus;
 }
 
 export interface Payment {
