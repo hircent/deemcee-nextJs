@@ -112,6 +112,13 @@ export const PromocodeLinks = [
   { href: "/promocode/inactive", label: "Inactive Code" },
 ];
 
+export const ReportLinks = [
+  { href: "/report", label: "Licensee Report" },
+  { href: "/report/finance", label: "Finance Report" },
+  { href: "/report/progression", label: "Monthly Centre Progression" },
+  { href: "/report/referral", label: "Referral Report" },
+];
+
 export const UserManagementLinks = [
   {
     href: "/users",
