@@ -319,7 +319,6 @@ export async function markAttendances(
 
     const today = new Date().toISOString().split("T")[0];
 
-    console.log({ data });
     const response = await fetch(
       `${process.env.API_URL}/class/mark-attendance?date=${today}`,
       {

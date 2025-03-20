@@ -157,7 +157,6 @@ export async function editPromoCode(
 
     const data = Object.fromEntries(formData);
     const validated = PromoCodeSchema.safeParse(data);
-    console.log({ data });
     if (!validated.success) {
       return {
         error: true,

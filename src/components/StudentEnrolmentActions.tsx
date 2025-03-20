@@ -54,8 +54,6 @@ const StudentEnrolmentActions = ({
     setDialog(true);
   };
 
-  console.log({ extensions });
-
   return (
     <>
       <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>

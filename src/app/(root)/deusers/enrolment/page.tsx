@@ -17,7 +17,7 @@ const Enrolment = async ({ searchParams }: SearchParamProps) => {
         : true,
       status: searchParams.status ? searchParams.status.toString() : "KIDS",
     });
-    console.log(result);
+
     return (
       <div className="p-4">
         <PageListTable columns={EnrolmentListColumns} data={result.data} />
