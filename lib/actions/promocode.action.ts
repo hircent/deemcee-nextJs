@@ -1,6 +1,6 @@
 "use server";
 
-import { ListProps, STATE } from "@/types/index";
+import { GetResponseProps, ListProps, STATE } from "@/types/index";
 import {
   CreateUpdatePromoCodeFormErrors,
   PromoCodeData,
@@ -192,3 +192,28 @@ export async function editPromoCode(
     return { error: true, msg: (error as Error).message };
   }
 }
+
+export const getPaymentPromoCodeList = async (): Promise<PromoCodeData[]> => {
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
+
+    const response = await fetch(
+      `${process.env.API_URL}/promo-code-payment/list`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+      }
+    );
+
+    const data: GetResponseProps<PromoCodeData> = await response.json();
+
+    return data.data;
+  } catch (error) {
+    throw new Error("Failed to fetch promo code data " + error);
+  }
+};
