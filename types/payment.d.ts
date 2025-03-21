@@ -10,3 +10,17 @@ export type PaymentData = {
   grade: number;
   student: string;
 };
+
+export type PaymentReportData = {
+  id: number;
+  student: string;
+  grade: number;
+  enrolment_type: string;
+  paid_at: string;
+  amount: number;
+};
+
+export type PaymentReportParams = {
+  month?: number;
+  year?: number;
+};
