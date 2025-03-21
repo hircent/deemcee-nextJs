@@ -168,6 +168,8 @@ export const branchSelectorPermission = [
   "/parent",
   "/certificate/ready",
   "/certificate/printed",
+  "/report",
+  "/report/finance",
 ];
 
 export const SERVER_ACTION_STATE = {
