@@ -18,7 +18,13 @@ const page = async () => {
             <div className="space-y-2">
               <div className="grid grid-cols-2 gap-2">
                 <div>New Enrolment</div>
-                <div className="text-left font-bold">:{" 0"}</div>
+                <div className="text-left font-bold">
+                  :
+                  {" " +
+                    paymentReportData.payments.filter(
+                      (item) => item.enrolment_type === "ENROLMENT"
+                    ).length}
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>Dropped Out</div>
@@ -41,12 +47,24 @@ const page = async () => {
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2">
-                <div>Advanced</div>
-                <div className="text-left font-bold">:{" 0"}</div>
+                <div>Advance</div>
+                <div className="text-left font-bold">
+                  :
+                  {" " +
+                    paymentReportData.payments.filter(
+                      (item) => item.enrolment_type === "ADVANCE"
+                    ).length}
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>Extended</div>
-                <div className="text-left font-bold">:{" 0"}</div>
+                <div className="text-left font-bold">
+                  :
+                  {" " +
+                    paymentReportData.payments.filter(
+                      (item) => item.enrolment_type === "EXTEND"
+                    ).length}
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>Graduated</div>
