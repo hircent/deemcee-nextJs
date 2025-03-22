@@ -113,10 +113,31 @@ export const PromocodeLinks = [
 ];
 
 export const ReportLinks = [
-  { href: "/report", label: "Licensee Report" },
-  { href: "/report/finance", label: "Finance Report" },
-  { href: "/report/progression", label: "Monthly Centre Progression" },
-  { href: "/report/referral", label: "Referral Report" },
+  {
+    href: "/report",
+    label: "Licensee Report",
+    visible: ["superadmin", "principal", "manager"],
+  },
+  {
+    href: "/report/hq",
+    label: "Licensee HQ Report",
+    visible: ["superadmin"],
+  },
+  {
+    href: "/report/finance",
+    label: "Finance Report",
+    visible: ["superadmin", "principal", "manager"],
+  },
+  {
+    href: "/report/progression",
+    label: "Monthly Centre Progression",
+    visible: ["superadmin", "principal", "manager"],
+  },
+  {
+    href: "/report/referral",
+    label: "Referral Report",
+    visible: ["superadmin", "principal", "manager"],
+  },
 ];
 
 export const UserManagementLinks = [

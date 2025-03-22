@@ -12,6 +12,30 @@ export type PaymentData = {
 };
 
 export type PaymentReportData = {
+  total_payments: number;
+  payments: PaymentInfo[];
+  student_info: {
+    total: number;
+    in_progress: number;
+    dropped_out: number;
+    graduated: number;
+  };
+  branch_info: {
+    branch_grade: number;
+    branch_percentage: number;
+    currency: string;
+  };
+  attendances: {
+    absent: number;
+    freeze: number;
+    sfreezed: number;
+    replacement: number;
+  };
+  total_paid_amount: string;
+  loyalty_fees: string;
+};
+
+export type PaymentInfo = {
   id: number;
   student: string;
   grade: number;

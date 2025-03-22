@@ -1,9 +1,9 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
 import { extractDate } from "@/lib/utils";
-import { PaymentReportData } from "@/types/payment";
+import { PaymentInfo } from "@/types/payment";
 
-export const PaymentReportListColumns: ColumnDef<PaymentReportData>[] = [
+export const PaymentReportListColumns: ColumnDef<PaymentInfo>[] = [
   {
     accessorKey: "id",
     header: "No.",
