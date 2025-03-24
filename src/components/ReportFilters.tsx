@@ -6,10 +6,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Filter } from "lucide-react";
 import { MONTHS } from "@/constants/index";
 import { formUrlQuery } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { Card } from "./ui/card";
 
 const ReportFilters = () => {
   const searchParams = useSearchParams();
@@ -44,7 +46,11 @@ const ReportFilters = () => {
     router.push(newUrl, { scroll: false });
   }, [monthNow]);
   return (
-    <div className="flex gap-2">
+    <Card className="flex gap-2 p-4 bg-blue-200">
+      <div className="flex items-center gap-2 text-blue-900">
+        <Filter className="h-4 w-4" />
+        <span className="text-sm font-medium">Filters:</span>
+      </div>
       <div>
         {/* Select year from 2018 to now */}
         <Select value={yearNow} onValueChange={setYearNow}>
@@ -83,7 +89,7 @@ const ReportFilters = () => {
           </SelectContent>
         </Select>
       </div>
-    </div>
+    </Card>
   );
 };
 

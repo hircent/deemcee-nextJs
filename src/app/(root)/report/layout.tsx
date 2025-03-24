@@ -13,9 +13,6 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="home-content">
-      <div className="flex flex-wrap justify-between gap-2">
-        <ReportFilters />
-      </div>
       <div className="rounded-md border bg-yellow-2 text-gray-500 p-2 px-4">
         <SectionNav links={ReportLinks} />
         {children}

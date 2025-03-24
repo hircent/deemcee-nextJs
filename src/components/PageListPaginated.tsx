@@ -40,7 +40,7 @@ export function PageListPaginatedTable<TData, TValue>({
   });
   return (
     <div>
-      <div className="rounded-md border bg-yellow-2">
+      <div className="rounded-md border bg-yellow-2 shadow-md">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

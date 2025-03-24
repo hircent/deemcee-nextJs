@@ -1,5 +1,6 @@
 import { PaymentReportListColumns } from "@/columns/report.list.columns";
 import { PageListPaginatedTable } from "@/components/PageListPaginated";
+import ReportFilters from "@/components/ReportFilters";
 import { getPaymentReportList } from "@/lib/actions/payment.action";
 import { SearchParamProps } from "@/types/index";
 import { Separator } from "@radix-ui/react-separator";
@@ -15,8 +16,9 @@ const page = async ({ searchParams }: SearchParamProps) => {
   });
   return (
     <div className="py-4">
-      <div className="flex flex-col gap-4">
-        <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-2 border border-slate-300 rounded-md p-4 sm:p-6 min-h-max">
+      <ReportFilters />
+      <div className="flex flex-col gap-4 mt-4">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-2 border border-slate-300 rounded-md p-4 sm:p-6 min-h-max shadow-md">
           <div className="grid grid-cols-2 gap-2 w-full h-full">
             <div className="space-y-2">
               <div className="grid grid-cols-2 gap-2">
