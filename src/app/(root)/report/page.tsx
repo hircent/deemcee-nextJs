@@ -1,14 +1,17 @@
 import { PaymentReportListColumns } from "@/columns/report.list.columns";
 import { PageListPaginatedTable } from "@/components/PageListPaginated";
 import { getPaymentReportList } from "@/lib/actions/payment.action";
+import { SearchParamProps } from "@/types/index";
 import { Separator } from "@radix-ui/react-separator";
 import React from "react";
 
-const page = async () => {
+const page = async ({ searchParams }: SearchParamProps) => {
+  const queryYear = searchParams.year;
+  const queryMonth = searchParams.month;
   const today = new Date();
   const paymentReportData = await getPaymentReportList({
-    month: today.getMonth() + 1,
-    year: today.getFullYear(),
+    month: queryMonth ? +queryMonth : today.getMonth() + 1,
+    year: queryYear ? +queryYear : today.getFullYear(),
   });
   return (
     <div className="py-4">
