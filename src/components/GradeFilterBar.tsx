@@ -34,13 +34,13 @@ const GradeFilterBar = ({
 
   useEffect(() => {
     const getTiers = async () => {
-      const tierList = await getTierList(selectedCountry);
+      const tierList = await getTierList();
       setTiers(tierList);
       setPlaceholder("All Tiers");
       setSelectedTier(undefined);
     };
     getTiers();
-  }, [selectedCountry]);
+  }, []);
 
   useEffect(() => {
     if (selectedTier) {

@@ -12,7 +12,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
   const userRole = getUserRole(user);
 
   const countryList = await getCountryList();
-  const tierList = await getTierList("Malaysia");
+  const tierList = await getTierList();
 
   return (
     <div className="home-content">

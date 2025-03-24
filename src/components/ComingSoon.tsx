@@ -78,7 +78,7 @@ const ComingSoonPage: React.FC = () => {
               Coming Soon!
             </h1>
             <p className="text-lg text-gray-600 mb-4 text-center lg:text-left">
-              We're building something amazing for your educational journey
+              We&apos;re building something amazing for your educational journey
             </p>
 
             {/* Social Media Icons - Only visible on desktop */}
