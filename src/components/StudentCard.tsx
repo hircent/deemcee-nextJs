@@ -9,12 +9,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Book, CreditCard, Check, X } from "lucide-react";
+import { Book, CreditCard, Check, X, CheckCircle } from "lucide-react";
 import { cn, formatDateTime, getCategoryByGrade } from "@/lib/utils";
-3;
 import { StudentCardProps } from "@/types/student";
 import StudentEnrolmentActions from "./StudentEnrolmentActions";
 import EditVideoAssignment from "./EditVideoAssignment";
+import MakePayment from "./MakePayment";
 
 export function StudentCard({ student }: StudentCardProps) {
   return (
@@ -214,17 +214,18 @@ export function StudentCard({ student }: StudentCardProps) {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-neutral-50">
-                    <TableHead className="text-neutral-700">ID</TableHead>
                     <TableHead className="text-neutral-700">Grade</TableHead>
                     <TableHead className="text-neutral-700">
                       Term Fees
                     </TableHead>
+                    <TableHead className="text-neutral-700">Discount</TableHead>
                     <TableHead className="text-neutral-700">
                       Paid Amount
                     </TableHead>
                     <TableHead className="text-neutral-700">
                       Outstanding
                     </TableHead>
+                    <TableHead className="text-neutral-700">Balance</TableHead>
                     <TableHead className="text-neutral-700">Status</TableHead>
                     <TableHead className="text-neutral-700">Action</TableHead>
                   </TableRow>
@@ -233,27 +234,32 @@ export function StudentCard({ student }: StudentCardProps) {
                   {student.payments?.map((payment) => (
                     <TableRow key={payment.id} className="hover:bg-neutral-50">
                       <TableCell className="text-neutral-800">
-                        {payment.id}
+                        G{payment.grade}
                       </TableCell>
                       <TableCell className="text-neutral-800">
-                        Grade {payment.grade}
+                        {payment.amount}
                       </TableCell>
                       <TableCell className="text-neutral-800">
-                        ${payment["term_fees"]}
+                        {payment.discount}
                       </TableCell>
                       <TableCell className="text-neutral-800">
-                        ${payment.paid}
+                        {payment.paid_amount}
                       </TableCell>
                       <TableCell className="text-rose-600">
-                        ${payment.outstanding}
+                        {payment.pre_outstanding}
+                      </TableCell>
+                      <TableCell className="text-emerald-600">
+                        {payment.post_outstanding}
                       </TableCell>
                       <TableCell>
-                        <Badge
-                          variant="warning"
-                          className="bg-amber-100 text-amber-700"
-                        >
-                          {payment.status}
-                        </Badge>
+                        {payment.status === "PAID" ? (
+                          <div className="flex gap-2 text-green-500">
+                            <CheckCircle size={18} />
+                            <span>Paid</span>
+                          </div>
+                        ) : (
+                          <MakePayment id={payment.id} />
+                        )}
                       </TableCell>
                       <TableCell className="w-[200px]">View</TableCell>
                     </TableRow>
