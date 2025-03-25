@@ -11,6 +11,10 @@ export type PaymentData = {
   student: string;
 };
 
+export type StudentPaymentList = PaymentData & {
+  enrolment_type: string;
+};
+
 export type PaymentReportData = {
   total_payments: number;
   payments: PaymentInfo[];

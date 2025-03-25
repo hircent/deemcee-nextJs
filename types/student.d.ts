@@ -1,3 +1,5 @@
+import { StudentPaymentList } from "./payment";
+
 export type StudentListFilterProps = {
   page?: number;
   pageSize?: number;
@@ -135,7 +137,7 @@ export interface StudentData {
   branch: string;
   parent?: Parent;
   enrolments?: Enrolment[];
-  payments?: Payment[];
+  payments?: StudentPaymentList[];
   referral_channel: string | null;
   referral: string | null;
   starter_kits: StarterKitItem[];
