@@ -240,6 +240,8 @@ export const branchSelectorPermission = [
   "/certificate/printed",
   "/report",
   "/report/finance",
+  "/report/progression",
+  "/report/referral",
 ];
 
 export const SERVER_ACTION_STATE = {
