@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogOverlay,
+  DialogPortal,
 } from "@/components/ui/dialog";
 import {
   Select,
@@ -134,153 +135,159 @@ const MakePayment = ({ id }: { id: number }) => {
           <span>Pay</span>
         </div>
       </DialogTrigger>
-      <DialogOverlay
-        className="bg-black/80"
-        style={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}
-      />
-      <DialogContent className="w-[500px] h-max max-h-[90vh] overflow-y-auto custom-scrollbar">
-        <DialogHeader className="space-y-2 sm:space-y-4">
-          <DialogTitle className="text-xl sm:text-2xl font-semibold">
-            Make Payment
-          </DialogTitle>
-          <DialogDescription className="text-sm sm:text-base">
-            Here&apos;s the {paymentData?.student} payment details.
-          </DialogDescription>
-        </DialogHeader>
+      <DialogPortal>
+        <DialogOverlay
+          className="bg-black/80"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}
+        />
+        <DialogContent className="w-[500px] h-max max-h-[90vh] overflow-y-auto custom-scrollbar">
+          <DialogHeader className="space-y-2 sm:space-y-4">
+            <DialogTitle className="text-xl sm:text-2xl font-semibold">
+              Make Payment
+            </DialogTitle>
+            <DialogDescription className="text-sm sm:text-base">
+              Here&apos;s the {paymentData?.student} payment details.
+            </DialogDescription>
+          </DialogHeader>
 
-        <Separator className="h-px bg-slate-200" />
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <form
-            action={formAction}
-            className="space-y-4 sm:space-y-6"
-            ref={formRef}
-          >
-            <Input type="hidden" name="id" value={id} />
+          <Separator className="h-px bg-slate-200" />
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <form
+              action={formAction}
+              className="space-y-4 sm:space-y-6"
+              ref={formRef}
+            >
+              <Input type="hidden" name="id" value={id} />
 
-            <div className="font-semibold text-lg mb-2">SUMMARY PAYMENT</div>
+              <div className="font-semibold text-lg mb-2">SUMMARY PAYMENT</div>
 
-            {/* G2 Term Payment - Left-Right Layout */}
-            <div className="flex justify-between items-center">
-              <Label htmlFor="g2TermPayment" className="text-sm font-medium">
-                G{paymentData?.grade} Term Payment
-              </Label>
-              <div className="text-right font-medium">
-                RM {Number(paymentData?.amount).toFixed(2)}
-                <Input
-                  type="hidden"
-                  name="g2TermPayment"
-                  value={paymentData?.amount}
-                />
-              </div>
-            </div>
-            {/* Payment Date - Left-Right Layout */}
-            <div className="flex justify-between items-center">
-              <Label htmlFor="paymentDate" className="text-sm font-medium">
-                Payment Date
-              </Label>
-              <div className="flex w-1/2">
-                <Input
-                  type="date"
-                  id="paymentDate"
-                  name="paymentDate"
-                  placeholder="yyyy-mm-dd"
-                  defaultValue={new Date().toISOString().slice(0, 10)}
-                />
-              </div>
-            </div>
-
-            {/* Promo Code - Left-Right Layout */}
-            <div className="flex justify-between items-center">
-              <Input type="hidden" name="promoCode" value={selectedPromoCode} />
-              <Label htmlFor="promoCode" className="text-sm font-medium">
-                Promo Code
-              </Label>
-              <div className="w-1/2">
-                <Select
-                  name="promoCode"
-                  value={selectedPromoCode}
-                  onValueChange={setSelectedPromoCode}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select promo code" />
-                  </SelectTrigger>
-                  <SelectContent className="select-content">
-                    {promoCode.map((code) => (
-                      <SelectItem
-                        key={code.id}
-                        value={code.id.toString()}
-                        className="select-item"
-                      >
-                        {code.code}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            {/* Total - Left-Right Layout */}
-            <div className="flex justify-between items-center">
-              <Label htmlFor="totalAmount" className="text-sm font-medium">
-                Total
-              </Label>
-              <div className="text-right font-medium">
-                RM {Number(paymentData?.amount).toFixed(2)}
-                <Input
-                  type="hidden"
-                  name="totalAmount"
-                  value={paymentData?.amount}
-                />
-              </div>
-            </div>
-
-            {/* Credit - Left-Right Layout */}
-            <div className="flex justify-between items-center">
-              <Label htmlFor="creditAmount" className="text-sm font-medium">
-                Credit
-              </Label>
-              <div className="text-right font-medium">
-                RM {Number(paymentData?.pre_outstanding).toFixed(2)}
-                <Input
-                  type="hidden"
-                  name="creditAmount"
-                  value={paymentData?.pre_outstanding}
-                />
-              </div>
-            </div>
-
-            {/* Separator before Amount to Pay */}
-            <div className="pt-2">
-              <Separator className="h-px bg-slate-200 w-full" />
-            </div>
-
-            {/* Amount to Pay - Left-Right Layout with Separator */}
-            <div className="flex justify-between items-center pt-2">
-              <Label htmlFor="amountToPay" className="text-sm font-medium">
-                Amount to Pay
-              </Label>
-              <div className="flex items-center">
-                <span className="mr-2 font-medium">RM</span>
-                <div className="w-32 text-right">
+              {/* G2 Term Payment - Left-Right Layout */}
+              <div className="flex justify-between items-center">
+                <Label htmlFor="g2TermPayment" className="text-sm font-medium">
+                  G{paymentData?.grade} Term Payment
+                </Label>
+                <div className="text-right font-medium">
+                  RM {Number(paymentData?.amount).toFixed(2)}
                   <Input
-                    type="number"
-                    id="amountToPay"
-                    name="amountToPay"
-                    value={amountToPay} // Changed from defaultValue to value
-                    onChange={(e) => setAmountToPay(e.target.value)}
-                    className="text-right font-bold"
+                    type="hidden"
+                    name="g2TermPayment"
+                    value={paymentData?.amount}
                   />
                 </div>
               </div>
-            </div>
-            <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
-              <SubmitButton label="Pay" submitLabel="Paying" />
-            </DialogFooter>
-          </form>
-        )}
-      </DialogContent>
+              {/* Payment Date - Left-Right Layout */}
+              <div className="flex justify-between items-center">
+                <Label htmlFor="paymentDate" className="text-sm font-medium">
+                  Payment Date
+                </Label>
+                <div className="flex w-1/2">
+                  <Input
+                    type="date"
+                    id="paymentDate"
+                    name="paymentDate"
+                    placeholder="yyyy-mm-dd"
+                    defaultValue={new Date().toISOString().slice(0, 10)}
+                  />
+                </div>
+              </div>
+
+              {/* Promo Code - Left-Right Layout */}
+              <div className="flex justify-between items-center">
+                <Input
+                  type="hidden"
+                  name="promoCode"
+                  value={selectedPromoCode}
+                />
+                <Label htmlFor="promoCode" className="text-sm font-medium">
+                  Promo Code
+                </Label>
+                <div className="w-1/2">
+                  <Select
+                    name="promoCode"
+                    value={selectedPromoCode}
+                    onValueChange={setSelectedPromoCode}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select promo code" />
+                    </SelectTrigger>
+                    <SelectContent className="select-content">
+                      {promoCode.map((code) => (
+                        <SelectItem
+                          key={code.id}
+                          value={code.id.toString()}
+                          className="select-item"
+                        >
+                          {code.code}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Total - Left-Right Layout */}
+              <div className="flex justify-between items-center">
+                <Label htmlFor="totalAmount" className="text-sm font-medium">
+                  Total
+                </Label>
+                <div className="text-right font-medium">
+                  RM {Number(paymentData?.amount).toFixed(2)}
+                  <Input
+                    type="hidden"
+                    name="totalAmount"
+                    value={paymentData?.amount}
+                  />
+                </div>
+              </div>
+
+              {/* Credit - Left-Right Layout */}
+              <div className="flex justify-between items-center">
+                <Label htmlFor="creditAmount" className="text-sm font-medium">
+                  Credit
+                </Label>
+                <div className="text-right font-medium">
+                  RM {Number(paymentData?.pre_outstanding).toFixed(2)}
+                  <Input
+                    type="hidden"
+                    name="creditAmount"
+                    value={paymentData?.pre_outstanding}
+                  />
+                </div>
+              </div>
+
+              {/* Separator before Amount to Pay */}
+              <div className="pt-2">
+                <Separator className="h-px bg-slate-200 w-full" />
+              </div>
+
+              {/* Amount to Pay - Left-Right Layout with Separator */}
+              <div className="flex justify-between items-center pt-2">
+                <Label htmlFor="amountToPay" className="text-sm font-medium">
+                  Amount to Pay
+                </Label>
+                <div className="flex items-center">
+                  <span className="mr-2 font-medium">RM</span>
+                  <div className="w-32 text-right">
+                    <Input
+                      type="number"
+                      id="amountToPay"
+                      name="amountToPay"
+                      value={amountToPay} // Changed from defaultValue to value
+                      onChange={(e) => setAmountToPay(e.target.value)}
+                      className="text-right font-bold"
+                    />
+                  </div>
+                </div>
+              </div>
+              <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
+                <SubmitButton label="Pay" submitLabel="Paying" />
+              </DialogFooter>
+            </form>
+          )}
+        </DialogContent>
+      </DialogPortal>
     </Dialog>
   );
 };
