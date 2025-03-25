@@ -690,9 +690,19 @@ export type STATE<T> = {
   msg?: string;
 };
 
+export type UserRole = (
+  | "superadmin"
+  | "principal"
+  | "manager"
+  | "teacher"
+  | "student"
+  | "parent"
+)[];
+
 export type SectionNavLink = {
   href: string;
   label: string;
+  visible: UserRole;
 };
 
 export type TimeslotData = {

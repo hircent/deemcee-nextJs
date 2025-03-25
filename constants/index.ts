@@ -1,4 +1,5 @@
 import * as LucideIcons from "lucide-react";
+import { SectionNavLink } from "../types";
 
 export const sidebarLinks = [
   {
@@ -83,36 +84,84 @@ export const sidebarLinks = [
   },
 ];
 
-export const StructureLinks = [
-  { href: "/structure", label: "Main" },
-  { href: "/structure/category", label: "Category" },
-  { href: "/structure/theme", label: "Theme" },
-  { href: "/structure/grade", label: "Grade" },
+export const StructureLinks: SectionNavLink[] = [
+  {
+    href: "/structure",
+    label: "Main",
+    visible: ["superadmin", "principal", "manager"],
+  },
+  {
+    href: "/structure/category",
+    label: "Category",
+    visible: ["superadmin", "principal", "manager"],
+  },
+  {
+    href: "/structure/theme",
+    label: "Theme",
+    visible: ["superadmin", "principal", "manager"],
+  },
+  {
+    href: "/structure/grade",
+    label: "Grade",
+    visible: ["superadmin", "principal", "manager"],
+  },
 ];
 
-export const DeUsersLinks = [
-  { href: "/deusers/parent", label: "Parents" },
-  { href: "/deusers/student", label: "Students" },
-  { href: "/deusers/enrolment", label: "Enrolments" },
+export const DeUsersLinks: SectionNavLink[] = [
+  {
+    href: "/deusers/parent",
+    label: "Parents",
+    visible: ["superadmin", "principal", "manager", "teacher"],
+  },
+  {
+    href: "/deusers/student",
+    label: "Students",
+    visible: ["superadmin", "principal", "manager", "teacher"],
+  },
+  {
+    href: "/deusers/enrolment",
+    label: "Enrolments",
+    visible: ["superadmin", "principal", "manager", "teacher"],
+  },
 ];
 
-export const ClassLinks = [
-  { href: "/class", label: "Lesson Sequence" },
-  { href: "/class/attendance", label: "Attendance" },
-  { href: "/class/manage", label: "Manage Classes" },
+export const ClassLinks: SectionNavLink[] = [
+  {
+    href: "/class",
+    label: "Lesson Sequence",
+    visible: ["superadmin", "principal", "manager"],
+  },
+  {
+    href: "/class/attendance",
+    label: "Attendance",
+    visible: ["superadmin", "principal", "manager"],
+  },
+  {
+    href: "/class/manage",
+    label: "Manage Classes",
+    visible: ["superadmin", "principal", "manager"],
+  },
 ];
 
-export const CertificateLinks = [
-  { href: "/certificate/ready", label: "Ready to Print" },
-  { href: "/certificate/printed", label: "Printed" },
+export const CertificateLinks: SectionNavLink[] = [
+  {
+    href: "/certificate/ready",
+    label: "Ready to Print",
+    visible: ["superadmin"],
+  },
+  { href: "/certificate/printed", label: "Printed", visible: ["superadmin"] },
 ];
 
-export const PromocodeLinks = [
-  { href: "/promocode/active", label: "Active Code" },
-  { href: "/promocode/inactive", label: "Inactive Code" },
+export const PromocodeLinks: SectionNavLink[] = [
+  { href: "/promocode/active", label: "Active Code", visible: ["superadmin"] },
+  {
+    href: "/promocode/inactive",
+    label: "Inactive Code",
+    visible: ["superadmin"],
+  },
 ];
 
-export const ReportLinks = [
+export const ReportLinks: SectionNavLink[] = [
   {
     href: `/report`,
     label: "Licensee Report",
@@ -140,7 +189,7 @@ export const ReportLinks = [
   },
 ];
 
-export const UserManagementLinks = [
+export const UserManagementLinks: SectionNavLink[] = [
   {
     href: "/users",
     label: "Main",
