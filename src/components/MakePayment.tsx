@@ -51,6 +51,10 @@ const MakePayment = ({ id }: { id: number }) => {
   );
   const [promoCode, setPromoCode] = useState<PromoCodeData[]>([]);
   const [selectedPromoCode, setSelectedPromoCode] = useState<string>("");
+  const [promoCodePlaceholder, setPromoCodePlaceholder] =
+    useState<string>("No promo code");
+  const [promoCodeSelecteAble, setPromoCodeSelecteAble] =
+    useState<boolean>(true);
 
   const [state, formAction] = useFormState(editPromoCode, SERVER_ACTION_STATE);
 
@@ -91,9 +95,14 @@ const MakePayment = ({ id }: { id: number }) => {
         getPaymentDetails(id),
       ]);
 
-      if (promoCodeList && paymentData) {
-        setLoading(false);
+      if (promoCodeList.length > 0) {
+        setPromoCodePlaceholder("Select promo code");
+        setPromoCodeSelecteAble(false);
         setPromoCode(promoCodeList);
+      }
+
+      if (paymentData) {
+        setLoading(false);
         setPaymentData(paymentData);
         setAmountToPay(paymentData?.amount);
       }
@@ -208,9 +217,10 @@ const MakePayment = ({ id }: { id: number }) => {
                     name="promoCode"
                     value={selectedPromoCode}
                     onValueChange={setSelectedPromoCode}
+                    disabled={promoCodeSelecteAble}
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select promo code" />
+                      <SelectValue placeholder={promoCodePlaceholder} />
                     </SelectTrigger>
                     <SelectContent className="select-content">
                       {promoCode.map((code) => (
@@ -245,7 +255,7 @@ const MakePayment = ({ id }: { id: number }) => {
               {/* Credit - Left-Right Layout */}
               <div className="flex justify-between items-center">
                 <Label htmlFor="creditAmount" className="text-sm font-medium">
-                  Credit
+                  Credit Balance
                 </Label>
                 <div className="text-right font-medium">
                   RM {Number(paymentData?.pre_outstanding).toFixed(2)}

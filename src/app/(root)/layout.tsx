@@ -18,7 +18,12 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
 
       <div className="flex size-full flex-col">
         <div className="root-layout">
-          <Image src="/icons/logo.svg" width={30} height={30} alt="menu icon" />
+          <Image
+            src="/images/logo-ver.png"
+            width={30}
+            height={30}
+            alt="menu icon"
+          />
           <div>
             <MobileNavbar />
           </div>

@@ -225,7 +225,9 @@ export function StudentCard({ student }: StudentCardProps) {
                     <TableHead className="text-neutral-700">
                       Outstanding
                     </TableHead>
-                    <TableHead className="text-neutral-700">Balance</TableHead>
+                    <TableHead className="text-neutral-700">
+                      Credit Balance
+                    </TableHead>
                     <TableHead className="text-neutral-700">Status</TableHead>
                     <TableHead className="text-neutral-700">Action</TableHead>
                   </TableRow>

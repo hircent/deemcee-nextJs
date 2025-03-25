@@ -30,23 +30,20 @@ const MobileNavbar = () => {
         <SheetContent side="left" className="border-none bg-white">
           <Link
             href="/"
-            className="cursor-pointer flex items-center gap-1 px-4"
+            className="cursor-pointer flex items-center justify-center gap-1 px-4"
           >
             <Image
-              src="/icons/logo.svg"
-              width={34}
-              height={34}
+              src="/images/logo-ver.png"
+              width={50}
+              height={50}
               alt="Deemcee logo"
             />
-            <h1 className="text-26 font-ibm-plex-serif font-bold text-black-1">
-              Deemcee
-            </h1>
           </Link>
 
           <div className="mobilenav-sheet">
             {/* asChild is the child of the sheet */}
             {/* <SheetClose asChild> */}
-            <nav className="flex h-full flex-col gap-6 pt-16 text-white">
+            <nav className="flex h-full flex-col gap-2 pt-2 text-white items-center">
               {sidebarLinks.map((item) => {
                 const isActive =
                   pathName === item.route ||
@@ -60,9 +57,7 @@ const MobileNavbar = () => {
                         "bg-bank-gradient": isActive,
                       })}
                     >
-                      <Image
-                        src={item.imgURL}
-                        alt={item.label}
+                      <item.icon
                         width={20}
                         height={20}
                         className={cn({
@@ -80,10 +75,7 @@ const MobileNavbar = () => {
                   </SheetClose>
                 );
               })}
-              User
             </nav>
-            {/* </SheetClose> */}
-            Footer
           </div>
         </SheetContent>
       </Sheet>
