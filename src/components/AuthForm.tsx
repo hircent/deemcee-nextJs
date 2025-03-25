@@ -97,10 +97,10 @@ const AuthForm = ({ type }: { type: string }) => {
 
   return (
     <section className="auth-form">
-      <header className="flex flex-col gap-5 md:gap-8">
+      <header className="flex flex-col">
         <Link href="/" className="cursor-pointer flex items-center gap-1">
           <Image
-            src="/images/logo.png"
+            src="/images/logo_new.png"
             width={200}
             height={70}
             alt="Deemcee logo"

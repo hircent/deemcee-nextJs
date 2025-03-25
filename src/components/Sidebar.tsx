@@ -5,27 +5,27 @@ import { getUserRole } from "@/lib/utils";
 import SidebarLinks from "./SidebarLinks";
 import { User } from "@/types/index";
 
-const Sidebar = async ({user}:{user:User | undefined}) => {
-  const userRole = getUserRole(user)
+const Sidebar = async ({ user }: { user: User | undefined }) => {
+  const userRole = getUserRole(user);
 
   return (
     <section className="flex flex-col w-[18%] md:w-[13%] lg:w-[16%] xl:w-[17%] overflow-y-scroll custom-scrollbar">
       <div className="bg-yellow-2 p-4 sticky top-0 z-10 ">
         <Link
           href="/"
-          className="cursor-pointer flex gap-2 sticky top-0 items-center justify-center xl:justify-start"
+          className="cursor-pointer flex gap-2 sticky top-0 items-center justify-center"
         >
           <Image
-            src="/icons/logo.svg"
-            width={34}
-            height={34}
+            src="/images/logo-ver.png"
+            width={70}
+            height={70}
             alt="Deemcee Logo"
-            className="size-[24px] max-xl:size-14"
+            className="size-[40px] lg:size-[70px]"
           />
-          <h1 className="sidebar-logo">Deemcee</h1>
+          <h1 className="sidebar-logo"></h1>
         </Link>
       </div>
-      <SidebarLinks userRole={userRole}/>
+      <SidebarLinks userRole={userRole} />
     </section>
   );
 };
