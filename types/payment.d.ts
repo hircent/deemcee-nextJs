@@ -9,6 +9,7 @@ export type PaymentData = {
   start_date: string;
   grade: number;
   student: string;
+  currency: string;
 };
 
 export type StudentPaymentList = PaymentData & {
