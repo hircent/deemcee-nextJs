@@ -59,6 +59,7 @@ const MakePayment = ({ id }: { id: number }) => {
   const [state, formAction] = useFormState(editPromoCode, SERVER_ACTION_STATE);
 
   const [amountToPay, setAmountToPay] = useState<string>("");
+  const [discountedAmount, setDiscountedAmount] = useState<string>("");
 
   useEffect(() => {
     if (state.zodErr) {
@@ -105,6 +106,7 @@ const MakePayment = ({ id }: { id: number }) => {
         setLoading(false);
         setPaymentData(paymentData);
         setAmountToPay(paymentData?.amount);
+        setDiscountedAmount(paymentData?.amount);
       }
     } catch (error) {
       toast({
@@ -124,12 +126,14 @@ const MakePayment = ({ id }: { id: number }) => {
           ?.amount || 0;
 
       const originalAmount = paymentData?.amount || "0";
-      const calculatedAmount = Math.max(
-        0,
-        +originalAmount - +promoAmount
-      ).toString();
-
-      setAmountToPay(calculatedAmount);
+      const creditBalance = paymentData?.pre_outstanding || "0";
+      const discountedPrice = +originalAmount - +promoAmount;
+      setDiscountedAmount(discountedPrice.toString());
+      if (+creditBalance >= discountedPrice) {
+        setAmountToPay("0");
+      } else {
+        setAmountToPay((discountedPrice - +creditBalance).toString());
+      }
     }
   }, [selectedPromoCode, paymentData, promoCode]);
 
@@ -149,7 +153,7 @@ const MakePayment = ({ id }: { id: number }) => {
           className="bg-black/80"
           style={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}
         />
-        <DialogContent className="w-[500px] h-max max-h-[90vh] overflow-y-auto custom-scrollbar">
+        <DialogContent className="w-[500px] max-h-[90vh] overflow-y-auto custom-scrollbar">
           <DialogHeader className="space-y-2 sm:space-y-4">
             <DialogTitle className="text-xl sm:text-2xl font-semibold">
               Make Payment
@@ -174,14 +178,16 @@ const MakePayment = ({ id }: { id: number }) => {
 
               {/* G2 Term Payment - Left-Right Layout */}
               <div className="flex justify-between items-center">
-                <Label htmlFor="g2TermPayment" className="text-sm font-medium">
+                <Label htmlFor="termPayment" className="text-sm font-medium">
                   G{paymentData?.grade} Term Payment
                 </Label>
                 <div className="text-right font-medium">
-                  RM {Number(paymentData?.amount).toFixed(2)}
+                  {paymentData?.currency +
+                    " " +
+                    Number(paymentData?.amount).toFixed(2)}
                   <Input
                     type="hidden"
-                    name="g2TermPayment"
+                    name="termPayment"
                     value={paymentData?.amount}
                   />
                 </div>
@@ -223,6 +229,9 @@ const MakePayment = ({ id }: { id: number }) => {
                       <SelectValue placeholder={promoCodePlaceholder} />
                     </SelectTrigger>
                     <SelectContent className="select-content">
+                      <SelectItem value="0" className="select-item">
+                        None
+                      </SelectItem>
                       {promoCode.map((code) => (
                         <SelectItem
                           key={code.id}
@@ -240,14 +249,14 @@ const MakePayment = ({ id }: { id: number }) => {
               {/* Total - Left-Right Layout */}
               <div className="flex justify-between items-center">
                 <Label htmlFor="totalAmount" className="text-sm font-medium">
-                  Total
+                  Discounted Amount
                 </Label>
                 <div className="text-right font-medium">
-                  RM {Number(paymentData?.amount).toFixed(2)}
+                  {paymentData?.currency + " " + discountedAmount}
                   <Input
                     type="hidden"
                     name="totalAmount"
-                    value={paymentData?.amount}
+                    value={discountedAmount}
                   />
                 </div>
               </div>
@@ -258,7 +267,9 @@ const MakePayment = ({ id }: { id: number }) => {
                   Credit Balance
                 </Label>
                 <div className="text-right font-medium">
-                  RM {Number(paymentData?.pre_outstanding).toFixed(2)}
+                  {paymentData?.currency +
+                    " " +
+                    Number(paymentData?.pre_outstanding).toFixed(2)}
                   <Input
                     type="hidden"
                     name="creditAmount"
@@ -278,7 +289,9 @@ const MakePayment = ({ id }: { id: number }) => {
                   Amount to Pay
                 </Label>
                 <div className="flex items-center">
-                  <span className="mr-2 font-medium">RM</span>
+                  <span className="mr-2 font-medium">
+                    {paymentData?.currency}
+                  </span>
                   <div className="w-32 text-right">
                     <Input
                       type="number"
