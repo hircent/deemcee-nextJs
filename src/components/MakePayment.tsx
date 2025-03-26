@@ -86,6 +86,14 @@ const MakePayment = ({ id }: { id: number }) => {
     }
   }, [state, toast]);
 
+  function getAmountToPay(creditBalance: number, discountedPrice: number) {
+    if (+creditBalance >= discountedPrice) {
+      setAmountToPay("0");
+    } else {
+      setAmountToPay((discountedPrice - +creditBalance).toString());
+    }
+  }
+
   const getPromoCodeAndPaymentDetails = async () => {
     setPromoCode([]);
     setPaymentData(undefined);
@@ -105,7 +113,10 @@ const MakePayment = ({ id }: { id: number }) => {
       if (paymentData) {
         setLoading(false);
         setPaymentData(paymentData);
-        setAmountToPay(paymentData?.amount);
+        getAmountToPay(
+          +paymentData?.pre_outstanding || 0,
+          +paymentData?.amount || 0
+        );
         setDiscountedAmount(paymentData?.amount);
       }
     } catch (error) {
@@ -129,11 +140,7 @@ const MakePayment = ({ id }: { id: number }) => {
       const creditBalance = paymentData?.pre_outstanding || "0";
       const discountedPrice = +originalAmount - +promoAmount;
       setDiscountedAmount(discountedPrice.toString());
-      if (+creditBalance >= discountedPrice) {
-        setAmountToPay("0");
-      } else {
-        setAmountToPay((discountedPrice - +creditBalance).toString());
-      }
+      getAmountToPay(+creditBalance, discountedPrice);
     }
   }, [selectedPromoCode, paymentData, promoCode]);
 
