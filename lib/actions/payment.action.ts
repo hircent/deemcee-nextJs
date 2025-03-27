@@ -10,6 +10,7 @@ import {
 } from "@/types/payment";
 import { STATE } from "@/types/index";
 import { MakePaymentSchema } from "@/constants/form";
+import { revalidatePath } from "next/cache";
 
 export async function getPaymentDetails(id: number): Promise<PaymentData> {
   const token = await getToken();
@@ -90,22 +91,28 @@ export async function makePayment(
       };
     }
 
-    const response = await fetch(
-      `${process.env.API_URL}/payment/make-payment/${data.id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token?.value}`,
-          BranchId: `${branchId?.toString()}`,
-        },
-        body: JSON.stringify(data),
-      }
-    );
+    if (+data.paid_amount < +data.amount_to_pay) {
+      return {
+        error: true,
+        msg: "Amount to pay should be greater than discounted amount",
+      };
+    }
+    const id = data.id;
+    delete data.id;
+
+    const response = await fetch(`${process.env.API_URL}/make-payment/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+        BranchId: `${branchId?.toString()}`,
+      },
+      body: JSON.stringify(data),
+    });
 
     if (!response.ok) {
       const res = await response.json();
-      return { success: false, msg: response.statusText };
+      return { error: true, msg: res.msg };
     }
 
     return { success: true, msg: "Payment is made successfully" };

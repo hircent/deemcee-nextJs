@@ -27,36 +27,32 @@ import { useFormState } from "react-dom";
 import { SERVER_ACTION_STATE } from "@/constants/index";
 import SubmitButton from "./SubmitButton";
 import { Separator } from "@radix-ui/react-dropdown-menu";
-import {
-  CreateUpdatePromoCodeFormErrors,
-  PromoCodeData,
-} from "@/types/promocode";
-import {
-  editPromoCode,
-  getPaymentPromoCodeList,
-} from "@/lib/actions/promocode.action";
+import { PromoCodeData } from "@/types/promocode";
+import { getPaymentPromoCodeList } from "@/lib/actions/promocode.action";
 import Loader from "./Loader";
-import { getPaymentDetails } from "@/lib/actions/payment.action";
-import { PaymentData } from "@/types/payment";
+import { getPaymentDetails, makePayment } from "@/lib/actions/payment.action";
+import { MakePaymentFormErrors, PaymentData } from "@/types/payment";
+import { usePathname, useRouter } from "next/navigation";
 
 const MakePayment = ({ id }: { id: number }) => {
+  const router = useRouter();
   const [isLoading, setLoading] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false);
-  const [zoderror, setZodError] =
-    useState<CreateUpdatePromoCodeFormErrors | null>(null);
+  const [zoderror, setZodError] = useState<MakePaymentFormErrors | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
   const [paymentData, setPaymentData] = useState<PaymentData | undefined>(
     undefined
   );
   const [promoCode, setPromoCode] = useState<PromoCodeData[]>([]);
+  const [promoPrice, setPromoPrice] = useState<string>("0");
   const [selectedPromoCode, setSelectedPromoCode] = useState<string>("");
   const [promoCodePlaceholder, setPromoCodePlaceholder] =
     useState<string>("No promo code");
   const [promoCodeSelecteAble, setPromoCodeSelecteAble] =
     useState<boolean>(true);
 
-  const [state, formAction] = useFormState(editPromoCode, SERVER_ACTION_STATE);
+  const [state, formAction] = useFormState(makePayment, SERVER_ACTION_STATE);
 
   const [amountToPay, setAmountToPay] = useState<string>("");
   const [discountedAmount, setDiscountedAmount] = useState<string>("");
@@ -66,15 +62,16 @@ const MakePayment = ({ id }: { id: number }) => {
       setZodError(state.zodErr);
     }
     if (state.success) {
-      formRef.current?.reset();
-      setOpen(false);
-      setZodError(null);
       toast({
         title: "Success",
         description: state.msg,
         className: cn(`bottom-0 left-0`, "bg-success-100"),
         duration: 3000,
       });
+      formRef.current?.reset();
+      setOpen(false);
+      setZodError(null);
+      router.refresh();
     }
     if (state.error) {
       toast({
@@ -140,6 +137,7 @@ const MakePayment = ({ id }: { id: number }) => {
       const creditBalance = paymentData?.pre_outstanding || "0";
       const discountedPrice = +originalAmount - +promoAmount;
       setDiscountedAmount(discountedPrice.toString());
+      setPromoPrice(promoAmount.toString());
       getAmountToPay(+creditBalance, discountedPrice);
     }
   }, [selectedPromoCode, paymentData, promoCode]);
@@ -192,25 +190,20 @@ const MakePayment = ({ id }: { id: number }) => {
                   {paymentData?.currency +
                     " " +
                     Number(paymentData?.amount).toFixed(2)}
-                  <Input
-                    type="hidden"
-                    name="termPayment"
-                    value={paymentData?.amount}
-                  />
                 </div>
               </div>
               {/* Payment Date - Left-Right Layout */}
               <div className="flex justify-between items-center">
-                <Label htmlFor="paymentDate" className="text-sm font-medium">
+                <Label htmlFor="payment_date" className="text-sm font-medium">
                   Payment Date
                 </Label>
                 <div className="flex w-1/2">
                   <Input
                     type="date"
-                    id="paymentDate"
-                    name="paymentDate"
+                    id="payment_date"
                     placeholder="yyyy-mm-dd"
                     defaultValue={new Date().toISOString().slice(0, 10)}
+                    readOnly
                   />
                 </div>
               </div>
@@ -219,15 +212,15 @@ const MakePayment = ({ id }: { id: number }) => {
               <div className="flex justify-between items-center">
                 <Input
                   type="hidden"
-                  name="promoCode"
+                  name="promo_code"
                   value={selectedPromoCode}
                 />
-                <Label htmlFor="promoCode" className="text-sm font-medium">
+                <Label htmlFor="promo_code" className="text-sm font-medium">
                   Promo Code
                 </Label>
                 <div className="w-1/2">
                   <Select
-                    name="promoCode"
+                    name="promo_code"
                     value={selectedPromoCode}
                     onValueChange={setSelectedPromoCode}
                     disabled={promoCodeSelecteAble}
@@ -253,18 +246,24 @@ const MakePayment = ({ id }: { id: number }) => {
                 </div>
               </div>
 
+              <div className="flex justify-between items-center">
+                <Label htmlFor="totalAmount" className="text-sm font-medium">
+                  Promo Price
+                </Label>
+                <div className="text-right font-medium">
+                  {paymentData?.currency + " " + Number(promoPrice).toFixed(2)}
+                </div>
+              </div>
+
               {/* Total - Left-Right Layout */}
               <div className="flex justify-between items-center">
                 <Label htmlFor="totalAmount" className="text-sm font-medium">
                   Discounted Amount
                 </Label>
                 <div className="text-right font-medium">
-                  {paymentData?.currency + " " + discountedAmount}
-                  <Input
-                    type="hidden"
-                    name="totalAmount"
-                    value={discountedAmount}
-                  />
+                  {paymentData?.currency +
+                    " " +
+                    Number(discountedAmount).toFixed(2)}
                 </div>
               </div>
 
@@ -277,11 +276,6 @@ const MakePayment = ({ id }: { id: number }) => {
                   {paymentData?.currency +
                     " " +
                     Number(paymentData?.pre_outstanding).toFixed(2)}
-                  <Input
-                    type="hidden"
-                    name="creditAmount"
-                    value={paymentData?.pre_outstanding}
-                  />
                 </div>
               </div>
 
@@ -292,7 +286,7 @@ const MakePayment = ({ id }: { id: number }) => {
 
               {/* Amount to Pay - Left-Right Layout with Separator */}
               <div className="flex justify-between items-center pt-2">
-                <Label htmlFor="amountToPay" className="text-sm font-medium">
+                <Label htmlFor="paidAmount" className="text-sm font-medium">
                   Amount to Pay
                 </Label>
                 <div className="flex items-center">
@@ -301,15 +295,23 @@ const MakePayment = ({ id }: { id: number }) => {
                   </span>
                   <div className="w-32 text-right">
                     <Input
+                      type="hidden"
+                      name="amount_to_pay"
+                      value={discountedAmount}
+                    />
+                    <Input
                       type="number"
-                      id="amountToPay"
-                      name="amountToPay"
+                      id="paidAmount"
+                      name="paid_amount"
                       value={amountToPay} // Changed from defaultValue to value
                       onChange={(e) => setAmountToPay(e.target.value)}
                       className="text-right font-bold"
                     />
                   </div>
                 </div>
+                <small className="text-red-500">
+                  {zoderror?.paid_amount?.[0]}
+                </small>
               </div>
               <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
                 <SubmitButton label="Pay" submitLabel="Paying" />
