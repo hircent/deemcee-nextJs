@@ -53,3 +53,8 @@ export type PaymentReportParams = {
   month?: number;
   year?: number;
 };
+
+export type MakePaymentFormErrors = {
+  promo_code?: string;
+  paid_amount?: string;
+};
