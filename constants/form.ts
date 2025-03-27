@@ -333,3 +333,9 @@ export const PromoCodeSchema = z
       path: ["branch"],
     }
   );
+
+export const MakePaymentSchema = z.object({
+  id: z.string().min(1, "Id is required"),
+  promo_code: z.string().min(1).optional(),
+  paid_amount: z.string().min(1, "Paid amount is required"),
+});
