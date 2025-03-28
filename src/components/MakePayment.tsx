@@ -176,7 +176,7 @@ const MakePayment = ({ id }: { id: number }) => {
           ) : (
             <form
               action={formAction}
-              className="space-y-4 sm:space-y-6"
+              className="space-y-4 sm:space-y-6 mt-[-30px]"
               ref={formRef}
             >
               <Input type="hidden" name="id" value={id} />
@@ -294,11 +294,9 @@ const MakePayment = ({ id }: { id: number }) => {
                 </div>
               </div>
 
-              <div className="pt-2">
-                <Separator className="h-px bg-slate-200 w-full" />
-              </div>
+              <Separator className="h-px bg-slate-200 w-full" />
 
-              <div className="flex justify-between items-center pt-2">
+              <div className="flex justify-between items-center">
                 <Label htmlFor="paidAmount" className="text-sm font-medium">
                   Paid amount
                 </Label>
@@ -317,10 +315,7 @@ const MakePayment = ({ id }: { id: number }) => {
                 </div>
               </div>
 
-              <small className="text-red-500">
-                {zoderror?.paid_amount?.[0]}
-              </small>
-              <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
+              <DialogFooter className="flex flex-col sm:flex-row gap-4 sm:gap-0">
                 <SubmitButton label="Pay" submitLabel="Paying" />
               </DialogFooter>
             </form>
