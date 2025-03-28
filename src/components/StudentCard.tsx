@@ -223,10 +223,10 @@ export function StudentCard({ student }: StudentCardProps) {
                       Paid Amount
                     </TableHead>
                     <TableHead className="text-neutral-700">
-                      Outstanding
+                      Credit Balance
                     </TableHead>
                     <TableHead className="text-neutral-700">
-                      Credit Balance
+                      Post-Payment Balance
                     </TableHead>
                     <TableHead className="text-neutral-700">Status</TableHead>
                     <TableHead className="text-neutral-700">Action</TableHead>
@@ -247,7 +247,7 @@ export function StudentCard({ student }: StudentCardProps) {
                       <TableCell className="text-neutral-800">
                         {payment.paid_amount}
                       </TableCell>
-                      <TableCell className="text-rose-600">
+                      <TableCell className="text-orange-600">
                         {payment.pre_outstanding}
                       </TableCell>
                       <TableCell className="text-emerald-600">

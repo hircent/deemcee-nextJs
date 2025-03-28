@@ -114,7 +114,9 @@ const MakePayment = ({ id }: { id: number }) => {
           +paymentData?.pre_outstanding || 0,
           +paymentData?.amount || 0
         );
-        setDiscountedAmount(paymentData?.amount);
+        setDiscountedAmount(
+          (+paymentData?.amount - +paymentData?.pre_outstanding).toString()
+        );
       }
     } catch (error) {
       toast({
@@ -181,7 +183,6 @@ const MakePayment = ({ id }: { id: number }) => {
 
               <div className="font-semibold text-lg mb-2">SUMMARY PAYMENT</div>
 
-              {/* G2 Term Payment - Left-Right Layout */}
               <div className="flex justify-between items-center">
                 <Label htmlFor="termPayment" className="text-sm font-medium">
                   G{paymentData?.grade} Term Payment
@@ -192,7 +193,7 @@ const MakePayment = ({ id }: { id: number }) => {
                     Number(paymentData?.amount).toFixed(2)}
                 </div>
               </div>
-              {/* Payment Date - Left-Right Layout */}
+
               <div className="flex justify-between items-center">
                 <Label htmlFor="payment_date" className="text-sm font-medium">
                   Payment Date
@@ -208,7 +209,6 @@ const MakePayment = ({ id }: { id: number }) => {
                 </div>
               </div>
 
-              {/* Promo Code - Left-Right Layout */}
               <div className="flex justify-between items-center">
                 <Input
                   type="hidden"
@@ -255,7 +255,6 @@ const MakePayment = ({ id }: { id: number }) => {
                 </div>
               </div>
 
-              {/* Total - Left-Right Layout */}
               <div className="flex justify-between items-center">
                 <Label htmlFor="totalAmount" className="text-sm font-medium">
                   Discounted Amount
@@ -267,7 +266,6 @@ const MakePayment = ({ id }: { id: number }) => {
                 </div>
               </div>
 
-              {/* Credit - Left-Right Layout */}
               <div className="flex justify-between items-center">
                 <Label htmlFor="creditAmount" className="text-sm font-medium">
                   Credit Balance
@@ -279,15 +277,30 @@ const MakePayment = ({ id }: { id: number }) => {
                 </div>
               </div>
 
-              {/* Separator before Amount to Pay */}
+              <div className="flex justify-between items-center pt-2">
+                <Label htmlFor="amount_to_pay" className="text-sm font-medium">
+                  Amount to Pay
+                </Label>
+                <div className="text-right font-medium text-red-500">
+                  {paymentData?.currency + " " + Number(amountToPay).toFixed(2)}
+                  <div className="text-right font-medium">
+                    <Input
+                      id="amount_to_pay"
+                      type="hidden"
+                      name="amount_to_pay"
+                      value={amountToPay}
+                    />
+                  </div>
+                </div>
+              </div>
+
               <div className="pt-2">
                 <Separator className="h-px bg-slate-200 w-full" />
               </div>
 
-              {/* Amount to Pay - Left-Right Layout with Separator */}
               <div className="flex justify-between items-center pt-2">
                 <Label htmlFor="paidAmount" className="text-sm font-medium">
-                  Amount to Pay
+                  Paid amount
                 </Label>
                 <div className="flex items-center">
                   <span className="mr-2 font-medium">
@@ -295,24 +308,18 @@ const MakePayment = ({ id }: { id: number }) => {
                   </span>
                   <div className="w-32 text-right">
                     <Input
-                      type="hidden"
-                      name="amount_to_pay"
-                      value={discountedAmount}
-                    />
-                    <Input
                       type="number"
                       id="paidAmount"
                       name="paid_amount"
-                      value={amountToPay} // Changed from defaultValue to value
-                      onChange={(e) => setAmountToPay(e.target.value)}
                       className="text-right font-bold"
                     />
                   </div>
                 </div>
-                <small className="text-red-500">
-                  {zoderror?.paid_amount?.[0]}
-                </small>
               </div>
+
+              <small className="text-red-500">
+                {zoderror?.paid_amount?.[0]}
+              </small>
               <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
                 <SubmitButton label="Pay" submitLabel="Paying" />
               </DialogFooter>
