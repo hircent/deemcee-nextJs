@@ -54,6 +54,10 @@ export type PaymentReportParams = {
   year?: number;
 };
 
+export type HQPaymentReportParams = PaymentReportParams & {
+  country: string | undefined | string[];
+};
+
 export type MakePaymentFormErrors = {
   promo_code?: string;
   paid_amount?: string;
