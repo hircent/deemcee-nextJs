@@ -7,23 +7,26 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Filter } from "lucide-react";
-import { MONTHS } from "@/constants/index";
+import { MONTHS, REGIONS } from "@/constants/index";
 import { formUrlQuery } from "@/lib/utils";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Card } from "./ui/card";
 
 const ReportFilters = () => {
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
   const queryYear = searchParams?.get("year");
   const queryMonth = searchParams?.get("month");
+  const regions = searchParams?.get("region");
   const [yearNow, setYearNow] = useState<string>(
     queryYear || new Date().getFullYear().toString()
   );
   const [monthNow, setMonthNow] = useState<string>(
     queryMonth || (new Date().getMonth() + 1).toString()
   );
+  const [region, setRegion] = useState<string>(regions || "Malaysia");
   const today = new Date();
   const years = today.getFullYear() - 2018;
   const yearOptions = Array.from({ length: years + 1 }, (_, i) => i + 2018);
@@ -45,6 +48,15 @@ const ReportFilters = () => {
     });
     router.push(newUrl, { scroll: false });
   }, [monthNow]);
+
+  useEffect(() => {
+    const newUrl = formUrlQuery({
+      params: searchParams!.toString(),
+      key: "region",
+      value: region,
+    });
+    router.push(newUrl, { scroll: false });
+  }, [region]);
   return (
     <Card className="flex gap-2 p-4 bg-blue-200">
       <div className="flex items-center gap-2 text-blue-900">
@@ -89,6 +101,27 @@ const ReportFilters = () => {
           </SelectContent>
         </Select>
       </div>
+
+      {pathname === "/report/hq" && (
+        <div>
+          <Select value={region} onValueChange={setRegion}>
+            <SelectTrigger className="w-[180px] bg-yellow-2">
+              <SelectValue placeholder="Select month" />
+            </SelectTrigger>
+            <SelectContent className="select-content">
+              {REGIONS.map((reg) => (
+                <SelectItem
+                  key={reg.id}
+                  value={reg.value}
+                  className="select-item"
+                >
+                  {reg.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
     </Card>
   );
 };
