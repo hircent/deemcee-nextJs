@@ -3,6 +3,7 @@
 import { getToken } from "./user.actions";
 import { cookies } from "next/headers";
 import {
+  HQPaymentReportParams,
   MakePaymentFormErrors,
   PaymentData,
   PaymentReportData,
@@ -45,6 +46,38 @@ export async function getPaymentReportList(
   param: PaymentReportParams
 ): Promise<PaymentReportData> {
   const { month, year } = param;
+
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
+    const response = await fetch(
+      `${process.env.API_URL}/payment-report/list?month=${month}&year=${year}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch payment data " + response.statusText);
+    }
+
+    const data = await response.json();
+
+    return data.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getPaymentHQReportList(
+  param: HQPaymentReportParams
+): Promise<PaymentReportData> {
+  const { month, year, country } = param;
 
   try {
     const token = await getToken();
