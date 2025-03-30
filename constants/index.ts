@@ -276,6 +276,11 @@ export const MONTHS = [
   { id: 12, label: "December", value: "12" },
 ];
 
+export const REGIONS = [
+  { id: 1, label: "Malaysia", value: "Malaysia" },
+  { id: 2, label: "Australia", value: "Australia" },
+];
+
 export const CLASS_TYPES = [
   { value: "Kids", label: "Kids" },
   { value: "Kiddo", label: "Kiddo" },
