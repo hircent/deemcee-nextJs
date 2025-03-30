@@ -49,6 +49,14 @@ export type PaymentInfo = {
   amount: number;
 };
 
+export type BranchPaymentInfo = {
+  id: number;
+  branch: string;
+  total_active_students: number;
+  total_fees: number;
+  royalty: number;
+};
+
 export type PaymentReportParams = {
   month?: number;
   year?: number;
