@@ -1,6 +1,7 @@
 import { CertificateListColumns } from "@/columns/certificate.list.column";
 import { PageListTable } from "@/components/PageList";
 import Pagination from "@/components/Pagination";
+import { PaginationWrapper } from "@/components/PaginationWrapper";
 import { getCertificateList } from "@/lib/actions/certificate.action";
 import { SearchParamProps } from "@/types/index";
 import React from "react";
@@ -13,11 +14,9 @@ const Printed = async ({ searchParams }: SearchParamProps) => {
   });
   return (
     <div className="p-4">
-      <PageListTable columns={CertificateListColumns} data={result.data} />
-
-      <Pagination
-        next={result.next}
-        previous={result.previous}
+      <PaginationWrapper
+        columns={CertificateListColumns}
+        paginationData={result}
         baseUrl="/certificate/printed"
       />
     </div>
