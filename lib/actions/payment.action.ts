@@ -3,6 +3,7 @@
 import { getToken } from "./user.actions";
 import { cookies } from "next/headers";
 import {
+  HQAllBranchPaymentReportData,
   HQPaymentReportParams,
   MakePaymentFormErrors,
   PaymentData,
@@ -11,7 +12,6 @@ import {
 } from "@/types/payment";
 import { STATE } from "@/types/index";
 import { MakePaymentSchema } from "@/constants/form";
-import { revalidatePath } from "next/cache";
 
 export async function getPaymentDetails(id: number): Promise<PaymentData> {
   const token = await getToken();
@@ -76,14 +76,14 @@ export async function getPaymentReportList(
 
 export async function getPaymentHQReportList(
   param: HQPaymentReportParams
-): Promise<PaymentReportData> {
+): Promise<HQAllBranchPaymentReportData> {
   const { month, year, country } = param;
 
   try {
     const token = await getToken();
     const branchId = cookies().get("BranchId")?.value;
     const response = await fetch(
-      `${process.env.API_URL}/payment-report/list?month=${month}&year=${year}`,
+      `${process.env.API_URL}/hq-payment-report/list?month=${month}&year=${year}&country=${country}`,
       {
         method: "GET",
         headers: {

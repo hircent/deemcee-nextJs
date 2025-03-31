@@ -17,6 +17,7 @@ const HQPage = async ({ searchParams }: SearchParamProps) => {
     year: queryYear ? +queryYear : today.getFullYear(),
     country: queryCountry ? queryCountry : "Malaysia",
   });
+
   return (
     <div className="py-4">
       <ReportFilters />
@@ -69,14 +70,22 @@ const HQPage = async ({ searchParams }: SearchParamProps) => {
 
               <Separator className="w-px bg-slate-300" orientation="vertical" />
               <div className="flex flex-col items-centre justify-center p-4 min-w-max">
-                <div className="text-center font-bold">MRY 0.00</div>
+                <div className="text-center font-bold">
+                  {hqPaymentReportData.currency +
+                    " " +
+                    hqPaymentReportData.discounted_amount}
+                </div>
                 <div className="text-center">Total Fees</div>
               </div>
 
               <Separator className="w-px bg-slate-300" orientation="vertical" />
               <div className="flex flex-col items-centre justify-center p-4 min-w-max">
-                <div className="text-center font-bold">MRY 0.00</div>
-                <div className="text-center">Royalty ( MYR )</div>
+                <div className="text-center font-bold">
+                  {hqPaymentReportData.currency +
+                    " " +
+                    hqPaymentReportData.loyalty_fees}
+                </div>
+                <div className="text-center">Royalty Fees</div>
               </div>
             </div>
           </div>
@@ -84,7 +93,7 @@ const HQPage = async ({ searchParams }: SearchParamProps) => {
         <div>
           <PageListPaginatedTable
             columns={HQPaymentReportListColumns}
-            data={[]}
+            data={hqPaymentReportData.payments}
           />
         </div>
       </div>

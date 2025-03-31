@@ -16,6 +16,13 @@ export type StudentPaymentList = PaymentData & {
   enrolment_type: string;
 };
 
+export type AttendanceInfo = {
+  absent: number;
+  freeze: number;
+  sfreezed: number;
+  replacement: number;
+};
+
 export type PaymentReportData = {
   total_payments: number;
   payments: PaymentInfo[];
@@ -30,13 +37,28 @@ export type PaymentReportData = {
     branch_percentage: number;
     currency: string;
   };
-  attendances: {
-    absent: number;
-    freeze: number;
-    sfreezed: number;
-    replacement: number;
-  };
+  attendances: AttendanceInfo;
   total_paid_amount: string;
+  loyalty_fees: string;
+};
+
+type BranchTotalPayment = {
+  id: number;
+  name: string;
+  total_amount: number;
+  total_discount: number;
+  discounted_amount: number;
+  percentage: number;
+  loyalty_fees: number;
+};
+
+export type HQAllBranchPaymentReportData = {
+  attendances: AttendanceInfo;
+  payments: BranchTotalPayment[];
+  total_amount: string;
+  total_discount: string;
+  discounted_amount: string;
+  currency: string;
   loyalty_fees: string;
 };
 
@@ -47,6 +69,8 @@ export type PaymentInfo = {
   enrolment_type: string;
   paid_at: string;
   amount: number;
+  discount: number;
+  discounted_amount: number;
 };
 
 export type BranchPaymentInfo = {

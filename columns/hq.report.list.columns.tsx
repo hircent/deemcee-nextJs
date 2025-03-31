@@ -1,8 +1,8 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { BranchPaymentInfo } from "@/types/payment";
+import { BranchTotalPayment } from "@/types/payment";
 
-export const HQPaymentReportListColumns: ColumnDef<BranchPaymentInfo>[] = [
+export const HQPaymentReportListColumns: ColumnDef<BranchTotalPayment>[] = [
   {
     accessorKey: "id",
     header: "No.",
@@ -11,23 +11,27 @@ export const HQPaymentReportListColumns: ColumnDef<BranchPaymentInfo>[] = [
     },
   },
   {
-    accessorKey: "branch",
+    accessorKey: "name",
     header: "Branch",
   },
   {
-    accessorKey: "total_active_students",
-    header: "Total Active Students",
+    accessorKey: "total_amount",
+    header: "Total Amount",
   },
   {
-    accessorKey: "total_fees",
-    header: "Total Fees",
+    accessorKey: "total_discount",
+    header: "Total Discount",
   },
   {
-    id: "royalty",
-    header: "Royalty",
+    accessorKey: "discounted_amount",
+    header: "Discounted Amount",
   },
   {
-    id: "actions",
-    header: "Actions",
+    accessorKey: "percentage",
+    header: "Percentage",
+  },
+  {
+    accessorKey: "loyalty_fees",
+    header: "Loyalty Fees",
   },
 ];

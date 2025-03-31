@@ -39,4 +39,20 @@ export const PaymentReportListColumns: ColumnDef<PaymentInfo>[] = [
       return <div>{fees.amount}</div>;
     },
   },
+  {
+    id: "discount",
+    header: "Discount",
+    cell: ({ row }) => {
+      const fees = row.original;
+      return <div>{fees.discount}</div>;
+    },
+  },
+  {
+    id: "discounted_amount",
+    header: "Discounted Amount",
+    cell: ({ row }) => {
+      const fees = row.original;
+      return <div>{fees.discounted_amount}</div>;
+    },
+  },
 ];

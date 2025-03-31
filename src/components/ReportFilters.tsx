@@ -38,7 +38,7 @@ const ReportFilters = () => {
       value: yearNow,
     });
     router.push(newUrl, { scroll: false });
-  }, [yearNow]);
+  }, [yearNow, router, searchParams]);
 
   useEffect(() => {
     const newUrl = formUrlQuery({
@@ -47,16 +47,18 @@ const ReportFilters = () => {
       value: monthNow,
     });
     router.push(newUrl, { scroll: false });
-  }, [monthNow]);
+  }, [monthNow, router, searchParams]);
 
   useEffect(() => {
-    const newUrl = formUrlQuery({
-      params: searchParams!.toString(),
-      key: "region",
-      value: region,
-    });
-    router.push(newUrl, { scroll: false });
-  }, [region]);
+    if (pathname === "/report/hq") {
+      const newUrl = formUrlQuery({
+        params: searchParams!.toString(),
+        key: "region",
+        value: region,
+      });
+      router.push(newUrl, { scroll: false });
+    }
+  }, [region, router, searchParams, pathname]);
   return (
     <Card className="flex gap-2 p-4 bg-blue-200">
       <div className="flex items-center gap-2 text-blue-900">
