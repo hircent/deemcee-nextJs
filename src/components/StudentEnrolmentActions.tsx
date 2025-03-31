@@ -76,20 +76,20 @@ const StudentEnrolmentActions = ({
             <span>Lesson View</span>
           </DropdownMenuItem>
 
-          {/* <DropdownMenuItem
+          <DropdownMenuItem
             className="dropdown-menu-item"
             onClick={() => handleDeleteClick(setEditEnrolmentViewOpen)}
           >
             <Edit className="h-4 w-4" />
             <span>Edit Enrolment</span>
-          </DropdownMenuItem> */}
+          </DropdownMenuItem>
 
           <DropdownMenuItem
             className="dropdown-menu-item"
             onClick={() => handleDeleteClick(setRescheduleViewOpen)}
           >
             <Calendar className="h-4 w-4" />
-            <span>Reschedule Class</span>
+            <span>Change Class Slot</span>
           </DropdownMenuItem>
 
           <DropdownMenuItem
