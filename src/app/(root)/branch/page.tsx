@@ -10,7 +10,7 @@ import { BranchProps, ListProps, SearchParamProps } from "@/types/index";
 
 import React from "react";
 import { IsSuperadmin } from "@/constants/index";
-import Pagination from "@/components/Pagination";
+import { PaginationWrapper } from "@/components/PaginationWrapper";
 
 export default async function Branch({ searchParams }: SearchParamProps) {
   const user = await authUser();
@@ -27,11 +27,10 @@ export default async function Branch({ searchParams }: SearchParamProps) {
         <SearchBar />
         {IsSuperadmin.includes(userRole[0]) && <CreateBranch type={BRANCH} />}
       </div>
-      <PageListTable columns={BranchListColumns} data={result.data} />
 
-      <Pagination
-        next={result.next}
-        previous={result.previous}
+      <PaginationWrapper
+        columns={BranchListColumns}
+        paginationData={result}
         baseUrl="/branch"
       />
     </div>
