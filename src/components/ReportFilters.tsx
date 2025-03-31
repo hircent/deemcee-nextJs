@@ -60,10 +60,10 @@ const ReportFilters = () => {
     }
   }, [region, router, searchParams, pathname]);
   return (
-    <Card className="flex gap-2 p-4 bg-blue-200">
-      <div className="flex items-center gap-2 text-blue-900">
+    <Card className="flex gap-4 p-4 bg-indigo-200">
+      <div className="flex items-center gap-3 text-indigo-800">
         <Filter className="h-4 w-4" />
-        <span className="text-sm font-medium">Filters:</span>
+        <span className="text-sm font-medium">Filters :</span>
       </div>
       <div>
         {/* Select year from 2018 to now */}
