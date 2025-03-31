@@ -22,21 +22,15 @@ const SearchBar = () => {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
+      let newUrl = new URLSearchParams(searchParams?.toString() || "");
       if (search) {
-        const newUrl = formUrlQuery({
-          params: searchParams!.toString(),
-          key: "q",
-          value: search,
-        });
-
-        router.push(newUrl, { scroll: false });
+        newUrl.delete("page");
+        newUrl.set("q", search);
       } else {
-        const newUrl = removeKeysFromQuery({
-          params: searchParams!.toString(),
-          keysToRemove: ["q", "page"],
-        });
-        router.push(newUrl, { scroll: false });
+        newUrl.delete("q");
       }
+
+      router.push(pathname + "?" + newUrl.toString(), { scroll: false });
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
