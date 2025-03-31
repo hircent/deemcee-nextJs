@@ -21,17 +21,22 @@ export type AttendanceInfo = {
   freeze: number;
   sfreezed: number;
   replacement: number;
+  enrolment: number;
+  advance: number;
+  extend: number;
+};
+
+export type StudentInfo = {
+  total: number;
+  in_progress: number;
+  dropped_out: number;
+  graduated: number;
 };
 
 export type PaymentReportData = {
   total_payments: number;
   payments: PaymentInfo[];
-  student_info: {
-    total: number;
-    in_progress: number;
-    dropped_out: number;
-    graduated: number;
-  };
+  student_info: StudentInfo;
   branch_info: {
     branch_grade: number;
     branch_percentage: number;
@@ -55,6 +60,7 @@ type BranchTotalPayment = {
 export type HQAllBranchPaymentReportData = {
   attendances: AttendanceInfo;
   payments: BranchTotalPayment[];
+  student_info: StudentInfo;
   total_amount: string;
   total_discount: string;
   discounted_amount: string;

@@ -24,11 +24,7 @@ const page = async ({ searchParams }: SearchParamProps) => {
               <div className="grid grid-cols-2 gap-2">
                 <div>New Enrolment</div>
                 <div className="text-left font-bold">
-                  :
-                  {" " +
-                    paymentReportData.payments.filter(
-                      (item) => item.enrolment_type === "ENROLMENT"
-                    ).length}
+                  :{" " + paymentReportData.attendances.enrolment}
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2">
@@ -43,37 +39,41 @@ const page = async ({ searchParams }: SearchParamProps) => {
                 <div>Transfer Out</div>
                 <div className="text-left font-bold">:{" 0"}</div>
               </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div>Graduated</div>
+                <div className="text-left font-bold">:{" 0"}</div>
+              </div>
             </div>
             <div className="space-y-2">
               <div className="grid grid-cols-2 gap-2">
                 <div>Freezed</div>
                 <div className="text-left font-bold">
-                  :{" " + paymentReportData.attendances.freeze}
+                  : {paymentReportData.attendances.freeze}
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>Advance</div>
                 <div className="text-left font-bold">
-                  :
-                  {" " +
-                    paymentReportData.payments.filter(
-                      (item) => item.enrolment_type === "ADVANCE"
-                    ).length}
+                  : {paymentReportData.attendances.advance}
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>Extended</div>
                 <div className="text-left font-bold">
-                  :
-                  {" " +
-                    paymentReportData.payments.filter(
-                      (item) => item.enrolment_type === "EXTEND"
-                    ).length}
+                  : {paymentReportData.attendances.extend}
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2">
-                <div>Graduated</div>
-                <div className="text-left font-bold">:{" 0"}</div>
+                <div>SFreeze</div>
+                <div className="text-left font-bold">
+                  : {paymentReportData.attendances.sfreezed}
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div>Replacement</div>
+                <div className="text-left font-bold">
+                  : {paymentReportData.attendances.replacement}
+                </div>
               </div>
             </div>
           </div>

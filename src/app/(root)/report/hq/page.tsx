@@ -27,7 +27,9 @@ const HQPage = async ({ searchParams }: SearchParamProps) => {
             <div className="space-y-2">
               <div className="grid grid-cols-2 gap-2">
                 <div>New Enrolment</div>
-                <div className="text-left font-bold">: 0</div>
+                <div className="text-left font-bold">
+                  : {hqPaymentReportData.attendances.enrolment}
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>Dropped Out</div>
@@ -41,30 +43,50 @@ const HQPage = async ({ searchParams }: SearchParamProps) => {
                 <div>Transfer Out</div>
                 <div className="text-left font-bold">:{" 0"}</div>
               </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div>Graduated</div>
+                <div className="text-left font-bold">:{" 0"}</div>
+              </div>
             </div>
             <div className="space-y-2">
               <div className="grid grid-cols-2 gap-2">
                 <div>Freezed</div>
-                <div className="text-left font-bold">: 0</div>
+                <div className="text-left font-bold">
+                  : {hqPaymentReportData.attendances.freeze}
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>Advance</div>
-                <div className="text-left font-bold">: 0</div>
+                <div className="text-left font-bold">
+                  : {hqPaymentReportData.attendances.advance}
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>Extended</div>
-                <div className="text-left font-bold">: 0</div>
+                <div className="text-left font-bold">
+                  : {hqPaymentReportData.attendances.extend}
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-2">
-                <div>Graduated</div>
-                <div className="text-left font-bold">:{" 0"}</div>
+                <div>SFreeze</div>
+                <div className="text-left font-bold">
+                  : {hqPaymentReportData.attendances.sfreezed}
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div>Replacement</div>
+                <div className="text-left font-bold">
+                  : {hqPaymentReportData.attendances.replacement}
+                </div>
               </div>
             </div>
           </div>
           <div className="bg-blue border-l-2 border-slate-300 flex justify-center items-center w-full h-full gap-4">
             <div className="flex gap-2">
               <div className="flex flex-col items-centre justify-center p-4 min-w-max">
-                <div className="text-center font-bold">0</div>
+                <div className="text-center font-bold">
+                  {hqPaymentReportData.student_info.in_progress}
+                </div>
                 <div className="text-center">Total Active Students</div>
               </div>
 
