@@ -9,7 +9,10 @@ import { EyeIcon } from "lucide-react";
 export const StudentListColumns: ColumnDef<StudentProps>[] = [
   {
     accessorKey: "id",
-    header: "ID",
+    header: "No.",
+    cell: ({ row }) => {
+      return <div>{row.index + 1}</div>;
+    },
   },
   {
     accessorKey: "fullname",

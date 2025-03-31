@@ -19,7 +19,10 @@ import { DeleteBranch } from "@/components/DeleteBranch";
 export const BranchListColumns: ColumnDef<BranchProps>[] = [
   {
     accessorKey: "id",
-    header: "ID",
+    header: "No.",
+    cell: ({ row }) => {
+      return <div>{row.index + 1}</div>;
+    },
   },
   {
     accessorKey: "name",
