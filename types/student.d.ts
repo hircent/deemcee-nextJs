@@ -136,8 +136,8 @@ export interface StudentData {
   enrolment_date: string;
   branch: string;
   parent?: Parent;
-  enrolments?: Enrolment[];
-  payments?: StudentPaymentList[];
+  enrolments: Enrolment[];
+  payments: StudentPaymentList[];
   referral_channel: string | null;
   referral: string | null;
   starter_kits: StarterKitItem[];
