@@ -378,13 +378,8 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
           rowSpan={allStudents.length + 1}
         >
           <div className="flex flex-col">
-            <div>
-              {classData.class_instance.start_time.slice(0, 5)} {" - "}{" "}
-              {classData.class_instance.end_time.slice(0, 5)}
-            </div>
-            <div>{classData.class_instance.name}</div>
-            <Separator className="h-px bg-slate-200 my-2" />
-            {classData.class_instance.label}
+            <div>{classData.class_instance.display_name.split(" - ")[0]}</div>
+            <div>{classData.class_instance.display_name.split(" - ")[1]}</div>
           </div>
         </TableCell>
         <TableCell
