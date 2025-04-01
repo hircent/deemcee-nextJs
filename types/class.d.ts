@@ -18,6 +18,7 @@ export type ClassData = {
   start_time: string;
   end_time: string;
   day: string;
+  display_name: string;
 };
 
 export type ClassFormErrors = {
