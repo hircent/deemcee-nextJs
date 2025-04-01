@@ -37,7 +37,6 @@ import { ClassFormErrors } from "@/types/class";
 const ClassesForm = ({ type }: { type: string }) => {
   const [category, setCategory] = useState<string | undefined>(undefined);
   const [day, setDay] = useState<string | undefined>(undefined);
-  const [isActive, setIsActive] = useState<boolean>(true);
   const [zoderror, setZodError] = useState<ClassFormErrors | null>(null);
   const [open, setOpen] = useState<boolean>(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -203,23 +202,6 @@ const ClassesForm = ({ type }: { type: string }) => {
                 {zoderror?.start_date?.[0]}
               </small>
             </div>
-
-            {/* Label */}
-            <div>
-              <div className="grid grid-cols-3 gap-4">
-                <Label htmlFor="label" className="text-sm sm:text-base">
-                  Label <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="label"
-                  type="text"
-                  name="label"
-                  placeholder="e.g., Tuesday 09:00 - 10:00"
-                  className="w-full text-sm sm:text-base col-span-2"
-                />
-              </div>
-            </div>
-            <small className="text-red-500">{zoderror?.label?.[0]}</small>
           </div>
 
           <DialogFooter className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 sm:gap-0">
