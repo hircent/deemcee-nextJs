@@ -22,7 +22,10 @@ import { DeleteUser } from "@/components/DeleteUser";
 export const SuperadminListColumns: ColumnDef<TypeUserProps>[] = [
   {
     accessorKey: "id",
-    header: "ID",
+    header: "No.",
+    cell: ({ row }) => {
+      return <div>{row.index + 1}</div>;
+    },
   },
   {
     accessorKey: "username",
@@ -35,9 +38,9 @@ export const SuperadminListColumns: ColumnDef<TypeUserProps>[] = [
   {
     accessorKey: "updated_at",
     header: "Updated at",
-    cell:({row})=>{
-      return extractDate(row.getValue("updated_at"))
-    }
+    cell: ({ row }) => {
+      return extractDate(row.getValue("updated_at"));
+    },
   },
   // {
   //   accessorKey: "is_active",
@@ -87,8 +90,12 @@ export const SuperadminListColumns: ColumnDef<TypeUserProps>[] = [
         //   </DropdownMenuContent>
         // </DropdownMenu>
         <div className="flex gap-4 text-black-2">
-          <EditUser type={'superadmin'} id={superadmin.id}/>
-          <DeleteUser type={'superadmin'} name={superadmin.username} id={superadmin.id}/>
+          <EditUser type={"superadmin"} id={superadmin.id} />
+          <DeleteUser
+            type={"superadmin"}
+            name={superadmin.username}
+            id={superadmin.id}
+          />
         </div>
       );
     },

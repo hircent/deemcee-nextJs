@@ -9,6 +9,7 @@ import { ParentListColumns } from "@/columns/parent.list.columns";
 import { SearchParamProps } from "@/types/index";
 import { IsManagerOrHigher } from "@/constants/index";
 import Pagination from "@/components/Pagination";
+import { PaginationWrapper } from "@/components/PaginationWrapper";
 
 const Parent = async ({ searchParams }: SearchParamProps) => {
   try {
@@ -19,11 +20,9 @@ const Parent = async ({ searchParams }: SearchParamProps) => {
     });
     return (
       <div className="p-4">
-        <PageListTable columns={ParentListColumns} data={result.data} />
-
-        <Pagination
-          next={result.next}
-          previous={result.previous}
+        <PaginationWrapper
+          columns={ParentListColumns}
+          paginationData={result}
           baseUrl="/deusers/parent"
         />
       </div>

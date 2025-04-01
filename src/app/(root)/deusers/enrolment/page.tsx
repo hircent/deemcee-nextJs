@@ -5,6 +5,7 @@ import { SearchParamProps } from "@/types/index";
 import Pagination from "@/components/Pagination";
 import { EnrolmentListColumns } from "@/columns/enrolment.list.columns";
 import { getEnrolmentList } from "@/lib/actions/student.action";
+import { PaginationWrapper } from "@/components/PaginationWrapper";
 
 const Enrolment = async ({ searchParams }: SearchParamProps) => {
   try {
@@ -20,11 +21,9 @@ const Enrolment = async ({ searchParams }: SearchParamProps) => {
 
     return (
       <div className="p-4">
-        <PageListTable columns={EnrolmentListColumns} data={result.data} />
-
-        <Pagination
-          next={result.next}
-          previous={result.previous}
+        <PaginationWrapper
+          columns={EnrolmentListColumns}
+          paginationData={result}
           baseUrl="/deusers/enrolment"
         />
       </div>

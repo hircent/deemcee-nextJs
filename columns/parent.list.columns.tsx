@@ -23,7 +23,10 @@ import { EditParentProfile } from "@/components/EditParentProfile";
 export const ParentListColumns: ColumnDef<TypeUserProps>[] = [
   {
     accessorKey: "id",
-    header: "ID",
+    header: "No.",
+    cell: ({ row }) => {
+      return <div>{row.index + 1}</div>;
+    },
   },
   {
     accessorKey: "username",

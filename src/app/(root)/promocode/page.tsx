@@ -7,6 +7,7 @@ import { PromoCodeListColumns } from "@/columns/promocode.list.column";
 import Pagination from "@/components/Pagination";
 import { getPromoCodeList } from "@/lib/actions/promocode.action";
 import CreatePromoCode from "@/components/CreatePromoCode";
+import { PaginationWrapper } from "@/components/PaginationWrapper";
 
 const PromoCode = async () => {
   const user = await authUser();
@@ -19,11 +20,9 @@ const PromoCode = async () => {
         <SearchBar />
         <CreatePromoCode />
       </div>
-      <PageListTable columns={PromoCodeListColumns} data={result.data} />
-
-      <Pagination
-        next={result.next}
-        previous={result.previous}
+      <PaginationWrapper
+        columns={PromoCodeListColumns}
+        paginationData={result}
         baseUrl="/promocode"
       />
     </div>

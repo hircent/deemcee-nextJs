@@ -5,6 +5,7 @@ import { SearchParamProps } from "@/types/index";
 import Pagination from "@/components/Pagination";
 import { getStudentList } from "@/lib/actions/student.action";
 import { StudentListColumns } from "@/columns/student.list.columns";
+import { PaginationWrapper } from "@/components/PaginationWrapper";
 
 const Student = async ({ searchParams }: SearchParamProps) => {
   try {
@@ -15,11 +16,9 @@ const Student = async ({ searchParams }: SearchParamProps) => {
     });
     return (
       <div className="p-4">
-        <PageListTable columns={StudentListColumns} data={result.data} />
-
-        <Pagination
-          next={result.next}
-          previous={result.previous}
+        <PaginationWrapper
+          columns={StudentListColumns}
+          paginationData={result}
           baseUrl="/deusers/student"
         />
       </div>
