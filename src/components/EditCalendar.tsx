@@ -165,6 +165,7 @@ export function EditCalendar({ type, id }: EditProps) {
                   type="date"
                   defaultValue={extractDate(calendarData?.start_datetime)}
                   className="w-full text-sm sm:text-base"
+                  readOnly
                 />
                 <small className="text-red-500">
                   {zoderror?.start_datetime?.[0]}
@@ -181,6 +182,7 @@ export function EditCalendar({ type, id }: EditProps) {
                   type="date"
                   defaultValue={extractDate(calendarData?.end_datetime)}
                   className="w-full text-sm sm:text-base"
+                  readOnly
                 />
                 <small className="text-red-500">
                   {zoderror?.end_datetime?.[0]}
