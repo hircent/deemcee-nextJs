@@ -49,7 +49,7 @@ const StudentEnrolmentActions = ({
   const [editEnrolmentViewOpen, setEditEnrolmentViewOpen] =
     useState<boolean>(false);
 
-  const handleDeleteClick = (setDialog: (open: boolean) => void) => {
+  const handleDialogClick = (setDialog: (open: boolean) => void) => {
     setDropdownOpen(false); // Close dropdown when opening dialog
     setDialog(true);
   };
@@ -70,7 +70,7 @@ const StudentEnrolmentActions = ({
         >
           <DropdownMenuItem
             className="dropdown-menu-item"
-            onClick={() => handleDeleteClick(setLessonViewOpen)}
+            onClick={() => handleDialogClick(setLessonViewOpen)}
           >
             <BookOpen className="h-4 w-4" />
             <span>Lesson View</span>
@@ -78,7 +78,7 @@ const StudentEnrolmentActions = ({
 
           <DropdownMenuItem
             className="dropdown-menu-item"
-            onClick={() => handleDeleteClick(setEditEnrolmentViewOpen)}
+            onClick={() => handleDialogClick(setEditEnrolmentViewOpen)}
           >
             <Edit className="h-4 w-4" />
             <span>Edit Enrolment</span>
@@ -86,7 +86,7 @@ const StudentEnrolmentActions = ({
 
           <DropdownMenuItem
             className="dropdown-menu-item"
-            onClick={() => handleDeleteClick(setRescheduleViewOpen)}
+            onClick={() => handleDialogClick(setRescheduleViewOpen)}
           >
             <Calendar className="h-4 w-4" />
             <span>Change Class Slot</span>
@@ -94,7 +94,7 @@ const StudentEnrolmentActions = ({
 
           <DropdownMenuItem
             className="dropdown-menu-item"
-            onClick={() => handleDeleteClick(setExtendEnrolmentViewOpen)}
+            onClick={() => handleDialogClick(setExtendEnrolmentViewOpen)}
           >
             <Clock className="h-4 w-4" />
             <span>Extend Enrolment</span>
@@ -103,7 +103,7 @@ const StudentEnrolmentActions = ({
           {extensions > 0 && (
             <DropdownMenuItem
               className="dropdown-menu-item"
-              onClick={() => handleDeleteClick(setRevertEnrolmentViewOpen)}
+              onClick={() => handleDialogClick(setRevertEnrolmentViewOpen)}
             >
               <CornerDownLeft className="h-4 w-4" />
               <span>Revert Extension</span>
@@ -112,7 +112,7 @@ const StudentEnrolmentActions = ({
 
           <DropdownMenuItem
             className="dropdown-menu-item"
-            onClick={() => handleDeleteClick(setAdvanceEnrolmentViewOpen)}
+            onClick={() => handleDialogClick(setAdvanceEnrolmentViewOpen)}
           >
             <ArrowRight className="h-4 w-4" />
             <span>Advance Enrolment</span>
@@ -120,7 +120,7 @@ const StudentEnrolmentActions = ({
 
           <DropdownMenuItem
             className="dropdown-menu-item text-red-600"
-            onClick={() => handleDeleteClick(setDeleteDialogOpen)}
+            onClick={() => handleDialogClick(setDeleteDialogOpen)}
           >
             <Trash className="h-4 w-4" />
             <span>Delete</span>
