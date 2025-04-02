@@ -33,6 +33,12 @@ export type StudentFormErrors = {
   status?: string;
 };
 
+export type EnrolmentFormErrors = {
+  deemcee_starting_grade?: string;
+  start_date?: string;
+  timeslot?: string;
+};
+
 export type DeleteFormErrors = {
   studentId?: string;
   id?: string;
