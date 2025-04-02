@@ -639,10 +639,8 @@ export type BranchDetailProps = {
     id: number;
     username: string;
   };
-  branch_grade: {
-    id: number;
-    name: string;
-  };
+  branch_grade: number;
+  country: string;
   address: Address;
   branch_grade: number;
   business_name: string;
