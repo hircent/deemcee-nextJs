@@ -27,17 +27,17 @@ import { cn } from "@/lib/utils";
 import SubmitButton from "./SubmitButton";
 import { SERVER_ACTION_STATE } from "@/constants/index";
 import { useFormState } from "react-dom";
-import { StudentFormErrors } from "@/types/student";
-import { createStudent } from "@/lib/actions/student.action";
+import { EnrolmentFormErrors } from "@/types/student";
+import { createEnrolment } from "@/lib/actions/student.action";
 import { TimeslotData } from "@/types/index";
 import { getTimeslots } from "@/lib/actions/class.action";
 import { getGradeList, getTierList } from "@/lib/actions/structure.actions";
 import { GradeData, TierListData } from "@/types/structure";
 import Loader from "./Loader";
 
-const CreateEnrolment = () => {
+const CreateEnrolment = ({ id }: { id: number }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [zoderror, setZodError] = useState<StudentFormErrors | null>(null);
+  const [zoderror, setZodError] = useState<EnrolmentFormErrors | null>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [isTierSelected, setIsTierSelected] = useState<boolean>(true);
   const [selectedTier, setSelectedTier] = useState<string | undefined>(
@@ -60,7 +60,10 @@ const CreateEnrolment = () => {
 
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
-  const [state, formAction] = useFormState(createStudent, SERVER_ACTION_STATE);
+  const [state, formAction] = useFormState(
+    createEnrolment,
+    SERVER_ACTION_STATE
+  );
 
   // ZodErrors
   useEffect(() => {
@@ -135,20 +138,19 @@ const CreateEnrolment = () => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          className="group p-2 bg-blue-200 rounded-md hover:bg-blue-300"
+          className="group p-2 bg-blue-200 rounded-md hover:bg-blue-300 shadow-md"
           onClick={() => {
             getTiers();
           }}
         >
-          <Plus size={18} className="text-red-600 group-hover:text-blue-600" />{" "}
-          Create Enrolment
+          <Plus size={18} className="text-red-600" /> New Enrolment
         </Button>
       </DialogTrigger>
       <DialogOverlay
         className="bg-black/80"
         style={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}
       />
-      <DialogContent className="w-[80vw] max-w-[1000px] max-h-[90vh] overflow-y-auto custom-scrollbar bg-white">
+      <DialogContent className="w-[800px]  max-h-[90vh] overflow-y-auto custom-scrollbar bg-white">
         <DialogHeader>
           <DialogTitle className="text-xl sm:text-2xl font-semibold">
             Create Enrolment
@@ -161,145 +163,135 @@ const CreateEnrolment = () => {
           <Loader />
         ) : (
           <form action={formAction} ref={formRef} className="space-y-4">
+            <Input type="hidden" name="id" value={id} />
             <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <div className="space-y-2">
-                    <Label htmlFor="tier">
-                      Tier <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      id="tier"
-                      value={selectedTier}
-                      name="tier"
-                      type="hidden"
-                    />
-                    <Select
-                      onValueChange={(value) => {
-                        setSelectedTier(value);
-                        setIsTierSelected(false);
-                      }}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a Tier" />
-                      </SelectTrigger>
-                      <SelectContent className="select-content">
-                        {tiers.map((tier) => (
-                          <SelectItem
-                            key={tier.id}
-                            value={tier.id.toString()}
-                            className="select-item"
-                          >
-                            {tier.name + " (" + tier.year + ")"}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <small className="text-red-500">
-                    {zoderror?.deemcee_starting_grade}
-                  </small>
+              <div>
+                <div className="space-y-2">
+                  <Label htmlFor="tier">
+                    Tier <span className="text-red-500">*</span>
+                  </Label>
+                  <Input id="tier" value={selectedTier} type="hidden" />
+                  <Select
+                    onValueChange={(value) => {
+                      setSelectedTier(value);
+                      setIsTierSelected(false);
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a Tier" />
+                    </SelectTrigger>
+                    <SelectContent className="select-content">
+                      {tiers.map((tier) => (
+                        <SelectItem
+                          key={tier.id}
+                          value={tier.id.toString()}
+                          className="select-item"
+                        >
+                          {tier.name + " (" + tier.year + ")"}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-
-                <div>
-                  <div className="space-y-2">
-                    <Label htmlFor="deemcee_starting_grade">
-                      Starting Grade <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      id="deemcee_starting_grade"
-                      value={startingGrade}
-                      name="deemcee_starting_grade"
-                      type="hidden"
-                    />
-                    <Select
-                      onValueChange={(value) => {
-                        setStartingGrade(value);
-                        setAbleSelectDate(true);
-                      }}
-                    >
-                      <SelectTrigger disabled={isTierSelected}>
-                        <SelectValue placeholder="Select starting grade" />
-                      </SelectTrigger>
-                      <SelectContent className="select-content">
-                        {grades.map((grade) => (
-                          <SelectItem
-                            key={grade.id}
-                            value={grade.grade_level.toString()}
-                            className="select-item"
-                          >
-                            {"Grade " +
-                              grade.grade_level +
-                              " - " +
-                              grade.currency +
-                              " " +
-                              grade.price}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <small className="text-red-500">
-                    {zoderror?.deemcee_starting_grade}
-                  </small>
-                </div>
+                <small className="text-red-500">
+                  {zoderror?.deemcee_starting_grade}
+                </small>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <div className="space-y-2">
-                    <Label htmlFor="start_date">
-                      Commencement Date <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      id="start_date"
-                      name="start_date"
-                      type="date"
-                      onChange={(e) => {
-                        setStartDate(e.target.value);
-                        setAbleSelectTimeslot(true);
-                      }}
-                      disabled={!ableSelectDate}
-                    />
-                  </div>
-                  <small className="text-red-500">{zoderror?.start_date}</small>
+              <div>
+                <div className="space-y-2">
+                  <Label htmlFor="deemcee_starting_grade">
+                    Starting Grade <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="deemcee_starting_grade"
+                    value={startingGrade}
+                    name="deemcee_starting_grade"
+                    type="hidden"
+                  />
+                  <Select
+                    onValueChange={(value) => {
+                      setStartingGrade(value);
+                      setAbleSelectDate(true);
+                    }}
+                  >
+                    <SelectTrigger disabled={isTierSelected}>
+                      <SelectValue placeholder="Select starting grade" />
+                    </SelectTrigger>
+                    <SelectContent className="select-content">
+                      {grades.map((grade) => (
+                        <SelectItem
+                          key={grade.id}
+                          value={grade.grade_level.toString()}
+                          className="select-item"
+                        >
+                          {"Grade " +
+                            grade.grade_level +
+                            " - " +
+                            grade.currency +
+                            " " +
+                            grade.price}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
+                <small className="text-red-500">
+                  {zoderror?.deemcee_starting_grade}
+                </small>
+              </div>
 
-                <div>
-                  <div className="space-y-2">
-                    <Label htmlFor="timeslot">
-                      Time Slot <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      id="timeslot"
-                      name="timeslot"
-                      type="hidden"
-                      value={confirmTimeslot}
-                    />
-                    <Select
-                      onValueChange={(value) => setConfirmTimeslot(value)}
-                    >
-                      <SelectTrigger disabled={!ableSelectTimeslot}>
-                        <SelectValue placeholder={placeholder} />
-                      </SelectTrigger>
-                      <SelectContent className="select-content">
-                        {timeslots.map((ts) => (
-                          <SelectItem
-                            disabled={ts.student_in_class! >= 6}
-                            key={ts.id}
-                            value={ts.id.toString()}
-                            className="select-item"
-                          >
-                            {ts.label +
-                              " - " +
-                              "(" +
-                              ts.student_in_class! +
-                              "/6)"}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+              <div>
+                <div className="space-y-2">
+                  <Label htmlFor="start_date">
+                    Commencement Date <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="start_date"
+                    name="start_date"
+                    type="date"
+                    onChange={(e) => {
+                      setStartDate(e.target.value);
+                      setAbleSelectTimeslot(true);
+                    }}
+                    disabled={!ableSelectDate}
+                  />
+                </div>
+                <small className="text-red-500">{zoderror?.start_date}</small>
+              </div>
+
+              <div>
+                <div className="space-y-2">
+                  <Label htmlFor="timeslot">
+                    Time Slot <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="timeslot"
+                    name="timeslot"
+                    type="hidden"
+                    value={confirmTimeslot}
+                  />
+                  <Select onValueChange={(value) => setConfirmTimeslot(value)}>
+                    <SelectTrigger disabled={!ableSelectTimeslot}>
+                      <SelectValue placeholder={placeholder} />
+                    </SelectTrigger>
+                    <SelectContent className="select-content">
+                      {timeslots.map((ts) => (
+                        <SelectItem
+                          disabled={ts.student_in_class! >= 6}
+                          key={ts.id}
+                          value={ts.id.toString()}
+                          className="select-item"
+                        >
+                          {ts.label +
+                            " - " +
+                            "(" +
+                            ts.student_in_class! +
+                            "/6)"}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
             </div>

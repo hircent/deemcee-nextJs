@@ -11,8 +11,8 @@ import { cookies } from "next/headers";
 import {
   AdvanceEnrolmentError,
   DeleteFormErrors,
-  EnrolmentData,
   EnrolmentExtensionError,
+  EnrolmentFormErrors,
   EnrolmentLessonProps,
   StudentData,
   StudentFormErrors,
@@ -24,6 +24,7 @@ import {
   AdvanceEnrolmentSchema,
   DeleteEnrolmentSchema,
   DeleteStudentSchema,
+  EnrolmentFormSchema,
   ExtendEnrolmentSchema,
   StudentFormSchema,
   UpdateStudentFormSchema,
@@ -183,6 +184,52 @@ export async function createStudent(
 
     revalidatePath("/deusers/student");
     return { success: true, msg: "Student is created" };
+  } catch (error) {
+    return { error: true, msg: (error as Error).message };
+  }
+}
+
+export async function createEnrolment(
+  _prevState: STATE<EnrolmentFormErrors>,
+  formData: FormData
+): Promise<STATE<EnrolmentFormErrors>> {
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
+
+    const data = Object.fromEntries(formData);
+
+    const validated = EnrolmentFormSchema.safeParse(data);
+
+    if (!validated.success) {
+      return {
+        error: true,
+        zodErr: validated.error.flatten().fieldErrors as EnrolmentFormErrors,
+        msg: "Validation Failed",
+      };
+    }
+
+    const id = data.id;
+    delete data.id;
+
+    const response = await fetch(`${process.env.API_URL}/enrolment/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+        BranchId: `${branchId?.toString()}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const res = await response.json();
+      return { error: true, msg: res.msg };
+    }
+
+    revalidatePath(`/student/${id}`);
+
+    return { success: true, msg: "Enrolment has been created" };
   } catch (error) {
     return { error: true, msg: (error as Error).message };
   }
