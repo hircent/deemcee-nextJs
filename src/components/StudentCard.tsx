@@ -120,7 +120,7 @@ export function StudentCard({ student }: StudentCardProps) {
         {/* Enrollments Tab */}
         {student.enrolments.length === 0 ? (
           <div className="p-4 flex justify-center">
-            <CreateEnrolment />
+            <CreateEnrolment id={student.id} />
           </div>
         ) : (
           <TabsContent value="enrollments" className="space-y-4">
