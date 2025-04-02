@@ -163,7 +163,7 @@ const CreateEnrolment = ({ id }: { id: number }) => {
           <Loader />
         ) : (
           <form action={formAction} ref={formRef} className="space-y-4">
-            <Input type="hidden" name="id" value={id} />
+            <Input type="hidden" name="student" value={id} />
             <div className="space-y-4">
               <div>
                 <div className="space-y-2">
