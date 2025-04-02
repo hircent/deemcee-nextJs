@@ -281,6 +281,11 @@ export const REGIONS = [
   { id: 2, label: "Australia", value: "Australia" },
 ];
 
+export const BRANCH_GRADE = [
+  { id: 1, label: "Level 1 (20%)", value: "1" },
+  { id: 2, label: "Level 2 (15%)", value: "2" },
+];
+
 export const CLASS_TYPES = [
   { value: "Kids", label: "Kids" },
   { value: "Kiddo", label: "Kiddo" },

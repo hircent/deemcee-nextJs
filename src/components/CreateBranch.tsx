@@ -13,6 +13,13 @@ import {
   DialogOverlay,
 } from "@/components/ui/dialog";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Form,
   FormControl,
   FormField,
@@ -37,6 +44,8 @@ import {
 } from "@/lib/actions/branch.action";
 import { useToast } from "./ui/use-toast";
 import { camelCase, cn } from "@/lib/utils";
+import { Label } from "@radix-ui/react-dropdown-menu";
+import { REGIONS } from "@/constants/index";
 
 const CustomInput = ({
   control,
@@ -74,8 +83,9 @@ const CreateBranch = (params: CreateType) => {
   const [open, setOpen] = useState<boolean>(false);
   const [principals, setPrincipals] = useState<Principal[]>([]);
   const [branchGrades, setBranchGrades] = useState<BranchGrade[]>([]);
+  const [country, setCountry] = useState<string>("1");
   const [principalID, setPrincipalID] = useState("");
-  const [branchGradeID, setBranchGradeID] = useState("");
+  const [branchGradeID, setBranchGradeID] = useState("1");
   const { toast } = useToast();
 
   useEffect(() => {
@@ -117,6 +127,7 @@ const CreateBranch = (params: CreateType) => {
   const submitForm = async (formData: FormData) => {
     formData.append("principal", principalID);
     formData.append("branch_grade", branchGradeID);
+    formData.append("country", country);
     try {
       await createBranch(formData);
       toast({
@@ -246,7 +257,28 @@ const CreateBranch = (params: CreateType) => {
                     type="text"
                   />
 
-                  <div className="grid gap-4 sm:grid-cols-3">
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label className="text-sm font-semibold">
+                        Country <span className="text-red-500">*</span>
+                      </Label>
+                      <Select value={country} onValueChange={setCountry}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a State" />
+                        </SelectTrigger>
+                        <SelectContent className="select-content">
+                          {REGIONS.map((country) => (
+                            <SelectItem
+                              key={country.value}
+                              value={country.id.toString()}
+                              className="select-item"
+                            >
+                              {country.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                     <CustomInput
                       control={form.control}
                       name="city"
