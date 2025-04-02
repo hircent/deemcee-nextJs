@@ -96,10 +96,11 @@ const CreateEnrolment = ({ id }: { id: number }) => {
     const fetchTimeslots = async () => {
       if (startDate && startingGrade) {
         setTimeslots([]);
+        const grade = grades.filter((grade) => grade.id === +startingGrade);
         try {
           const timeslots = await getTimeslots({
             date: startDate,
-            grade: +startingGrade,
+            grade: +grade[0].grade_level,
           });
 
           if (timeslots.length === 0) {
@@ -121,6 +122,7 @@ const CreateEnrolment = ({ id }: { id: number }) => {
     const tierList = await getTierList();
     setTiers(tierList);
     setIsLoading(false);
+    console.log({ tierList });
   };
 
   useEffect(() => {
@@ -219,7 +221,7 @@ const CreateEnrolment = ({ id }: { id: number }) => {
                       {grades.map((grade) => (
                         <SelectItem
                           key={grade.id}
-                          value={grade.grade_level.toString()}
+                          value={grade.id.toString()}
                           className="select-item"
                         >
                           {"Grade " +
