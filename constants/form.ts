@@ -214,6 +214,12 @@ export const StudentFormSchema = z
     }
   });
 
+export const EnrolmentFormSchema = z.object({
+  deemcee_starting_grade: z.string().min(1, "Starting grade is required"),
+  start_date: z.string().min(1, "Enrolment date is required"),
+  timeslot: z.string().min(1, "Timeslot is required"),
+});
+
 export const UpdateStudentFormSchema = z.object({
   first_name: z.string().min(1, "First name is required"),
   last_name: z.string().optional(),
