@@ -209,25 +209,25 @@ export async function createEnrolment(
       };
     }
 
-    const id = data.id;
-    delete data.id;
-
-    const response = await fetch(`${process.env.API_URL}/enrolment/create`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token?.value}`,
-        BranchId: `${branchId?.toString()}`,
-      },
-      body: JSON.stringify(data),
-    });
+    const response = await fetch(
+      `${process.env.API_URL}/student/enrolment/create`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+        body: JSON.stringify(data),
+      }
+    );
 
     if (!response.ok) {
       const res = await response.json();
       return { error: true, msg: res.msg };
     }
 
-    revalidatePath(`/student/${id}`);
+    revalidatePath(`/student/${data.student}`);
 
     return { success: true, msg: "Enrolment has been created" };
   } catch (error) {
