@@ -193,20 +193,17 @@ const CreateEnrolment = ({ id }: { id: number }) => {
                     </SelectContent>
                   </Select>
                 </div>
-                <small className="text-red-500">
-                  {zoderror?.deemcee_starting_grade}
-                </small>
               </div>
 
               <div>
                 <div className="space-y-2">
-                  <Label htmlFor="deemcee_starting_grade">
+                  <Label htmlFor="grade">
                     Starting Grade <span className="text-red-500">*</span>
                   </Label>
                   <Input
-                    id="deemcee_starting_grade"
+                    id="grade"
                     value={startingGrade}
-                    name="deemcee_starting_grade"
+                    name="grade"
                     type="hidden"
                   />
                   <Select
@@ -236,9 +233,7 @@ const CreateEnrolment = ({ id }: { id: number }) => {
                     </SelectContent>
                   </Select>
                 </div>
-                <small className="text-red-500">
-                  {zoderror?.deemcee_starting_grade}
-                </small>
+                <small className="text-red-500">{zoderror?.grade}</small>
               </div>
 
               <div>
@@ -262,12 +257,12 @@ const CreateEnrolment = ({ id }: { id: number }) => {
 
               <div>
                 <div className="space-y-2">
-                  <Label htmlFor="timeslot">
+                  <Label htmlFor="classroom">
                     Time Slot <span className="text-red-500">*</span>
                   </Label>
                   <Input
-                    id="timeslot"
-                    name="timeslot"
+                    id="classroom"
+                    name="classroom"
                     type="hidden"
                     value={confirmTimeslot}
                   />

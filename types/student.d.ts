@@ -34,9 +34,9 @@ export type StudentFormErrors = {
 };
 
 export type EnrolmentFormErrors = {
-  deemcee_starting_grade?: string;
+  grade?: string;
   start_date?: string;
-  timeslot?: string;
+  classroom?: string;
 };
 
 export type DeleteFormErrors = {
