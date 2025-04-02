@@ -11,6 +11,13 @@ import {
   DialogTrigger,
   DialogOverlay,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import {
   getAllPrincipalAndBranchGrade,
@@ -33,12 +40,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "./ui/use-toast";
 import { cn } from "@/lib/utils";
 import { branchFormSchema, BranchFormValues } from "@/constants/form";
+import { Label } from "@radix-ui/react-dropdown-menu";
+import { BRANCH_GRADE, REGIONS } from "@/constants/index";
 
 export function EditBranch({ type, id }: EditProps) {
   const [isLoading, setLoading] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false);
-  const [principals, setPrincipals] = useState<Principal[]>([]);
-  const [branchGrades, setBranchGrades] = useState<BranchGrade[]>([]);
+  const [country, setCountry] = useState<string>("1");
   const [principalID, setPrincipalID] = useState("");
   const [branchGradeID, setBranchGradeID] = useState("");
   const { toast } = useToast();
@@ -60,18 +68,6 @@ export function EditBranch({ type, id }: EditProps) {
       state: "",
     },
   });
-
-  async function getSelectFromPrincipalAndBranchGrade() {
-    try {
-      const data = await getAllPrincipalAndBranchGrade();
-      if (data) {
-        setBranchGrades(data.branch_grades);
-        setPrincipals(data.principals);
-      }
-    } catch (error) {
-      console.error("Failed to fetch select options:", error);
-    }
-  }
 
   async function getBranch() {
     setLoading(true);
@@ -95,15 +91,9 @@ export function EditBranch({ type, id }: EditProps) {
         postcode: branchData?.address.postcode || "",
         state: branchData?.address.state || "",
       });
+      setCountry(branchData.country.toString());
       setPrincipalID(branchData.principal.id.toString());
-      setBranchGradeID(branchData.branch_grade.id.toString());
-      setPrincipals((prevPrincipal) => [
-        ...prevPrincipal,
-        {
-          id: branchData.principal.id,
-          username: branchData.principal.username,
-        },
-      ]);
+      setBranchGradeID(branchData.branch_grade.toString());
     } catch (error) {
       console.error("Failed to fetch branch details:", error);
     } finally {
@@ -114,6 +104,7 @@ export function EditBranch({ type, id }: EditProps) {
   async function onSubmit(formData: FormData) {
     formData.append("principal", principalID);
     formData.append("branch_grade", branchGradeID);
+    formData.append("country", country);
     try {
       await updateBranch(formData, id);
       toast({
@@ -254,6 +245,31 @@ export function EditBranch({ type, id }: EditProps) {
                         </FormItem>
                       )}
                     />
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-semibold">
+                        Branch Grade
+                      </Label>
+                      <Select
+                        value={branchGradeID}
+                        onValueChange={setBranchGradeID}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a Grade" />
+                        </SelectTrigger>
+                        <SelectContent className="select-content">
+                          {BRANCH_GRADE.map((bg) => (
+                            <SelectItem
+                              key={bg.value}
+                              value={bg.id.toString()}
+                              className="select-item"
+                            >
+                              {bg.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                 </div>
 
@@ -315,7 +331,28 @@ export function EditBranch({ type, id }: EditProps) {
                       )}
                     />
 
-                    <div className="grid gap-4 sm:grid-cols-3">
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label className="text-sm font-semibold">
+                          Country <span className="text-red-500">*</span>
+                        </Label>
+                        <Select value={country} onValueChange={setCountry}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a State" />
+                          </SelectTrigger>
+                          <SelectContent className="select-content">
+                            {REGIONS.map((country) => (
+                              <SelectItem
+                                key={country.value}
+                                value={country.id.toString()}
+                                className="select-item"
+                              >
+                                {country.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
                       <FormField
                         control={form.control}
                         name="city"
