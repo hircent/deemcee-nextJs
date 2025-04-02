@@ -46,7 +46,7 @@ const MakePayment = ({ id }: { id: number }) => {
   );
   const [promoCode, setPromoCode] = useState<PromoCodeData[]>([]);
   const [promoPrice, setPromoPrice] = useState<string>("0");
-  const [selectedPromoCode, setSelectedPromoCode] = useState<string>("");
+  const [selectedPromoCode, setSelectedPromoCode] = useState<string>("0");
   const [promoCodePlaceholder, setPromoCodePlaceholder] =
     useState<string>("No promo code");
   const [promoCodeSelecteAble, setPromoCodeSelecteAble] =
