@@ -294,6 +294,13 @@ export const ExtendEnrolmentSchema = z.object({
   id: z.string().min(1, "Id is required"),
 });
 
+export const UpdateEnrolmentSchema = z.object({
+  is_active: z.string().min(1, "Check or uncheck"),
+  status: z.string().min(1, "Status is required"),
+  grade_level: z.string().min(1, "Grade level is required"),
+  tier: z.string().min(1, "Tier is required"),
+});
+
 export const VideoAssignmentFormSchema = z.object({
   student_id: z.string().min(1, "Student ID is required"),
   theme: z.string().min(1, "Theme is required"),
