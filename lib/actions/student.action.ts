@@ -442,26 +442,26 @@ export async function updateEnrolment(
     }
     const id = data.id;
     delete data.id;
-    console.log({ data });
-    // const response = await fetch(
-    //   `${process.env.API_URL}/student/enrolment/update/${id}`,
-    //   {
-    //     method: "PUT",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       Authorization: `Bearer ${token?.value}`,
-    //       BranchId: `${branchId?.toString()}`,
-    //     },
-    //     body: JSON.stringify(data),
-    //   }
-    // );
 
-    // if (!response.ok) {
-    //   const res = await response.json();
-    //   return { error: true, msg: res.msg };
-    // }
+    const response = await fetch(
+      `${process.env.API_URL}/student/enrolment/update/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+        body: JSON.stringify(data),
+      }
+    );
 
-    // revalidatePath(`/student`);
+    if (!response.ok) {
+      const res = await response.json();
+      return { error: true, msg: res.msg };
+    }
+
+    revalidatePath(`/student`);
     return { success: true, msg: `Enrolment has been updated` };
   } catch (error) {
     return { error: true, msg: (error as Error).message };
