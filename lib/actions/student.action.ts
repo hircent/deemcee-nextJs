@@ -19,6 +19,7 @@ import {
   StudentFormErrors,
   StudentListFilterProps,
   StudentProps,
+  UpdateEnrolmentError,
 } from "@/types/student";
 import { revalidatePath } from "next/cache";
 import {
@@ -28,6 +29,7 @@ import {
   EnrolmentFormSchema,
   ExtendEnrolmentSchema,
   StudentFormSchema,
+  UpdateEnrolmentSchema,
   UpdateStudentFormSchema,
 } from "@/constants/form";
 import { ClassLessonTodayStudentList } from "@/types/class";
@@ -417,6 +419,52 @@ export async function getEnrolmentDetailForUpdateView(
     return data.data;
   } catch (error) {
     throw error;
+  }
+}
+
+export async function updateEnrolment(
+  _prevState: STATE<UpdateEnrolmentError>,
+  formData: FormData
+): Promise<STATE<UpdateEnrolmentError>> {
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
+
+    const data = Object.fromEntries(formData);
+    const validated = UpdateEnrolmentSchema.safeParse(data);
+
+    if (!validated.success) {
+      return {
+        error: true,
+        zodErr: validated.error.flatten().fieldErrors as UpdateEnrolmentError,
+        msg: "Validation Failed",
+      };
+    }
+    const id = data.id;
+    delete data.id;
+    console.log({ data });
+    // const response = await fetch(
+    //   `${process.env.API_URL}/student/enrolment/update/${id}`,
+    //   {
+    //     method: "PUT",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: `Bearer ${token?.value}`,
+    //       BranchId: `${branchId?.toString()}`,
+    //     },
+    //     body: JSON.stringify(data),
+    //   }
+    // );
+
+    // if (!response.ok) {
+    //   const res = await response.json();
+    //   return { error: true, msg: res.msg };
+    // }
+
+    // revalidatePath(`/student`);
+    return { success: true, msg: `Enrolment has been updated` };
+  } catch (error) {
+    return { error: true, msg: (error as Error).message };
   }
 }
 
