@@ -343,7 +343,6 @@ export const STUDENT_FILTERTING_STATUSES = [
 export const ENROLMENT_STATUS_CHOICES = [
   { value: "IN_PROGRESS", label: "IN PROGRESS" },
   { value: "COMPLETED", label: "COMPLETED" },
-  { value: "DROPPED_OUT", label: "DROPPED_OUT" },
 ];
 
 export const AttendanceStatus = [
