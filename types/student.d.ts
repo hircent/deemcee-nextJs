@@ -205,3 +205,10 @@ export type EnrolmentExtensionError = {
   id?: string;
   confirm?: string;
 };
+
+export type UpdateEnrolmentError = {
+  is_active?: string;
+  grade_level?: string;
+  status?: string;
+  tier?: string;
+};
