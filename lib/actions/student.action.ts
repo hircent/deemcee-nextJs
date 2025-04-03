@@ -11,6 +11,7 @@ import { cookies } from "next/headers";
 import {
   AdvanceEnrolmentError,
   DeleteFormErrors,
+  EnrolmentDetails,
   EnrolmentExtensionError,
   EnrolmentFormErrors,
   EnrolmentLessonProps,
@@ -384,6 +385,35 @@ export async function getEnrolmentLesson(
       throw new Error(`HTTP Error! Status: ${response.status}`);
     }
     const data: GetResponseProps<EnrolmentLessonProps> = await response.json();
+    return data.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getEnrolmentDetailForUpdateView(
+  id: number
+): Promise<EnrolmentDetails> {
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
+
+    const response = await fetch(
+      `${process.env.API_URL}/student/enrolment/details/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error! Status: ${response.status}`);
+    }
+    const data = await response.json();
     return data.data;
   } catch (error) {
     throw error;
