@@ -98,6 +98,24 @@ export interface Enrolment {
   extensions: number;
 }
 
+export type EnrolmentDetails = {
+  id: number;
+  grade: {
+    id: number;
+    grade_level: number;
+    category: string;
+  };
+  tier: {
+    id: number;
+    name: string;
+  };
+  start_date: string;
+  status: string;
+  remaining_lessons: number;
+  is_active: boolean;
+  freeze_lessons: number;
+};
+
 type PaymentStatus = {
   id: number;
   status: "PAID" | "PENDING" | "PARTIALLY_PAID" | "REFUNDED" | "VOIDED";
