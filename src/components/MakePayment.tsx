@@ -176,7 +176,7 @@ const MakePayment = ({ id }: { id: number }) => {
           ) : (
             <form
               action={formAction}
-              className="space-y-4 sm:space-y-6 mt-[-30px]"
+              className="space-y-4 sm:space-y-5 mt-[-30px]"
               ref={formRef}
             >
               <Input type="hidden" name="id" value={id} />
@@ -313,6 +313,12 @@ const MakePayment = ({ id }: { id: number }) => {
                     />
                   </div>
                 </div>
+              </div>
+
+              <div>
+                <small className="text-red-500">
+                  {zoderror?.paid_amount?.[0]}
+                </small>
               </div>
 
               <DialogFooter className="flex flex-col sm:flex-row gap-4 sm:gap-0">
