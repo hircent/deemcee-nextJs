@@ -92,7 +92,7 @@ export const ExtendEnrolment = ({
                 <Input
                   type="date"
                   id="start_date"
-                  value={today}
+                  defaultValue={today}
                   name="start_date"
                   className="col-span-3"
                   min={today}
