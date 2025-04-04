@@ -213,6 +213,7 @@ export type EnrolmentLessonProps = {
 export type EnrolmentExtensionError = {
   id?: string;
   confirm?: string;
+  start_date?: string;
 };
 
 export type UpdateEnrolmentError = {

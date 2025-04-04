@@ -504,6 +504,7 @@ export async function extendEnrolment(
           Authorization: `Bearer ${token?.value}`,
           BranchId: `${branchId?.toString()}`,
         },
+        body: JSON.stringify(data),
       }
     );
 

@@ -40,6 +40,8 @@ export const ExtendEnrolment = ({
     SERVER_ACTION_STATE
   );
 
+  const today = new Date().toISOString().split("T")[0];
+
   useEffect(() => {
     if (state.zodErr) {
       setZodError(state.zodErr);
@@ -82,9 +84,25 @@ export const ExtendEnrolment = ({
 
           <form action={formAction} ref={formRef}>
             <Input id="id" type="hidden" name="id" value={id} />
-            <div className="grid gap-4 py-4 border-b-2">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="confirm" className="text-left">
+            <div className="space-y-4 py-4 border-b-2">
+              <div className="grid grid-cols-5 items-center gap-4">
+                <Label htmlFor="start_date" className="text-left col-span-2">
+                  Start Date: <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  type="date"
+                  id="start_date"
+                  value={today}
+                  name="start_date"
+                  className="col-span-3"
+                  min={today}
+                />
+                <small className="text-red-500">
+                  {zoderror?.start_date?.[0]}
+                </small>
+              </div>
+              <div className="grid grid-cols-5 items-center gap-4">
+                <Label htmlFor="confirm" className="text-left col-span-2">
                   Confirm: <span className="text-red-500">*</span>
                 </Label>
                 <Input id="confirm" name="confirm" className="col-span-3" />
