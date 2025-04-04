@@ -84,6 +84,12 @@ export type AdvanceEnrolmentError = {
   classroom?: string;
 };
 
+type EnrolmentExtensionDetails = {
+  id: number;
+  start_date: string;
+  status: "PENDING" | "EXTENDED";
+};
+
 export interface Enrolment {
   id: number;
   start_date: string;
@@ -95,7 +101,10 @@ export interface Enrolment {
   freeze_lessons: number;
   grade: number;
   video_assignments: VideoAssignment[];
-  extensions: number;
+  extensions: {
+    total: number;
+    extension: EnrolmentExtensionDetails[];
+  };
 }
 
 export type EnrolmentDetails = {
