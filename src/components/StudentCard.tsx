@@ -236,7 +236,7 @@ export function StudentCard({ student }: StudentCardProps) {
                                 variant="secondary"
                                 className="bg-purple-100 text-purple-700"
                               >
-                                None
+                                Never
                               </Badge>
                             </div>
                           )}
