@@ -136,7 +136,6 @@ export function StudentCard({ student }: StudentCardProps) {
                       <TableHead className="text-neutral-700">
                         End Date
                       </TableHead>
-                      <TableHead className="text-neutral-700">Day</TableHead>
                       <TableHead className="text-neutral-700">Status</TableHead>
                       <TableHead className="text-neutral-700">Videos</TableHead>
                       <TableHead className="text-neutral-700">
@@ -144,6 +143,9 @@ export function StudentCard({ student }: StudentCardProps) {
                       </TableHead>
                       <TableHead className="text-neutral-700">
                         Is Active
+                      </TableHead>
+                      <TableHead className="text-neutral-700">
+                        Extension
                       </TableHead>
                       <TableHead className="text-neutral-700">Action</TableHead>
                     </TableRow>
@@ -166,9 +168,6 @@ export function StudentCard({ student }: StudentCardProps) {
                               .dateOnly
                           }
                         </TableCell>
-                        <TableCell className="text-neutral-800">
-                          {enrollment.day}
-                        </TableCell>
                         <TableCell>
                           <Badge
                             variant={
@@ -179,6 +178,7 @@ export function StudentCard({ student }: StudentCardProps) {
                             {enrollment.status}
                           </Badge>
                         </TableCell>
+
                         <TableCell className="text-neutral-800 flex flex-col items-start">
                           {enrollment.video_assignments.map((video) => (
                             <EditVideoAssignment
@@ -203,11 +203,49 @@ export function StudentCard({ student }: StudentCardProps) {
                             </div>
                           )}
                         </TableCell>
-                        <TableCell className="w-[200px]">
+                        <TableCell>
+                          {enrollment.extensions.total > 0 ? (
+                            enrollment.extensions.extension.map((ext) => (
+                              <div
+                                className="flex flex-col gap-2 text-sm"
+                                key={ext.id}
+                              >
+                                <div className="text-neutral-800">
+                                  {
+                                    formatDateTime(new Date(ext.start_date))
+                                      .dateOnly
+                                  }
+                                </div>
+                                <div className="text-neutral-800">
+                                  <Badge
+                                    variant="secondary"
+                                    className={cn(
+                                      ext.status === "EXTENDED"
+                                        ? "bg-emerald-100 text-emerald-700"
+                                        : "bg-orange-100 text-orange-700"
+                                    )}
+                                  >
+                                    {ext.status}
+                                  </Badge>
+                                </div>
+                              </div>
+                            ))
+                          ) : (
+                            <div className="flex gap-2 text-red-500">
+                              <Badge
+                                variant="secondary"
+                                className="bg-purple-100 text-purple-700"
+                              >
+                                None
+                              </Badge>
+                            </div>
+                          )}
+                        </TableCell>
+                        <TableCell className="w-[100px]">
                           <StudentEnrolmentActions
                             enrolment={enrollment}
                             studentId={student.id}
-                            extensions={enrollment.extensions}
+                            extensions={enrollment.extensions.total}
                           />
                         </TableCell>
                       </TableRow>
