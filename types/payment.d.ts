@@ -103,3 +103,7 @@ export type MakePaymentFormErrors = {
   promo_code?: string;
   paid_amount?: string;
 };
+
+export type InvoiceData = {
+  id: number;
+};

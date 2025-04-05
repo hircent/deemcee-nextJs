@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Image,
 } from "@react-pdf/renderer";
+import { InvoiceData } from "@/types/payment";
 
 // Styles for the PDF document
 const styles = StyleSheet.create({

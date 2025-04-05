@@ -16,6 +16,7 @@ import StudentEnrolmentActions from "./StudentEnrolmentActions";
 import EditVideoAssignment from "./EditVideoAssignment";
 import MakePayment from "./MakePayment";
 import CreateEnrolment from "./CreateEnrolment";
+import InvoiceViewer from "./InvoiceViewer";
 
 export function StudentCard({ student }: StudentCardProps) {
   return (
@@ -329,7 +330,10 @@ export function StudentCard({ student }: StudentCardProps) {
                             <MakePayment id={payment.id} />
                           )}
                         </TableCell>
-                        <TableCell className="w-[100px]">View</TableCell>
+                        <TableCell className="w-[100px]">
+                          view
+                          {/* <InvoiceViewer id={payment.id}/> */}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
