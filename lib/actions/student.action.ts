@@ -33,6 +33,7 @@ import {
   UpdateStudentFormSchema,
 } from "@/constants/form";
 import { ClassLessonTodayStudentList } from "@/types/class";
+import { InvoiceData } from "@/types/payment";
 
 export async function getStudentList(
   params: StudentListFilterProps
@@ -684,5 +685,35 @@ export async function getEnrolmentList(params: EnrolmentDataProps) {
     return data;
   } catch (error) {
     return [];
+  }
+}
+
+export async function getInvoiceDetailForPrint(
+  id: number
+): Promise<InvoiceData> {
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
+
+    const response = await fetch(
+      `${process.env.API_URL}/paymemt-invoice-details/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    throw error;
   }
 }

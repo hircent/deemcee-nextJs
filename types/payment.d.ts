@@ -1,3 +1,5 @@
+import { BranchDetailProps, ParentFullDetailsData } from "./index";
+
 export type PaymentData = {
   id: number;
   status: string;
@@ -104,6 +106,10 @@ export type MakePaymentFormErrors = {
   paid_amount?: string;
 };
 
-export type InvoiceData = {
-  id: number;
+export type InvoiceData = StudentPaymentList & {
+  student: string;
+  grade: number;
+  invoice: string;
+  parent: ParentFullDetailsData;
+  branch: BranchDetailProps;
 };

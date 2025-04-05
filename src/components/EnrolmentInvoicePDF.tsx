@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   companyAddress: { fontSize: 10, marginBottom: 2 },
   companyWebsite: { fontSize: 10, marginBottom: 2 },
   companySSM: { fontSize: 10, marginBottom: 10 },
-  logo: { width: 220, marginLeft: "auto", height: 70 },
+  logo: { width: 70, marginLeft: "auto", height: 70 },
   invoiceTitle: {
     fontSize: 22,
     color: "#4299e1",
@@ -139,20 +139,27 @@ const styles = StyleSheet.create({
 });
 
 // Education Invoice PDF Document Component
-const EnrolmentInvoicePDF = ({ invoice }: { invoice: any }) => (
+const EnrolmentInvoicePDF = ({ invoice }: { invoice: InvoiceData }) => (
   <Document>
     <Page size="A4" style={styles.page}>
       {/* Header with company info and logo */}
       <View style={styles.header}>
         <View style={styles.companyInfo}>
-          <Text style={styles.companyName}>{invoice.company.name}</Text>
-          <Text style={styles.companyAddress}>{invoice.company.address}</Text>
-          <Text style={styles.companyAddress}>{invoice.company.area}</Text>
-          <Text style={styles.companyWebsite}>{invoice.company.website}</Text>
-          <Text style={styles.companySSM}>SSM: {invoice.company.ssm}</Text>
+          <Text style={styles.companyName}>{invoice.branch.display_name}</Text>
+          <Text style={styles.companyAddress}>
+            {invoice.branch.address.address_line_1}
+          </Text>
+          <Text style={styles.companyAddress}>
+            {invoice.branch.address.city} {invoice.branch.address.state}{" "}
+            {invoice.branch.address.postcode}
+          </Text>
+          <Text style={styles.companyWebsite}>https://www.deemcee.com</Text>
+          <Text style={styles.companySSM}>
+            SSM: {invoice.branch.business_reg_no}
+          </Text>
         </View>
         {/* eslint-disable-next-line jsx-a11y/alt-text */}
-        <Image src="/logo.png" style={styles.logo} />
+        <Image src="/images/logo-ver.png" style={styles.logo} />
       </View>
 
       {/* Invoice Title */}
@@ -162,31 +169,36 @@ const EnrolmentInvoicePDF = ({ invoice }: { invoice: any }) => (
       <View style={styles.infoSection}>
         <View style={styles.invoiceToSection}>
           <Text style={styles.sectionTitle}>INVOICE TO</Text>
-          <Text style={styles.clientDetail}>{invoice.client.name}</Text>
-          <Text style={styles.clientDetail}>{invoice.client.address1}</Text>
-          <Text style={styles.clientDetail}>{invoice.client.address2}</Text>
           <Text style={styles.clientDetail}>
-            {invoice.client.postcode} {invoice.client.city}
+            {invoice.parent.first_name} {invoice.parent.last_name}
           </Text>
-          <Text style={styles.clientDetail}>{invoice.client.state}</Text>
-          <Text style={styles.clientDetail}>{invoice.client.phone}</Text>
+          <Text style={styles.clientDetail}>
+            {invoice.parent.address.address_line_1}
+          </Text>
+          <Text style={styles.clientDetail}>
+            {invoice.parent.address.address_line_2}
+          </Text>
+          <Text style={styles.clientDetail}>
+            {invoice.parent.address.postcode} {invoice.parent.address.city}
+          </Text>
+          <Text style={styles.clientDetail}>
+            {invoice.parent.address.state}
+          </Text>
+          <Text style={styles.clientDetail}>{invoice.parent.email}</Text>
         </View>
 
         <View style={styles.invoiceDetailsSection}>
           <Text style={styles.invoiceDetail}>
             <Text style={styles.invoiceDetailLabel}>INVOICE NO.</Text>
-            <Text style={styles.invoiceDetailValue}>
-              {" "}
-              {invoice.invoiceNumber}
-            </Text>
+            <Text style={styles.invoiceDetailValue}> {invoice.invoice}</Text>
           </Text>
           <Text style={styles.invoiceDetail}>
             <Text style={styles.invoiceDetailLabel}>DATE</Text>
-            <Text style={styles.invoiceDetailValue}> {invoice.date}</Text>
+            <Text style={styles.invoiceDetailValue}> {invoice.start_date}</Text>
           </Text>
           <Text style={styles.invoiceDetail}>
             <Text style={styles.invoiceDetailLabel}>TERMS</Text>
-            <Text style={styles.invoiceDetailValue}> {invoice.terms}</Text>
+            <Text style={styles.invoiceDetailValue}>Due Now</Text>
           </Text>
         </View>
       </View>
@@ -213,21 +225,21 @@ const EnrolmentInvoicePDF = ({ invoice }: { invoice: any }) => (
               styles.rowMargin,
             ]}
           >
-            {invoice.student.name}
+            {invoice.student}
           </Text>
           <Text style={[styles.tableCell, styles.descriptionCellValue]}>
-            {invoice.student.description}
+            {invoice.enrolment_type}
           </Text>
           <Text style={[styles.tableCell, styles.gradeCellValue]}>
-            {invoice.student.grade}
+            {invoice.grade}
           </Text>
           <Text style={[styles.tableCell, styles.dateCellValue]}>
-            {invoice.student.startingDate}
+            {invoice.start_date}
           </Text>
           <Text
             style={[styles.tableCell, styles.amountCellValue, styles.rowMargin]}
           >
-            {invoice.student.amount.toFixed(2)}
+            {invoice.amount}
           </Text>
         </View>
       </View>
@@ -239,7 +251,7 @@ const EnrolmentInvoicePDF = ({ invoice }: { invoice: any }) => (
       <View style={styles.paymentWrapper}>
         <View style={styles.paymentSection}>
           <Text style={styles.paymentLabel}>PAYMENT METHOD:</Text>
-          <Text style={styles.paymentMethod}>{invoice.paymentMethod}</Text>
+          <Text style={styles.paymentMethod}>Cash</Text>
         </View>
 
         {/* Totals Section */}
@@ -247,20 +259,18 @@ const EnrolmentInvoicePDF = ({ invoice }: { invoice: any }) => (
           <View style={styles.totalRow}>
             <Text style={styles.totalLabel}>SUBTOTAL</Text>
             <Text style={styles.totalAmount}>
-              {invoice.subtotal.toFixed(2)}
+              {invoice.early_advance_rebate}
             </Text>
           </View>
 
           <View style={styles.totalRow}>
             <Text style={styles.grandTotalLabel}>TOTAL</Text>
-            <Text style={styles.grandTotal}>RM {invoice.total.toFixed(2)}</Text>
+            <Text style={styles.grandTotal}>RM {invoice.discount}</Text>
           </View>
 
           <View style={styles.paidSection}>
             <Text style={styles.paidLabel}>AMOUNT PAID</Text>
-            <Text style={styles.paidAmount}>
-              RM {invoice.amountPaid.toFixed(2)}
-            </Text>
+            <Text style={styles.paidAmount}>RM {invoice.paid_amount}</Text>
           </View>
         </View>
       </View>

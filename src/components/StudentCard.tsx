@@ -331,8 +331,7 @@ export function StudentCard({ student }: StudentCardProps) {
                           )}
                         </TableCell>
                         <TableCell className="w-[100px]">
-                          view
-                          {/* <InvoiceViewer id={payment.id}/> */}
+                          <InvoiceViewer id={payment.id} />
                         </TableCell>
                       </TableRow>
                     ))}
