@@ -166,6 +166,7 @@ const StudentEnrolmentActions = ({
         end_date={formatDateTime(new Date(enrolment.end_date)).dateOnly}
         remaining_lessons={enrolment.remaining_lessons}
         grade={enrolment.grade}
+        extension={enrolment.extensions.total}
         open={advanceEnrolmentViewOpen}
         onOpenChange={setAdvanceEnrolmentViewOpen}
       />

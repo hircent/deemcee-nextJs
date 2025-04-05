@@ -35,6 +35,7 @@ export const AdvanceEnrolment = ({
   end_date,
   remaining_lessons,
   grade,
+  extension,
   open,
   onOpenChange,
 }: {
@@ -42,6 +43,7 @@ export const AdvanceEnrolment = ({
   end_date: string;
   remaining_lessons: number;
   grade: number;
+  extension: number;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) => {
@@ -154,27 +156,29 @@ export const AdvanceEnrolment = ({
             <Input type="hidden" name="id" value={id} />
             <Input type="hidden" name="grade" value={grade + 1} />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 space-y-2">
-              <div className="flex items-center col-span-full gap-4">
-                <Input
-                  type="hidden"
-                  name="is_early_advance"
-                  value={isActive.toString()}
-                />
-                <Label htmlFor="is_early_advance" className="font-medium">
-                  Early Advance :
-                </Label>
-                <Checkbox
-                  id="is_early_advance"
-                  name="is_early_advance"
-                  defaultChecked={false}
-                  value={isActive.toString()}
-                  checked={isActive}
-                  className={cn("h-5 w-5 border-gray-300", {
-                    " text-green-400 ": isActive,
-                  })}
-                  onClick={handleEarlyAdvance}
-                />
-              </div>
+              {extension === 0 && (
+                <div className="flex items-center col-span-full gap-4">
+                  <Input
+                    type="hidden"
+                    name="is_early_advance"
+                    value={isActive.toString()}
+                  />
+                  <Label htmlFor="is_early_advance" className="font-medium">
+                    Early Advance :
+                  </Label>
+                  <Checkbox
+                    id="is_early_advance"
+                    name="is_early_advance"
+                    defaultChecked={false}
+                    value={isActive.toString()}
+                    checked={isActive}
+                    className={cn("h-5 w-5 border-gray-300", {
+                      " text-green-400 ": isActive,
+                    })}
+                    onClick={handleEarlyAdvance}
+                  />
+                </div>
+              )}
 
               <div className="flex flex-col space-y-2">
                 <Label htmlFor="remaining_lessons" className="font-medium">
