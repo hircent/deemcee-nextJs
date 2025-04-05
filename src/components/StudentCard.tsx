@@ -266,6 +266,7 @@ export function StudentCard({ student }: StudentCardProps) {
                   <TableHeader>
                     <TableRow className="bg-neutral-50">
                       <TableHead className="text-neutral-700">Grade</TableHead>
+                      <TableHead className="text-neutral-700">Type</TableHead>
                       <TableHead className="text-neutral-700">
                         Term Fees
                       </TableHead>
@@ -298,6 +299,9 @@ export function StudentCard({ student }: StudentCardProps) {
                           G{payment.grade}
                         </TableCell>
                         <TableCell className="text-neutral-800">
+                          {payment.enrolment_type}
+                        </TableCell>
+                        <TableCell className="text-neutral-800">
                           {payment.amount}
                         </TableCell>
                         <TableCell className="text-neutral-800">
@@ -325,7 +329,7 @@ export function StudentCard({ student }: StudentCardProps) {
                             <MakePayment id={payment.id} />
                           )}
                         </TableCell>
-                        <TableCell className="w-[200px]">View</TableCell>
+                        <TableCell className="w-[100px]">View</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
