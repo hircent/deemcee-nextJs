@@ -23,6 +23,10 @@ export const HQPaymentReportListColumns: ColumnDef<BranchTotalPayment>[] = [
     header: "Total Discount",
   },
   {
+    accessorKey: "early_advance_rebate",
+    header: "Total Early Advance Rebate",
+  },
+  {
     accessorKey: "discounted_amount",
     header: "Discounted Amount",
   },

@@ -3,6 +3,7 @@ export type PaymentData = {
   status: string;
   amount: string;
   discount: string;
+  early_advance_rebate: string;
   paid_amount: string;
   pre_outstanding: string;
   post_outstanding: string;
@@ -52,6 +53,7 @@ type BranchTotalPayment = {
   name: string;
   total_amount: number;
   total_discount: number;
+  early_advance_rebate: number;
   discounted_amount: number;
   percentage: number;
   loyalty_fees: number;
@@ -76,6 +78,7 @@ export type PaymentInfo = {
   paid_at: string;
   amount: number;
   discount: number;
+  early_advance_rebate: number;
   discounted_amount: number;
 };
 

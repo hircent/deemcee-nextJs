@@ -48,6 +48,14 @@ export const PaymentReportListColumns: ColumnDef<PaymentInfo>[] = [
     },
   },
   {
+    id: "early_advance_rebate",
+    header: "Early Advance Rebate",
+    cell: ({ row }) => {
+      const fees = row.original;
+      return <div>{fees.early_advance_rebate}</div>;
+    },
+  },
+  {
     id: "discounted_amount",
     header: "Discounted Amount",
     cell: ({ row }) => {

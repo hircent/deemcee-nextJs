@@ -273,6 +273,9 @@ export function StudentCard({ student }: StudentCardProps) {
                         Discount
                       </TableHead>
                       <TableHead className="text-neutral-700">
+                        Early Advance Rebate
+                      </TableHead>
+                      <TableHead className="text-neutral-700">
                         Paid Amount
                       </TableHead>
                       <TableHead className="text-neutral-700">
@@ -299,6 +302,9 @@ export function StudentCard({ student }: StudentCardProps) {
                         </TableCell>
                         <TableCell className="text-neutral-800">
                           {payment.discount}
+                        </TableCell>
+                        <TableCell className="text-neutral-800">
+                          {payment.early_advance_rebate}
                         </TableCell>
                         <TableCell className="text-neutral-800">
                           {payment.paid_amount}
