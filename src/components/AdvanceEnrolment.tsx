@@ -155,14 +155,14 @@ export const AdvanceEnrolment = ({
           <form className="space-y-4" action={formAction} ref={formRef}>
             <Input type="hidden" name="id" value={id} />
             <Input type="hidden" name="grade" value={grade + 1} />
+            <Input
+              type="hidden"
+              name="is_early_advance"
+              value={isActive.toString()}
+            />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 space-y-2">
               {extension === 0 && (
                 <div className="flex items-center col-span-full gap-4">
-                  <Input
-                    type="hidden"
-                    name="is_early_advance"
-                    value={isActive.toString()}
-                  />
                   <Label htmlFor="is_early_advance" className="font-medium">
                     Early Advance :
                   </Label>
