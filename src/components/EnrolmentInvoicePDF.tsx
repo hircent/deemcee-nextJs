@@ -206,7 +206,7 @@ const EnrolmentInvoicePDF = ({ invoice }: { invoice: InvoiceData }) => (
           </Text>
           <Text style={styles.invoiceDetail}>
             <Text style={styles.invoiceDetailLabel}>TERMS</Text>
-            <Text style={styles.invoiceDetailValue}> Due Now</Text>
+            <Text style={styles.invoiceDetailValue}> Due on receipt</Text>
           </Text>
         </View>
       </View>
