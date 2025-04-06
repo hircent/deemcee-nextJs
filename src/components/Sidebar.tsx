@@ -16,11 +16,11 @@ const Sidebar = async ({ user }: { user: User | undefined }) => {
           className="cursor-pointer flex gap-2 sticky top-0 items-center justify-center"
         >
           <Image
-            src="/images/logo-ver.png"
-            width={70}
-            height={70}
+            src="/images/logo-ver.svg"
+            width={80}
+            height={80}
             alt="Deemcee Logo"
-            className="size-[40px] lg:size-[70px]"
+            className="size-[40px] lg:size-[80px]"
           />
           <h1 className="sidebar-logo"></h1>
         </Link>

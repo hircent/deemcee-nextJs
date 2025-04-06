@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   description:
     "At Deemcee, we empower young speakers (ages 5-10) to inspire with confidence. Through a structured program, children refine their self-expression, build resilience, and master public speaking. From role plays to global discussions, we nurture articulation, stage presence, and a love for communication. Join us in shaping future voices!",
   icons: {
-    icon: "/images/logo-ver.png",
+    icon: "/images/logo-ver.svg",
   },
 };
 
