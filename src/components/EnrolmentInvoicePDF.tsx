@@ -1,13 +1,7 @@
 import React from "react";
-import {
-  Document,
-  Page,
-  Text,
-  View,
-  StyleSheet,
-  Image,
-} from "@react-pdf/renderer";
+import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 import { InvoiceData } from "@/types/payment";
+import LogoVer from "./LogoVer";
 
 // Styles for the PDF document
 const styles = StyleSheet.create({
@@ -16,13 +10,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 10,
+    height: "80",
   },
-  companyInfo: { flexDirection: "column" },
+  companyInfo: {
+    flexDirection: "column",
+    width: "50%",
+  },
   companyName: { fontSize: 14, fontWeight: "bold", marginBottom: 4 },
   companyAddress: { fontSize: 10, marginBottom: 2 },
   companyWebsite: { fontSize: 10, marginBottom: 2 },
   companySSM: { fontSize: 10, marginBottom: 10 },
-  logo: { width: 70, marginLeft: "auto", height: 70 },
+  logo: {
+    width: "50%",
+    justifyContent: "flex-end",
+  },
   invoiceTitle: {
     fontSize: 22,
     color: "#4299e1",
@@ -92,10 +93,13 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   paymentWrapper: { flexDirection: "row", justifyContent: "space-between" },
-  paymentSection: { flexDirection: "column", marginBottom: 8 },
+  paymentSection: {
+    flexDirection: "column",
+    marginBottom: 8,
+  },
   paymentLabel: { fontSize: 10, fontWeight: "bold", width: "20%" },
   paymentMethod: { fontSize: 10, marginTop: 5 },
-  totalSection: { width: "50%" },
+  totalSection: { width: "60%" },
   totalRow: {
     flexDirection: "row",
     justifyContent: "flex-end",
@@ -103,25 +107,26 @@ const styles = StyleSheet.create({
   },
   totalLabel: {
     fontSize: 10,
-    width: "40%", // Added fixed width
+    width: "60%", // Added fixed width
     textAlign: "right", // Right-aligned label
     paddingRight: 40, // Added padding for separation
   },
   totalAmount: {
     fontSize: 10,
-    width: "30%", // Added fixed width
+    width: "40%", // Added fixed width
     textAlign: "left", // Left-aligned value
   },
   grandTotalLabel: {
     fontSize: 14,
     width: "40%",
+    fontWeight: "bold",
     textAlign: "right",
     paddingRight: 40,
   },
   grandTotal: {
     fontSize: 14,
     fontWeight: "bold",
-    width: "30%",
+    width: "40%",
     textAlign: "left",
   },
   paidSection: {
@@ -131,11 +136,11 @@ const styles = StyleSheet.create({
   },
   paidLabel: {
     fontSize: 10,
-    width: "50%",
+    width: "40%",
     textAlign: "right",
     paddingRight: 40,
   },
-  paidAmount: { fontSize: 10, width: "30%", textAlign: "left" },
+  paidAmount: { fontSize: 10, width: "40%", textAlign: "left" },
 });
 
 // Education Invoice PDF Document Component
@@ -159,7 +164,9 @@ const EnrolmentInvoicePDF = ({ invoice }: { invoice: InvoiceData }) => (
           </Text>
         </View>
         {/* eslint-disable-next-line jsx-a11y/alt-text */}
-        <Image src="/images/logo-ver.png" style={styles.logo} />
+        <View style={styles.logo}>
+          <LogoVer />
+        </View>
       </View>
 
       {/* Invoice Title */}
@@ -185,6 +192,7 @@ const EnrolmentInvoicePDF = ({ invoice }: { invoice: InvoiceData }) => (
             {invoice.parent.address.state}
           </Text>
           <Text style={styles.clientDetail}>{invoice.parent.email}</Text>
+          <Text style={styles.clientDetail}>{invoice.parent.phone || "-"}</Text>
         </View>
 
         <View style={styles.invoiceDetailsSection}>
@@ -198,7 +206,7 @@ const EnrolmentInvoicePDF = ({ invoice }: { invoice: InvoiceData }) => (
           </Text>
           <Text style={styles.invoiceDetail}>
             <Text style={styles.invoiceDetailLabel}>TERMS</Text>
-            <Text style={styles.invoiceDetailValue}>Due Now</Text>
+            <Text style={styles.invoiceDetailValue}> Due Now</Text>
           </Text>
         </View>
       </View>
@@ -214,7 +222,7 @@ const EnrolmentInvoicePDF = ({ invoice }: { invoice: InvoiceData }) => (
           </Text>
           <Text style={[styles.tableCell, styles.gradeCell]}>GRADE</Text>
           <Text style={[styles.tableCell, styles.dateCell]}>STARTING DATE</Text>
-          <Text style={[styles.tableCell, styles.amountCell]}>AMOUNT (RM)</Text>
+          <Text style={[styles.tableCell, styles.amountCell]}>AMOUNT</Text>
         </View>
 
         <View style={styles.tableRow}>
@@ -239,7 +247,7 @@ const EnrolmentInvoicePDF = ({ invoice }: { invoice: InvoiceData }) => (
           <Text
             style={[styles.tableCell, styles.amountCellValue, styles.rowMargin]}
           >
-            {invoice.amount}
+            {invoice.branch.country.currency} {invoice.amount}
           </Text>
         </View>
       </View>
@@ -257,20 +265,35 @@ const EnrolmentInvoicePDF = ({ invoice }: { invoice: InvoiceData }) => (
         {/* Totals Section */}
         <View style={styles.totalSection}>
           <View style={styles.totalRow}>
-            <Text style={styles.totalLabel}>SUBTOTAL</Text>
-            <Text style={styles.totalAmount}>
-              {invoice.early_advance_rebate}
+            <Text style={styles.grandTotalLabel}>TOTAL</Text>
+            <Text style={styles.grandTotal}>
+              {invoice.branch.country.currency} {invoice.amount}
             </Text>
           </View>
 
           <View style={styles.totalRow}>
-            <Text style={styles.grandTotalLabel}>TOTAL</Text>
-            <Text style={styles.grandTotal}>RM {invoice.discount}</Text>
+            <Text style={styles.totalLabel}>Discount</Text>
+            <Text style={styles.totalAmount}>{invoice.discount}</Text>
           </View>
-
+          <View style={styles.totalRow}>
+            <Text style={styles.totalLabel}>Early Advance Rebate</Text>
+            <Text style={styles.totalAmount}>
+              {invoice.early_advance_rebate}
+            </Text>
+          </View>
+          <View style={styles.totalRow}>
+            <Text style={styles.totalLabel}>Credit Balance</Text>
+            <Text style={styles.totalAmount}>{invoice.pre_outstanding}</Text>
+          </View>
+          <View style={styles.totalRow}>
+            <Text style={styles.totalLabel}>Post-Payment</Text>
+            <Text style={styles.totalAmount}>{invoice.post_outstanding}</Text>
+          </View>
           <View style={styles.paidSection}>
             <Text style={styles.paidLabel}>AMOUNT PAID</Text>
-            <Text style={styles.paidAmount}>RM {invoice.paid_amount}</Text>
+            <Text style={styles.paidAmount}>
+              {invoice.branch.country.currency} {invoice.paid_amount}
+            </Text>
           </View>
         </View>
       </View>
