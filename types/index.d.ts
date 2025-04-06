@@ -461,6 +461,7 @@ export type ParentFullDetailsData = {
   last_name: string;
   username: string;
   email: string;
+  phone: string | null;
   is_active: boolean;
   created_at: string;
   updated_at: string;
@@ -640,7 +641,10 @@ export type BranchDetailProps = {
     username: string;
   };
   branch_grade: number;
-  country: string;
+  country: {
+    name: string;
+    currency: string;
+  };
   address: Address;
   branch_grade: number;
   business_name: string;
