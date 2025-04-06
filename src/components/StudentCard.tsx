@@ -330,9 +330,11 @@ export function StudentCard({ student }: StudentCardProps) {
                             <MakePayment id={payment.id} />
                           )}
                         </TableCell>
-                        <TableCell className="w-[100px]">
-                          <InvoiceViewer id={payment.id} />
-                        </TableCell>
+                        {payment.status === "PAID" && (
+                          <TableCell className="w-[100px]">
+                            <InvoiceViewer id={payment.id} />
+                          </TableCell>
+                        )}
                       </TableRow>
                     ))}
                   </TableBody>
