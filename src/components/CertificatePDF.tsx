@@ -68,13 +68,20 @@ const styles = StyleSheet.create({
   },
 });
 
+const getCompletion = (grade: number) => {
+  if (grade === 6) {
+    return "COMPLETION";
+  }
+  return "INVOLVEMENT";
+};
+
 // Create Document Component
-const CertificateDocument = ({ cert }: { cert: CertificateData }) => (
+const CertificatePDF = () => (
   <Document>
     <Page size="A4" style={styles.page}>
       <View style={styles.header}>
         <Text style={styles.title}>CERTIFICATE</Text>
-        <Text style={styles.subtitle}>OF INVOLVEMENT</Text>
+        <Text style={styles.subtitle}>OF {getCompletion(6)}</Text>
         <Text style={styles.programName}>in Kiddo Emcee Programme</Text>
       </View>
 
@@ -98,4 +105,4 @@ const CertificateDocument = ({ cert }: { cert: CertificateData }) => (
   </Document>
 );
 
-export default CertificateDocument;
+export default CertificatePDF;

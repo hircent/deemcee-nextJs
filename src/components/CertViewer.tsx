@@ -35,7 +35,7 @@ const CertViewer = ({ cert }: { cert: CertificateData }) => {
         </div>
         <div className="flex-grow">
           <PDFViewer width="100%" height="100%" style={{ border: "none" }}>
-            <CertificatePDF cert={cert} />
+            <CertificatePDF />
           </PDFViewer>
         </div>
       </DialogContent>
