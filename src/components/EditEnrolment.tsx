@@ -153,13 +153,15 @@ export const EditEnrolment = ({
             <form className="space-y-4" action={formAction} ref={formRef}>
               <Input type="hidden" name="id" value={id} />
               <Input type="hidden" name="grade_level" value={currentGrade} />
-              <div>
+              <Input
+                type="hidden"
+                name="is_active"
+                value={isActive ? "true" : "false"}
+              />
+
+              {/* Temporary remove this is_active field, might be used later */}
+              {/* <div>
                 <div className="grid grid-cols-3 gap-4 items-center">
-                  <Input
-                    type="hidden"
-                    name="is_active"
-                    value={isActive ? "true" : "false"}
-                  />
                   <Label htmlFor="is_active">Is Active</Label>
                   <div className="col-span-2 flex items-center space-x-2">
                     <Checkbox
@@ -180,7 +182,7 @@ export const EditEnrolment = ({
                     </Label>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className="space-y-2">
                 <Input type="hidden" name="status" value={enrolmentStatus} />
