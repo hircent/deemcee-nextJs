@@ -1,4 +1,5 @@
 import { CertificateData } from "@/types/certificate";
+import { getCategoryByGrade } from "@/lib/utils";
 import {
   Document,
   Page,
@@ -76,20 +77,24 @@ const getCompletion = (grade: number) => {
 };
 
 // Create Document Component
-const CertificatePDF = () => (
+const CertificatePDF = ({ cert }: { cert: CertificateData }) => (
   <Document>
     <Page size="A4" style={styles.page}>
       <View style={styles.header}>
         <Text style={styles.title}>CERTIFICATE</Text>
-        <Text style={styles.subtitle}>OF {getCompletion(6)}</Text>
-        <Text style={styles.programName}>in Kiddo Emcee Programme</Text>
+        <Text style={styles.subtitle}>OF {getCompletion(cert.grade)}</Text>
+        <Text style={styles.programName}>
+          in {getCategoryByGrade(cert.grade)} Emcee Programme
+        </Text>
       </View>
 
       <View style={styles.recipientSection}>
-        <Text style={styles.recipientName}>Giselle Kok</Text>
+        <Text style={styles.recipientName}>
+          {cert.student.first_name} {cert.student.last_name}
+        </Text>
         <Text style={styles.attendanceText}>
-          attended <Text style={styles.boldText}>Grade 1</Text> Creative Based
-          Speaking Programme
+          attended <Text style={styles.boldText}>Grade {cert.grade}</Text>{" "}
+          Creative Based Speaking Programme
         </Text>
         <Text style={styles.attendanceText}>in Year 2025.</Text>
       </View>
