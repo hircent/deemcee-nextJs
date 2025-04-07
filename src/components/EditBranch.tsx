@@ -19,12 +19,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import {
-  getAllPrincipalAndBranchGrade,
-  getBranchDetails,
-  updateBranch,
-} from "@/lib/actions/branch.action";
-import { BranchGrade, EditProps, Principal } from "@/types/index";
+import { getBranchDetails, updateBranch } from "@/lib/actions/branch.action";
+import { EditProps } from "@/types/index";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -91,7 +87,7 @@ export function EditBranch({ type, id }: EditProps) {
         postcode: branchData?.address.postcode || "",
         state: branchData?.address.state || "",
       });
-      setCountry(branchData.country.toString());
+      setCountry(branchData.country.id.toString());
       setPrincipalID(branchData.principal.id.toString());
       setBranchGradeID(branchData.branch_grade.toString());
     } catch (error) {

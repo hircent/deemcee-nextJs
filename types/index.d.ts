@@ -642,6 +642,7 @@ export type BranchDetailProps = {
   };
   branch_grade: number;
   country: {
+    id: number;
     name: string;
     currency: string;
   };
