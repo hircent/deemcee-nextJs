@@ -4,6 +4,7 @@ import { CertificateData, CertificateParams } from "@/types/certificate";
 import { ListProps } from "@/types/index";
 import { cookies } from "next/headers";
 import { getToken } from "./user.actions";
+import { revalidatePath } from "next/cache";
 
 export const getCertificateList = async (
   params: CertificateParams
@@ -42,3 +43,25 @@ export const getCertificateList = async (
     throw new Error("Failed to fetch certificate data " + error);
   }
 };
+
+export async function printCertificate(id: number) {
+  const token = await getToken();
+  const branchId = cookies().get("BranchId")?.value;
+
+  const url = new URL(`${process.env.API_URL}/certificate/${id}/print`);
+
+  const response = await fetch(url.toString(), {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token?.value}`,
+      BranchId: `${branchId?.toString()}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to print certificate");
+  }
+
+  revalidatePath("/certificate");
+}
