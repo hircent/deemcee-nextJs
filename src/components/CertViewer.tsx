@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,25 +8,74 @@ import {
   DialogTrigger,
   DialogOverlay,
 } from "@/components/ui/dialog";
-import { PDFViewer } from "@react-pdf/renderer";
-import CertificatePDF from "./CertificatePDF";
 import { Button } from "./ui/button";
 import { CertificateData } from "@/types/certificate";
 import { Printer } from "lucide-react";
+import { printCertificate } from "@/lib/actions/certificate.action";
+import { useToast } from "./ui/use-toast";
+import { cn } from "@/lib/utils";
+import dynamic from "next/dynamic";
+
+// Dynamically import PDF components with no SSR
+const PDFViewer = dynamic(
+  () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
+  { ssr: false }
+);
+
+const CertificatePDF = dynamic(() => import("./CertificatePDF"), {
+  ssr: false,
+});
 
 const CertViewer = ({ cert }: { cert: CertificateData }) => {
   const [open, setOpen] = useState(false);
+  const [isPrinting, setIsPrinting] = useState(false);
+  const { toast } = useToast();
+  const [isClient, setIsClient] = useState(false);
+
+  // Only render PDF components on the client side
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const handlePrint = async () => {
+    try {
+      // Call the API to mark the certificate as printed
+      await printCertificate(cert.id);
+      toast({
+        title: "Success",
+        description: `Certificate ${cert.student.first_name} ${cert.student.last_name} has been marked as printed.`,
+        className: cn(`bottom-0 left-0`, "bg-success-100"),
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to mark certificate as printed. Please try again.",
+        className: cn(`bottom-0 left-0`, "bg-error-100"),
+      });
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="group p-2 hover:bg-gray-100 rounded-full transition-colors">
-          <Printer
-            size={18}
-            className="text-gray-500 group-hover:text-blue-600 transition-colors"
-          />
-        </Button>
-      </DialogTrigger>
+      <div className="flex gap-2">
+        <DialogTrigger asChild>
+          <Button className="group p-2 hover:bg-gray-100 rounded-full transition-colors">
+            <Printer
+              size={18}
+              className="text-gray-500 group-hover:text-blue-600 transition-colors"
+            />
+          </Button>
+        </DialogTrigger>
+        {!cert.is_printed && (
+          <Button
+            onClick={handlePrint}
+            variant="default"
+            className="mr-12 p-1 px-4 bg-green-200 text-green-600 hover:bg-green-300 rounded-lg"
+          >
+            Mark as Printed
+          </Button>
+        )}
+      </div>
       <DialogOverlay
         className="bg-black/80"
         style={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}

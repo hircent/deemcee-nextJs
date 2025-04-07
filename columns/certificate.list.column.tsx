@@ -30,7 +30,7 @@ export const CertificateListColumns: ColumnDef<CertificateData>[] = [
       const cert = row.original;
 
       return (
-        <div className="flex gap-4">
+        <div className="flex gap-4 w-36">
           <CertViewer cert={cert} />
         </div>
       );
