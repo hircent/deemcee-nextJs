@@ -32,7 +32,7 @@ export const sidebarLinks = [
     baseRoute: "/structure",
     label: "Structure",
     icon: LucideIcons.BookA,
-    visible: ["superadmin", "principal", "manager", "teacher"],
+    visible: ["superadmin"],
   },
   {
     imgURL: "/icons/home.svg",
