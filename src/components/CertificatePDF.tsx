@@ -1,4 +1,4 @@
-import React from "react";
+import { CertificateData } from "@/types/certificate";
 import {
   Document,
   Page,
@@ -7,83 +7,95 @@ import {
   StyleSheet,
   Image,
 } from "@react-pdf/renderer";
-import { Certificate } from "crypto";
-import { CertificateData } from "@/types/certificate";
-import { capitalizeFirstLetter, getCategoryByGrade } from "@/lib/utils";
 
+// Create styles
 const styles = StyleSheet.create({
-  html: {
-    fontFamily: "Helvetica", // Arial is not available in react-pdf, Helvetica is the closest match
-    fontSize: 13,
+  page: {
+    flexDirection: "column",
+    backgroundColor: "#fff",
+    padding: 50,
   },
-  body: { margin: 0, padding: 0 },
-  certificateTitle: {
+  header: {
+    marginTop: 75,
+    marginLeft: "30%",
+    marginBottom: 20,
+    textAlign: "center", // Cyan color for the header
+  },
+  title: {
     fontSize: 46,
     fontWeight: "bold",
-    marginTop: "32%",
-    marginLeft: "24.5%",
-    marginRight: "5%",
+    textAlign: "left",
   },
-  certificat2ndTitle: {
-    fontSize: 44,
-    fontWeight: "normal",
-    marginLeft: "24.5%",
-    marginRight: "5%",
-    color: "#45A0E7",
-  },
-  certificateSubtitle: {
-    fontSize: 22,
-    marginLeft: "24.5%",
-    marginRight: "5%",
-    fontWeight: "bold",
-  },
-  certificateMainText: {
-    textAlign: "center",
-    fontWeight: "bold",
+  subtitle: {
     fontSize: 36,
-    marginTop: "34%",
-    paddingHorizontal: 30,
-    color: "#45A0E7",
+    color: "#00B7EB", // Cyan color for "OF INVOLVEMENT"
+    textAlign: "left",
+  },
+  programName: {
+    fontSize: 20,
+    textAlign: "left",
+    fontWeight: "bold",
+    marginTop: 3,
+  },
+  recipientSection: {
+    marginTop: 160,
+    marginBottom: 10,
+    marginLeft: "30%",
+    textAlign: "left",
+  },
+  recipientName: {
+    fontSize: 32,
+
+    color: "#00B7EB", // Cyan color for the name
+    marginBottom: 10,
+    textAlign: "left",
   },
   attendanceText: {
-    textAlign: "center",
     fontSize: 12,
-    paddingHorizontal: "22%",
-    marginTop: 10,
+    textAlign: "left",
+    lineHeight: 1.5,
   },
-  signatureContainer: { width: 100, marginTop: "14%", alignSelf: "center" },
-  signatureImage: { width: "100%", height: "auto" },
+  boldText: {
+    fontWeight: "bold",
+  },
+  signatureSection: {
+    marginTop: 150,
+    alignItems: "center",
+  },
+  signature: {
+    width: 100,
+    height: 50,
+  },
 });
 
-const CertificatePDF = ({ cert }: { cert: CertificateData }) => (
+// Create Document Component
+const CertificateDocument = ({ cert }: { cert: CertificateData }) => (
   <Document>
-    <Page size="A4" style={styles.body}>
-      <View>
-        <Text style={styles.certificateTitle}>CERTIFICATE </Text>
-        <Text style={styles.certificat2ndTitle}>OF INVOLVEMENT</Text>
-        <Text style={styles.certificateSubtitle}>
-          in {getCategoryByGrade(cert.grade)} Emcee Program
-        </Text>
-        <Text style={styles.certificateMainText}>
-          {capitalizeFirstLetter(cert.student.fullname)}
-        </Text>
+    <Page size="A4" style={styles.page}>
+      <View style={styles.header}>
+        <Text style={styles.title}>CERTIFICATE</Text>
+        <Text style={styles.subtitle}>OF INVOLVEMENT</Text>
+        <Text style={styles.programName}>in Kiddo Emcee Programme</Text>
+      </View>
+
+      <View style={styles.recipientSection}>
+        <Text style={styles.recipientName}>Giselle Kok</Text>
         <Text style={styles.attendanceText}>
-          attended Grade {cert.grade} Creative Based Speaking Program {"\n"} in
-          Year{" "}
-          <Text style={{ fontWeight: "bold" }}>
-            {cert.end_date.slice(0, 4)}
-          </Text>
+          attended <Text style={styles.boldText}>Grade 1</Text> Creative Based
+          Speaking Programme
         </Text>
-        <View style={styles.signatureContainer}>
-          {/* eslint-disable-next-line jsx-a11y/alt-text */}
-          <Image
-            src="/images/certificate-signature.png"
-            style={styles.signatureImage}
-          />
-        </View>
+        <Text style={styles.attendanceText}>in Year 2025.</Text>
+      </View>
+
+      <View style={styles.signatureSection}>
+        {/* eslint-disable-next-line jsx-a11y/alt-text */}
+        <Image
+          style={styles.signature}
+          src="/images/certificate-signature.png" // Replace with your signature image path
+        />
       </View>
     </Page>
   </Document>
 );
 
-export default CertificatePDF;
+export default CertificateDocument;
