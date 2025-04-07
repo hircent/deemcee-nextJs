@@ -19,7 +19,6 @@ import {
 import SubmitButton from "./SubmitButton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "./ui/checkbox";
 import { useToast } from "./ui/use-toast";
 import { useFormState } from "react-dom";
 import {
@@ -27,7 +26,7 @@ import {
   SERVER_ACTION_STATE,
 } from "@/constants/index";
 import Loader from "./Loader";
-import { EnrolmentDetails, UpdateEnrolmentError } from "@/types/student";
+import { UpdateEnrolmentError } from "@/types/student";
 import {
   getEnrolmentDetailForUpdateView,
   updateEnrolment,

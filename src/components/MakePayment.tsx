@@ -81,7 +81,7 @@ const MakePayment = ({ id }: { id: number }) => {
         duration: 3000,
       });
     }
-  }, [state, toast]);
+  }, [state, toast, router]);
 
   function getAmountToPay(creditBalance: number, discountedPrice: number) {
     if (+creditBalance >= discountedPrice) {

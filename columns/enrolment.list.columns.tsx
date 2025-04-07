@@ -1,9 +1,8 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
 import { EnrolmentData } from "@/types/student";
-import { DeleteStudent } from "@/components/DeleteStudent";
 import Link from "next/link";
-import { CheckCircle, Clock, EyeIcon } from "lucide-react";
+import { CheckCircle, EyeIcon } from "lucide-react";
 import EditVideoAssignment from "@/components/EditVideoAssignment";
 import { getCategoryByGrade } from "@/lib/utils";
 import MakePayment from "@/components/MakePayment";
@@ -63,13 +62,7 @@ export const EnrolmentListColumns: ColumnDef<EnrolmentData>[] = [
               <span>Paid</span>
             </div>
           )}
-          {payment.status === "PENDING" && (
-            // <div className="flex gap-2 text-yellow-500">
-            //   <Clock size={18} />
-            //   <span>Pending</span>
-            // </div>
-            <MakePayment id={payment.id} />
-          )}
+          {payment.status === "PENDING" && <MakePayment id={payment.id} />}
         </div>
       );
     },
@@ -91,11 +84,6 @@ export const EnrolmentListColumns: ColumnDef<EnrolmentData>[] = [
               className="text-gray-500 group-hover:text-blue-500 transition-colors"
             />
           </Link>
-          {/* <DeleteStudent
-            type="student"
-            name={original.student.fullname}
-            id={original.student.id}
-          /> */}
         </div>
       );
     },
