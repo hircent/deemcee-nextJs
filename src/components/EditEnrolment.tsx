@@ -94,7 +94,7 @@ export const EditEnrolment = ({
     };
 
     fetchEnrolmentDetails();
-  }, [open]);
+  }, [open, toast, id]);
 
   useEffect(() => {
     setIsGradeLoading(true);
@@ -132,7 +132,7 @@ export const EditEnrolment = ({
         duration: 3000,
       });
     }
-  }, [state, toast]);
+  }, [state, toast, onOpenChange]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
