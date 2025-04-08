@@ -185,8 +185,10 @@ export const StudentFormSchema = z
     deemcee_starting_grade: z.string().min(1, "Starting grade is required"),
     start_date: z.string().min(1, "Enrolment date is required"),
     parent: z.string().optional(),
-    parent_username: z.string().optional(),
     parent_email: z.string().optional(),
+    parent_first_name: z.string().optional(),
+    parent_last_name: z.string().optional(),
+    parent_phone: z.string().optional(),
     timeslot: z.string().optional(),
     // referral_channel: z.string().optional(),
     // referral_name: z.string().optional(),
@@ -195,20 +197,40 @@ export const StudentFormSchema = z
   .superRefine((data, ctx) => {
     // If parent doesn't exist or is empty
     if (!data.parent) {
-      // Check parent_username
-      if (!data.parent_username) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Parent username is required",
-          path: ["parent_username"],
-        });
-      }
       // Check parent_email
       if (!data.parent_email) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: "Parent email is required",
           path: ["parent_email"],
+        });
+      }
+      if (!data.parent_email) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Parent email is required",
+          path: ["parent_email"],
+        });
+      }
+      if (!data.parent_first_name) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Parent first name is required",
+          path: ["parent_first_name"],
+        });
+      }
+      if (!data.parent_last_name) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Parent last name is required",
+          path: ["parent_last_name"],
+        });
+      }
+      if (!data.parent_phone) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Parent phone is required",
+          path: ["parent_phone"],
         });
       }
     }

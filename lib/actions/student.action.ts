@@ -164,16 +164,48 @@ export async function createStudent(
       };
     }
 
-    const { parent_username, parent_email, ...rest } = fdata;
+    const {
+      parent_first_name,
+      parent_last_name,
+      parent_email,
+      parent_address_1,
+      parent_address_2,
+      parent_address_3,
+      parent_city,
+      parent_state,
+      parent_postcode,
+      parent_phone,
+      parent_dob,
+      parent_occupation,
+      ...rest
+    } = fdata;
 
     const data = {
       ...rest,
       parent_details: {
-        username: parent_username,
+        username: parent_first_name.toString() + parent_last_name.toString(),
         email: parent_email,
+        first_name: parent_first_name,
+        last_name: parent_last_name,
+      },
+      address_details: {
+        address_line_1: parent_address_1,
+        address_line_2: parent_address_2,
+        address_line_3: parent_address_3,
+        city: parent_city,
+        state: parent_state,
+        postcode: parent_postcode,
+      },
+      profile: {
+        phone: parent_phone,
+        dob: parent_dob,
+        occupation: parent_occupation,
       },
     };
 
+    console.log({
+      data,
+    });
     const response = await fetch(`${process.env.API_URL}/student/create`, {
       method: "POST",
       headers: {

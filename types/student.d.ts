@@ -29,8 +29,10 @@ export type StudentFormErrors = {
   deemcee_starting_grade?: string;
   start_date?: string;
   parent?: string;
-  parent_username?: string;
   parent_email?: string;
+  parent_first_name?: string;
+  parent_last_name?: string;
+  parent_phone?: string;
   status?: string;
 };
 

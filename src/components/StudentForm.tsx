@@ -306,21 +306,10 @@ const StudentForm = () => {
                   {/* New Parent Registration Fields */}
                   {showParentFields && (
                     <div className="mt-4 space-y-4">
+                      <h3 className="text-lg font-medium">
+                        Parent Information
+                      </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="parent_username">
-                            Username <span className="text-red-500">*</span>
-                          </Label>
-                          <Input
-                            id="parent_username"
-                            name="parent_username"
-                            placeholder="Enter username"
-                          />
-                          <small className="text-red-500">
-                            {zoderror?.parent_username}
-                          </small>
-                        </div>
-
                         <div className="space-y-2">
                           <Label htmlFor="parent_email">
                             Email <span className="text-red-500">*</span>
@@ -335,8 +324,134 @@ const StudentForm = () => {
                             {zoderror?.parent_email}
                           </small>
                         </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="parent_first_name">
+                            First Name <span className="text-red-500">*</span>
+                          </Label>
+                          <Input
+                            id="parent_first_name"
+                            name="parent_first_name"
+                            type="text"
+                            placeholder="First Name"
+                          />
+                          <small className="text-red-500">
+                            {zoderror?.parent_first_name}
+                          </small>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="parent_last_name">
+                            Last Name <span className="text-red-500">*</span>
+                          </Label>
+                          <Input
+                            id="parent_last_name"
+                            name="parent_last_name"
+                            type="text"
+                            placeholder="Last Name"
+                          />
+                          <small className="text-red-500">
+                            {zoderror?.parent_last_name}
+                          </small>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="parent_phone">
+                            Phone <span className="text-red-500">*</span>
+                          </Label>
+                          <Input
+                            id="parent_phone"
+                            name="parent_phone"
+                            type="text"
+                            placeholder="Phone"
+                          />
+                          <small className="text-red-500">
+                            {zoderror?.parent_phone}
+                          </small>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="parent_occupation">Occupation</Label>
+                          <Input
+                            id="parent_occupation"
+                            name="parent_occupation"
+                            type="text"
+                            placeholder="Occupation"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="parent_dob">Date of Birth </Label>
+                          <Input
+                            id="parent_dob"
+                            name="parent_dob"
+                            type="date"
+                            placeholder="year-month-day"
+                          />
+                        </div>
                       </div>
 
+                      <Separator className="my-4 bg-gray-300" />
+                      <div className="mt-4 space-y-4">
+                        <h3 className="text-lg font-medium">Address Details</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="parent_address_1">
+                              Address Line 1
+                            </Label>
+                            <Input
+                              id="parent_address_1"
+                              name="parent_address_1"
+                              type="text"
+                              placeholder="Address"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="parent_address_2">
+                              Address Line 2
+                            </Label>
+                            <Input
+                              id="parent_address_2"
+                              name="parent_address_2"
+                              type="text"
+                              placeholder="Address"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="parent_address_3">
+                              Address Line 3
+                            </Label>
+                            <Input
+                              id="parent_address_3"
+                              name="parent_address_3"
+                              type="text"
+                              placeholder="Address"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="parent_postcode">Postcode</Label>
+                            <Input
+                              id="parent_postcode"
+                              name="parent_postcode"
+                              type="text"
+                              placeholder="Postcode"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="parent_state">State</Label>
+                            <Input
+                              id="parent_state"
+                              name="parent_state"
+                              type="text"
+                              placeholder="State"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="parent_city">City</Label>
+                            <Input
+                              id="parent_city"
+                              name="parent_city"
+                              type="text"
+                              placeholder="City"
+                            />
+                          </div>
+                        </div>
+                      </div>
                       <Button
                         type="button"
                         onClick={() => {
