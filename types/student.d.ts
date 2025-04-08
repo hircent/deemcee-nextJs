@@ -1,4 +1,5 @@
 import { StudentPaymentList } from "./payment";
+import { ThemeData } from "./structure";
 
 export type StudentListFilterProps = {
   page?: number;
@@ -62,7 +63,7 @@ export interface VideoAssignment {
 
 export interface VideoAssignmentDetails {
   id: number;
-  theme: string;
+  theme: ThemeData;
   video_number: number;
   video_url: string | null;
   submission_date: string | null;
