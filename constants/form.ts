@@ -301,6 +301,10 @@ export const UpdateEnrolmentSchema = z.object({
   tier: z.string().min(1, "Tier is required"),
 });
 
+export const UpdateStudentNoteSchema = z.object({
+  remark: z.string().optional(),
+});
+
 export const VideoAssignmentFormSchema = z.object({
   student_id: z.string().min(1, "Student ID is required"),
   theme: z.string().min(1, "Theme is required"),
