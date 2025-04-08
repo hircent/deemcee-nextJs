@@ -436,8 +436,11 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
         <TableRow key={student.id}>
           <TableCell className="border-r-2">
             {student.type === "attended"
-              ? student.enrollment.student.fullname
-              : student.student.fullname}
+              ? student.enrollment.student.fullname +
+                " -(G" +
+                student.enrollment.student.grade +
+                ")"
+              : student.student.fullname + " -(G" + student.student.grade + ")"}
           </TableCell>
           <TableCell className="border-r-2">
             <div className="flex gap-2">

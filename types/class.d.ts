@@ -45,6 +45,7 @@ export type GetClassSlotProps = {
 export type EnrolmentStudent = {
   id: number;
   fullname: string;
+  grade: number;
 };
 
 export type Enrolment = {
