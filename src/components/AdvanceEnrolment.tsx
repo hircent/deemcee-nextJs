@@ -123,7 +123,7 @@ export const AdvanceEnrolment = ({
         duration: 3000,
       });
     }
-  }, [state, toast]);
+  }, [state, toast, onOpenChange]);
 
   if (grade > 5 || remaining_lessons > 12) {
     return (

@@ -116,7 +116,7 @@ const CreateEnrolment = ({ id }: { id: number }) => {
     };
 
     fetchTimeslots();
-  }, [startDate, startingGrade]);
+  }, [startDate, startingGrade, grades]);
 
   const getTiers = async () => {
     const tierList = await getTierList();
