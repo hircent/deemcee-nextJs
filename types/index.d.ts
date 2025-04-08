@@ -550,6 +550,7 @@ export type EnrolmentDataProps = {
   is_active: boolean;
   status: string;
   name?: string;
+  page?: number;
 };
 
 export type SUPERADMIN = "superadmin";

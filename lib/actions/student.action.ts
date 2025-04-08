@@ -656,7 +656,7 @@ export async function advanceEnrolment(
 }
 
 export async function getEnrolmentList(params: EnrolmentDataProps) {
-  const { is_active, status, name } = params;
+  const { is_active, status, name, page } = params;
   const token = await getToken();
   const id = cookies().get("BranchId")?.value;
 
@@ -664,6 +664,10 @@ export async function getEnrolmentList(params: EnrolmentDataProps) {
 
   if (name) {
     url = `${url}&name=${name}`;
+  }
+
+  if (page && page > 1) {
+    url = `${url}&page=${page}`;
   }
 
   try {

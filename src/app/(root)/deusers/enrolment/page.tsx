@@ -10,6 +10,7 @@ import { PaginationWrapper } from "@/components/PaginationWrapper";
 const Enrolment = async ({ searchParams }: SearchParamProps) => {
   try {
     const result = await getEnrolmentList({
+      page: searchParams.page ? +searchParams.page : 1,
       name: searchParams.q ? searchParams.q.toString() : undefined,
       is_active: searchParams.is_active
         ? searchParams.is_active === "true"
