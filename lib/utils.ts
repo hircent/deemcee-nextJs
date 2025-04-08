@@ -391,14 +391,16 @@ function groupLessonsByDate(data: LessonData[]): GroupedLesson[] {
     // Assign theme lessons based on category
     switch (lesson.category) {
       case "Kids":
-        groupedLessons[dateKey].theme_lesson_kids = lesson.theme_lesson.name;
+        groupedLessons[dateKey].theme_lesson_kids =
+          lesson.theme_lesson.name + " - (" + lesson.theme.name + ")";
         break;
       case "Kiddo":
-        groupedLessons[dateKey].theme_lesson_kiddo = lesson.theme_lesson.name;
+        groupedLessons[dateKey].theme_lesson_kiddo =
+          lesson.theme_lesson.name + " - (" + lesson.theme.name + ")";
         break;
       case "Superkids":
         groupedLessons[dateKey].theme_lesson_superkids =
-          lesson.theme_lesson.name;
+          lesson.theme_lesson.name + " - (" + lesson.theme.name + ")";
         break;
     }
   });
