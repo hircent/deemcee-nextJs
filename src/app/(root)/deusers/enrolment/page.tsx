@@ -1,8 +1,5 @@
-import { PageListTable } from "@/components/PageList";
-import { PARENT } from "@/constants/message";
 import React from "react";
 import { SearchParamProps } from "@/types/index";
-import Pagination from "@/components/Pagination";
 import { EnrolmentListColumns } from "@/columns/enrolment.list.columns";
 import { getEnrolmentList } from "@/lib/actions/student.action";
 import { PaginationWrapper } from "@/components/PaginationWrapper";
