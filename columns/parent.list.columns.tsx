@@ -14,8 +14,12 @@ export const ParentListColumns: ColumnDef<TypeUserProps>[] = [
     },
   },
   {
-    accessorKey: "username",
-    header: "Username",
+    accessorKey: "first_name",
+    header: "First Name",
+  },
+  {
+    accessorKey: "last_name",
+    header: "Last Name",
   },
   {
     accessorKey: "email",
@@ -37,7 +41,11 @@ export const ParentListColumns: ColumnDef<TypeUserProps>[] = [
       return (
         <div className="flex gap-4 text-black-2">
           <EditParentProfile type={"parent"} id={parent.id} />
-          <DeleteUser type={"parent"} name={parent.username} id={parent.id} />
+          <DeleteUser
+            type={"parent"}
+            name={parent.first_name + " " + parent.last_name}
+            id={parent.id}
+          />
         </div>
       );
     },
