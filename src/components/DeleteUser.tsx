@@ -42,16 +42,18 @@ export function DeleteUser({ type, name, id }: DeleteProps) {
 
   const onSubmit = async (values: z.infer<typeof deleteFormSchema>) => {
     setLoading(true);
-    setOpen(false);
 
     try {
-      await deleteUser({ type ,name: values.name, confirmName: name, id });
+      await deleteUser({ type, name: values.name, confirmName: name, id });
       toast({
         title: "Success",
-        description: `${camelCase(type)} "${name}" has been deleted successfully.`,
+        description: `${camelCase(
+          type
+        )} "${name}" has been deleted successfully.`,
         duration: 2000,
         className: cn("bottom-0 left-0 bg-success-100"),
       });
+      setOpen(false);
     } catch (err: any) {
       if (err instanceof Error) {
         toast({
@@ -72,7 +74,6 @@ export function DeleteUser({ type, name, id }: DeleteProps) {
       }
     } finally {
       setLoading(false);
-      setOpen(false);
     }
   };
 
