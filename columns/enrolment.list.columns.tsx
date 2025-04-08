@@ -6,6 +6,7 @@ import { CheckCircle, EyeIcon } from "lucide-react";
 import EditVideoAssignment from "@/components/EditVideoAssignment";
 import { getCategoryByGrade } from "@/lib/utils";
 import MakePayment from "@/components/MakePayment";
+import { EditNote } from "@/components/EditNote";
 
 export const EnrolmentListColumns: ColumnDef<EnrolmentData>[] = [
   {
@@ -19,7 +20,15 @@ export const EnrolmentListColumns: ColumnDef<EnrolmentData>[] = [
     accessorKey: "fullname",
     header: "Fullname",
     cell: ({ row }) => {
-      return row.original.student.fullname;
+      const student = row.original;
+      return (
+        <div className="flex gap-2 items-center">
+          {student.student.fullname}
+          <div>
+            <EditNote id={student.student.id} name={student.student.fullname} />
+          </div>
+        </div>
+      );
     },
   },
   {
