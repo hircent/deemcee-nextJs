@@ -227,3 +227,12 @@ export type UpdateEnrolmentError = {
   status?: string;
   tier?: string;
 };
+
+export type StudentRemark = {
+  fullname: string;
+  remark: string;
+};
+
+export type StudentRemarkError = {
+  remark?: string;
+};
