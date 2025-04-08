@@ -367,21 +367,27 @@ const StudentForm = () => {
                           </small>
                         </div>
                         <div className="space-y-2">
+                          <Label htmlFor="parent_dob">
+                            Date of Birth{" "}
+                            <span className="text-red-500">*</span>
+                          </Label>
+                          <Input
+                            id="parent_dob"
+                            name="parent_dob"
+                            type="date"
+                            placeholder="year-month-day"
+                          />
+                          <small className="text-red-500">
+                            {zoderror?.parent_dob}
+                          </small>
+                        </div>
+                        <div className="space-y-2">
                           <Label htmlFor="parent_occupation">Occupation</Label>
                           <Input
                             id="parent_occupation"
                             name="parent_occupation"
                             type="text"
                             placeholder="Occupation"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="parent_dob">Date of Birth </Label>
-                          <Input
-                            id="parent_dob"
-                            name="parent_dob"
-                            type="date"
-                            placeholder="year-month-day"
                           />
                         </div>
                       </div>
@@ -665,6 +671,7 @@ const StudentForm = () => {
                         setAbleSelectTimeslot(true);
                       }}
                       disabled={!ableSelectDate}
+                      min={new Date().toISOString().split("T")[0]}
                     />
                   </div>
                   <small className="text-red-500">{zoderror?.start_date}</small>

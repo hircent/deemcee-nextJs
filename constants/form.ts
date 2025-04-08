@@ -189,6 +189,7 @@ export const StudentFormSchema = z
     parent_first_name: z.string().optional(),
     parent_last_name: z.string().optional(),
     parent_phone: z.string().optional(),
+    parent_dob: z.string().optional(),
     timeslot: z.string().optional(),
     // referral_channel: z.string().optional(),
     // referral_name: z.string().optional(),
@@ -231,6 +232,13 @@ export const StudentFormSchema = z
           code: z.ZodIssueCode.custom,
           message: "Parent phone is required",
           path: ["parent_phone"],
+        });
+      }
+      if (!data.parent_dob) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Parent DOB is required",
+          path: ["parent_dob"],
         });
       }
     }

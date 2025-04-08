@@ -33,6 +33,7 @@ export type StudentFormErrors = {
   parent_first_name?: string;
   parent_last_name?: string;
   parent_phone?: string;
+  parent_dob?: string;
   status?: string;
 };
 
