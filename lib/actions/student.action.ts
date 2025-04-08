@@ -19,6 +19,8 @@ import {
   StudentFormErrors,
   StudentListFilterProps,
   StudentProps,
+  StudentRemark,
+  StudentRemarkError,
   UpdateEnrolmentError,
 } from "@/types/student";
 import { revalidatePath } from "next/cache";
@@ -31,6 +33,7 @@ import {
   StudentFormSchema,
   UpdateEnrolmentSchema,
   UpdateStudentFormSchema,
+  UpdateStudentNoteSchema,
 } from "@/constants/form";
 import { ClassLessonTodayStudentList } from "@/types/class";
 import { InvoiceData } from "@/types/payment";
@@ -719,5 +722,78 @@ export async function getInvoiceDetailForPrint(
     return data.data;
   } catch (error) {
     throw error;
+  }
+}
+
+export async function getStudentRemark(id: number): Promise<StudentRemark> {
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
+
+    const response = await fetch(
+      `${process.env.API_URL}/students/remark/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function updateStudentRemark(
+  _prevState: STATE<StudentRemarkError>,
+  formData: FormData
+): Promise<STATE<StudentRemarkError>> {
+  try {
+    const token = await getToken();
+    const branchId = cookies().get("BranchId")?.value;
+
+    const data = Object.fromEntries(formData);
+    const validated = UpdateStudentNoteSchema.safeParse(data);
+
+    if (!validated.success) {
+      return {
+        error: true,
+        zodErr: validated.error.flatten().fieldErrors as StudentRemarkError,
+        msg: "Validation Failed",
+      };
+    }
+    const id = data.id;
+    delete data.id;
+
+    const response = await fetch(
+      `${process.env.API_URL}/students/remark/${id}/update`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      const res = await response.json();
+      return { error: true, msg: res.msg };
+    }
+
+    revalidatePath(`/deusers/enrolment`);
+    return { success: true, msg: `Enrolment has been updated` };
+  } catch (error) {
+    return { error: true, msg: (error as Error).message };
   }
 }
