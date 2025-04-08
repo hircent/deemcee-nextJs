@@ -128,14 +128,18 @@ export type EnrolmentDetails = {
 type PaymentStatus = {
   id: number;
   status: "PAID" | "PENDING" | "PARTIALLY_PAID" | "REFUNDED" | "VOIDED";
+  amount: string;
+  paid_at: string | null;
 };
 
 export interface EnrolmentData {
   id: number;
+  currency: string;
   student: {
     id: number;
     fullname: string;
   };
+  start_date: string;
   grade: number;
   remaining_lessons: number;
   video_assignments: VideoAssignment[];

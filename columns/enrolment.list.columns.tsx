@@ -27,26 +27,31 @@ export const EnrolmentListColumns: ColumnDef<EnrolmentData>[] = [
     header: "Grade",
   },
   {
+    accessorKey: "start_date",
+    header: "Start Date",
+  },
+  {
     accessorKey: "remaining_lessons",
     header: "Remaining Lessons",
   },
   {
-    accessorKey: "video_assignments",
-    header: "Video Assignments",
+    accessorKey: "amount",
+    header: "Fees",
     cell: ({ row }) => {
-      const student = row.original;
+      const payment = row.original;
       return (
-        <div className="flex flex-col gap-2">
-          {student.video_assignments.map((video) => (
-            <EditVideoAssignment
-              key={video.video_number}
-              video={video}
-              student_id={student.id}
-              category={getCategoryByGrade(student.grade)}
-            />
-          ))}
+        <div>
+          {payment.currency} {payment.payments.amount}
         </div>
       );
+    },
+  },
+  {
+    accessorKey: "paid_at",
+    header: "Paid At",
+    cell: ({ row }) => {
+      const payment = row.original;
+      return <div>{payment.payments.paid_at || "Due Immediately"}</div>;
     },
   },
   {
@@ -63,6 +68,25 @@ export const EnrolmentListColumns: ColumnDef<EnrolmentData>[] = [
             </div>
           )}
           {payment.status === "PENDING" && <MakePayment id={payment.id} />}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "video_assignments",
+    header: "Video Assignments",
+    cell: ({ row }) => {
+      const student = row.original;
+      return (
+        <div className="flex flex-col gap-2">
+          {student.video_assignments.map((video) => (
+            <EditVideoAssignment
+              key={video.video_number}
+              video={video}
+              student_id={student.id}
+              category={getCategoryByGrade(student.grade)}
+            />
+          ))}
         </div>
       );
     },
