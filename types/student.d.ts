@@ -66,7 +66,7 @@ export interface VideoAssignment {
 
 export interface VideoAssignmentDetails {
   id: number;
-  theme: ThemeData;
+  theme: ThemeData | null;
   video_number: number;
   video_url: string | null;
   submission_date: string | null;
