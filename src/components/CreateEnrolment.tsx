@@ -252,6 +252,7 @@ const CreateEnrolment = ({ id }: { id: number }) => {
                       setAbleSelectTimeslot(true);
                     }}
                     disabled={!ableSelectDate}
+                    min={new Date().toISOString().split("T")[0]}
                   />
                 </div>
                 <small className="text-red-500">{zoderror?.start_date}</small>
