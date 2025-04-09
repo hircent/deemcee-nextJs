@@ -14,17 +14,8 @@ import { Printer } from "lucide-react";
 import { printCertificate } from "@/lib/actions/certificate.action";
 import { useToast } from "./ui/use-toast";
 import { cn } from "@/lib/utils";
-import dynamic from "next/dynamic";
-
-// Dynamically import PDF components with no SSR
-const PDFViewer = dynamic(
-  () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
-  { ssr: false }
-);
-
-const CertificatePDF = dynamic(() => import("./CertificatePDF"), {
-  ssr: false,
-});
+import { PDFViewer } from "@react-pdf/renderer";
+import CertificatePDF from "./CertificatePDF";
 
 const CertViewer = ({ cert }: { cert: CertificateData }) => {
   const [open, setOpen] = useState(false);
