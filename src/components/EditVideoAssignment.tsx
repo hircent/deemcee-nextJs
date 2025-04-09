@@ -105,26 +105,34 @@ const EditVideoAssignment = ({
         ]);
 
         setFormData(videoDetails);
-        setTheme(videoDetails.theme.id.toString());
 
-        const has_theme = themes.filter(
-          (theme) => theme.id === videoDetails.theme.id
-        );
+        if (videoDetails.theme !== null) {
+          setTheme(videoDetails.theme.id.toString());
 
-        if (has_theme.length === 0) {
-          themes.push({
-            id: videoDetails.theme.id,
-            name: videoDetails.theme.name,
-            year: videoDetails.theme.year,
-            category: videoDetails.theme.category,
-            order: videoDetails.theme.order,
-          });
+          const has_theme = themes.filter(
+            (theme) => theme.id === videoDetails.theme?.id
+          );
+
+          if (has_theme.length === 0) {
+            themes.push({
+              id: videoDetails.theme.id,
+              name: videoDetails.theme.name,
+              year: videoDetails.theme.year,
+              category: videoDetails.theme.category,
+              order: videoDetails.theme.order,
+            });
+          }
         }
+
         setThemeList(themes);
-        console.log({ themes });
         setIsLoading(false);
       } catch (error) {
-        console.error("Error fetching video details and theme list:", error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch video details and theme list",
+          className: cn(`bottom-0 left-0`, "bg-error-100"),
+          duration: 3000,
+        });
       }
     };
     fetchThemeAndVideoDetails();
