@@ -8,15 +8,15 @@ export const sidebarLinks = [
     baseRoute: "/",
     label: "Home",
     icon: LucideIcons.LayoutDashboard,
-    visible: ["superadmin", "principal", "manager", "teacher"],
+    visible: ["superadmin", "principal", "manager"],
   },
   {
     imgURL: "/icons/home.svg",
-    route: "/users",
     baseRoute: "/users",
+    route: "/users/principal",
     label: "Users",
     icon: LucideIcons.Users,
-    visible: ["superadmin", "principal", "manager", "teacher"],
+    visible: ["superadmin", "principal", "manager"],
   },
   {
     imgURL: "/icons/home.svg",
@@ -28,8 +28,8 @@ export const sidebarLinks = [
   },
   {
     imgURL: "/icons/home.svg",
-    route: "/structure",
     baseRoute: "/structure",
+    route: "/structure/category",
     label: "Structure",
     icon: LucideIcons.BookA,
     visible: ["superadmin"],
@@ -85,11 +85,6 @@ export const sidebarLinks = [
 ];
 
 export const StructureLinks: SectionNavLink[] = [
-  {
-    href: "/structure",
-    label: "Main",
-    visible: ["superadmin", "principal", "manager"],
-  },
   {
     href: "/structure/category",
     label: "Category",
@@ -191,12 +186,6 @@ export const ReportLinks: SectionNavLink[] = [
 
 export const UserManagementLinks: SectionNavLink[] = [
   {
-    href: "/users",
-    label: "Main",
-    visible: ["superadmin", "principal", "manager", "teacher"],
-  },
-  { href: "/users/superadmin", label: "Superadmin", visible: ["superadmin"] },
-  {
     href: "/users/principal",
     label: "Principal",
     visible: ["superadmin", "principal"],
@@ -211,6 +200,7 @@ export const UserManagementLinks: SectionNavLink[] = [
     label: "Teacher",
     visible: ["superadmin", "principal", "manager", "teacher"],
   },
+  { href: "/users/superadmin", label: "Superadmin", visible: ["superadmin"] },
 ];
 
 export const IsSuperadmin = ["superadmin"];
