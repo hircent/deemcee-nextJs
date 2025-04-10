@@ -196,6 +196,7 @@ const ClassesForm = ({ type }: { type: string }) => {
                   type="date"
                   name="start_date"
                   className="w-full text-sm sm:text-base col-span-2"
+                  min={new Date().toISOString().split("T")[0]}
                 />
               </div>
               <small className="text-red-500">
