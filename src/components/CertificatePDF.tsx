@@ -46,12 +46,17 @@ const styles = StyleSheet.create({
   },
   recipientName: {
     fontSize: 32,
-
     color: "#00B7EB", // Cyan color for the name
-    marginBottom: 10,
+    marginBottom: 6,
     textAlign: "left",
   },
   attendanceText: {
+    fontSize: 12,
+    textAlign: "left",
+    lineHeight: 1.5,
+    marginTop: 5,
+  },
+  attendanceTextYear: {
     fontSize: 12,
     textAlign: "left",
     lineHeight: 1.5,
@@ -61,7 +66,7 @@ const styles = StyleSheet.create({
   },
   signatureSection: {
     marginTop: 150,
-    alignItems: "center",
+    marginLeft: "45%",
   },
   signature: {
     width: 100,
@@ -70,10 +75,15 @@ const styles = StyleSheet.create({
 });
 
 const getCompletion = (grade: number) => {
-  if (grade === 6) {
-    return "COMPLETION";
+  switch (grade) {
+    case 2:
+    case 4:
+    case 6:
+      return "COMPLETION";
+
+    default:
+      return "INVOLVEMENT";
   }
-  return "INVOLVEMENT";
 };
 
 // Create Document Component
@@ -96,14 +106,14 @@ const CertificatePDF = ({ cert }: { cert: CertificateData }) => (
           attended <Text style={styles.boldText}>Grade {cert.grade}</Text>{" "}
           Creative Based Speaking Programme
         </Text>
-        <Text style={styles.attendanceText}>in Year 2025.</Text>
+        <Text style={styles.attendanceTextYear}>in Year 2025.</Text>
       </View>
 
       <View style={styles.signatureSection}>
         {/* eslint-disable-next-line jsx-a11y/alt-text */}
         <Image
           style={styles.signature}
-          src="/images/certificate-signature.png" // Replace with your signature image path
+          src="/images/signature.png" // Replace with your signature image path
         />
       </View>
     </Page>
