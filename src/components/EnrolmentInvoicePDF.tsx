@@ -51,10 +51,16 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderWidth: 1,
     borderColor: "#e2e8f0",
-    marginVertical: 15,
   },
   tableRow: {
     flexDirection: "row",
+    borderBottomWidth: 1,
+    borderBottomColor: "#e2e8f0",
+  },
+  tableLastRow: {
+    flexDirection: "row",
+  },
+  tableLastRowTotal: {
     borderBottomWidth: 1,
     borderBottomColor: "#e2e8f0",
   },
@@ -96,10 +102,35 @@ const styles = StyleSheet.create({
   paymentSection: {
     flexDirection: "column",
     marginBottom: 8,
+    width: "60%",
   },
-  paymentLabel: { fontSize: 10, fontWeight: "bold", width: "20%" },
+  paymentLabel: { fontSize: 10, fontWeight: "bold" },
   paymentMethod: { fontSize: 10, marginTop: 5 },
-  totalSection: { width: "60%" },
+  totalSection: { width: "40%" },
+  openCreditRightSection: {
+    width: "40%",
+    marginTop: 40,
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
+    paddingVertical: 4,
+    paddingHorizontal: 5,
+  },
+  openCreditLeftSection: {
+    flexDirection: "column",
+    marginBottom: 8,
+    width: "60%",
+  },
+  openCreditTotalLabel: {
+    fontSize: 7,
+    width: "65%", // Added fixed width
+    textAlign: "right", // Right-aligned label
+    paddingRight: 30, // Added padding for separation
+  },
+  openCreditTotalAmount: {
+    fontSize: 7,
+    width: "35%", // Added fixed width
+    textAlign: "left", // Left-aligned value
+  },
   totalRow: {
     flexDirection: "row",
     justifyContent: "flex-end",
@@ -107,25 +138,30 @@ const styles = StyleSheet.create({
   },
   totalLabel: {
     fontSize: 10,
-    width: "60%", // Added fixed width
+    width: "65%", // Added fixed width
     textAlign: "right", // Right-aligned label
-    paddingRight: 40, // Added padding for separation
+    paddingRight: 30, // Added padding for separation
   },
   totalAmount: {
     fontSize: 10,
-    width: "40%", // Added fixed width
+    width: "35%", // Added fixed width
     textAlign: "left", // Left-aligned value
   },
+  totalBalanceAmount: {
+    borderTop: 1,
+    borderTopColor: "#e2e8f0",
+    borderBottom: 1,
+    borderBottomColor: "#e2e8f0",
+    paddingVertical: 4,
+  },
   grandTotalLabel: {
-    fontSize: 14,
+    fontSize: 10,
     width: "40%",
-    fontWeight: "bold",
     textAlign: "right",
     paddingRight: 40,
   },
   grandTotal: {
-    fontSize: 14,
-    fontWeight: "bold",
+    fontSize: 10,
     width: "40%",
     textAlign: "left",
   },
@@ -158,7 +194,7 @@ const EnrolmentInvoicePDF = ({ invoice }: { invoice: InvoiceData }) => (
             {invoice.branch.address.city} {invoice.branch.address.state}{" "}
             {invoice.branch.address.postcode}
           </Text>
-          <Text style={styles.companyWebsite}>https://www.deemcee.com</Text>
+          <Text style={styles.companyWebsite}>www.deemcee.com</Text>
           <Text style={styles.companySSM}>
             SSM: {invoice.branch.business_reg_no}
           </Text>
@@ -186,13 +222,16 @@ const EnrolmentInvoicePDF = ({ invoice }: { invoice: InvoiceData }) => (
             {invoice.parent.address.address_line_2}
           </Text>
           <Text style={styles.clientDetail}>
-            {invoice.parent.address.postcode} {invoice.parent.address.city}
+            {invoice.parent.address.address_line_3}
           </Text>
           <Text style={styles.clientDetail}>
+            {invoice.parent.address.city} {invoice.parent.address.postcode}{" "}
             {invoice.parent.address.state}
           </Text>
           <Text style={styles.clientDetail}>{invoice.parent.email}</Text>
-          <Text style={styles.clientDetail}>{invoice.parent.phone || "-"}</Text>
+          <Text style={styles.clientDetail}>
+            {invoice.parent.details.phone}
+          </Text>
         </View>
 
         <View style={styles.invoiceDetailsSection}>
@@ -250,6 +289,84 @@ const EnrolmentInvoicePDF = ({ invoice }: { invoice: InvoiceData }) => (
             {invoice.branch.country.currency} {invoice.amount}
           </Text>
         </View>
+
+        {invoice.early_advance_rebate !== "0.00" && (
+          <View style={styles.tableRow}>
+            <Text
+              style={[
+                styles.tableCell,
+                styles.studentNameCellValue,
+                styles.rowMargin,
+              ]}
+            ></Text>
+            <Text style={[styles.tableCell, styles.descriptionCellValue]}>
+              CREDIT FROM PREVIOUS GRADE
+            </Text>
+            <Text style={[styles.tableCell, styles.gradeCellValue]}></Text>
+            <Text style={[styles.tableCell, styles.dateCellValue]}></Text>
+            <Text
+              style={[
+                styles.tableCell,
+                styles.amountCellValue,
+                styles.rowMargin,
+              ]}
+            >
+              {invoice.branch.country.currency +
+                " " +
+                invoice.early_advance_rebate}
+            </Text>
+          </View>
+        )}
+
+        {invoice.discount !== "0.00" && (
+          <View style={styles.tableRow}>
+            <Text
+              style={[
+                styles.tableCell,
+                styles.studentNameCellValue,
+                styles.rowMargin,
+              ]}
+            ></Text>
+            <Text style={[styles.tableCell, styles.descriptionCellValue]}>
+              DISCOUNT :{invoice.promo_code} (CENTRE)
+            </Text>
+            <Text style={[styles.tableCell, styles.gradeCellValue]}></Text>
+            <Text style={[styles.tableCell, styles.dateCellValue]}></Text>
+            <Text
+              style={[
+                styles.tableCell,
+                styles.amountCellValue,
+                styles.rowMargin,
+              ]}
+            >
+              {invoice.branch.country.currency + " " + invoice.discount}
+            </Text>
+          </View>
+        )}
+      </View>
+      <View style={styles.tableLastRow}>
+        <Text
+          style={[
+            styles.tableCell,
+            styles.studentNameCellValue,
+            styles.rowMargin,
+          ]}
+        ></Text>
+        <Text style={[styles.tableCell, styles.descriptionCellValue]}></Text>
+        <Text style={[styles.tableCell, styles.gradeCellValue]}></Text>
+        <Text style={[styles.tableCell, styles.dateCellValue]}>
+          Amount to Pay
+        </Text>
+        <Text
+          style={[
+            styles.tableCell,
+            styles.amountCellValue,
+            styles.rowMargin,
+            styles.tableLastRowTotal,
+          ]}
+        >
+          {invoice.branch.country.currency + " " + invoice.amount_to_pay}
+        </Text>
       </View>
 
       {/* Separator */}
@@ -265,34 +382,53 @@ const EnrolmentInvoicePDF = ({ invoice }: { invoice: InvoiceData }) => (
         {/* Totals Section */}
         <View style={styles.totalSection}>
           <View style={styles.totalRow}>
-            <Text style={styles.grandTotalLabel}>TOTAL</Text>
-            <Text style={styles.grandTotal}>
-              {invoice.branch.country.currency} {invoice.amount}
-            </Text>
-          </View>
-
-          <View style={styles.totalRow}>
-            <Text style={styles.totalLabel}>Discount</Text>
-            <Text style={styles.totalAmount}>{invoice.discount}</Text>
-          </View>
-          <View style={styles.totalRow}>
-            <Text style={styles.totalLabel}>Early Advance Rebate</Text>
+            <Text style={styles.totalLabel}>PAYMENT</Text>
             <Text style={styles.totalAmount}>
-              {invoice.early_advance_rebate}
+              {invoice.branch.country.currency + " " + invoice.paid_amount}
             </Text>
           </View>
           <View style={styles.totalRow}>
-            <Text style={styles.totalLabel}>Credit Balance</Text>
-            <Text style={styles.totalAmount}>{invoice.pre_outstanding}</Text>
+            <Text style={styles.totalLabel}>APPLIED CREDIT</Text>
+            <Text style={styles.totalAmount}>
+              {invoice.branch.country.currency + " " + invoice.pre_outstanding}
+            </Text>
           </View>
           <View style={styles.totalRow}>
-            <Text style={styles.totalLabel}>Post-Payment</Text>
-            <Text style={styles.totalAmount}>{invoice.post_outstanding}</Text>
+            <Text style={[styles.totalLabel]}>BALANCE</Text>
+            <Text style={[styles.totalAmount, styles.totalBalanceAmount]}>
+              {invoice.branch.country.currency + " " + invoice.post_outstanding}
+            </Text>
           </View>
-          <View style={styles.paidSection}>
-            <Text style={styles.paidLabel}>AMOUNT PAID</Text>
-            <Text style={styles.paidAmount}>
-              {invoice.branch.country.currency} {invoice.paid_amount}
+        </View>
+      </View>
+
+      <View style={styles.paymentWrapper}>
+        <View style={styles.openCreditLeftSection}></View>
+        <View style={styles.openCreditRightSection}>
+          <View style={styles.totalRow}>
+            <Text style={styles.openCreditTotalLabel}>Opening Credit :</Text>
+            <Text style={styles.openCreditTotalAmount}>
+              {invoice.branch.country.currency + " " + invoice.pre_outstanding}
+            </Text>
+          </View>
+          <View style={styles.totalRow}>
+            <Text style={styles.openCreditTotalLabel}>
+              (-) INV {invoice.invoice} :
+            </Text>
+            <Text style={styles.openCreditTotalAmount}>
+              {invoice.branch.country.currency + " " + invoice.amount_to_pay}
+            </Text>
+          </View>
+          <View style={styles.totalRow}>
+            <Text style={styles.openCreditTotalLabel}>(+) PAYMENT :</Text>
+            <Text style={styles.openCreditTotalAmount}>
+              {invoice.branch.country.currency + " " + invoice.paid_amount}
+            </Text>
+          </View>
+          <View style={styles.totalRow}>
+            <Text style={styles.openCreditTotalLabel}>= Closing Credit :</Text>
+            <Text style={styles.openCreditTotalAmount}>
+              {invoice.branch.country.currency + " " + invoice.post_outstanding}
             </Text>
           </View>
         </View>

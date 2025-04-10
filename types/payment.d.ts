@@ -5,7 +5,9 @@ export type PaymentData = {
   status: string;
   amount: string;
   discount: string;
+  promo_code: string;
   early_advance_rebate: string;
+  amount_to_pay: string;
   paid_amount: string;
   pre_outstanding: string;
   post_outstanding: string;
