@@ -111,6 +111,7 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
         ic_number: parentData.details.ic_number,
         occupation: parentData.details.occupation,
         personal_email: parentData.details.personal_email,
+        phone: parentData.details.phone,
 
         // Address
         address_line_1: parentData.address.address_line_1,
@@ -417,6 +418,25 @@ export const EditParentProfile = ({ type, id }: EditProps) => {
                       </div>
                       <small className="text-red-500">
                         {zoderror?.personal_email?.[0]}
+                      </small>
+                    </div>
+
+                    <div>
+                      <div className="space-y-2">
+                        <Label className="text-sm sm:text-base" htmlFor="phone">
+                          Phone
+                        </Label>
+                        <Input
+                          id="phone"
+                          name="phone"
+                          defaultValue={parentData?.details.phone}
+                          className="text-sm sm:text-base"
+                          onChange={handleInputChange}
+                          placeholder="Enter your Phone no"
+                        />
+                      </div>
+                      <small className="text-red-500">
+                        {zoderror?.phone?.[0]}
                       </small>
                     </div>
                   </div>
