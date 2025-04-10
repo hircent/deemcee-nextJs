@@ -824,7 +824,7 @@ export async function updateStudentRemark(
     }
 
     revalidatePath(`/deusers/enrolment`);
-    return { success: true, msg: `Enrolment has been updated` };
+    return { success: true, msg: `Remark has been updated` };
   } catch (error) {
     return { error: true, msg: (error as Error).message };
   }
