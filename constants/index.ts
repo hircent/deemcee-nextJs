@@ -167,21 +167,21 @@ export const ReportLinks: SectionNavLink[] = [
     label: "Licensee HQ Report",
     visible: ["superadmin"],
   },
-  {
-    href: `/report/finance`,
-    label: "Finance Report",
-    visible: ["superadmin", "principal", "manager"],
-  },
-  {
-    href: `/report/progression`,
-    label: "Monthly Centre Progression",
-    visible: ["superadmin", "principal", "manager"],
-  },
-  {
-    href: `/report/referral`,
-    label: "Referral Report",
-    visible: ["superadmin", "principal", "manager"],
-  },
+  // {
+  //   href: `/report/finance`,
+  //   label: "Finance Report",
+  //   visible: ["superadmin", "principal", "manager"],
+  // },
+  // {
+  //   href: `/report/progression`,
+  //   label: "Monthly Centre Progression",
+  //   visible: ["superadmin", "principal", "manager"],
+  // },
+  // {
+  //   href: `/report/referral`,
+  //   label: "Referral Report",
+  //   visible: ["superadmin", "principal", "manager"],
+  // },
 ];
 
 export const UserManagementLinks: SectionNavLink[] = [
