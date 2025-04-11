@@ -17,11 +17,11 @@ const Sidebar = async ({ user }: { user: User | undefined }) => {
         >
           <Image
             src="/images/logo-ver.svg"
-            width={80}
-            height={80}
+            width={40}
+            height={40}
             alt="Deemcee Logo"
             priority={true}
-            className="size-[40px] lg:size-[80px]"
+            className="lg:w-[80px] lg:h-[80px]"
           />
           <h1 className="sidebar-logo"></h1>
         </Link>
