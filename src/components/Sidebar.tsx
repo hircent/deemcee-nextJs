@@ -20,6 +20,7 @@ const Sidebar = async ({ user }: { user: User | undefined }) => {
             width={80}
             height={80}
             alt="Deemcee Logo"
+            priority={true}
             className="size-[40px] lg:size-[80px]"
           />
           <h1 className="sidebar-logo"></h1>
