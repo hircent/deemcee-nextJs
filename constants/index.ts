@@ -6,7 +6,7 @@ export const sidebarLinks = [
     imgURL: "/icons/home.svg",
     route: "/",
     baseRoute: "/",
-    label: "Homedev",
+    label: "Home",
     icon: LucideIcons.LayoutDashboard,
     visible: ["superadmin", "principal", "manager"],
   },
