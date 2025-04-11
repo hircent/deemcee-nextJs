@@ -66,7 +66,7 @@ export const signIn = async ({
       httpOnly: true,
       sameSite: "strict",
       maxAge: 60 * 60 * 5,
-      secure: process.env.ENVIRONMENT !== "development",
+      secure: process.env.NODE_ENV === "production",
     });
 
     const userData = jwtDecode<User>(data.access);
