@@ -9,11 +9,11 @@ const Sidebar = async ({ user }: { user: User | undefined }) => {
   const userRole = getUserRole(user);
 
   return (
-    <section className="flex flex-col w-[18%] md:w-[13%] lg:w-[16%] xl:w-[17%] overflow-y-scroll custom-scrollbar">
-      <div className="bg-yellow-2 p-4 sticky top-0 z-10 ">
+    <section className="flex flex-col w-[18%] md:w-[13%] lg:w-[16%] xl:w-[17%] max-h-screen overflow-y-scroll custom-scrollbar">
+      <div className="bg-yellow-2 p-4 sticky top-0 z-10">
         <Link
           href="/"
-          className="cursor-pointer flex gap-2 sticky top-0 items-center justify-center"
+          className="cursor-pointer flex gap-2 items-center justify-center"
         >
           <Image
             src="/images/logo-ver.svg"
@@ -21,7 +21,8 @@ const Sidebar = async ({ user }: { user: User | undefined }) => {
             height={40}
             alt="Deemcee Logo"
             priority={true}
-            className="lg:w-[80px] lg:h-[80px]"
+            sizes="(max-width: 1024px) 40px, 80px"
+            className="w-10 lg:w-20 h-10 lg:h-20"
           />
           <h1 className="sidebar-logo"></h1>
         </Link>
