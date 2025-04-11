@@ -6,7 +6,7 @@ import { PaginationWrapper } from "@/components/PaginationWrapper";
 export const dynamic = "force-dynamic";
 
 const Inactive = async () => {
-  const result = await getPromoCodeList();
+  const result = await getPromoCodeList("false");
 
   return (
     <div className="p-4">
