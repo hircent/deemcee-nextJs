@@ -136,7 +136,7 @@ const EditVideoAssignment = ({
       }
     };
     fetchThemeAndVideoDetails();
-  }, [video, open, category]);
+  }, [video, open, category, toast]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
