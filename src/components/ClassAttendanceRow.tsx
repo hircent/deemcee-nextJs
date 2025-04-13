@@ -549,13 +549,7 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
                           value={ts.id.toString()}
                           className="select-item"
                         >
-                          {ts.student_in_class
-                            ? ts.label +
-                              " - " +
-                              "(" +
-                              ts.student_in_class +
-                              "/6)"
-                            : ts.label}
+                          {ts.label + " - " + "(" + ts.student_in_class + "/6)"}
                         </SelectItem>
                       ))}
                     </SelectContent>
