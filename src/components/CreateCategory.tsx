@@ -27,7 +27,7 @@ const CreateCategory = () => {
 
   if (name == "category") return <CategoryForm type={name} />;
 
-  if (name == "grade") return <GradeForm type={name} />;
+  // if (name == "grade") return <GradeForm type={name} />;
 
   if (name == "theme") return <ThemeForm type={name} />;
 };
