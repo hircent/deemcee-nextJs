@@ -11,19 +11,24 @@ import { getToken } from "./user.actions";
 import { DeleteSchema, PromoCodeSchema } from "@/constants/form";
 import { revalidatePath, revalidateTag } from "next/cache";
 
-export const getPromoCodeList = async (): Promise<ListProps<PromoCodeData>> => {
+export const getPromoCodeList = async (
+  is_active: string
+): Promise<ListProps<PromoCodeData>> => {
   try {
     const token = await getToken();
     const branchId = cookies().get("BranchId")?.value;
 
-    const response = await fetch(`${process.env.API_URL}/promo-code/list`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token?.value}`,
-        BranchId: `${branchId?.toString()}`,
-      },
-    });
+    const response = await fetch(
+      `${process.env.API_URL}/promo-code/list?is_active=${is_active}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+          BranchId: `${branchId?.toString()}`,
+        },
+      }
+    );
 
     const data = await response.json();
 

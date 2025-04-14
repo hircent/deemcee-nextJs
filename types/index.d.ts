@@ -713,7 +713,7 @@ export type TimeslotData = {
   id: number;
   label: string;
   day: string;
-  student_in_class?: number;
+  student_in_class: number;
 };
 
 export type ClassSlotData = {
