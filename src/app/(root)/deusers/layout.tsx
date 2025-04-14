@@ -19,7 +19,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
       <div className="flex flex-wrap justify-between gap-2">
         <SearchBar />
         <StudentFilter />
-        <ExportStudents id={branchId!.toString()} />
+        {/* <ExportStudents id={branchId!.toString()} /> */}
         {/* Back here fix again */}
         {IsManagerOrHigher.includes(userRole[0]) && <CreateDeUsers />}
       </div>
