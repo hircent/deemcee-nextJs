@@ -87,15 +87,25 @@ const Create = ({ type }: { type: string }) => {
 
   const onSubmit = async (formData: FormData) => {
     try {
-      await createUser(formData, type);
-      toast({
-        title: "Success",
-        description: `New ${type} has been created successfully.`,
-        duration: 2000,
-        className: cn("bottom-0 left-0 bg-success-100"),
-      });
-      form.reset();
-      setOpen(false);
+      const res = await createUser(formData, type);
+
+      if (res.success) {
+        toast({
+          title: "Success",
+          description: `New ${type} has been created successfully.`,
+          duration: 2000,
+          className: cn("bottom-0 left-0 bg-success-100"),
+        });
+        form.reset();
+        setOpen(false);
+      } else {
+        toast({
+          title: "Error",
+          description: `${res.msg}`,
+          duration: 4000,
+          className: cn("bottom-0 left-0 bg-error-100"),
+        });
+      }
     } catch (error) {
       toast({
         title: "Error",

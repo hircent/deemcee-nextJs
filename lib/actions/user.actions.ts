@@ -223,7 +223,7 @@ export async function createUser(formData: FormData, type: string) {
     } = formDataObject;
 
     if (password !== confirm_password) {
-      throw new Error("Password doesnt match");
+      return { success: false, msg: "Passwords do not match" };
     }
     const payload = {
       username,
@@ -254,11 +254,12 @@ export async function createUser(formData: FormData, type: string) {
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(JSON.stringify(errorData));
+      return { success: false, msg: errorData.msg };
     }
     revalidatePath(`/${type}`);
+    return { success: true, msg: `${type} has been created successfully.` };
   } catch (error) {
-    throw error;
+    return { success: false, msg: (error as Error).message };
   }
 }
 
