@@ -31,6 +31,7 @@ export type ClassFormErrors = {
 
 export type RescheduleFormErrors = {
   classroom?: string;
+  calculate_date?: string;
 };
 
 export type GetTimeslotProps =

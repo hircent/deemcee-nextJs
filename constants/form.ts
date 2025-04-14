@@ -344,6 +344,7 @@ export const VideoAssignmentFormSchema = z.object({
 
 export const RescheduleClassSchema = z.object({
   classroom: z.string().min(1, "Classroom is required"),
+  calculate_date: z.string().min(1, "Date is required"),
 });
 
 export const AdvanceEnrolmentSchema = z.object({

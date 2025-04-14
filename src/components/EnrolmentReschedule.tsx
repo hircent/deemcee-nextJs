@@ -94,6 +94,7 @@ export const EnrolmentReschedule = ({
     }
     if (state.success) {
       formRef.current?.reset();
+      onOpenChange(false);
       toast({
         title: "Success",
         description: state.msg,
@@ -109,7 +110,7 @@ export const EnrolmentReschedule = ({
         duration: 3000,
       });
     }
-  }, [state, toast]);
+  }, [state, toast, onOpenChange]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -161,6 +162,11 @@ export const EnrolmentReschedule = ({
               <form action={formAction} ref={formRef}>
                 <Input type="hidden" name="enrolment_id" value={id} />
                 <Input type="hidden" name="student_id" value={studentId} />
+                <Input
+                  type="hidden"
+                  name="calculate_date"
+                  value={selectedDay}
+                />
                 <div className="flex flex-col space-y-2">
                   <Input
                     type="hidden"
