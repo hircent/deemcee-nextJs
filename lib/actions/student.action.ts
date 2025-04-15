@@ -153,7 +153,10 @@ export async function createStudent(
     const branchId = cookies().get("BranchId")?.value;
 
     const fdata = Object.fromEntries(formData);
-
+    console.log({
+      fdata,
+      dob: fdata.parent_dob,
+    });
     const validated = StudentFormSchema.safeParse(fdata);
 
     if (!validated.success) {
@@ -183,7 +186,9 @@ export async function createStudent(
     const data = {
       ...rest,
       parent_details: {
-        username: parent_first_name.toString() + parent_last_name.toString(),
+        username: `${fdata.parent_first_name || ""}${
+          fdata.parent_last_name || ""
+        }`,
         email: parent_email,
         first_name: parent_first_name,
         last_name: parent_last_name,
@@ -198,7 +203,7 @@ export async function createStudent(
       },
       profile: {
         phone: parent_phone,
-        dob: parent_dob,
+        dob: parent_dob || null,
         occupation: parent_occupation,
       },
     };

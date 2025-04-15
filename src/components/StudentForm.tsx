@@ -367,19 +367,13 @@ const StudentForm = () => {
                           </small>
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="parent_dob">
-                            Date of Birth{" "}
-                            <span className="text-red-500">*</span>
-                          </Label>
+                          <Label htmlFor="parent_dob">Date of Birth</Label>
                           <Input
                             id="parent_dob"
                             name="parent_dob"
                             type="date"
                             placeholder="year-month-day"
                           />
-                          <small className="text-red-500">
-                            {zoderror?.parent_dob}
-                          </small>
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="parent_occupation">Occupation</Label>

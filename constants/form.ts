@@ -234,13 +234,6 @@ export const StudentFormSchema = z
           path: ["parent_phone"],
         });
       }
-      if (!data.parent_dob) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Parent DOB is required",
-          path: ["parent_dob"],
-        });
-      }
     }
   });
 
