@@ -40,6 +40,10 @@ export const EnrolmentListColumns: ColumnDef<EnrolmentData>[] = [
     header: "Start Date",
   },
   {
+    accessorKey: "end_date",
+    header: "End Date",
+  },
+  {
     accessorKey: "remaining_lessons",
     header: "Remaining Lessons",
   },

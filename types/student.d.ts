@@ -144,6 +144,7 @@ export interface EnrolmentData {
     fullname: string;
   };
   start_date: string;
+  end_date: string;
   grade: number;
   remaining_lessons: number;
   video_assignments: VideoAssignment[];
