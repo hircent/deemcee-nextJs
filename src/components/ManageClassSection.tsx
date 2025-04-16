@@ -17,6 +17,8 @@ const ManageClassSection = ({
           next={classData.next}
           previous={classData.previous}
           baseUrl="/class/manage"
+          totalItems={classData.total}
+          pageSize={classData.page_size}
         />
       </div>
     </div>
