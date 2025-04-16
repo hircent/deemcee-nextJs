@@ -524,6 +524,8 @@ export interface PaginationProps {
   next: string | null;
   previous: string | null;
   baseUrl: string;
+  totalItems: number;
+  pageSize: number;
 }
 
 export type BranchListFilterProps = {

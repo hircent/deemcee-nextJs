@@ -23,6 +23,8 @@ export function PaginationWrapper<T>({
           next={paginationData.next}
           previous={paginationData.previous}
           baseUrl={baseUrl}
+          totalItems={paginationData.total}
+          pageSize={paginationData.page_size}
         />
       </div>
     </div>
