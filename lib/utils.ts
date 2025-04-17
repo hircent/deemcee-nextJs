@@ -443,3 +443,21 @@ export function capitalizeFirstLetter(str: string): string {
 export function dateIsBeforeToday(date: string): boolean {
   return new Date(date).getTime() < new Date().setHours(0, 0, 0, 0);
 }
+
+export function getMonday(dateString: string): string {
+  const date = new Date(dateString);
+  const day = date.getDay(); // Sunday = 0, Monday = 1, ..., Saturday = 6
+  const diff = day === 0 ? -6 : 1 - day; // Adjust Sunday to be the last day of the week
+  const monday = new Date(date);
+  monday.setDate(date.getDate() + diff);
+  return monday.toISOString().split("T")[0];
+}
+
+export function getSunday(dateString: string): string {
+  const date = new Date(dateString);
+  const day = date.getDay(); // Sunday = 0, Monday = 1, ..., Saturday = 6
+  const diff = day === 0 ? 0 : 7 - day; // If it's Sunday already, no need to move
+  const sunday = new Date(date);
+  sunday.setDate(date.getDate() + diff);
+  return sunday.toISOString().split("T")[0];
+}

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { cn, dateIsBeforeToday } from "@/lib/utils";
+import { cn, dateIsBeforeToday, getMonday, getSunday } from "@/lib/utils";
 import { ClassAttendanceFormProps, ClassData } from "@/types/class";
 import {
   AttendanceStatus,
@@ -167,20 +167,6 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
 
     if (replacementDate === "") return;
 
-    // Check if replacement date is not today or in the future
-    if (dateIsBeforeToday(replacementDate)) {
-      setPlaceholderPerStudent((prev) => ({
-        ...prev,
-        [studentId]: "No available time slots.",
-      }));
-      toast({
-        title: "Replacement Date Error",
-        description: "Replacement date cannot be in the PAST.",
-        className: cn(`bottom-0 left-0`, "bg-error-100"),
-        duration: 3000,
-      });
-      return;
-    }
     getSelectTimeslot(studentId, replacementDate, category);
   };
 
@@ -517,7 +503,8 @@ const ClassAttendanceRow: React.FC<ClassAttendanceFormProps> = ({
                       replacedLessonStatus[student.id] === "ABSENT" ||
                       replacedLessonStatus[student.id] === "ATTENDED"
                     }
-                    min={new Date().toISOString().split("T")[0]}
+                    min={getMonday(classData.date)}
+                    max={getSunday(classData.date)}
                   />
                   <Select
                     key={`${student.id}-${replacementDate[student.id]}`}
