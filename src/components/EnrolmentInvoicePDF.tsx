@@ -240,8 +240,8 @@ const EnrolmentInvoicePDF = ({ invoice }: { invoice: InvoiceData }) => (
             <Text style={styles.invoiceDetailValue}> {invoice.invoice}</Text>
           </Text>
           <Text style={styles.invoiceDetail}>
-            <Text style={styles.invoiceDetailLabel}>DATE</Text>
-            <Text style={styles.invoiceDetailValue}> {invoice.start_date}</Text>
+            <Text style={styles.invoiceDetailLabel}>PAYMENT DATE</Text>
+            <Text style={styles.invoiceDetailValue}> {invoice.paid_at}</Text>
           </Text>
           <Text style={styles.invoiceDetail}>
             <Text style={styles.invoiceDetailLabel}>TERMS</Text>

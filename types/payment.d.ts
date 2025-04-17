@@ -12,6 +12,7 @@ export type PaymentData = {
   pre_outstanding: string;
   post_outstanding: string;
   start_date: string;
+  paid_at: string | null;
   grade: number;
   student: string;
   currency: string;
