@@ -204,7 +204,6 @@ const MakePayment = ({ id }: { id: number }) => {
                     id="payment_date"
                     placeholder="yyyy-mm-dd"
                     defaultValue={new Date().toISOString().slice(0, 10)}
-                    readOnly
                   />
                 </div>
               </div>
