@@ -12,8 +12,9 @@ import {
 } from "@/components/ui/dialog";
 import { getEnrolmentLesson } from "@/lib/actions/student.action";
 import { EnrolmentLessonProps } from "@/types/student";
-import { getStatusColor } from "@/lib/utils";
+import { cn, getStatusColor } from "@/lib/utils";
 import Loader from "./Loader";
+import { Badge } from "./ui/badge";
 
 export const ViewEnrolmentLesson = ({
   id,
@@ -101,6 +102,23 @@ export const ViewEnrolmentLesson = ({
                           {lesson.class_lesson.theme_lesson.name}
                         </h3>
                         <p className="text-sm text-gray-500">{lesson.date}</p>
+                        {lesson.replacement !== null && (
+                          <p className="flex text-sm text-gray-500 gap-2">
+                            Replaced on: {lesson.replacement.date}
+                            <Badge
+                              className={cn("text-xs ml-2", {
+                                "bg-success-100 text-success-600":
+                                  lesson.replacement.status === "ATTENDED",
+                                "bg-orange-100 text-orange-600":
+                                  lesson.replacement.status === "PENDING",
+                                "bg-error-100 text-error-600":
+                                  lesson.replacement.status === "ABSENT",
+                              })}
+                            >
+                              {lesson.replacement.status}
+                            </Badge>
+                          </p>
+                        )}
                       </div>
                     </div>
                     <div className="flex items-center">

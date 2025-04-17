@@ -217,6 +217,10 @@ export type EnrolmentLessonProps = {
   end_time: string;
   has_attended: boolean;
   status: "ABSENT" | "PRESENT"; // Add other possible status values if they exist
+  replacement: {
+    date: string;
+    status: "PENDING" | "ATTENDED" | "ABSENT";
+  };
 };
 
 export type EnrolmentExtensionError = {
