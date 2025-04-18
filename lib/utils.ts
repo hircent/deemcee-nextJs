@@ -461,3 +461,9 @@ export function getSunday(dateString: string): string {
   sunday.setDate(date.getDate() + diff);
   return sunday.toISOString().split("T")[0];
 }
+
+export function getThisMonth(dateString: string): string {
+  const date = new Date(dateString);
+  const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+  return firstDayOfMonth.toISOString().split("T")[0];
+}

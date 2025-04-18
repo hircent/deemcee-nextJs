@@ -23,7 +23,7 @@ import { Input } from "./ui/input";
 import { useEffect, useRef, useState } from "react";
 import { Plus } from "lucide-react";
 import { useToast } from "./ui/use-toast";
-import { cn } from "@/lib/utils";
+import { cn, getThisMonth } from "@/lib/utils";
 import SubmitButton from "./SubmitButton";
 import { SERVER_ACTION_STATE } from "@/constants/index";
 import { useFormState } from "react-dom";
@@ -252,7 +252,7 @@ const CreateEnrolment = ({ id }: { id: number }) => {
                       setAbleSelectTimeslot(true);
                     }}
                     disabled={!ableSelectDate}
-                    min={new Date().toISOString().split("T")[0]}
+                    min={getThisMonth(new Date().toISOString().split("T")[0])}
                   />
                 </div>
                 <small className="text-red-500">{zoderror?.start_date}</small>

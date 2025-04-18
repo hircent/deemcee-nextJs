@@ -24,10 +24,9 @@ import { Input } from "./ui/input";
 import { useEffect, useRef, useState } from "react";
 import { Plus, Search, Check, X } from "lucide-react";
 import { useToast } from "./ui/use-toast";
-import { cn } from "@/lib/utils";
+import { cn, getThisMonth } from "@/lib/utils";
 import SubmitButton from "./SubmitButton";
 import {
-  GRADE,
   ReferralChannels,
   SERVER_ACTION_STATE,
   StarterKitItems,
@@ -665,7 +664,7 @@ const StudentForm = () => {
                         setAbleSelectTimeslot(true);
                       }}
                       disabled={!ableSelectDate}
-                      min={new Date().toISOString().split("T")[0]}
+                      min={getThisMonth(new Date().toISOString().split("T")[0])}
                     />
                   </div>
                   <small className="text-red-500">{zoderror?.start_date}</small>
