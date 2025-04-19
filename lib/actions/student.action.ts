@@ -393,7 +393,8 @@ export async function deleteEnrolment(
     );
 
     if (!response.ok) {
-      return { success: false, msg: response.statusText };
+      const res = await response.json();
+      return { error: true, msg: res.msg };
     }
 
     return { success: true, msg: `Enrolment ${obj.name} is deleted` };
